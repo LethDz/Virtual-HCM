@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "src/common": ["src/common"],
+      "src/layouts": ["src/layouts"],
+      "src/pages": ["src/pages"]
+    }
+  },
+
+  "include": ["src"],
+
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
