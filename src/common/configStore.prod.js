@@ -1,9 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { rootReducer } from "src/reducer";
 
-const configStore = (initialState, middleWares = []) => {
+const configStore = () => {
   const store = createStore(
-    initialState,
-    compose(applyMiddleware(...middleWares))
+    rootReducer,
+    compose(applyMiddleware())
   );
 
   return store;

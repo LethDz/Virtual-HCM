@@ -1,10 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import loggerMiddleware from 'redux-logger';
+import { rootReducer } from "src/reducer";
 
-const configStore = (initialState, middleWares = []) => {
+const configStore = () => {
   const store = createStore(
-    initialState,
-    compose(applyMiddleware(loggerMiddleware, ...middleWares))
+    rootReducer,
+    compose(applyMiddleware(loggerMiddleware))
   );
 
   return store;
