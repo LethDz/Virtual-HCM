@@ -35,7 +35,7 @@ Caution: Create React App is only supported to debug in Visual Studio Code and W
 
 ## Let's Start
 
-# For new
+### For new
 ```bash
 cp .env.example .env
 yarn install
