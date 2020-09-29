@@ -27,7 +27,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - [Visual Studio Code][vc] (recommend) + extensions: 
   (I used these extensions)
-![Image](https://imgur.com/DAKbByt)
+![Image](https://i.imgur.com/DAKbByt.png)
 
 - Or you can use others IDE, such as: Webstorm, ...
 
