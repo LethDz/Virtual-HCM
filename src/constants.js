@@ -1,3 +1,7 @@
+// Axios Config
+export const API_URL = process.env.REACT_APP_BASE_URL_EXAMPLE;
+export const API_PREFIX = '';
+
 // Route Path
 
 // Home Page
