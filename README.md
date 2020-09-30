@@ -15,13 +15,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Step 1: Install npm. Link: https://nodejs.org/en/download/
 - Step 2: Install yarn. Two way to install yarn: 
   + Download: https://classic.yarnpkg.com/latest.msi
-  + Install via Chocolatey: ```bash choco install yarn ```
+  + Install via Chocolatey: ```choco install yarn ```
 
 :warning: Caution: Yarn is for every package installation after. You should not install package via npm.
 
 - Step 3: Pull the code 
-- Step 4: ```bash yarn install ```
-- Step 5: ```bash yarn start ```
+- Step 4: ```yarn install ```
+- Step 5: ```yarn start ```
 
 ## Editor and Utility
 
@@ -36,7 +36,7 @@ Caution: Create React App is only supported to debug in Visual Studio Code and W
 ## Let's Start
 
 ### For new
-```bash
+```
 cp .env.example .env
 yarn install
 yarn start
