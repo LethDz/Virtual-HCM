@@ -1,5 +1,5 @@
 import HomePage from 'src/pages/home/HomePage';
-import LoginPage from 'src/pages/login/LoginPage'
+import LoginPage from 'src/pages/login/LoginPage';
 
 export {
   HomePage,
