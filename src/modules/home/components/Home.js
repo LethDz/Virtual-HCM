@@ -10,7 +10,6 @@ class Home extends Component {
       data: {},
     };
   }
-
   componentDidMount() {
     axiosClient
       .get(

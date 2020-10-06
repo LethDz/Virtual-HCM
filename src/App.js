@@ -3,6 +3,7 @@ import { Router } from "react-router-dom";
 import Routes from 'src/routes';
 import { history } from 'src/common/history';
 import 'src/App.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
