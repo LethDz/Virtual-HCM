@@ -6,3 +6,6 @@ export const API_PREFIX = '';
 
 // Home Page
 export const HOME_PAGE = '/';
+
+// Login Page
+export const LOGIN_PAGE = '/login';
