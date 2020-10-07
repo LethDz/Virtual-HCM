@@ -9,3 +9,6 @@ export const HOME_PAGE = '/';
 
 // Login Page
 export const LOGIN_PAGE = '/login';
+
+// Admin Page
+export const ADMIN_PAGE = '/admin'
