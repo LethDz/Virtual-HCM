@@ -1,0 +1,9 @@
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -50px;
+}
+
+.footer {
+    height: 50px;
+    color: #D5D6D7;
+}

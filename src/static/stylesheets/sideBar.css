@@ -27,19 +27,19 @@
 
 .sidebar-item .list-group-item{
   color: rgba(255,255,255,.8);
-  background-color: #343A40;
+  background-color: #363b41;
   border-left: none;
   border-right: none;
 }
 
 .sidebar-item .list-group-item:hover{
   color: rgba(255,255,255,.8);
-  background-color: #545b63;
+  background-color: #444b52;
   text-decoration: none;
 }
 
 .navbar {
-  background-color: #3C8DBC;
+  background-color: #363b41;
 }
 
 .navbar-font {

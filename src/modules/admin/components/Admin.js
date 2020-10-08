@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+// import ContributorList from 'src/modules/admin/components/ContributorList'
 
 class Admin extends Component {
     render() {
         return (
             <div>
-                admin
+                list
             </div>
         )
     }

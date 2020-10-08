@@ -9,19 +9,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import BarIcon from "src/static/icons/barIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faKey, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
-const Header = (props) => {
+const Header = () => {
   return (
-    <Navbar className="d-flex justify-content-between navbar" expand="md">
-      <div
-        className="icon-bar align-center"
-        onClick={() => props.toggleSideBar(true)}
-      >
-        {BarIcon}
-      </div>
+    <Navbar className="d-flex justify-content-end navbar" expand="md">
       <div>
         <Nav className="mr-auto" navbar>
           <NavItem>

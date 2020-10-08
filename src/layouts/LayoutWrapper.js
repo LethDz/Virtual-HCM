@@ -1,26 +1,23 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import Header from "src/layouts/Header";
 import Footer from "src/layouts/Footer";
 import SideBar from "react-sidebar";
 import SideBarContent from "src/layouts/SideBarContent";
+import "src/static/stylesheets/layout.css"
 
 const LayoutWrapper = (props) => {
-  const [isOpen, toggle] = useState(false);
-
-  const closeSideBar = () => {
-    toggle(false);
-  };
-
   return (
     <Fragment>
       <SideBar
         sidebar={<SideBarContent />}
-        open={isOpen}
-        onSetOpen={closeSideBar}
-        styles={{ sidebar: { backgroundColor: "#343A40" }}}
+        styles={{ sidebar: { backgroundColor: "#363b41" } }}
+        docked
       >
-        <Header toggleSideBar={toggle} />
-        {props.children}
+        <div className="wrapper">
+          <Header />
+          <div className="contain-body">{props.children}</div>
+        </div>
+        
         <Footer />
       </SideBar>
     </Fragment>
