@@ -16,27 +16,27 @@ const SideBarContributorContent = () => {
         <SideBarItem
           name="Data Approval"
           icon={<FontAwesomeIcon icon={faClipboardList} />}
-          link="#"
+          link="data-approval"
         />
         <SideBarItem
           name="Chat Log"
           icon={<FontAwesomeIcon icon={faComments} />}
-          link="#"
+          link="chat-log"
         />
         <SideBarItem
           name="Knowledge Data"
           icon={<FontAwesomeIcon icon={faBook} />}
-          link="#"
+          link="knowledge-data"
         />
         <SideBarItem
           name="Document Reference"
           icon={<FontAwesomeIcon icon={faFileAlt} />}
-          link="#"
+          link="document-reference"
         />
         <SideBarItem
           name="Reports"
           icon={<FontAwesomeIcon icon={faNewspaper} />}
-          link="#"
+          link="reports"
         />
       </ListGroup>
   );

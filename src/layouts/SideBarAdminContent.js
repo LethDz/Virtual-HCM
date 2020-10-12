@@ -14,17 +14,17 @@ const SideBarAdminContent = () => {
         <SideBarItem
           name="Accounts"
           icon={<FontAwesomeIcon icon={faUserCircle} />}
-          link="#"
+          link="accounts"
         />
         <SideBarItem
           name="Manage Training Process"
           icon={<FontAwesomeIcon icon={faServer} />}
-          link="#"
+          link="manage-training-process"
         />
         <SideBarItem
           name="Configure System"
           icon={<FontAwesomeIcon icon={faCogs} />}
-          link="#"
+          link="configure-system"
         />
       </ListGroup>
   );
