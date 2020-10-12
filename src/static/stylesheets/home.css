@@ -1,0 +1,66 @@
+.home-welcome-background {
+  background-image: url('../images/hero.jpg');
+}
+
+.invite-upper {
+  height: 50%;
+}
+
+.invite-upper .container .justify-content-center {
+  align-items: center;
+}
+
+.img-project-introduction {
+  content: url('../images/HCM-5.png');
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
+}
+
+.contact-container {
+  height: 100%;
+}
+
+.contact-footer {
+  height: 50%;
+}
+
+.contact-footer .contact-footer-container {
+  height: 100%;
+}
+
+.avatar-male {
+  content: url('../images/img_avatar.png');
+}
+
+.avatar-female {
+  content: url('../images/img_avatar_female.png');
+}
+
+.image-list-1 {
+  content: url('../images/Anh-1.jpg');
+}
+
+.image-list-2 {
+  content: url('../images/Anh-2.jpg');
+}
+
+.image-list-3 {
+  content: url('../images/Anh-3.jpg');
+}
+
+.image-list-4 {
+  content: url('../images/Anh-4.jpg');
+}
+
+.image-list-5 {
+  content: url('../images/Anh-5.jpg');
+}
+
+.image-list-6 {
+  content: url('../images/Anh-6.jpg');
+}
+
+.invite-purposed-text {
+  font-size: 1.5rem;
+}
