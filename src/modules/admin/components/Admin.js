@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+// import ContributorList from 'src/modules/admin/components/contributor/ContributorList'
+import "src/static/stylesheets/admin.css"
+import CreateContributorForm from './contributor/CreateContributorForm'
 
 class Admin extends Component {
     render() {
         return (
             <div>
-                list
+                {/* <ContributorList /> */}
+                <CreateContributorForm />
             </div>
         )
     }
