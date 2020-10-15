@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Project Structure
 
-![Diagram](https://imgur.com/12KJGRo)
+![Diagram](https://i.imgur.com/12KJGRo.png)
 
 ## Setup
 
