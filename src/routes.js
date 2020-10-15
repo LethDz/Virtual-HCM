@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { HomePage, LoginPage, AdminPage } from 'src/pages/index';
 import { HOME_PAGE, LOGIN_PAGE, ADMIN_PAGE } from 'src/constants';
+import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
+import PrivateRoute from 'src/common/PrivateRoute';
 
 const Routes = () => (
   <Fragment>
     <Switch>
-      <Route exact path={HOME_PAGE} component={HomePage} />
-      <Route exact path={LOGIN_PAGE} component={LoginPage}/>
-      <Route exact path={ADMIN_PAGE} component={AdminPage}/>
+      <ErrorBoundaryRoute exact path={HOME_PAGE} component={HomePage} />
+      <ErrorBoundaryRoute exact path={LOGIN_PAGE} component={LoginPage} />
+      <PrivateRoute exact path={ADMIN_PAGE} component={AdminPage} />
     </Switch>
   </Fragment>
 );
