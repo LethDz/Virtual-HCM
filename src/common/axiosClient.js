@@ -7,7 +7,7 @@ const axiosClient = axios.create({
   responseType: 'json',
 });
 
-const setAuthToken = (token) => {
+export const setAuthToken = (token) => {
   if (token !== null) {
     axiosClient.defaults.headers['Authorization'] = `Bearer ${token}`;
   }

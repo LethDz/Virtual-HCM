@@ -9,15 +9,16 @@ import 'src/index.css';
 import App from 'src/App';
 import * as serviceWorker from 'src/serviceWorker';
 import { rootReducer } from 'src/reducer';
+import ErrorBoundary from 'src/common/ErrorBoundary';
 
 const store = configStore(rootReducer);
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ErrorBoundary>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
+  </ErrorBoundary>,
   document.getElementById('root')
 );
 
