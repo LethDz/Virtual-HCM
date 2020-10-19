@@ -14,6 +14,9 @@ export const LOGIN_PAGE = '/login';
 // Admin Page
 export const ADMIN_PAGE = '/admin';
 
+// Contributor Page
+export const CONTRIBUTOR_PAGE = '/contributor';
+
 // Roles
-export const ROLE_ADMIN = 'admin';
-export const ROLE_CONTRIBUTOR = 'contributor';
+export const ROLE_ADMIN = 'Admin';
+export const ROLE_CONTRIBUTOR = 'Contributor';

@@ -1,23 +1,47 @@
-import React from "react";
-import SideBarAdminContent from "src/layouts/SideBarAdminContent"
-import SideBarContributorContent from "src/layouts/SideBarContributorContent";
-import { ROLE_ADMIN, ROLE_CONTRIBUTOR } from "src/constants";
+import React from 'react';
+import SideBarAdminContent from 'src/layouts/SideBarAdminContent';
+import SideBarContributorContent from 'src/layouts/SideBarContributorContent';
+import { ROLE_ADMIN, ROLE_CONTRIBUTOR } from 'src/constants';
+import {
+  getTheCurrentUserRole,
+  getUserData,
+} from 'src/common/authorizationChecking';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
-const switchLayout = (user) => {
-  if (user === ROLE_ADMIN) {
+const switchLayout = (role) => {
+  if (role === ROLE_ADMIN) {
     return <SideBarAdminContent />;
-  } else if (user === ROLE_CONTRIBUTOR) {
+  }
+  console.log(role);
+  if (role === ROLE_CONTRIBUTOR) {
     return <SideBarContributorContent />;
   }
 };
 
 const SideBarContent = () => {
+  const { user } = getUserData();
   return (
-    <div className="sidebar">
-      <div className="align-center">
-        <h2 className="sidebar-item">Profile</h2>
+    <div className="side-bar-content">
+      <div className="align-center side-navbar">
+        <h4 className="sidebar-title">
+          <b>{getTheCurrentUserRole()}</b>
+        </h4>
       </div>
-      {switchLayout(ROLE_CONTRIBUTOR)}
+      <div className="profile">
+        <div className="avatar-image">
+          <img className="img-circle" alt="User-Avatar"></img>
+        </div>
+        <div className="user-name">
+          <p>{user.username}</p>
+          <p>
+            <FontAwesomeIcon icon={faCircle} color="green" />
+            &nbsp;Online
+          </p>
+        </div>
+      </div>
+      <div className="side-navbar-title">Main Navigation</div>
+      <div className="sidebar">{switchLayout(getTheCurrentUserRole())}</div>
     </div>
   );
 };
