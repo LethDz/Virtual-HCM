@@ -2,12 +2,12 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import ErrorBoundary from 'src/common/ErrorBoundary';
 import { LOGIN_PAGE } from 'src/constants';
-import { setToken } from './ErrorBoundaryRoute';
+import { setToken } from 'src/common/ErrorBoundaryRoute';
 
-const PrivateRoute = ({ component: Component, ...rest }: any) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
   const checkAuthorization = (props) => {
     const user = setToken();
-    return user && user.token ? (
+    return user && user.access_token ? (
       <ErrorBoundary>
         <Component {...props} />
       </ErrorBoundary>

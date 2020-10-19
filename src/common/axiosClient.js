@@ -5,6 +5,9 @@ const token = null;
 const axiosClient = axios.create({
   baseURL: API_URL + API_PREFIX,
   responseType: 'json',
+  headers: {
+    'content-type': 'application/json',
+  },
 });
 
 export const setAuthToken = (token) => {

@@ -21,8 +21,8 @@ const ErrorBoundaryRoute = ({ component: Component, ...rest }) => {
 };
 
 export const setToken = () => {
-  const user = sessionStorage.getItem('user');
-  user && user.token && setAuthToken(user.token);
+  const user = JSON.parse(sessionStorage.getItem('user'));
+  user && user.token && setAuthToken(user.access_token);
   return user;
 };
 
