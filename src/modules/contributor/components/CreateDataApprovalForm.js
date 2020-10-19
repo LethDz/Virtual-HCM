@@ -6,6 +6,7 @@ import {
   Question,
   GenList,
   SynonymsModal,
+  GenSynonyms,
 } from "src/modules/contributor/index";
 import "src/static/stylesheets/contributor.css";
 
@@ -46,7 +47,8 @@ class CreateDataApprovalForm extends Component {
     this.componentFieldRef = React.createRef("");
     this.criticalFieldRef = React.createRef("");
     this.coresponseFieldRef = React.createRef("");
-    this.modalRef = React.createRef("")
+    this.synonymFieldRef = React.createRef("");
+    this.modalRef = React.createRef("");
   }
 
   valueElement = () => {
@@ -99,16 +101,55 @@ class CreateDataApprovalForm extends Component {
     this.setState(newState);
   };
 
+  addSynonym = (synonymList) => {
+    let result = this.state.currentSelected.word + "-";
+    synonymList.forEach((synonym) => {
+      result += synonym.meaning + ",";
+    });
+    document.getElementById("synonym-field").innerHTML = result;
+  };
+
+  setSynonym = () => {
+    let result = this.synonymFieldRef.current.innerHTML;
+    let word = result.split("-")[0];
+    let synonymListTemp = result.split("-")[1].split(",");
+    let synonymList = [];
+    synonymListTemp.forEach((synonym) => {
+      if (synonym.trim() !== "") {
+        synonymList.push(synonym);
+      }
+    });
+
+    let currentState = this.state;
+    let synonymObject = {
+      word: word,
+      list: synonymList,
+    };
+    currentState.form.synonyms.push(synonymObject);
+    this.setState(currentState);
+  };
+
+  setCritical = () => {
+    let type = this.criticalDataRef.current.value;
+    let criticalList = this.getListElementText("critical-field");
+    let newState = this.state;
+    newState.form.criticalData.push({
+      type: type,
+      criticalData: criticalList,
+    });
+    this.setState(newState);
+  };
+
   addCoresponse = () => {
     this.addElement("coresponse-field");
     let newState = this.state;
-    newState.currentSelected.word = null;
-    newState.currentSelected.index = null;
+    newState.currentSelected.word = "";
+    newState.currentSelected.index = "";
     this.setState(newState);
   };
 
   openSynonymsModal = () => {
-    this.modalRef.current.setModal()
+    this.modalRef.current.setModal();
   };
 
   submitForm = () => {
@@ -167,17 +208,6 @@ class CreateDataApprovalForm extends Component {
     newState.form.componentOfQuestion.push({
       type: type,
       components: componentList,
-    });
-    this.setState(newState);
-  };
-
-  setCritical = () => {
-    let type = this.criticalDataRef.current.value;
-    let criticalList = this.getListElementText("critical-field");
-    let newState = this.state;
-    newState.form.criticalData.push({
-      type: type,
-      criticalData: criticalList,
     });
     this.setState(newState);
   };
@@ -305,6 +335,26 @@ class CreateDataApprovalForm extends Component {
     }
   };
 
+  removeSynonym = (currentState, word) => {
+    let list = [];
+    this.state.form.synonyms.forEach((synonym) => {
+      list.push(synonym);
+    });
+
+    console.log(list);
+    console.log(word);
+
+    let newList = [];
+    list.forEach((item) => {
+      if (item.word !== word) {
+        newList.push(item);
+      }
+    });
+
+    currentState.form.synonyms = newList;
+    this.setState(currentState);
+  };
+
   render() {
     return (
       <div>
@@ -404,9 +454,15 @@ class CreateDataApprovalForm extends Component {
             />
           </div>
           <div className="container w-80 mt-3 d-flex justify-content-start p-0">
-            <SynonymsModal ref={this.modalRef}/>
-            <div>Synonyms session:</div>
-            <div>123</div>
+            <SynonymsModal ref={this.modalRef} addSynonym={this.addSynonym} />
+            <div>Synonyms:</div>
+            <div ref={this.synonymFieldRef} id="synonym-field"></div>
+            <Button onClick={this.setSynonym}>Confirm</Button>
+            <GenSynonyms
+              currentState={this.state}
+              list={this.state.form.synonyms}
+              removeSynonym={this.removeSynonym}
+            />
           </div>
           <div className="container w-80 mt-3 d-flex justify-content-start p-0">
             <div className="d-flex justify-content-center mr-5">
@@ -446,9 +502,11 @@ class CreateDataApprovalForm extends Component {
             </div>
           </div>
         </div>
+        
         <div className="d-flex justify-content-center mt-5">
           <Button onClick={this.submitForm}>Create new data approval</Button>
         </div>
+
         <Menu id="menu_id">
           <Item onClick={this.addComponent}>Add to component of question</Item>
           <Item onClick={this.addCriticalData}>Add to critical data</Item>

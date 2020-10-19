@@ -1,6 +1,6 @@
 import React from "react";
-
 import { Button } from "reactstrap";
+
 const GenList = (props) => {
   const list = props.list.map((item, index) => {
     return (
