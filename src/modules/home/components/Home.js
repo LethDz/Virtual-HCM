@@ -1,50 +1,48 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { getHomeExamples, editHomeExample } from 'src/modules/home/index';
-import axiosClient from 'src/common/axiosClient';
+import {
+  getHomeExamples,
+  editHomeExample,
+  Contact,
+  Welcome,
+  ProjectIntroduction,
+  ProjectMember,
+  anchorsList,
+} from 'src/modules/home/index';
+import ReactFullpage from '@fullpage/react-fullpage';
+import 'src/static/stylesheets/home.css';
 
-class Home extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: {},
-    };
-  }
-  componentDidMount() {
-    axiosClient
-      .get(
-        '/?appid=c8ab1f9f4d840f76d232508bbdc3f487&id=1581130&units=metric&mode=json',
-      )
-      .then((response) => {
-        console.log(response);
-        this.setState(
-          {
-            data: response.data,
-          },
-          () => this.props.editHomeExample(this.state.data.name)
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  render() {
-    return (
-      <div>
-        <p>Home Component</p>
-        <div>{this.props.text}</div>
-        <button
-          onClick={() => {
-            this.props.editHomeExample('Vai~ lon` luon dau cat moi');
-          }}
-        >
-          Cắt đầu cắt moi ??
-        </button>
-      </div>
-    );
-  }
-}
+const Home = () => {
+  return (
+    <div className="site-wrap" id="home-section">
+      <ReactFullpage
+        anchors={anchorsList}
+        navigation={true}
+        navigationPosition={'right'}
+        slidesNavigation={false}
+        scrollingSpeed={700}
+        render={() => {
+          return (
+            <ReactFullpage.Wrapper>
+              <div className="section">
+                <Welcome />
+              </div>
+              <div className="section">
+                <ProjectIntroduction />
+              </div>
+              <div className="section">
+                <ProjectMember />
+              </div>
+              <div className="section">
+                <Contact />
+              </div>
+            </ReactFullpage.Wrapper>
+          );
+        }}
+      />
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   text: getHomeExamples(state),

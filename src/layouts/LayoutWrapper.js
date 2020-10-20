@@ -1,17 +1,16 @@
-import React from "react";
-import Header from "src/layouts/Header";
-import Footer from "src/layouts/Footer";
-import SideBar from "react-sidebar";
-import SideBarContent from "src/layouts/SideBarContent";
-import "src/static/stylesheets/layout.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import Header from 'src/layouts/Header';
+import SideBar from 'react-sidebar';
+import SideBarContent from 'src/layouts/SideBarContent';
+import 'src/static/stylesheets/layout.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 
 const LayoutWrapper = (props) => {
   return (
     <SideBar
       sidebar={<SideBarContent />}
-      styles={{ sidebar: { backgroundColor: "#363b41" } }}
+      styles={{ sidebar: { backgroundColor: '#222D32', width: '230px' } }}
       docked
     >
       <div className="wrapper">
@@ -23,7 +22,6 @@ const LayoutWrapper = (props) => {
           <FontAwesomeIcon size="2x" color="white" icon={faCommentDots} />
         </div>
       </div>
-      <Footer />
     </SideBar>
   );
 };

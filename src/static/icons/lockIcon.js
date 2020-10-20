@@ -2,7 +2,7 @@ import React from "react";
 
 const lockIcon = (
   <svg
-    class="lock-image"
+    className="lock-image"
     focusable="false"
     viewBox="0 0 24 24"
     aria-hidden="true"
