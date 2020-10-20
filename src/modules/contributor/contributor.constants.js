@@ -1,0 +1,2 @@
+export const SET_INTENT = "SET_INTENT";
+export const SET_INTENT_FULLNAME = "SET_INTENT_FULLNAME";

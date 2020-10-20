@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Label, Input, Button } from "reactstrap";
+import { Label, Input, Button, Container, Row, Col } from "reactstrap";
 import { Menu, Item, Separator, MenuProvider } from "react-contexify";
 import {
   Intent,
@@ -7,6 +7,10 @@ import {
   GenList,
   SynonymsModal,
   GenSynonyms,
+  FormTitle,
+  FormSectionTitle,
+  Reference,
+  Synonyms,
 } from "src/modules/contributor/index";
 import "src/static/stylesheets/contributor.css";
 
@@ -51,6 +55,7 @@ class CreateDataApprovalForm extends Component {
     this.modalRef = React.createRef("");
   }
 
+  // For raw data
   valueElement = () => {
     let element = document.createElement("data");
     element.setAttribute("class", "mr-1");
@@ -83,22 +88,19 @@ class CreateDataApprovalForm extends Component {
         document.getElementById(fieldName).appendChild(sortedNodes[i]);
       }
     }
+
+    let newState = this.state;
+    newState.currentSelected.word = "";
+    newState.currentSelected.index = "";
+    this.setState(newState);
   };
 
   addComponent = () => {
     this.addElement("component-field");
-    let newState = this.state;
-    newState.currentSelected.word = "";
-    newState.currentSelected.index = "";
-    this.setState(newState);
   };
 
   addCriticalData = () => {
     this.addElement("critical-field");
-    let newState = this.state;
-    newState.currentSelected.word = "";
-    newState.currentSelected.index = "";
-    this.setState(newState);
   };
 
   addSynonym = (synonymList) => {
@@ -142,10 +144,6 @@ class CreateDataApprovalForm extends Component {
 
   addCoresponse = () => {
     this.addElement("coresponse-field");
-    let newState = this.state;
-    newState.currentSelected.word = "";
-    newState.currentSelected.index = "";
-    this.setState(newState);
   };
 
   openSynonymsModal = () => {
@@ -254,8 +252,8 @@ class CreateDataApprovalForm extends Component {
   renderRawDataMode = () => {
     if (this.state.mode === "TOKENIZE") {
       return (
-        <div className="row">
-          <div className="col-10">
+        <Row>
+          <Col>
             <MenuProvider id="menu_id">
               {this.getWordArray().map((data, index) => {
                 return (
@@ -271,16 +269,16 @@ class CreateDataApprovalForm extends Component {
                 );
               })}
             </MenuProvider>
-          </div>
-          <div className="col-2">
+          </Col>
+          <Col xs="1" className="p-0">
             <Button onClick={this.stateCancelTokenize}>Cancel</Button>
-          </div>
-        </div>
+          </Col>
+        </Row>
       );
     } else {
       return (
-        <div className="row">
-          <div className="col-10">
+        <Row>
+          <Col>
             <Input
               innerRef={this.rawDataRef}
               type="textarea"
@@ -290,11 +288,11 @@ class CreateDataApprovalForm extends Component {
                 this.setRawData(this.rawDataRef.current.value);
               }}
             />
-          </div>
-          <div className="col-2">
+          </Col>
+          <Col xs="1" className="p-0">
             <Button onClick={this.stateTokenizeRawDate}>Tokenize</Button>
-          </div>
-        </div>
+          </Col>
+        </Row>
       );
     }
   };
@@ -340,17 +338,12 @@ class CreateDataApprovalForm extends Component {
     this.state.form.synonyms.forEach((synonym) => {
       list.push(synonym);
     });
-
-    console.log(list);
-    console.log(word);
-
     let newList = [];
     list.forEach((item) => {
       if (item.word !== word) {
         newList.push(item);
       }
     });
-
     currentState.form.synonyms = newList;
     this.setState(currentState);
   };
@@ -358,32 +351,55 @@ class CreateDataApprovalForm extends Component {
   render() {
     return (
       <div>
-        <div className="d-flex justify-content-center m-3">
-          <h1>New data approval</h1>
-        </div>
-        <div>
-          <div className="container w-80">
-            <Intent setIntent={this.setIntent} />
-          </div>
-          <div className="container w-80 mt-3">
-            <div>
+        <Container fluid={true}>
+          <FormTitle title="New data Approval" />
+          <FormSectionTitle title="Meta data" />
+          <SynonymsModal ref={this.modalRef} addSynonym={this.addSynonym} />
+          <Menu id="menu_id">
+            <Item onClick={this.addComponent}>
+              Add to component of question
+            </Item>
+            <Item onClick={this.addCriticalData}>Add to critical data</Item>
+            <Item onClick={this.addCoresponse}>Add coresponse</Item>
+            <Separator />
+            <Item onClick={this.openSynonymsModal}>Add synonym</Item>
+          </Menu>
+          <Intent className="m-3" setIntent={this.setIntent} />
+          <Reference
+            setDocument={this.setDocument}
+            setPage={this.setPage}
+            documentValue={this.documentRef}
+            pageValue={this.pageRef}
+            documentInnerRef={this.documentRef}
+            pageInnerRef={this.pageRef}
+          />
+
+          <FormSectionTitle title="Data analysis" />
+          <Row xs="1">
+            <Col>
               <Label for="rawData">Raw data:</Label>
-            </div>
-            <div style={{ width: "100%" }}>{this.renderRawDataMode()}</div>
-          </div>
-          <div className="container w-80 d-flex justify-content-between mt-3">
-            <div>
+              <div style={{ width: "100%" }}>{this.renderRawDataMode()}</div>
+            </Col>
+          </Row>
+          <Row className="mt-3" xs="3">
+            <Col>
               <Label>Component of question</Label>
-              <div className="row">
-                <Input
-                  innerRef={this.componentRef}
-                  className="col-2"
-                  type="text"
-                  name="componentOfQuestion"
-                />
-                <div id="component-field" className="m-1"></div>
-                <Button onClick={this.setComponentOfQuestion}>Add</Button>
-              </div>
+              <Row>
+                <Col xs="3">
+                  <Input
+                    innerRef={this.componentRef}
+                    type="text"
+                    name="componentOfQuestion"
+                    placeholder="Type"
+                  />
+                </Col>
+                <div className="over-flow mw-55">
+                  <div id="component-field" className="m-1"></div>
+                </div>
+                <Col xs="2" className="p-0">
+                  <Button onClick={this.setComponentOfQuestion}>Add</Button>
+                </Col>
+              </Row>
               <div id="component-list">
                 <GenList
                   type="component"
@@ -392,19 +408,25 @@ class CreateDataApprovalForm extends Component {
                   removeComponent={this.removeComponent}
                 />
               </div>
-            </div>
-            <div>
+            </Col>
+            <Col>
               <Label>Critical data</Label>
-              <div className="row">
-                <Input
-                  innerRef={this.criticalDataRef}
-                  className="col-2"
-                  type="text"
-                  name="criticalData"
-                />
-                <div id="critical-field" className="m-1"></div>
-                <Button onClick={this.setCritical}>Add</Button>
-              </div>
+              <Row>
+                <Col xs="3">
+                  <Input
+                    innerRef={this.criticalDataRef}
+                    type="text"
+                    name="criticalData"
+                    placeholder="Type"
+                  />
+                </Col>
+                <div className="over-flow mw-55">
+                  <div id="critical-field" className="m-1"></div>
+                </div>
+                <Col xs="2" className="p-0">
+                  <Button onClick={this.setCritical}>Add</Button>
+                </Col>
+              </Row>
               <div id="critical-list">
                 <GenList
                   type="critical"
@@ -413,19 +435,25 @@ class CreateDataApprovalForm extends Component {
                   removeComponent={this.removeComponent}
                 />
               </div>
-            </div>
-            <div>
+            </Col>
+            <Col>
               <Label>Coresponse</Label>
-              <div className="row">
-                <Input
-                  innerRef={this.coresponseRef}
-                  className="col-2"
-                  type="text"
-                  name="coresponse"
-                />
-                <div id="coresponse-field" className="m-1"></div>
-                <Button onClick={this.setCoresponse}>Add</Button>
-              </div>
+              <Row>
+                <Col xs="3">
+                  <Input
+                    innerRef={this.coresponseRef}
+                    type="text"
+                    name="coresponse"
+                    placeholder="Type"
+                  />
+                </Col>
+                <div className="over-flow mw-55">
+                  <div id="coresponse-field" className="m-1"></div>
+                </div>
+                <Col xs="2" className="p-0">
+                  <Button onClick={this.setCoresponse}>Add</Button>
+                </Col>
+              </Row>
               <div id="coresponse-list">
                 <GenList
                   type="coresponse"
@@ -434,86 +462,36 @@ class CreateDataApprovalForm extends Component {
                   removeComponent={this.removeComponent}
                 />
               </div>
-            </div>
-
-            <div></div>
-          </div>
-          <div className="container w-80 mt-3">
-            <Question setQuestions={this.setQuestions} />
-          </div>
-          <div className="container w-80 mt-3 d-flex justify-content-start p-0">
-            <Label for="baseResponse">Base response</Label>
-            <Input
-              innerRef={this.baseResRef}
-              type="textarea"
-              name="baseResponse"
-              id="baseResponse"
-              onChange={() => {
-                this.setBaseRes(this.baseResRef.current.value);
-              }}
-            />
-          </div>
-          <div className="container w-80 mt-3 d-flex justify-content-start p-0">
-            <SynonymsModal ref={this.modalRef} addSynonym={this.addSynonym} />
-            <div>Synonyms:</div>
-            <div ref={this.synonymFieldRef} id="synonym-field"></div>
-            <Button onClick={this.setSynonym}>Confirm</Button>
-            <GenSynonyms
-              currentState={this.state}
-              list={this.state.form.synonyms}
-              removeSynonym={this.removeSynonym}
-            />
-          </div>
-          <div className="container w-80 mt-3 d-flex justify-content-start p-0">
-            <div className="d-flex justify-content-center mr-5">
-              <Label for="reference">Document reference: </Label>
+            </Col>
+          </Row>
+          <Question className="mt-3" setQuestions={this.setQuestions} />
+          <Row className="mt-3" xs="1">
+            <Col xs="11">
+              <Label for="baseResponse">Base response</Label>
               <Input
-                className="m-1"
-                innerRef={this.documentRef}
-                type="select"
-                name="reference"
-                id="reference"
+                innerRef={this.baseResRef}
+                type="textarea"
+                name="baseResponse"
+                id="baseResponse"
                 onChange={() => {
-                  this.setDocument(this.documentRef.current.value);
-                }}
-              >
-                <option>HCM tap 1</option>
-                <option>HCM tap 2</option>
-                <option>HCM tap 3</option>
-                <option>HCM tap 4</option>
-                <option>HCM tap 5</option>
-              </Input>
-              <Button>Add new reference</Button>
-            </div>
-            <div className="d-flex justify-content-center">
-              <Label for="page">Page:</Label>
-              <Input
-                className="m-1"
-                innerRef={this.pageRef}
-                type="number"
-                name="Page"
-                id="Page"
-                min="1"
-                value="1"
-                onChange={() => {
-                  this.setPage(this.pageRef.current.value);
+                  this.setBaseRes(this.baseResRef.current.value);
                 }}
               />
-            </div>
-          </div>
-        </div>
-        
-        <div className="d-flex justify-content-center mt-5">
-          <Button onClick={this.submitForm}>Create new data approval</Button>
-        </div>
-
-        <Menu id="menu_id">
-          <Item onClick={this.addComponent}>Add to component of question</Item>
-          <Item onClick={this.addCriticalData}>Add to critical data</Item>
-          <Item onClick={this.addCoresponse}>Add coresponse</Item>
-          <Separator />
-          <Item onClick={this.openSynonymsModal}>Add synonym</Item>
-        </Menu>
+            </Col>
+          </Row>
+          <Synonyms
+            synonymFieldRef={this.synonymFieldRef}
+            setSynonym={this.setSynonym}
+          />
+          <GenSynonyms
+            currentState={this.state}
+            list={this.state.form.synonyms}
+            removeSynonym={this.removeSynonym}
+          />
+          <Row className="d-flex justify-content-around mt-3">
+            <Button onClick={this.submitForm}>Create new data approval</Button>
+          </Row>
+        </Container>
       </div>
     );
   }

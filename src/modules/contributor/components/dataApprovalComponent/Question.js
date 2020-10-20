@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Button } from "reactstrap";
+import { Input, Button, Row, Col } from "reactstrap";
 
 export default class Question extends Component {
   constructor() {
@@ -31,31 +31,37 @@ export default class Question extends Component {
   render() {
     return (
       <div>
-        <div className="row">
-          <div>Question</div>
-          <div className="col-9">
-            <Input
-              innerRef={this.questionRef}
-              type="text"
-              name="question"
-              id="question"
-            />
-          </div>
-          <div>
-            <Button
-              onClick={() => {
-                this.addQuestion(this.getQuestion());
-                this.props.setQuestions(this.state.questions);
-              }}
-            >
-              Add question
-            </Button>
-          </div>
-        </div>
+        <Row xs="1">
+          <Col>Question</Col>
+          <Col>
+            <Row>
+              <Col>
+                <Input
+                  innerRef={this.questionRef}
+                  type="text"
+                  name="question"
+                  id="question"
+                />
+              </Col>
+              <Col xs="1">
+                <Button
+                  onClick={() => {
+                    this.addQuestion(this.getQuestion());
+                    this.props.setQuestions(this.state.questions);
+                  }}
+                >
+                  Add
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <div>
           {this.state.questions.map((question) => (
             <div className="mt-2">
-              <span className="mr-3" key={question}>- {question}</span>
+              <span className="mr-3" key={question}>
+                - {question}
+              </span>
               <Button
                 onClick={() => {
                   this.removeQuestion(question);

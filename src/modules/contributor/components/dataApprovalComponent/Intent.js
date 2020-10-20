@@ -1,16 +1,14 @@
 import React, { useRef } from "react";
-import { FormGroup, Label, Input, Col } from "reactstrap";
+import { Input, Col, Row } from "reactstrap";
 
 const Intent = (props) => {
   const intentRef = useRef("");
   const intentFullNameRef = useRef("");
   return (
-    <div className="row">
-      <div className="col">
-        <FormGroup row>
-          <Label for="intent">
-            Intent:
-          </Label>
+    <Row>
+      <Col xs="6" sm="4">
+        <Row>
+          <Col xs="auto">Intent:</Col>
           <Col>
             <Input
               innerRef={intentRef}
@@ -25,13 +23,11 @@ const Intent = (props) => {
               }}
             />
           </Col>
-        </FormGroup>
-      </div>
-      <div className="col">
-        <FormGroup row>
-          <Label for="intentFullName">
-            Intent full name:
-          </Label>
+        </Row>
+      </Col>
+      <Col xs="6" sm="4">
+        <Row>
+          <Col xs="auto">Intent full name:</Col>
           <Col>
             <Input
               innerRef={intentFullNameRef}
@@ -46,9 +42,10 @@ const Intent = (props) => {
               }}
             />
           </Col>
-        </FormGroup>
-      </div>
-    </div>
+        </Row>
+      </Col>
+      <Col sm="4"></Col>
+    </Row>
   );
 };
 

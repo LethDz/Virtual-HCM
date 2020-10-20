@@ -1,12 +1,12 @@
 import React from "react";
-import { Button } from "reactstrap";
+import { Button, Row, Col } from "reactstrap";
 
 const GenSynonyms = (props) => {
   const list = props.list.map((item, index) => {
     return (
       <div>
-        <div key={index}>
-          <h1>
+        <Row key={index}>
+          <Col>
             <span>Word: {item.word}</span>
             <span>
               ; With meaning{" "}
@@ -14,15 +14,17 @@ const GenSynonyms = (props) => {
                 return <span>{meaning}</span>;
               })}
             </span>
-          </h1>
-          <Button
-            onClick={() => {
-              props.removeSynonym(props.currentState, item.word);
-            }}
-          >
-            remove
-          </Button>
-        </div>
+          </Col>
+          <Col>
+            <Button
+              onClick={() => {
+                props.removeSynonym(props.currentState, item.word);
+              }}
+            >
+              remove
+            </Button>
+          </Col>
+        </Row>
       </div>
     );
   });

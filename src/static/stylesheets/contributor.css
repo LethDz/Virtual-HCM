@@ -1,7 +1,22 @@
-.w-80{
-    width: 80%;
+.w-80 {
+  width: 80%;
 }
 
 .person {
-    color: red;
+  color: red;
+}
+
+.over-flow {
+  overflow: auto;
+}
+
+.mw-55 {
+  max-width: 55%;
+}
+
+.section-line {
+  height: 2px;
+  border-width: 0;
+  color: gray;
+  background-color: gray;
 }
