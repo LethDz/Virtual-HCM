@@ -1,34 +1,25 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, FormGroup, Label, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Form, Input, Button, Label, Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 class ReferenceModal extends Component {
-  constructor() {
-    super();
-    this.state = {
-      modal: false,
-      data: {
-        id: 1,
-        name: 'Ho Chi Minh Toan Tap 1',
-        author: 'Ho Chi Minh',
-        link: 'hochiminh.vn'
-      }
-    }
-  }
-
   render() {
     return (
       <div className="ag-theme-alpine">
-        <Modal isOpen>
+        <Modal isOpen={this.props.modal}>
           <ModalHeader>Document Reference</ModalHeader>
           <ModalBody>
-            <h5>ID: {this.state.data.id}</h5>
+            <h5>ID: {this.props.data.id}</h5>
             <Form>
               <div className="row">
                 <div className="col-3">
                   <Label>Reference name: </Label>
                 </div>
                 <div className="col-6">
-                  <Input id="reference" type="text" value={this.state.data.name} />
+                  <Input
+                    id="reference"
+                    type="text"
+                    value={this.props.data.reference}
+                  />
                 </div>
                 <div className="col-3">
                   <Button >Save</Button>
@@ -40,7 +31,11 @@ class ReferenceModal extends Component {
                   <Label>Author: </Label>
                 </div>
                 <div className="col-6">
-                  <Input id="reference" type="text" value={this.state.data.author} />
+                  <Input
+                    id="reference"
+                    type="text"
+                    value={this.props.data.author}
+                  />
                 </div>
               </div>
 
@@ -49,7 +44,11 @@ class ReferenceModal extends Component {
                   <Label>Link: </Label>
                 </div>
                 <div className="col-6">
-                  <Input id="reference" type="text" value={this.state.data.link} />
+                  <Input
+                    id="reference"
+                    type="text"
+                    value={this.props.data.link}
+                  />
                 </div>
                 <div className="col-3">
                   <Button >Delete</Button>

@@ -1,6 +1,6 @@
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import React, { Component } from 'react';
-import { ReferencePopup} from "src/modules/contributor/index"
+import { ReferenceModal } from "src/modules/contributor/index"
 
 class ReferenceList extends Component {
     constructor() {
@@ -13,6 +13,14 @@ class ReferenceList extends Component {
                 { id: "3", reference: "Ho Chi Minh Toan Tap 3", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
             ],
             gridApi: "",
+            selectedRow: {
+                id: "",
+                reference: "",
+                author: "",
+                link: "",
+                createdBy: "",
+                editBy: ""
+            }
         };
     }
 
@@ -20,12 +28,16 @@ class ReferenceList extends Component {
         let currentState = this.state;
         currentState.gridApi = params.api;
         this.setState(currentState);
-      };
+    };
 
-    onSelectionChanged = () => {
-        let selectedNodes = this.state.gridApi.getSelectedNodes();
+    onRowDoubleClicked = () => {
+        let currentState = this.state;
+        let selectedNodes = currentState.gridApi.getSelectedNodes();
         let selectedRow = selectedNodes.map(node => node.data);
-        console.log(selectedRow);
+        currentState.selectedRow = selectedRow[0];
+        currentState.modal = !currentState.modal;
+        this.setState(currentState);
+        // console.log(selectedRow);
     }
 
     render() {
@@ -36,7 +48,7 @@ class ReferenceList extends Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                         rowSelection="single"
-                        onSelectionChanged={this.onSelectionChanged.bind(this)}
+                        onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
                     >
                         <AgGridColumn field="id" sortable filter></AgGridColumn>
                         <AgGridColumn field="reference" sortable filter></AgGridColumn>
@@ -44,6 +56,8 @@ class ReferenceList extends Component {
                         <AgGridColumn field="createdBy" sortable filter></AgGridColumn>
                         <AgGridColumn field="editBy" sortable filter></AgGridColumn>
                     </AgGridReact>
+
+                    <ReferenceModal modal={this.state.modal} data={this.state.selectedRow} />
                 </div>
             </div>
         );
