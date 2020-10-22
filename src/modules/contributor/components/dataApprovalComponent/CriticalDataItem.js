@@ -36,7 +36,7 @@ class CriticalDataItem extends Component {
         <Col>
           <Input type="select" name="word" onChange={this.handleInput}>
             <option selected disabled>None</option>
-            {this.props.getWordArray().map((data, index) => {
+            {this.props.wordArray.map((data, index) => {
               return <option key={index}>{data.value}</option>;
             })}
           </Input>

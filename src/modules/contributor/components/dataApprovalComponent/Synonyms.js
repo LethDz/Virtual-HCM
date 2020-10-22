@@ -3,7 +3,8 @@ import { Row, Col, Button, Input, ListGroup, ListGroupItem } from "reactstrap";
 import { handleInputChange } from "src/common/handleInputChange";
 
 import { SynonymsModal } from "src/modules/contributor/index";
-class Synonyms1 extends Component {
+
+class Synonyms extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -107,4 +108,4 @@ class Synonyms1 extends Component {
   }
 }
 
-export default Synonyms1;
+export default Synonyms;

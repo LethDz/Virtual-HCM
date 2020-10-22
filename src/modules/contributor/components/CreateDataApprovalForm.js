@@ -1,25 +1,15 @@
 import React, { Component } from "react";
-import {
-  Label,
-  Input,
-  Button,
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  ListGroupItem,
-} from "reactstrap";
-import { MenuProvider } from "react-contexify";
+import { Button, Container, Row } from "reactstrap";
 import {
   Question,
-  // SynonymsModal,
-  // GenSynonyms,
-  // GenList,
   FormTitle,
   FormSectionTitle,
-  CriticalDataItem,
   MetaData,
   Synonyms,
+  RawData,
+  BaseResponse,
+  Coresponse,
+  CriticalData,
 } from "src/modules/contributor/index";
 import "src/static/stylesheets/contributor.css";
 import {
@@ -34,7 +24,6 @@ class CreateDataApprovalForm extends Component {
   constructor() {
     super();
     this.state = {
-      mode: "NORMAL",
       form: {
         intent: "",
         intentFullName: "",
@@ -47,20 +36,14 @@ class CreateDataApprovalForm extends Component {
         baseResponse: "",
         documentReference: "",
         page: "",
-      }
+      },
     };
-
-    this.synonymFieldRef = React.createRef("");
     this.modalRef = React.createRef("");
   }
 
-  handleInputForm = (event) => {
-    handleInputFormChange(event, this);
-  };
+  handleInputForm = (event) => handleInputFormChange(event, this);
 
-  handleInput = (event) => {
-    handleInputChange(event, this);
-  };
+  handleInput = (event) => handleInputChange(event, this);
 
   addCriticalData = () => {
     let type = document.getElementById("critical-data-type").value;
@@ -107,7 +90,7 @@ class CreateDataApprovalForm extends Component {
     let currentState = this.state;
     let synonymObject = {
       word: word,
-      synonyms: []
+      synonyms: [],
     };
     currentState.form.synonyms.push(synonymObject);
     this.setState(currentState);
@@ -124,14 +107,14 @@ class CreateDataApprovalForm extends Component {
   };
 
   removeSynonymInWord = (wordIndex, synonymIndex) => {
-    let form = this.state.form
+    let form = this.state.form;
     if (synonymIndex > -1) {
       form.synonyms[wordIndex].synonyms.splice(synonymIndex, 1);
     }
     this.setState({
       form: form,
     });
-  }
+  };
 
   openSynonymsModal = () => {
     this.modalRef.current.setModal();
@@ -161,21 +144,9 @@ class CreateDataApprovalForm extends Component {
   };
 
   setQuestions = (questions) => {
-    let newState = this.state;
-    newState.form.questions = questions;
-    this.setState(newState);
-  };
-
-  stateTokenizeRawDate = () => {
-    let newState = this.state;
-    newState.mode = "TOKENIZE";
-    this.setState(newState);
-  };
-
-  stateCancelTokenize = () => {
-    let newState = this.state;
-    newState.mode = "NORMAL";
-    this.setState(newState);
+    let form = this.state.form;
+    form.questions = questions;
+    this.setState({ form: form });
   };
 
   getWordArray = () => {
@@ -185,45 +156,6 @@ class CreateDataApprovalForm extends Component {
       wordArray.push(rawData[index]);
     }
     return wordArray;
-  };
-
-  renderRawDataMode = () => {
-    if (this.state.mode === "TOKENIZE") {
-      return (
-        <Row>
-          <Col>
-            <MenuProvider id="menu_id">
-              {this.getWordArray().map((data, index) => {
-                return (
-                  <span className="mr-1" key={index}>
-                    {data.value}
-                  </span>
-                );
-              })}
-            </MenuProvider>
-          </Col>
-          <Col xs="1" className="p-0">
-            <Button onClick={this.stateCancelTokenize}>Cancel</Button>
-          </Col>
-        </Row>
-      );
-    } else {
-      return (
-        <Row>
-          <Col>
-            <Input
-              type="textarea"
-              name="rawData"
-              id="rawData"
-              onChange={this.handleInputForm}
-            />
-          </Col>
-          <Col xs="1" className="p-0">
-            <Button onClick={this.stateTokenizeRawDate}>Tokenize</Button>
-          </Col>
-        </Row>
-      );
-    }
   };
 
   removeComponent = (criticalIndex, verbIndex) => {
@@ -254,8 +186,6 @@ class CreateDataApprovalForm extends Component {
   };
 
   render() {
-    const criticalType = ["PER", "LOC", "ORG", "MISC"];
-    const questionType = ["WHAT", "WHEN", "WHERE", "WHO", "WHY", "HOW"];
     const wordArray = this.getWordArray();
 
     return (
@@ -267,149 +197,35 @@ class CreateDataApprovalForm extends Component {
           <MetaData onChange={this.handleInputForm} />
 
           <FormSectionTitle title="Data analysis" />
-          <Row xs="1">
-            <Col>
-              <Label for="rawData">Raw data:</Label>
-              {this.renderRawDataMode()}
-            </Col>
-          </Row>
+          <RawData
+            getWordArray={this.getWordArray}
+            onChange={this.handleInputForm}
+          />
           <Row className="mt-3" xs="3">
-            <Col xs="7">
-              <Label>Critical data</Label>
-              <Row>
-                <Col xs="auto">
-                  <Input type="select" id="critical-data-type">
-                    {criticalType.map((value, index) => {
-                      return <option key={index}>{value}</option>;
-                    })}
-                  </Input>
-                </Col>
-                <Col>
-                  <Input type="select" id="critical-data-index">
-                    {wordArray.map((data, index) => {
-                      return <option key={index}>{data.value}</option>;
-                    })}
-                  </Input>
-                </Col>
-                <Col xs="auto" className="p-0">
-                  <Button onClick={this.addCriticalData}>Add</Button>
-                </Col>
-              </Row>
-              <ListGroup className="mt-1">
-                {this.state.form.criticalData.map((criticalData, index) => {
-                  return (
-                    <ListGroupItem key={index}>
-                      <Row>
-                        <Col>
-                          <Row>
-                            {criticalData.type}: {criticalData.word}
-                          </Row>
-                          <ListGroup>
-                            {this.state.form.criticalData[index].verb.map(
-                              (verb, index) => {
-                                return (
-                                  <ListGroupItem className="mt-1" key={index}>
-                                    <Row>
-                                      <Col>
-                                        {verb.type}: {verb.word}
-                                      </Col>
-                                      <Col xs="auto">
-                                        <Button
-                                          onClick={() => {
-                                            this.removeComponent(
-                                              criticalData.index,
-                                              index
-                                            );
-                                          }}
-                                        >
-                                          Remove
-                                        </Button>
-                                      </Col>
-                                    </Row>
-                                  </ListGroupItem>
-                                );
-                              }
-                            )}
-                          </ListGroup>
-                        </Col>
-                        <Col>
-                          <CriticalDataItem
-                            index={criticalData.index}
-                            getWordArray={this.getWordArray}
-                            setVerb={this.setVerb}
-                          />
-                        </Col>
-                      </Row>
-                    </ListGroupItem>
-                  );
-                })}
-              </ListGroup>
-            </Col>
-            <Col>
-              <Label>Coresponse</Label>
-              <Row>
-                <Col xs="4">
-                  <Input type="select" id="coresponse-type" placeholder="Type">
-                    {questionType.map((value, index) => {
-                      return <option key={index}>{value}</option>;
-                    })}
-                  </Input>
-                </Col>
-                <Col>
-                  <Input type="select" id="coresponse-index">
-                    {wordArray.map((data, index) => {
-                      return <option key={index}>{data.value}</option>;
-                    })}
-                  </Input>
-                </Col>
-                <Col xs="2" className="p-0">
-                  <Button onClick={this.addCoresponse}>Add</Button>
-                </Col>
-              </Row>
-              <ListGroup className="mt-1">
-                {this.state.form.coresponse.map((coresponse, index) => {
-                  return (
-                    <ListGroupItem key={index}>
-                      <Row>
-                        <Col>
-                          {coresponse.type}: {coresponse.word}
-                        </Col>
-                        <Col xs="auto">
-                          <Button
-                            onClick={() => {
-                              this.removeCoresponse(index);
-                            }}
-                          >
-                            Remove
-                          </Button>
-                        </Col>
-                      </Row>
-                    </ListGroupItem>
-                  );
-                })}
-              </ListGroup>
-            </Col>
+            <CriticalData
+              addCriticalData={this.addCriticalData}
+              removeComponent={this.removeComponent}
+              setVerb={this.setVerb}
+              wordArray={wordArray}
+              criticalData={this.state.form.criticalData}
+            />
+
+            <Coresponse
+              addCoresponse={this.addCoresponse}
+              removeCoresponse={this.removeCoresponse}
+              wordArray={wordArray}
+              coresponse={this.state.form.coresponse}
+            />
           </Row>
           <Question className="mt-3" setQuestions={this.setQuestions} />
-          <Row className="mt-3" xs="1">
-            <Col xs="11">
-              <Label for="baseResponse">Base response</Label>
-              <Input
-                type="textarea"
-                name="baseResponse"
-                id="baseResponse"
-                onChange={this.handleInputForm}
-              />
-            </Col>
-          </Row>
-
+          <BaseResponse onChange={this.handleInputForm} />
           <Synonyms
             addSynonym={this.addSynonym}
             setSynonym={this.setSynonym}
-            wordArray={wordArray}
-            synonymList={this.state.form.synonyms}
             removeSynonym={this.removeSynonym}
             removeSynonymInWord={this.removeSynonymInWord}
+            wordArray={wordArray}
+            synonymList={this.state.form.synonyms}
           />
 
           <Row className="d-flex justify-content-around mt-3">
