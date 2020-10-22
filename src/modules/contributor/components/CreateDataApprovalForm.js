@@ -250,7 +250,7 @@ class CreateDataApprovalForm extends Component {
           </div>
 
           <Row className="d-flex justify-content-around pt-3 pb-3">
-            <Button onClick={this.submitForm}>Create new data approval</Button>
+            <Button color="info" onClick={this.submitForm}>Create new data approval</Button>
           </Row>
         </Container>
       </div>

@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 class SynonymsModal extends Component {
   constructor() {
     super();
@@ -27,14 +30,14 @@ class SynonymsModal extends Component {
       selectedSynonyms: [],
       gridApi: "",
       gridColumnApi: "",
-      index: ""
+      index: "",
     };
   }
 
   setModal = (index) => {
     let currentState = this.state;
     currentState.modal = !currentState.modal;
-    currentState.index = index
+    currentState.index = index;
     this.setState(currentState);
   };
 
@@ -60,7 +63,7 @@ class SynonymsModal extends Component {
 
   addSynonyms = () => {
     this.props.addSynonym(this.state.selectedSynonyms, this.state.index);
-    this.setModal()
+    this.setModal();
   };
 
   render() {
@@ -102,8 +105,8 @@ class SynonymsModal extends Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.addSynonyms}>
-              Add
+            <Button color="success" onClick={this.addSynonyms}>
+              <FontAwesomeIcon icon={faPlus} />
             </Button>
           </ModalFooter>
         </Modal>

@@ -31,7 +31,7 @@ class RawData extends Component {
             })}
           </Col>
           <Col xs="1" className="p-0">
-            <Button onClick={this.stateCancelTokenize}>Cancel</Button>
+            <Button color="danger" onClick={this.stateCancelTokenize}>Cancel</Button>
           </Col>
         </Row>
       );
@@ -47,7 +47,7 @@ class RawData extends Component {
             />
           </Col>
           <Col xs="1" className="p-0">
-            <Button onClick={this.stateTokenizeRawDate}>Tokenize</Button>
+            <Button color="primary" onClick={this.stateTokenizeRawDate}>Tokenize</Button>
           </Col>
         </Row>
       );

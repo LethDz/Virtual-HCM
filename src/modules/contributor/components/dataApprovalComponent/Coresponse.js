@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Col, Row, Label, Input, ListGroup, ListGroupItem, Button} from "reactstrap"
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
 class Coresponse extends Component {
   render() {
     const questionType = ["WHAT", "WHEN", "WHERE", "WHO", "WHY", "HOW"];
@@ -19,7 +22,7 @@ class Coresponse extends Component {
             <Input id="coresponse-index" />
           </Col>
           <Col xs="auto">
-            <Button onClick={this.props.addCoresponse}>Add</Button>
+            <Button color="success" onClick={this.props.addCoresponse}><FontAwesomeIcon icon={faPlus} /> Coresponse</Button>
           </Col>
         </Row>
         <ListGroup className="mt-1">
@@ -31,12 +34,12 @@ class Coresponse extends Component {
                     {coresponse.type}: {coresponse.word}
                   </Col>
                   <Col xs="auto">
-                    <Button
+                    <Button color="danger"
                       onClick={() => {
                         this.props.removeCoresponse(index);
                       }}
                     >
-                      Remove
+                      <FontAwesomeIcon icon={faTrashAlt} />
                     </Button>
                   </Col>
                 </Row>

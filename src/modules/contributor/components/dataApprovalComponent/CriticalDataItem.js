@@ -3,6 +3,9 @@ import { Row, Col, Input, Button } from "reactstrap";
 
 import { handleInputChange } from "src/common/handleInputChange";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 class CriticalDataItem extends Component {
   constructor(props) {
     super();
@@ -10,7 +13,6 @@ class CriticalDataItem extends Component {
       verbType: "",
       word: "",
     };
-
   }
 
   handleInput = (event) => {
@@ -20,42 +22,73 @@ class CriticalDataItem extends Component {
   setVerb = () => {
     if (this.props.type === "Critical") {
       if (this.state.verbType !== "" && this.state.word !== "") {
-        this.props.setCriticalData(this.props.index, this.state.verbType, this.state.word)
+        this.props.setCriticalData(
+          this.props.index,
+          this.state.verbType,
+          this.state.word
+        );
       }
-    }
-    else if (this.props.type === "Verb") {
+    } else if (this.props.type === "Verb") {
       if (this.state.verbType !== "" && this.state.word !== "") {
-        this.props.setVerb(this.props.index, this.state.verbType, this.state.word)
+        this.props.setVerb(
+          this.props.index,
+          this.state.verbType,
+          this.state.word
+        );
       }
     }
-    
-  }
+  };
 
   render() {
-    const POSTags = ["Np", "Nc", "Nu", "N", "Ny", "Nb", "V", "Vb", "A", "P", "R", "L", "M", "E", "C", "Cc", "I", "T", "Y", "Z", "X", "CH"]
+    const POSTags = [
+      "Np",
+      "Nc",
+      "Nu",
+      "N",
+      "Ny",
+      "Nb",
+      "V",
+      "Vb",
+      "A",
+      "P",
+      "R",
+      "L",
+      "M",
+      "E",
+      "C",
+      "Cc",
+      "I",
+      "T",
+      "Y",
+      "Z",
+      "X",
+      "CH",
+    ];
     return (
       <Row>
         <Col xs="auto">
           <Input type="select" name="verbType" onChange={this.handleInput}>
-            <option selected disabled>None</option>
+            <option selected disabled>
+              None
+            </option>
             {POSTags.map((value, index) => {
-              return (<option key={index}>{value}</option>)
+              return <option key={index}>{value}</option>;
             })}
           </Input>
         </Col>
         <Col xs="auto">
           <Input type="select" name="word" onChange={this.handleInput}>
-            <option selected disabled>None</option>
+            <option selected disabled>
+              None
+            </option>
             {this.props.wordArray.map((data, index) => {
               return <option key={index}>{data.value}</option>;
             })}
           </Input>
         </Col>
         <Col xs="auto" className="p-0">
-          <Button
-            onClick={this.setVerb}
-          >
-            Add
+          <Button color="success" onClick={this.setVerb}>
+            <FontAwesomeIcon icon={faPlus} />
           </Button>
         </Col>
       </Row>

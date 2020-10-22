@@ -9,6 +9,10 @@ import {
   Button,
 } from "reactstrap";
 import { CriticalDataItem } from "src/modules/contributor/index";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+
 class CriticalData extends Component {
   render() {
     const criticalType = ["PER", "LOC", "ORG", "MISC"];
@@ -26,7 +30,9 @@ class CriticalData extends Component {
           </Col>
 
           <Col xs="auto">
-            <Button onClick={this.props.addCriticalData}>Add</Button>
+            <Button color="success" onClick={this.props.addCriticalData}>
+              <FontAwesomeIcon icon={faPlus} /> Subject
+            </Button>
           </Col>
         </Row>
         <ListGroup className="mt-1">
@@ -41,11 +47,12 @@ class CriticalData extends Component {
                   </Col>
                   <Col xs="auto">
                     <Button
+                      color="danger"
                       onClick={() => {
                         this.props.removeCritical(index);
                       }}
                     >
-                      Remove
+                      <FontAwesomeIcon icon={faTrashAlt} />
                     </Button>
                   </Col>
                 </Row>
@@ -69,6 +76,7 @@ class CriticalData extends Component {
                                 </Col>
                                 <Col xs="auto">
                                   <Button
+                                    color="danger"
                                     onClick={() => {
                                       this.props.removeComponent(
                                         "Critical",
@@ -77,7 +85,7 @@ class CriticalData extends Component {
                                       );
                                     }}
                                   >
-                                    Remove
+                                    <FontAwesomeIcon icon={faTrashAlt} />
                                   </Button>
                                 </Col>
                               </Row>
@@ -106,6 +114,7 @@ class CriticalData extends Component {
                                 </Col>
                                 <Col xs="auto">
                                   <Button
+                                    color="danger"
                                     onClick={() => {
                                       this.props.removeComponent(
                                         "Verb",
@@ -114,7 +123,7 @@ class CriticalData extends Component {
                                       );
                                     }}
                                   >
-                                    Remove
+                                    <FontAwesomeIcon icon={faTrashAlt} />
                                   </Button>
                                 </Col>
                               </Row>

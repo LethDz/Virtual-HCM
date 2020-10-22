@@ -4,6 +4,9 @@ import { handleInputChange } from "src/common/handleInputChange";
 
 import { SynonymsModal } from "src/modules/contributor/index";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+
 class Synonyms extends Component {
   constructor(props) {
     super();
@@ -24,7 +27,7 @@ class Synonyms extends Component {
   };
 
   removeSynonym = (wordIndex, synonymIndex) => {
-    this.props.removeSynonymInWord(wordIndex, synonymIndex)
+    this.props.removeSynonymInWord(wordIndex, synonymIndex);
   };
 
   render() {
@@ -51,7 +54,7 @@ class Synonyms extends Component {
               <ListGroup>
                 {this.props.synonymList.map((word, index) => {
                   return (
-                    <ListGroupItem key={index}>
+                    <ListGroupItem key={index} className="mt-1">
                       <Row>
                         <Col>
                           {word.word}
@@ -63,9 +66,14 @@ class Synonyms extends Component {
                                     <Row>
                                       <Col>{synonym.meaning}</Col>
                                       <Col xs="auto">
-                                        <Button onClick={() => {
-                                          this.removeSynonym(index, indexs)
-                                        }}>Remove</Button>
+                                        <Button
+                                          color="danger"
+                                          onClick={() => {
+                                            this.removeSynonym(index, indexs);
+                                          }}
+                                        >
+                                          <FontAwesomeIcon icon={faTrashAlt} />
+                                        </Button>
                                       </Col>
                                     </Row>
                                   </ListGroupItem>
@@ -76,20 +84,22 @@ class Synonyms extends Component {
                         </Col>
                         <Col xs="auto">
                           <Button
+                            color="success"
                             onClick={() => {
                               this.modalRef.current.setModal(index);
                             }}
                           >
-                            Add synonym
+                            <FontAwesomeIcon icon={faPlus} /> Synonym
                           </Button>
                         </Col>
                         <Col xs="auto">
                           <Button
+                            color="danger"
                             onClick={() => {
                               this.props.removeSynonym(index);
                             }}
                           >
-                            Remove
+                            <FontAwesomeIcon icon={faTrashAlt} />
                           </Button>
                         </Col>
                       </Row>
@@ -99,7 +109,9 @@ class Synonyms extends Component {
               </ListGroup>
             </Col>
             <Col xs="auto">
-              <Button onClick={this.setSynonym}>Add</Button>
+              <Button color="success" onClick={this.setSynonym}>
+                <FontAwesomeIcon icon={faPlus} /> Add
+              </Button>
             </Col>
           </Row>
         </Col>

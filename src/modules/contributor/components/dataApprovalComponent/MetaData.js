@@ -1,15 +1,23 @@
 import React from "react";
 import { Row, Col, Label, Input, Button } from "reactstrap";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 const MetaData = (props) => {
+  const references = ["HCM tap 4", "HCM tap 5", "HCM tap 6"];
   return (
     <Row className="pb-3">
       <Col className="pr-0" xs="auto">
         <Col>
-          <Label className="label" for="intent">Intent:</Label>
+          <Label className="label" for="intent">
+            Intent:
+          </Label>
         </Col>
         <Col>
-          <Label className="label" for="intentFullName">Intent full name:</Label>
+          <Label className="label" for="intentFullName">
+            Intent full name:
+          </Label>
         </Col>
       </Col>
       <Col className="m-1 pl-0 ml-0">
@@ -30,10 +38,14 @@ const MetaData = (props) => {
       </Col>
       <Col className="pr-0" xs="auto">
         <Col>
-          <Label className="label" for="reference">Document reference: </Label>
+          <Label className="label" for="reference">
+            Document reference:{" "}
+          </Label>
         </Col>
         <Col>
-          <Label className="label" for="page">Page:</Label>
+          <Label className="label" for="page">
+            Page:
+          </Label>
         </Col>
       </Col>
       <Col className="m-1 pl-0 ml-0">
@@ -45,9 +57,9 @@ const MetaData = (props) => {
             id="reference"
             onChange={props.onChange}
           >
-            <option>HCM tap 4</option>
-            <option>HCM tap 5</option>
-            <option>HCM tap 6</option>
+            {references.map((reference, index) => {
+              return <option key={index}>{reference}</option>;
+            })}
           </Input>
         </Col>
         <Col className="m-1">
@@ -62,7 +74,9 @@ const MetaData = (props) => {
         </Col>
       </Col>
       <Col className="m-1 pl-0 ml-0">
-        <Button>Add new reference</Button>
+        <Button color="success">
+          <FontAwesomeIcon icon={faPlus} /> New reference
+        </Button>
       </Col>
     </Row>
   );

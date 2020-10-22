@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Input, Button, Row, Col } from "reactstrap";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+
 export default class Question extends Component {
   constructor() {
     super();
@@ -45,12 +48,13 @@ export default class Question extends Component {
               </Col>
               <Col xs="auto">
                 <Button
+                  color="success"
                   onClick={() => {
                     this.addQuestion(this.getQuestion());
                     this.props.setQuestions(this.state.questions);
                   }}
                 >
-                  Add
+                  <FontAwesomeIcon icon={faPlus} />
                 </Button>
               </Col>
             </Row>
@@ -63,12 +67,13 @@ export default class Question extends Component {
                 - {question}
               </span>
               <Button
+                color="danger"
                 onClick={() => {
                   this.removeQuestion(question);
                   this.props.setQuestions(this.state.questions);
                 }}
               >
-                Remove
+                <FontAwesomeIcon icon={faTrashAlt} />
               </Button>
             </div>
           ))}
