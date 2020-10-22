@@ -18,23 +18,29 @@ class CriticalDataItem extends Component {
   };
 
   setVerb = () => {
-    if (this.state.verbType !== "" && this.state.word !== "") {
-      this.props.setVerb(this.props.index, this.state.verbType, this.state.word)
+    if (this.props.type === "Critical") {
+      if (this.state.verbType !== "" && this.state.word !== "") {
+        this.props.setCriticalData(this.props.index, this.state.verbType, this.state.word)
+      }
     }
-  }
-
-  removeCritical = () => {
-    this.props.removeCritical(this.props.index)
+    else if (this.props.type === "Verb") {
+      if (this.state.verbType !== "" && this.state.word !== "") {
+        this.props.setVerb(this.props.index, this.state.verbType, this.state.word)
+      }
+    }
+    
   }
 
   render() {
+    const POSTags = ["Np", "Nc", "Nu", "N", "Ny", "Nb", "V", "Vb", "A", "P", "R", "L", "M", "E", "C", "Cc", "I", "T", "Y", "Z", "X", "CH"]
     return (
       <Row>
         <Col xs="auto">
           <Input type="select" name="verbType" onChange={this.handleInput}>
             <option selected disabled>None</option>
-            <option>V</option>
-            <option>Nc</option>
+            {POSTags.map((value, index) => {
+              return (<option key={index}>{value}</option>)
+            })}
           </Input>
         </Col>
         <Col xs="auto">
@@ -51,9 +57,6 @@ class CriticalDataItem extends Component {
           >
             Add
           </Button>
-        </Col>
-        <Col xs="auto">
-          <Button onClick={this.removeCritical}>Remove</Button>
         </Col>
       </Row>
     );

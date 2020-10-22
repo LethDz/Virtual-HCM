@@ -28,7 +28,6 @@ class CreateDataApprovalForm extends Component {
         intent: "",
         intentFullName: "",
         questions: [],
-        componentOfQuestion: [],
         criticalData: [],
         coresponse: [],
         rawData: "",
@@ -47,18 +46,26 @@ class CreateDataApprovalForm extends Component {
 
   addCriticalData = () => {
     let type = document.getElementById("critical-data-type").value;
-    let word = document.getElementById("critical-data-index").value;
-    let index = document.getElementById("critical-data-index").selectedIndex;
     let temp = this.state.form.criticalData;
     temp.push({
       type: type,
-      word: word,
-      index: index,
+      word: [],
       verb: [],
+      index: temp.length
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
     let state = this.state;
     state.form.criticalData = sortedTemp;
+    this.setState(state);
+  };
+
+  setCriticalData = (index, type, word) => {
+    let critical = {
+      type: type,
+      word: word
+    };
+    let state = this.state;
+    state.form.criticalData[index].word.push(critical);
     this.setState(state);
   };
 
@@ -166,11 +173,17 @@ class CreateDataApprovalForm extends Component {
     return wordArray;
   };
 
-  removeComponent = (criticalIndex, verbIndex) => {
+  removeComponent = (type, criticalIndex, index) => {
+    console.log(type)
+    console.log(criticalIndex)
+    console.log(index)
     let form = this.state.form;
-    const index = verbIndex;
     if (index > -1) {
-      form.criticalData[criticalIndex].verb.splice(index, 1);
+      if (type === "Verb") {
+        form.criticalData[criticalIndex].verb.splice(index, 1);
+      } else if (type === "Critical") {
+        form.criticalData[criticalIndex].word.splice(index, 1);
+      }
     }
     let listCritical = form.criticalData[criticalIndex];
     let list = [];
@@ -212,20 +225,21 @@ class CreateDataApprovalForm extends Component {
               onChange={this.handleInputForm}
             />
             <CriticalData
-                addCriticalData={this.addCriticalData}
-                removeComponent={this.removeComponent}
-                removeCritical={this.removeCritical}
-                setVerb={this.setVerb}
-                wordArray={wordArray}
-                criticalData={this.state.form.criticalData}
-              />
+              addCriticalData={this.addCriticalData}
+              removeComponent={this.removeComponent}
+              removeCritical={this.removeCritical}
+              setVerb={this.setVerb}
+              setCriticalData={this.setCriticalData}
+              wordArray={wordArray}
+              criticalData={this.state.form.criticalData}
+            />
 
-              <Coresponse
-                addCoresponse={this.addCoresponse}
-                removeCoresponse={this.removeCoresponse}
-                wordArray={wordArray}
-                coresponse={this.state.form.coresponse}
-              />
+            <Coresponse
+              addCoresponse={this.addCoresponse}
+              removeCoresponse={this.removeCoresponse}
+              wordArray={wordArray}
+              coresponse={this.state.form.coresponse}
+            />
             <Question className="mt-3" setQuestions={this.setQuestions} />
             <BaseResponse onChange={this.handleInputForm} />
             <Synonyms

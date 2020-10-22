@@ -12,7 +12,7 @@ import { CriticalDataItem } from "src/modules/contributor/index";
 class CriticalData extends Component {
   render() {
     const criticalType = ["PER", "LOC", "ORG", "MISC"];
-    
+
     return (
       <Col>
         <Label>Critical data</Label>
@@ -24,13 +24,7 @@ class CriticalData extends Component {
               })}
             </Input>
           </Col>
-          <Col>
-            <Input type="select" id="critical-data-index">
-              {this.props.wordArray.map((data, index) => {
-                return <option key={index}>{data.value}</option>;
-              })}
-            </Input>
-          </Col>
+
           <Col xs="auto">
             <Button onClick={this.props.addCriticalData}>Add</Button>
           </Col>
@@ -44,19 +38,40 @@ class CriticalData extends Component {
                     <Row>
                       {criticalData.type}: {criticalData.word}
                     </Row>
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      onClick={() => {
+                        this.props.removeCritical(index);
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="border-right-solid">
+                    <Label>Subject: </Label>
+                    <CriticalDataItem
+                      type="Critical"
+                      index={index}
+                      wordArray={this.props.wordArray}
+                      setCriticalData={this.props.setCriticalData}
+                    />
                     <ListGroup>
-                      {this.props.criticalData[index].verb.map(
-                        (verb, index) => {
+                      {this.props.criticalData[index].word.map(
+                        (word, index) => {
                           return (
                             <ListGroupItem className="mt-1" key={index}>
                               <Row>
                                 <Col>
-                                  {verb.type}: {verb.word}
+                                  {word.type}: {word.word}
                                 </Col>
                                 <Col xs="auto">
                                   <Button
                                     onClick={() => {
                                       this.props.removeComponent(
+                                        "Critical",
                                         criticalData.index,
                                         index
                                       );
@@ -72,13 +87,42 @@ class CriticalData extends Component {
                       )}
                     </ListGroup>
                   </Col>
-                  <Col xs="auto">
+                  <Col>
+                    <Label>Verb: </Label>
                     <CriticalDataItem
-                      removeCritical={this.props.removeCritical}
+                      type="Verb"
                       index={index}
                       wordArray={this.props.wordArray}
                       setVerb={this.props.setVerb}
                     />
+                    <ListGroup>
+                      {this.props.criticalData[index].verb.map(
+                        (verb, index) => {
+                          return (
+                            <ListGroupItem className="mt-1" key={index}>
+                              <Row>
+                                <Col>
+                                  {verb.type}: {verb.word}
+                                </Col>
+                                <Col xs="auto">
+                                  <Button
+                                    onClick={() => {
+                                      this.props.removeComponent(
+                                        "Verb",
+                                        criticalData.index,
+                                        index
+                                      );
+                                    }}
+                                  >
+                                    Remove
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </ListGroupItem>
+                          );
+                        }
+                      )}
+                    </ListGroup>
                   </Col>
                 </Row>
               </ListGroupItem>

@@ -44,3 +44,9 @@
 .label {
   margin-top: 0.5em;
 }
+
+.border-right-solid {
+  border-right: solid;
+  border-width: 2px;
+  border-color: #6C757D;
+}
