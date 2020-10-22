@@ -15,7 +15,7 @@ class CriticalData extends Component {
 
     return (
       <Col>
-        <Label>Critical data</Label>
+        <Label>Subject</Label>
         <Row>
           <Col xs="auto">
             <Input type="select" id="critical-data-type">
@@ -51,7 +51,7 @@ class CriticalData extends Component {
                 </Row>
                 <Row>
                   <Col className="border-right-solid">
-                    <Label>Subject: </Label>
+                    <Label>Subject component: </Label>
                     <CriticalDataItem
                       type="Critical"
                       index={index}
@@ -59,13 +59,13 @@ class CriticalData extends Component {
                       setCriticalData={this.props.setCriticalData}
                     />
                     <ListGroup>
-                      {this.props.criticalData[index].word.map(
+                      {this.props.criticalData[index].subjectComponents.map(
                         (word, index) => {
                           return (
                             <ListGroupItem className="mt-1" key={index}>
                               <Row>
                                 <Col>
-                                  {word.type}: {word.word}
+                                  {word.type}: {word.subjectComponent}
                                 </Col>
                                 <Col xs="auto">
                                   <Button

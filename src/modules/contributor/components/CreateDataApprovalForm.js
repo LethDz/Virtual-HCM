@@ -28,7 +28,7 @@ class CreateDataApprovalForm extends Component {
         intent: "",
         intentFullName: "",
         questions: [],
-        criticalData: [],
+        subjects: [],
         coresponse: [],
         rawData: "",
         synonyms: [],
@@ -46,26 +46,26 @@ class CreateDataApprovalForm extends Component {
 
   addCriticalData = () => {
     let type = document.getElementById("critical-data-type").value;
-    let temp = this.state.form.criticalData;
+    let temp = this.state.form.subjects;
     temp.push({
       type: type,
-      word: [],
+      subjectComponents: [],
       verb: [],
       index: temp.length
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
     let state = this.state;
-    state.form.criticalData = sortedTemp;
+    state.form.subjects = sortedTemp;
     this.setState(state);
   };
 
   setCriticalData = (index, type, word) => {
     let critical = {
       type: type,
-      word: word
+      subjectComponent: word
     };
     let state = this.state;
-    state.form.criticalData[index].word.push(critical);
+    state.form.subjects[index].subjectComponents.push(critical);
     this.setState(state);
   };
 
@@ -114,7 +114,7 @@ class CreateDataApprovalForm extends Component {
   removeCritical = (index) => {
     let form = this.state.form;
     if (index > -1) {
-      form.criticalData.splice(index, 1);
+      form.subjects.splice(index, 1);
     }
     this.setState({
       form: form,
@@ -145,7 +145,7 @@ class CreateDataApprovalForm extends Component {
       word: word,
     };
     let state = this.state;
-    state.form.criticalData[index].verb.push(verb);
+    state.form.subjects[index].verb.push(verb);
     this.setState(state);
   };
 
@@ -174,18 +174,15 @@ class CreateDataApprovalForm extends Component {
   };
 
   removeComponent = (type, criticalIndex, index) => {
-    console.log(type)
-    console.log(criticalIndex)
-    console.log(index)
     let form = this.state.form;
     if (index > -1) {
       if (type === "Verb") {
-        form.criticalData[criticalIndex].verb.splice(index, 1);
+        form.subjects[criticalIndex].verb.splice(index, 1);
       } else if (type === "Critical") {
-        form.criticalData[criticalIndex].word.splice(index, 1);
+        form.subjects[criticalIndex].subjectComponents.splice(index, 1);
       }
     }
-    let listCritical = form.criticalData[criticalIndex];
+    let listCritical = form.subjects[criticalIndex];
     let list = [];
     for (let i in listCritical) {
       if (listCritical[i] !== null && listCritical[i] !== "")
@@ -231,7 +228,7 @@ class CreateDataApprovalForm extends Component {
               setVerb={this.setVerb}
               setCriticalData={this.setCriticalData}
               wordArray={wordArray}
-              criticalData={this.state.form.criticalData}
+              criticalData={this.state.form.subjects}
             />
 
             <Coresponse
