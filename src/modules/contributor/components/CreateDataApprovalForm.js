@@ -12,7 +12,7 @@ import {
 import { MenuProvider } from "react-contexify";
 import {
   Question,
-  SynonymsModal,
+  // SynonymsModal,
   // GenSynonyms,
   // GenList,
   FormTitle,
@@ -47,11 +47,7 @@ class CreateDataApprovalForm extends Component {
         baseResponse: "",
         documentReference: "",
         page: "",
-      },
-      currentSelected: {
-        word: "",
-        index: "",
-      },
+      }
     };
 
     this.synonymFieldRef = React.createRef("");
@@ -99,33 +95,43 @@ class CreateDataApprovalForm extends Component {
     this.setState(state);
   };
 
-  addSynonym = (synonymList) => {
-    let result = this.state.currentSelected.word + "-";
-    synonymList.forEach((synonym) => {
-      result += synonym.meaning + ",";
-    });
-    document.getElementById("synonym-field").innerHTML = result;
+  addSynonym = (synonymList, index) => {
+    let currentState = this.state;
+    for (let i in synonymList) {
+      currentState.form.synonyms[index].synonyms.push(synonymList[i]);
+    }
+    this.setState(currentState);
   };
 
-  setSynonym = () => {
-    let result = this.synonymFieldRef.current.innerHTML;
-    let word = result.split("-")[0];
-    let synonymListTemp = result.split("-")[1].split(",");
-    let synonymList = [];
-    synonymListTemp.forEach((synonym) => {
-      if (synonym.trim() !== "") {
-        synonymList.push(synonym);
-      }
-    });
-
+  setSynonym = (word) => {
     let currentState = this.state;
     let synonymObject = {
       word: word,
-      list: synonymList,
+      synonyms: []
     };
     currentState.form.synonyms.push(synonymObject);
     this.setState(currentState);
   };
+
+  removeSynonym = (index) => {
+    let form = this.state.form;
+    if (index > -1) {
+      form.synonyms.splice(index, 1);
+    }
+    this.setState({
+      form: form,
+    });
+  };
+
+  removeSynonymInWord = (wordIndex, synonymIndex) => {
+    let form = this.state.form
+    if (synonymIndex > -1) {
+      form.synonyms[wordIndex].synonyms.splice(synonymIndex, 1);
+    }
+    this.setState({
+      form: form,
+    });
+  }
 
   openSynonymsModal = () => {
     this.modalRef.current.setModal();
@@ -245,21 +251,6 @@ class CreateDataApprovalForm extends Component {
     this.setState({
       form: form,
     });
-  }
-
-  removeSynonym = (currentState, word) => {
-    let list = [];
-    this.state.form.synonyms.forEach((synonym) => {
-      list.push(synonym);
-    });
-    let newList = [];
-    list.forEach((item) => {
-      if (item.word !== word) {
-        newList.push(item);
-      }
-    });
-    currentState.form.synonyms = newList;
-    this.setState(currentState);
   };
 
   render() {
@@ -272,7 +263,6 @@ class CreateDataApprovalForm extends Component {
         <Container fluid={true}>
           <FormTitle title="New data Approval" />
           <FormSectionTitle title="Meta data" />
-          <SynonymsModal ref={this.modalRef} addSynonym={this.addSynonym} />
 
           <MetaData onChange={this.handleInputForm} />
 
@@ -385,9 +375,13 @@ class CreateDataApprovalForm extends Component {
                           {coresponse.type}: {coresponse.word}
                         </Col>
                         <Col xs="auto">
-                          <Button onClick={() => {
-                            this.removeCoresponse(index)
-                          }}>Remove</Button>
+                          <Button
+                            onClick={() => {
+                              this.removeCoresponse(index);
+                            }}
+                          >
+                            Remove
+                          </Button>
                         </Col>
                       </Row>
                     </ListGroupItem>
@@ -408,10 +402,16 @@ class CreateDataApprovalForm extends Component {
               />
             </Col>
           </Row>
+
           <Synonyms
-            synonymFieldRef={this.synonymFieldRef}
+            addSynonym={this.addSynonym}
             setSynonym={this.setSynonym}
+            wordArray={wordArray}
+            synonymList={this.state.form.synonyms}
+            removeSynonym={this.removeSynonym}
+            removeSynonymInWord={this.removeSynonymInWord}
           />
+
           <Row className="d-flex justify-content-around mt-3">
             <Button onClick={this.submitForm}>Create new data approval</Button>
           </Row>

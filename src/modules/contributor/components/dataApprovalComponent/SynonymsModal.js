@@ -27,12 +27,14 @@ class SynonymsModal extends Component {
       selectedSynonyms: [],
       gridApi: "",
       gridColumnApi: "",
+      index: ""
     };
   }
 
-  setModal = () => {
+  setModal = (index) => {
     let currentState = this.state;
     currentState.modal = !currentState.modal;
+    currentState.index = index
     this.setState(currentState);
   };
 
@@ -57,8 +59,7 @@ class SynonymsModal extends Component {
   };
 
   addSynonyms = () => {
-    // let synonyms = this.state.selectedSynonyms;
-    this.props.addSynonym(this.state.selectedSynonyms);
+    this.props.addSynonym(this.state.selectedSynonyms, this.state.index);
     this.setModal()
   };
 

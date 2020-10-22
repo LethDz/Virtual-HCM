@@ -6,7 +6,6 @@ import FormSectionTitle from "src/modules/contributor/components/dataApprovalCom
 import Question from "src/modules/contributor/components/dataApprovalComponent/Question";
 import MetaData from "src/modules/contributor/components/dataApprovalComponent/MetaData";
 import Synonyms from "src/modules/contributor/components/dataApprovalComponent/Synonyms";
-import GenList from "src/modules/contributor/components/dataApprovalComponent/GenList";
 import GenSynonyms from "src/modules/contributor/components/dataApprovalComponent/GenSynonyms";
 import CriticalDataItem from "src/modules/contributor/components/dataApprovalComponent/CriticalDataItem";
 import SynonymsModal from "src/modules/contributor/components/dataApprovalComponent/SynonymsModal";
@@ -19,7 +18,6 @@ export * from "src/modules/contributor/contributor.selectors.js";
 export {
   Contributor,
   CreateDataApprovalForm,
-  GenList,
   GenSynonyms,
   SynonymsModal,
   FormTitle,
