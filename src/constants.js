@@ -1,9 +1,23 @@
 // Axios Config
-export const API_URL = process.env.REACT_APP_BASE_URL_EXAMPLE;
+export const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_API_URL_DEPLOY
+    : process.env.REACT_APP_API_URL_DEV;
 export const API_PREFIX = '/api';
 
 // API Route Path
 export const LOGIN = '/auth';
+export const REFRESH_TOKEN = '/refresh-token';
+
+// API status code:
+export const FORBIDDEN = 403;
+
+// API error message:
+export const ACCESS_TOKEN_EXPIRED = 'Access token expired';
+export const EXPIRED_REFRESH_TOKEN = 'Expired refresh token';
+export const USER_IS_INACTIVE = 'User is inactive';
+export const USER_NOT_FOUND = 'User not found';
+export const WRONG_PASSWORD = 'Wrong password';
 
 // Home Page
 export const HOME_PAGE = '/';

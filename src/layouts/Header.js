@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faKey, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { signOut } from 'src/common/authorizationChecking';
 
 const Header = () => {
   return (
@@ -25,7 +26,7 @@ const Header = () => {
                 <FontAwesomeIcon icon={faKey} /> Change password
               </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem href="#signout">
+              <DropdownItem onClick={signOut}>
                 <FontAwesomeIcon icon={faSignOutAlt} /> Signout
               </DropdownItem>
             </DropdownMenu>
