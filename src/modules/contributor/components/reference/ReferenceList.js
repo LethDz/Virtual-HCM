@@ -1,38 +1,55 @@
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import React, { useState } from 'react';
 import { CreateReferenceForm } from 'src/modules/contributor/index';
+import React, { Component } from 'react';
 
-const onRowClicked = () =>{
-    console.log('Click happened');
-}
+class ReferenceList extends Component {
+    constructor() {
+        super();
+        this.state = {
+            rowData: [
+                { id: "1", reference: "Ho Chi Minh Toan Tap 1", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
+                { id: "2", reference: "Ho Chi Minh Toan Tap 2", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
+                { id: "3", reference: "Ho Chi Minh Toan Tap 3", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
+            ],
+            gridApi: "",
+        };
+    }
 
-const ReferenceList = () => {
+    onGridReady = (params) => {
+        let currentState = this.state;
+        currentState.gridApi = params.api;
+        currentState.gridColumnApi = params.columnApi;
+        this.setState(currentState);
+      };
 
-    const [rowData, setRowData] = useState([
-        { id: "1", reference: "Ho Chi Minh Toan Tap 1", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
-        { id: "2", reference: "Ho Chi Minh Toan Tap 2", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
-        { id: "3", reference: "Ho Chi Minh Toan Tap 3", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
-    ]);
+    onSelectionChanged = () => {
+        let selectedNodes = this.state.gridApi.getSelectedNodes();
+        let selectedRow = selectedNodes.map(node => node.data);
+        console.log(selectedRow);
+    }
 
-    return (
-        <div>
-            <h1>Document reference</h1>
-            <CreateReferenceForm />
-            <div className="ag-theme-alpine" style={{ height: '80vh', width: '80%' }}>
-                <AgGridReact
-                    rowData={rowData}
-                    rowSelection="single"
-                    
+    render() {
+        return (
+            <div>
+                <h1>Document reference</h1>
+                <CreateReferenceForm />
+                <div className="ag-theme-alpine" style={{ height: '80vh', width: '80%' }}>
+                    <AgGridReact
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                        rowSelection="single"
+                        onSelectionChanged={this.onSelectionChanged.bind(this)}
                     >
-                    <AgGridColumn field="id" sortable filter></AgGridColumn>
-                    <AgGridColumn field="reference" sortable filter></AgGridColumn>
-                    <AgGridColumn field="author" sortable filter></AgGridColumn>
-                    <AgGridColumn field="createdBy" sortable filter></AgGridColumn>
-                    <AgGridColumn field="editBy" sortable filter></AgGridColumn>
-                </AgGridReact>
+                        <AgGridColumn field="id" sortable filter></AgGridColumn>
+                        <AgGridColumn field="reference" sortable filter></AgGridColumn>
+                        <AgGridColumn field="author" sortable filter></AgGridColumn>
+                        <AgGridColumn field="createdBy" sortable filter></AgGridColumn>
+                        <AgGridColumn field="editBy" sortable filter></AgGridColumn>
+                    </AgGridReact>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default ReferenceList;
