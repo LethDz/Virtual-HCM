@@ -72,9 +72,10 @@ class CriticalData extends Component {
                       )}
                     </ListGroup>
                   </Col>
-                  <Col>
+                  <Col xs="auto">
                     <CriticalDataItem
-                      index={criticalData.index}
+                      removeCritical={this.props.removeCritical}
+                      index={index}
                       wordArray={this.props.wordArray}
                       setVerb={this.props.setVerb}
                     />

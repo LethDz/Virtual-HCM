@@ -23,6 +23,10 @@ class CriticalDataItem extends Component {
     }
   }
 
+  removeCritical = () => {
+    this.props.removeCritical(this.props.index)
+  }
+
   render() {
     return (
       <Row>
@@ -33,7 +37,7 @@ class CriticalDataItem extends Component {
             <option>Nc</option>
           </Input>
         </Col>
-        <Col>
+        <Col xs="auto">
           <Input type="select" name="word" onChange={this.handleInput}>
             <option selected disabled>None</option>
             {this.props.wordArray.map((data, index) => {
@@ -41,12 +45,15 @@ class CriticalDataItem extends Component {
             })}
           </Input>
         </Col>
-        <Col xs="2" className="p-0">
+        <Col xs="auto" className="p-0">
           <Button
             onClick={this.setVerb}
           >
             Add
           </Button>
+        </Col>
+        <Col xs="auto">
+          <Button onClick={this.removeCritical}>Remove</Button>
         </Col>
       </Row>
     );

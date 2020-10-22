@@ -106,6 +106,16 @@ class CreateDataApprovalForm extends Component {
     });
   };
 
+  removeCritical = (index) => {
+    let form = this.state.form;
+    if (index > -1) {
+      form.criticalData.splice(index, 1);
+    }
+    this.setState({
+      form: form,
+    });
+  }
+
   removeSynonymInWord = (wordIndex, synonymIndex) => {
     let form = this.state.form;
     if (synonymIndex > -1) {
@@ -205,6 +215,7 @@ class CreateDataApprovalForm extends Component {
             <CriticalData
               addCriticalData={this.addCriticalData}
               removeComponent={this.removeComponent}
+              removeCritical={this.removeCritical}
               setVerb={this.setVerb}
               wordArray={wordArray}
               criticalData={this.state.form.criticalData}
