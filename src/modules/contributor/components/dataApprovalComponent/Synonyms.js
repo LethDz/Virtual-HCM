@@ -29,7 +29,7 @@ class Synonyms extends Component {
 
   render() {
     return (
-      <Row className="mt-3" xs="1">
+      <Row className="p-3" xs="1">
         <SynonymsModal ref={this.modalRef} addSynonym={this.props.addSynonym} />
         <Col>
           Synonyms:

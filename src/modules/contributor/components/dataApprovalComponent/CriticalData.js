@@ -14,7 +14,7 @@ class CriticalData extends Component {
     const criticalType = ["PER", "LOC", "ORG", "MISC"];
     
     return (
-      <Col xs="7">
+      <Col>
         <Label>Critical data</Label>
         <Row>
           <Col xs="auto">
@@ -31,7 +31,7 @@ class CriticalData extends Component {
               })}
             </Input>
           </Col>
-          <Col xs="auto" className="p-0">
+          <Col xs="auto">
             <Button onClick={this.props.addCriticalData}>Add</Button>
           </Col>
         </Row>

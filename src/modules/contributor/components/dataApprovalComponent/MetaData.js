@@ -1,18 +1,18 @@
 import React from "react";
 import { Row, Col, Label, Input, Button } from "reactstrap";
 
-const FormTitle = (props) => {
+const MetaData = (props) => {
   return (
-    <Row>
-      <Col>
-        <Col className="pl-0">
-          <Label for="intent">Intent:</Label>
+    <Row className="pb-3">
+      <Col className="pr-0" xs="auto">
+        <Col>
+          <Label className="label" for="intent">Intent:</Label>
         </Col>
-        <Col className="pl-0">
-          <Label for="intentFullName">Intent full name:</Label>
+        <Col>
+          <Label className="label" for="intentFullName">Intent full name:</Label>
         </Col>
       </Col>
-      <Col className="m-1">
+      <Col className="m-1 pl-0 ml-0">
         <Input
           className="m-1"
           type="text"
@@ -28,17 +28,15 @@ const FormTitle = (props) => {
           onChange={props.onChange}
         />
       </Col>
-      <Col>
+      <Col className="pr-0" xs="auto">
         <Col>
-          <Col>
-            <Label for="reference">Document reference: </Label>
-          </Col>
-          <Col>
-            <Label for="page">Page:</Label>
-          </Col>
+          <Label className="label" for="reference">Document reference: </Label>
+        </Col>
+        <Col>
+          <Label className="label" for="page">Page:</Label>
         </Col>
       </Col>
-      <Col>
+      <Col className="m-1 pl-0 ml-0">
         <Col className="m-1">
           <Input
             className="m-1"
@@ -63,11 +61,11 @@ const FormTitle = (props) => {
           />
         </Col>
       </Col>
-      <Col>
+      <Col className="m-1 pl-0 ml-0">
         <Button>Add new reference</Button>
       </Col>
     </Row>
   );
 };
 
-export default FormTitle;
+export default MetaData;

@@ -8,7 +8,7 @@ class Coresponse extends Component {
       <Col>
         <Label>Coresponse</Label>
         <Row>
-          <Col xs="4">
+          <Col xs="auto">
             <Input type="select" id="coresponse-type" placeholder="Type">
               {questionType.map((value, index) => {
                 return <option key={index}>{value}</option>;
@@ -16,13 +16,9 @@ class Coresponse extends Component {
             </Input>
           </Col>
           <Col>
-            <Input type="select" id="coresponse-index">
-              {this.props.wordArray.map((data, index) => {
-                return <option key={index}>{data.value}</option>;
-              })}
-            </Input>
+            <Input id="coresponse-index" />
           </Col>
-          <Col xs="2" className="p-0">
+          <Col xs="auto">
             <Button onClick={this.props.addCoresponse}>Add</Button>
           </Col>
         </Row>

@@ -30,7 +30,7 @@ export default class Question extends Component {
   };
   render() {
     return (
-      <div>
+      <div className="p-3">
         <Row xs="1">
           <Col>Question</Col>
           <Col>
@@ -43,7 +43,7 @@ export default class Question extends Component {
                   id="question"
                 />
               </Col>
-              <Col xs="1">
+              <Col xs="auto">
                 <Button
                   onClick={() => {
                     this.addQuestion(this.getQuestion());

@@ -55,7 +55,7 @@ class RawData extends Component {
   };
   render() {
     return (
-      <Row xs="1">
+      <Row className="p-3" xs="1">
         <Col>
           <Label for="rawData">Raw data:</Label>
           {this.renderRawDataMode()}

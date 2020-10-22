@@ -65,12 +65,10 @@ class CreateDataApprovalForm extends Component {
   addCoresponse = () => {
     let type = document.getElementById("coresponse-type").value;
     let word = document.getElementById("coresponse-index").value;
-    let index = document.getElementById("coresponse-index").selectedIndex;
     let temp = this.state.form.coresponse;
     temp.push({
       type: type,
       word: word,
-      index: index,
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
     let state = this.state;
@@ -114,7 +112,7 @@ class CreateDataApprovalForm extends Component {
     this.setState({
       form: form,
     });
-  }
+  };
 
   removeSynonymInWord = (wordIndex, synonymIndex) => {
     let form = this.state.form;
@@ -202,44 +200,45 @@ class CreateDataApprovalForm extends Component {
       <div>
         <Container fluid={true}>
           <FormTitle title="New data Approval" />
-          <FormSectionTitle title="Meta data" />
+          <div className="form-item form-item-meta">
+            <FormSectionTitle title="Meta data" />
+            <MetaData onChange={this.handleInputForm} />
+          </div>
 
-          <MetaData onChange={this.handleInputForm} />
-
-          <FormSectionTitle title="Data analysis" />
-          <RawData
-            getWordArray={this.getWordArray}
-            onChange={this.handleInputForm}
-          />
-          <Row className="mt-3" xs="3">
+          <div className="form-item form-item-data mt-3 pb-3">
+            <FormSectionTitle title="Data analysis" />
+            <RawData
+              getWordArray={this.getWordArray}
+              onChange={this.handleInputForm}
+            />
             <CriticalData
-              addCriticalData={this.addCriticalData}
-              removeComponent={this.removeComponent}
-              removeCritical={this.removeCritical}
-              setVerb={this.setVerb}
-              wordArray={wordArray}
-              criticalData={this.state.form.criticalData}
-            />
+                addCriticalData={this.addCriticalData}
+                removeComponent={this.removeComponent}
+                removeCritical={this.removeCritical}
+                setVerb={this.setVerb}
+                wordArray={wordArray}
+                criticalData={this.state.form.criticalData}
+              />
 
-            <Coresponse
-              addCoresponse={this.addCoresponse}
-              removeCoresponse={this.removeCoresponse}
+              <Coresponse
+                addCoresponse={this.addCoresponse}
+                removeCoresponse={this.removeCoresponse}
+                wordArray={wordArray}
+                coresponse={this.state.form.coresponse}
+              />
+            <Question className="mt-3" setQuestions={this.setQuestions} />
+            <BaseResponse onChange={this.handleInputForm} />
+            <Synonyms
+              addSynonym={this.addSynonym}
+              setSynonym={this.setSynonym}
+              removeSynonym={this.removeSynonym}
+              removeSynonymInWord={this.removeSynonymInWord}
               wordArray={wordArray}
-              coresponse={this.state.form.coresponse}
+              synonymList={this.state.form.synonyms}
             />
-          </Row>
-          <Question className="mt-3" setQuestions={this.setQuestions} />
-          <BaseResponse onChange={this.handleInputForm} />
-          <Synonyms
-            addSynonym={this.addSynonym}
-            setSynonym={this.setSynonym}
-            removeSynonym={this.removeSynonym}
-            removeSynonymInWord={this.removeSynonymInWord}
-            wordArray={wordArray}
-            synonymList={this.state.form.synonyms}
-          />
+          </div>
 
-          <Row className="d-flex justify-content-around mt-3">
+          <Row className="d-flex justify-content-around pt-3 pb-3">
             <Button onClick={this.submitForm}>Create new data approval</Button>
           </Row>
         </Container>
