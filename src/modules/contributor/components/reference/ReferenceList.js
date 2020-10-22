@@ -1,11 +1,12 @@
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import { CreateReferenceForm } from 'src/modules/contributor/index';
 import React, { Component } from 'react';
+import { ReferencePopup} from "src/modules/contributor/index"
 
 class ReferenceList extends Component {
     constructor() {
         super();
         this.state = {
+            modal: false,
             rowData: [
                 { id: "1", reference: "Ho Chi Minh Toan Tap 1", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
                 { id: "2", reference: "Ho Chi Minh Toan Tap 2", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
@@ -18,7 +19,6 @@ class ReferenceList extends Component {
     onGridReady = (params) => {
         let currentState = this.state;
         currentState.gridApi = params.api;
-        currentState.gridColumnApi = params.columnApi;
         this.setState(currentState);
       };
 
@@ -31,8 +31,6 @@ class ReferenceList extends Component {
     render() {
         return (
             <div>
-                <h1>Document reference</h1>
-                <CreateReferenceForm />
                 <div className="ag-theme-alpine" style={{ height: '80vh', width: '80%' }}>
                     <AgGridReact
                         onGridReady={this.onGridReady}

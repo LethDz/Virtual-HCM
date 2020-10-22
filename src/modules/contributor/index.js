@@ -9,7 +9,7 @@ import GenSynonyms from "src/modules/contributor/components/dataApprovalComponen
 import SynonymsModal from "src/modules/contributor/components/dataApprovalComponent/SynonymsModal";
 import ReferenceList from "src/modules/contributor/components/reference/ReferenceList";
 import CreateReferenceForm from "src/modules/contributor/components/reference/CreateReferenceForm"
-import ReferencePopup from "src/modules/contributor/components/reference/ReferencePopup"
+import ReferenceModal from "src/modules/contributor/components/reference/ReferenceModal"
 
 export * from "src/modules/admin/admin.actions";
 export * from "src/modules/admin/admin.constants.js";
@@ -27,5 +27,5 @@ export {
   ViewReference,
   ReferenceList,
   CreateReferenceForm,
-  ReferencePopup
+  ReferenceModal
 };
