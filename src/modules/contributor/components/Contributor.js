@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { CreateDataApprovalForm, ViewReference } from "src/modules/contributor/index";
+import { CreateDataApprovalForm, ReferenceModal, ViewReference } from "src/modules/contributor/index";
 import 'react-contexify/dist/ReactContexify.min.css';
 
 class Contributor extends Component {
@@ -9,6 +9,7 @@ class Contributor extends Component {
             <div>
                 {/* <CreateDataApprovalForm></CreateDataApprovalForm> */}
                 <ViewReference />
+                {/* <ReferenceModal/> */}
             </div>
         )
     }

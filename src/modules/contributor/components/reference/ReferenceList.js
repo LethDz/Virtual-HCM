@@ -37,13 +37,12 @@ class ReferenceList extends Component {
         currentState.selectedRow = selectedRow[0];
         currentState.modal = !currentState.modal;
         this.setState(currentState);
-        // console.log(selectedRow);
     }
 
     render() {
         return (
             <div>
-                <div className="ag-theme-alpine" style={{ height: '80vh', width: '80%' }}>
+                <div className="ag-theme-alpine" style={{ height: '60vh', width: '80%' }}>
                     <AgGridReact
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
