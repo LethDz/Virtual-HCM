@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@ag-grid-community/client-side-row-model@^24.1.0":
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/@ag-grid-community/client-side-row-model/-/client-side-row-model-24.1.0.tgz#f04baa638f87186cd168253010304a81f1c42f8f"
+  integrity sha512-gzRxabieWLRQia3kqFbyesWU122oQeavzUuNAlhKyZFWgUpS8Ua7QwlSlfhafULocFL6tdEETrgWBtyGq/aR2w==
+  dependencies:
+    "@ag-grid-community/core" "~24.1.0"
+
+"@ag-grid-community/core@~24.1.0":
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/@ag-grid-community/core/-/core-24.1.0.tgz#d768a5085a8cf7ee5b1f7a37a42cb704d5488338"
+  integrity sha512-dmC7rgEoe6NIsGrBK4vENWorJ/yZxNU4TyaWp1Rwn0iCJENNOSbtjA8QejyTzKtLyWcYPlfkXxG1q2irAfRD7A==
+
 "@babel/code-frame@7.8.3", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.8.3.tgz#33e25903d7481181534e12ec0a25f16b6fcf419e"
@@ -2047,6 +2059,18 @@ adjust-sourcemap-loader@2.0.0:
     loader-utils "1.2.3"
     object-path "0.11.4"
     regex-parser "2.2.10"
+
+ag-grid-community@^24.1.0:
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-24.1.0.tgz#1e3cab51211822e08d56f03a491b7c0deaa398e6"
+  integrity sha512-pWnWphuDcejZ8ahf6C734EpCx3XQ6dHEZWMWTlCdHNT0mZBLJ4YKCGACX+ttAEtSX2MGM3G13JncvuratUlYag==
+
+ag-grid-react@^24.1.0:
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-24.1.0.tgz#dd6cbf4bf6fe00df182af6d4cb08f1f85e2dc806"
+  integrity sha512-CwrToc+M+GPe8cZ2z5+2kg19c/SAw+/CjAv1VjbE1e++CED5HGAPZ4PapNmzyiM57DEDleSjW9qCCJ0/VURomg==
+  dependencies:
+    prop-types "^15.6.2"
 
 aggregate-error@^3.0.0:
   version "3.0.1"

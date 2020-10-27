@@ -31,7 +31,7 @@
 }
 
 .sidebar-item .list-group-item {
-  color: rgba(255, 255, 255, 0.8);
+  color: #B8C7CE;
   background-color: #222d32;
   border: none;
 }
@@ -87,4 +87,14 @@
   line-height: 1;
   position: absolute;
   left: 55px;
+}
+
+.sidebar-link.active {
+  background-color: #1E282C !important;
+  border-left: 3px solid #007bff;
+}
+
+.link-no-underline:hover {
+  color: white;
+  text-decoration: none;
 }

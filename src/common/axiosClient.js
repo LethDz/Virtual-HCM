@@ -19,12 +19,6 @@ const axiosClient = axios.create({
   xsrfHeaderName: 'X-CSRFTOKEN',
 });
 
-export const setAuthToken = (token) => {
-  if (token !== null) {
-    axiosClient.defaults.headers['Authorization'] = `${token}`;
-  }
-};
-
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {

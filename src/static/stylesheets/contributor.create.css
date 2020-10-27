@@ -1,0 +1,31 @@
+.cl-create-container {
+  background-color: white;
+  margin: 10px !important;
+  border-radius: 5px;
+  border-top: 2px solid #3c8dbc;
+  max-width: 100% !important;
+  height: fit-content;
+}
+
+.link-no-underline {
+  color: white;
+}
+
+.link-no-underline:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}

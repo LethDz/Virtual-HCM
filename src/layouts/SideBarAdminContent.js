@@ -7,14 +7,17 @@ import {
   faServer,
   faCogs,
 } from "@fortawesome/free-solid-svg-icons";
+import { ADMIN_CONTRIBUTOR_LIST_PAGE } from "src/constants";
 
 const SideBarAdminContent = () => {
+  const location = window.location.pathname;
   return (
     <ListGroup flush>
         <SideBarItem
           name="Accounts"
           icon={<FontAwesomeIcon icon={faUserCircle} />}
-          link="accounts"
+          link={ADMIN_CONTRIBUTOR_LIST_PAGE}
+          active={location.includes(ADMIN_CONTRIBUTOR_LIST_PAGE)}
         />
         <SideBarItem
           name="Manage Training Process"

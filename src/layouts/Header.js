@@ -11,8 +11,14 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faKey, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { signOut } from 'src/common/authorizationChecking';
+import { connect } from 'react-redux';
+import { LOGOUT } from 'src/constants';
 
-const Header = () => {
+const resetAllRedux = () => ({
+  type: LOGOUT,
+});
+
+const Header = (props) => {
   return (
     <Navbar className="d-flex justify-content-end navbar" expand="md">
       <div>
@@ -26,7 +32,7 @@ const Header = () => {
                 <FontAwesomeIcon icon={faKey} /> Change password
               </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem onClick={signOut}>
+              <DropdownItem onClick={() => signOut(props.resetAllRedux)}>
                 <FontAwesomeIcon icon={faSignOutAlt} /> Signout
               </DropdownItem>
             </DropdownMenu>
@@ -37,4 +43,8 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapDispatchToProps = (dispatch) => ({
+  resetAllRedux: () => dispatch(resetAllRedux()),
+});
+
+export default connect(null, mapDispatchToProps)(Header);

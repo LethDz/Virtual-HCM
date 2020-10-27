@@ -1,15 +1,15 @@
-import React from "react";
-import { ListGroupItem } from "reactstrap";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ListGroupItem } from 'reactstrap';
 
 const SideBarItem = (props) => {
   return (
     <div className="sidebar-item">
-      <ListGroupItem
-        tag="a" 
-        href={props.link}
-      >
-        {props.icon} {props.name}
-      </ListGroupItem>
+      <Link to={props.link} className="link-no-underline">
+        <ListGroupItem active={props.active} className="sidebar-link">
+          {props.icon} {props.name}
+        </ListGroupItem>
+      </Link>
     </div>
   );
 };
