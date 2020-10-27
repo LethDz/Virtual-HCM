@@ -15,7 +15,7 @@ class CreateReferenceModal extends Component {
                             <option value="book">Book</option>
                             <option value="link">Link</option>
                         </Input>
-                        <Button>Add</Button>
+                        <Button style={{backgroundColor:"#3c8dbc"}}>Add</Button>
                     </Form>
                 </ModalBody>
 

@@ -25,11 +25,12 @@ class ViewReference extends Component {
 
     render() {
         return (
-            <Container>
+            <Container >
                 <h1>Document reference</h1>
                 <ReferenceList />
                 <Button 
                 onClick={this.onClick.bind(this)}
+                
                 >Add new</Button>
                 <CreateReferenceModal modal={this.state.modal}/>
             </Container>

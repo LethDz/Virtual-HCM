@@ -20,7 +20,7 @@ const switchLayout = (role) => {
 };
 
 const SideBarContent = () => {
-  const { user } = getUserData();
+  const user = getUserData();
   return (
     <div className="side-bar-content">
       <div className="align-center side-navbar">

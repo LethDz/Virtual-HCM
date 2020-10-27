@@ -1,11 +1,9 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import ErrorBoundary from 'src/common/ErrorBoundary';
-import { setAuthToken } from 'src/common/axiosClient';
 
 const ErrorBoundaryRoute = ({ component: Component, ...rest }) => {
   const encloseInErrorBoundary = (props) => {
-    setToken();
     return (
       <ErrorBoundary>
         <Component {...props} />
@@ -18,12 +16,6 @@ const ErrorBoundaryRoute = ({ component: Component, ...rest }) => {
   }
 
   return <Route {...rest} render={encloseInErrorBoundary} />;
-};
-
-export const setToken = () => {
-  const user = JSON.parse(sessionStorage.getItem('user'));
-  user && user.token && setAuthToken(user.access_token);
-  return user;
 };
 
 export default ErrorBoundaryRoute;

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ag-grid-community/client-side-row-model": "^24.0.0",
+    "@ag-grid-community/client-side-row-model": "^24.1.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
@@ -13,7 +13,6 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "ag-grid-community": "^24.1.0",
-    "ag-grid-enterprise": "^24.1.0",
     "ag-grid-react": "^24.1.0",
     "axios": "^0.20.0",
     "boostrap": "^2.0.0",

@@ -1,3 +1,4 @@
+import { LOGOUT } from 'src/constants';
 import { EDIT_HOME_EXAMPLES } from 'src/modules/home/index';
 
 const initialState = {
@@ -13,8 +14,10 @@ export const homeReducer = (state = initialState, action) => {
         text: textModified,
       };
 
+    case LOGOUT:
+      return initialState;
+
     default:
       return state;
   }
 };
-

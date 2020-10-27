@@ -42,7 +42,7 @@ class ReferenceList extends Component {
     render() {
         return (
             <div>
-                <div className="ag-theme-alpine" style={{ height: '60vh', width: '80%' }}>
+                <div className="ag-theme-alpine" style={{ height: '60vh', width: '80%'}}>
                     <AgGridReact
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
