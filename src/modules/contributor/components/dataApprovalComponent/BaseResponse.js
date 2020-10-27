@@ -8,6 +8,7 @@ class BaseResponse extends Component {
         <Col>
           <Label for="baseResponse">Base response</Label>
           <Input
+            required
             type="textarea"
             name="baseResponse"
             id="baseResponse"

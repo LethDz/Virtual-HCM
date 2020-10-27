@@ -2,35 +2,35 @@
     "token": {
         "0": {
             "key": "PER",
-            "value": "Ho Chi Minh"
+            "value": "Hồ Chí Minh"
         },
         "1": {
             "key": "V",
-            "value": "an"
+            "value": "ăn"
         },
         "2": {
             "key": "N",
-            "value": "com"
+            "value": "cơm"
         },
         "3": {
-            "key": "N",
-            "value": "cun4567g"
+            "key": "A",
+            "value": "với"
         },
         "4": {
             "key": "N",
-            "value": "v6789oi"
+            "value": "cá"
         },
         "5": {
-            "key": "N",
-            "value": "a3412i"
+            "key": "A",
+            "value": "và"
         },
         "6": {
             "key": "N",
-            "value": "dogsdg"
+            "value": "thịt"
         },
         "7": {
-            "key": "N",
-            "value": "ne"
+            "key": "V",
+            "value": "luộc"
         }
     }
 }

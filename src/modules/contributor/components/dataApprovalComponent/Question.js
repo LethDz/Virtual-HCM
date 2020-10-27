@@ -50,8 +50,10 @@ export default class Question extends Component {
                 <Button
                   color="success"
                   onClick={() => {
-                    this.addQuestion(this.getQuestion());
-                    this.props.setQuestions(this.state.questions);
+                    if (this.getQuestion().trim() !== "") {
+                      this.addQuestion(this.getQuestion());
+                      this.props.setQuestions(this.state.questions);
+                    }
                   }}
                 >
                   <FontAwesomeIcon icon={faPlus} />
@@ -61,9 +63,9 @@ export default class Question extends Component {
           </Col>
         </Row>
         <div>
-          {this.state.questions.map((question) => (
-            <div className="mt-2">
-              <span className="mr-3" key={question}>
+          {this.state.questions.map((question, index) => (
+            <div key={index} className="mt-2">
+              <span className="mr-3">
                 - {question}
               </span>
               <Button

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Container, Row } from "reactstrap";
+import { Button, Container, Row, Form, Alert } from "reactstrap";
 import {
   Question,
   FormTitle,
@@ -36,13 +36,44 @@ class CreateDataApprovalForm extends Component {
         documentReference: "",
         page: "",
       },
+      errorAlert: false,
+      errorMessage: "",
     };
-    this.modalRef = React.createRef("");
   }
 
   handleInputForm = (event) => handleInputFormChange(event, this);
 
   handleInput = (event) => handleInputChange(event, this);
+
+  getError = () => {
+    let errorMessage = "";
+    if (this.state.form.questions.length === 0) {
+      errorMessage = `${errorMessage}Question field required at least one question; `;
+    }
+    if (this.state.form.subjects.length === 0) {
+      errorMessage = `${errorMessage}Subject field required at least one subject; `;
+    }
+    for (let i in this.state.form.subjects) {
+      if (this.state.form.subjects[i].subjectComponents.length === 0)
+        errorMessage = `${errorMessage}Subject at index ${i} required at least one component; `;
+    }
+    this.setState({
+      errorMessage: errorMessage,
+    });
+    return errorMessage;
+  };
+
+  submitForm = (event) => {
+    event.preventDefault();
+    let error = this.getError();
+    if (error.trim() === "") {
+      this.setState({errorAlert: false})
+      console.log("submit");
+    }
+    else {
+      this.setState({errorAlert: true})
+    }
+  };
 
   addCriticalData = () => {
     let type = document.getElementById("critical-data-type").value;
@@ -51,7 +82,7 @@ class CreateDataApprovalForm extends Component {
       type: type,
       subjectComponents: [],
       verb: [],
-      index: temp.length
+      index: temp.length,
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
     let state = this.state;
@@ -62,7 +93,7 @@ class CreateDataApprovalForm extends Component {
   setCriticalData = (index, type, word) => {
     let critical = {
       type: type,
-      subjectComponent: word
+      subjectComponent: word,
     };
     let state = this.state;
     state.form.subjects[index].subjectComponents.push(critical);
@@ -72,15 +103,17 @@ class CreateDataApprovalForm extends Component {
   addCoresponse = () => {
     let type = document.getElementById("coresponse-type").value;
     let word = document.getElementById("coresponse-index").value;
-    let temp = this.state.form.coresponse;
-    temp.push({
-      type: type,
-      word: word,
-    });
-    let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-    let state = this.state;
-    state.form.coresponse = sortedTemp;
-    this.setState(state);
+    if (word.trim() !== "") {
+      let temp = this.state.form.coresponse;
+      temp.push({
+        type: type,
+        word: word,
+      });
+      let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
+      let state = this.state;
+      state.form.coresponse = sortedTemp;
+      this.setState(state);
+    }
   };
 
   addSynonym = (synonymList, index) => {
@@ -131,12 +164,8 @@ class CreateDataApprovalForm extends Component {
     });
   };
 
-  openSynonymsModal = () => {
-    this.modalRef.current.setModal();
-  };
-
-  submitForm = () => {
-    console.log(this.state.form);
+  toggleSubmitModal = () => {
+    this.submitModal.current.toggleSubmitModal();
   };
 
   setVerb = (index, type, word) => {
@@ -207,12 +236,18 @@ class CreateDataApprovalForm extends Component {
     const wordArray = this.getWordArray();
 
     return (
-      <div>
+      <Form onSubmit={this.submitForm}>
         <Container fluid={true}>
           <FormTitle title="New data Approval" />
+          <Alert isOpen={this.state.errorAlert} color="danger">
+            {this.state.errorMessage}
+          </Alert>
           <div className="form-item form-item-meta">
             <FormSectionTitle title="Meta data" />
-            <MetaData onChange={this.handleInputForm} />
+            <MetaData
+              onChange={this.handleInputForm}
+              invalidInput={this.state.invalidInput}
+            />
           </div>
 
           <div className="form-item form-item-data mt-3 pb-3">
@@ -238,6 +273,7 @@ class CreateDataApprovalForm extends Component {
               coresponse={this.state.form.coresponse}
             />
             <Question className="mt-3" setQuestions={this.setQuestions} />
+
             <BaseResponse onChange={this.handleInputForm} />
             <Synonyms
               addSynonym={this.addSynonym}
@@ -250,10 +286,12 @@ class CreateDataApprovalForm extends Component {
           </div>
 
           <Row className="d-flex justify-content-around pt-3 pb-3">
-            <Button color="info" onClick={this.submitForm}>Create new data approval</Button>
+            <Button type="submit" color="info">
+              Create new data approval
+            </Button>
           </Row>
         </Container>
-      </div>
+      </Form>
     );
   }
 }

@@ -10,11 +10,11 @@ class RawData extends Component {
   }
 
   stateTokenizeRawDate = () => {
-    this.setState({mode: "TOKENIZE"});
+    this.setState({ mode: "TOKENIZE" });
   };
 
   stateCancelTokenize = () => {
-    this.setState({mode: "NORMAL"});
+    this.setState({ mode: "NORMAL" });
   };
 
   renderRawDataMode = () => {
@@ -31,7 +31,13 @@ class RawData extends Component {
             })}
           </Col>
           <Col xs="1" className="p-0">
-            <Button color="danger" onClick={this.stateCancelTokenize}>Cancel</Button>
+            <Button
+              type="button"
+              color="danger"
+              onClick={this.stateCancelTokenize}
+            >
+              Cancel
+            </Button>
           </Col>
         </Row>
       );
@@ -40,6 +46,7 @@ class RawData extends Component {
         <Row>
           <Col>
             <Input
+              required
               type="textarea"
               name="rawData"
               id="rawData"
@@ -47,7 +54,13 @@ class RawData extends Component {
             />
           </Col>
           <Col xs="1" className="p-0">
-            <Button color="primary" onClick={this.stateTokenizeRawDate}>Tokenize</Button>
+            <Button
+              type="button"
+              color="primary"
+              onClick={this.stateTokenizeRawDate}
+            >
+              Tokenize
+            </Button>
           </Col>
         </Row>
       );
