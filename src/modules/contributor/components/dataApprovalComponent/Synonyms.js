@@ -31,6 +31,7 @@ class Synonyms extends Component {
   };
 
   render() {
+    const DEFAULT = "DEFAULT"
     return (
       <Row className="p-3" xs="1">
         <SynonymsModal ref={this.modalRef} addSynonym={this.props.addSynonym} />
@@ -42,9 +43,10 @@ class Synonyms extends Component {
                 type="select"
                 id="coresponse-index"
                 name="synonymWord"
+                defaultValue={DEFAULT}
                 onChange={this.handleInput}
               >
-                <option selected disabled>
+                <option value={DEFAULT} disabled>
                   None
                 </option>
                 {this.props.wordArray.map((data, index) => {

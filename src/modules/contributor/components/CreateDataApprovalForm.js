@@ -68,7 +68,6 @@ class CreateDataApprovalForm extends Component {
     let error = this.getError();
     if (error.trim() === "") {
       this.setState({errorAlert: false})
-      console.log("submit");
     }
     else {
       this.setState({errorAlert: true})
@@ -236,7 +235,7 @@ class CreateDataApprovalForm extends Component {
     const wordArray = this.getWordArray();
 
     return (
-      <Form onSubmit={this.submitForm}>
+      <Form onSubmit={this.submitForm} style={{width:"100%"}}>
         <Container fluid={true}>
           <FormTitle title="New data Approval" />
           <Alert isOpen={this.state.errorAlert} color="danger">

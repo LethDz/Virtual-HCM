@@ -12,6 +12,7 @@ class MetaData extends Component {
   }
 
   render() {
+    const DEFAULT = "DEFAULT"
     const references = ["HCM tap 4", "HCM tap 5", "HCM tap 6"];
     return (
       <Row className="pb-3">
@@ -65,9 +66,10 @@ class MetaData extends Component {
               type="select"
               name="documentReference"
               id="reference"
+              defaultValue={DEFAULT}
               onChange={this.props.onChange}
             >
-              <option selected disabled>
+              <option value={DEFAULT} disabled>
                 None
               </option>
               {references.map((reference, index) => {
@@ -88,7 +90,7 @@ class MetaData extends Component {
           </Col>
         </Col>
         <Col className="m-1 pl-0 ml-0">
-          <Button type="button" onclick={this.newRefer} color="success">
+          <Button type="button" onClick={this.newRefer} color="success">
             <FontAwesomeIcon icon={faPlus} /> New reference
           </Button>
         </Col>

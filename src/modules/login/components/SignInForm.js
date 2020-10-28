@@ -3,9 +3,9 @@ import { Form, Input, Button, FormGroup, FormFeedback } from 'reactstrap';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
-import { ADMIN_PAGE, LOGIN } from 'src/constants';
+import { ADMIN_PAGE, CONTRIBUTOR_PAGE, LOGIN } from 'src/constants';
+import { showLoginError } from 'src/modules/login';
 import lockIcon from 'src/static/icons/lockIcon';
-import { USER_NOT_FOUND, WRONG_PASSWORD } from 'src/modules/login';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class SignInForm extends Component {
@@ -43,43 +43,21 @@ class SignInForm extends Component {
     axiosClient
       .post(LOGIN, data)
       .then((response) => {
-        const user = response.data.result_data;
-        sessionStorage.setItem('user', JSON.stringify(user));
-      })
-      .then(() => {
         this._isMounted &&
           this.setState({
             loading: false,
           });
-        history.push(ADMIN_PAGE);
+        const user = response.data.result_data.user;
+        sessionStorage.setItem('user', JSON.stringify(user));
+        const pageToRedirect = user.admin ? ADMIN_PAGE : CONTRIBUTOR_PAGE;
+        history.push(pageToRedirect);
       })
       .catch((error) => {
         this._isMounted &&
           this.setState({
             loading: false,
           });
-        if (error.response) {
-          const resultData = error.response.data.result_data;
-          if (
-            resultData.error_detail &&
-            resultData.error_detail === USER_NOT_FOUND
-          ) {
-            this._isMounted &&
-              this.setState({
-                usernameInvalid: true,
-              });
-          }
-
-          if (
-            resultData.error_detail &&
-            resultData.error_detail === WRONG_PASSWORD
-          ) {
-            this._isMounted &&
-              this.setState({
-                passwordInvalid: true,
-              });
-          }
-        }
+        error.response && showLoginError(error.response.data, this);
       });
   };
 

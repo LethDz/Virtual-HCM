@@ -8,13 +8,13 @@ const LayoutWrapper = (props) => {
   return (
     <SideBar
       sidebar={<SideBarContent />}
-      styles={{ sidebar: { backgroundColor: '#222D32', width: '230px' } }}
+      styles={{
+        sidebar: { backgroundColor: '#222D32', width: '230px' },
+      }}
       docked
     >
-      <div className="wrapper">
-        <Header />
-        <div className="contain-body background-color">{props.children}</div>
-      </div>
+      <Header />
+      <div className="contain-body h-100 w-100 d-flex">{props.children}</div>
     </SideBar>
   );
 };

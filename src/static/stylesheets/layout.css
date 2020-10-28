@@ -1,13 +1,8 @@
-.wrapper {
-    min-height: 100%;
-    margin-bottom: -50px;
-}
-
 .footer {
-    height: 50px;
-    color: #D5D6D7;
+  height: 50px;
+  color: #d5d6d7;
 }
 
-.background-color {
-    background-color: #ECF0F5;
+.contain-body {
+  background-color: #ecf0f5;
 }

@@ -13,14 +13,13 @@ const switchLayout = (role) => {
   if (role === ROLE_ADMIN) {
     return <SideBarAdminContent />;
   }
-  console.log(role);
   if (role === ROLE_CONTRIBUTOR) {
     return <SideBarContributorContent />;
   }
 };
 
 const SideBarContent = () => {
-  const { user } = getUserData();
+  const user = getUserData();
   return (
     <div className="side-bar-content">
       <div className="align-center side-navbar">
