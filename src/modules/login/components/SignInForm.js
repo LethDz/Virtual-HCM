@@ -29,7 +29,9 @@ class SignInForm extends Component {
     this._isMounted = false;
   }
 
-  login = () => {
+  login = (event) => {
+    event.preventDefault();
+
     this._isMounted &&
       this.setState({
         loading: true,
@@ -69,7 +71,7 @@ class SignInForm extends Component {
     return (
       <div className="login-form-background">
         <LoadingSpinner loading={this.state.loading} text="Signing In">
-          <Form className="login-form-m align-center">
+          <Form className="login-form-m align-center" onSubmit={this.login}>
             <h5 className="login-form-title">Hồ Chí Minh Virtual Chatbot</h5>
             <div className="icon-lock align-center">{lockIcon}</div>
             <FormGroup className="w-100">
@@ -98,7 +100,7 @@ class SignInForm extends Component {
               />
               <FormFeedback>Invalid Password</FormFeedback>
             </FormGroup>
-            <Button color="primary" block onClick={this.login}>
+            <Button color="primary" block>
               Sign in
             </Button>
           </Form>
