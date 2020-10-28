@@ -30,7 +30,8 @@ class ReferenceList extends Component {
         let currentState = this.state;
         currentState.gridApi = params.api;
         this.setState(currentState);
-    };
+        
+    }
 
     onRowDoubleClicked = () => {
         let currentState = this.state;

@@ -41,7 +41,7 @@ class ViewReference extends Component {
 
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
-            <Button onClick={this.onClick.bind(this)} color="primary">
+            <Button onClick={this.onClick.bind(this)} className="r-button">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Add new
             </Button>

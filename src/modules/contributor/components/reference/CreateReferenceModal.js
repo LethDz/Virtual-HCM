@@ -15,7 +15,9 @@ class CreateReferenceModal extends Component {
   render() {
     return (
       <Modal isOpen={this.props.modal}>
-        <ModalHeader>Add New Document Reference</ModalHeader>
+        <ModalHeader toggle={!this.props.modal}>
+          Add New Document Reference
+        </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

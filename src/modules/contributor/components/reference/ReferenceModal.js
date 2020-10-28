@@ -40,7 +40,7 @@ class ReferenceModal extends Component {
                     />
                   </Col>
                   <Col xs="3">
-                    <Button>Save</Button>
+                    <Button className="r-button">Edit</Button>
                   </Col>
                 </Row>
 
@@ -70,7 +70,7 @@ class ReferenceModal extends Component {
                     />
                   </Col>
                   <Col xs="3">
-                    <Button>Delete</Button>
+                    <Button className="r-button">Delete</Button>
                   </Col>
                 </Row>
 
