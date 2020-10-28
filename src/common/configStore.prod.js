@@ -1,13 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { rootReducer } from "src/reducer";
+import { rootReducer } from 'src/reducer';
+
+export const prodStore = createStore(rootReducer, compose(applyMiddleware()));
 
 const configStore = () => {
-  const store = createStore(
-    rootReducer,
-    compose(applyMiddleware())
-  );
-
-  return store;
+  return prodStore;
 };
 
 export default configStore;

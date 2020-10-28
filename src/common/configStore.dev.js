@@ -1,14 +1,14 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import loggerMiddleware from 'redux-logger';
-import { rootReducer } from "src/reducer";
+import { rootReducer } from 'src/reducer';
+
+export const devStore = createStore(
+  rootReducer,
+  compose(applyMiddleware(loggerMiddleware))
+);
 
 const configStore = () => {
-  const store = createStore(
-    rootReducer,
-    compose(applyMiddleware(loggerMiddleware))
-  );
-
-  return store;
+  return devStore;
 };
 
 export default configStore;

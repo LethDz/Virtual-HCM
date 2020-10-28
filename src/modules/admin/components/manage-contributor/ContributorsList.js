@@ -6,9 +6,10 @@ import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { columnFieldDef, Data } from 'src/modules/admin';
+import { columnFieldDef } from 'src/modules/admin';
 import { Link } from 'react-router-dom';
-import { ADMIN_CONTRIBUTOR_CREATE_PAGE, ADMIN_CONTRIBUTOR_EDIT_PAGE } from 'src/constants';
+import { ADMIN_CONTRIBUTOR_CREATE_PAGE, ADMIN_CONTRIBUTOR_EDIT_PAGE, ADMIN_GET_USER_ALL } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
 
 class ContributorsList extends Component {
   _isMounted = false;
@@ -38,8 +39,13 @@ class ContributorsList extends Component {
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
+    axiosClient.get(ADMIN_GET_USER_ALL).then((response) => {
+
+    }).catch((error) => {
+
+    });
     this.setState({
-      contributorsList: Data,
+      contributorsList: [],
     });
     this.gridApi.sizeColumnsToFit();
   };
