@@ -13,6 +13,7 @@ import {
   WRONG_PASSWORD,
 } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
+import { store } from 'src/common/configStore';
 
 export const checkRoleToRedirect = () => {
   const authData = getUserData();
@@ -42,10 +43,10 @@ export const getUserData = () => {
     : JSON.parse(sessionStorage.getItem('user'));
 };
 
-export const signOut = (resetState) => {
+export const signOut = () => {
   sessionStorage.removeItem('user');
   axiosClient.get(LOGOUT);
-  resetState();
+  store.dispatch(resetAllRedux());
   history.push(LOGIN_PAGE);
 };
 
@@ -81,6 +82,10 @@ export const denyAuthorization = (error) => {
     }
   }
 };
+
+export const resetAllRedux = () => ({
+  type: LOGOUT,
+});
 
 export const checkMessageIsNotValidUser = (resultData) =>
   resultData.status_code === FORBIDDEN &&

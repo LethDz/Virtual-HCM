@@ -5,9 +5,15 @@ export const API_URL =
     : process.env.REACT_APP_API_URL_DEV;
 export const API_PREFIX = '/api';
 
-// API Route Path
+// API Common Route Path
 export const LOGIN = '/auth';
 export const LOGOUT = '/logout';
+
+// API Admin Route Path
+export const ADMIN_GET_USER_ALL = '/user/all';
+export const ADMIN_GET_USER = '/user/get';
+export const ADMIN_EDIT_USER = '/user/edit';
+export const ADMIN_CHANGE_STATUS_USER = '/user/change-status';
 
 // API status code:
 export const FORBIDDEN = 403;

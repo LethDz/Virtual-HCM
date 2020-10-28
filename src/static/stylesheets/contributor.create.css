@@ -22,10 +22,18 @@
   display: inline-block;
 }
 
-.upload-btn-wrapper input[type=file] {
+.upload-btn-wrapper input[type='file'] {
   font-size: 100px;
   position: absolute;
   left: 0;
   top: 0;
   opacity: 0;
+}
+
+.create-contributor-image {
+  width: 100%;
+  max-width: 480px;
+  height: 480px;
+  border: 1px solid #4391BE;
+  border-radius: 50%;
 }
