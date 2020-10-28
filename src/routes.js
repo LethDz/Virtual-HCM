@@ -18,6 +18,7 @@ import {
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
+import PrivateRouteContributor from './common/PrivateRouteContributor';
 
 const Routes = () => (
   <Fragment>
@@ -25,7 +26,7 @@ const Routes = () => (
       <ErrorBoundaryRoute exact path={HOME_PAGE} component={HomePage} />
       <ErrorBoundaryRoute exact path={LOGIN_PAGE} component={LoginPage} />
       <PrivateRouteAdmin exact path={ADMIN_PAGE} component={AdminPage} />
-      <PrivateRouteAdmin exact path={CONTRIBUTOR_PAGE} component={ContributorPage} />
+      <PrivateRouteContributor exact path={CONTRIBUTOR_PAGE} component={ContributorPage} />
       <PrivateRouteAdmin
         exact
         path={ADMIN_CONTRIBUTOR_LIST_PAGE}

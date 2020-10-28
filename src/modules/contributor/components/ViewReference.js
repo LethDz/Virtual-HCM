@@ -1,41 +1,62 @@
-import React, { Component } from 'react';
-import { Button, Container } from 'reactstrap';
-import { CreateReferenceModal, ReferenceList } from "src/modules/contributor/index"
+import React, { Component } from "react";
+import { Button, Col, Container, Row } from "reactstrap";
+import {
+  CreateReferenceModal,
+  ReferenceList,
+} from "src/modules/contributor/index";
+import "src/static/stylesheets/reference.css";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus} from "@fortawesome/free-solid-svg-icons";
 
 class ViewReference extends Component {
-
-    constructor() {
-        super();
-        this.state = {
-            modal: false,
-        }
-    }
-
-    onGridReady = (params) => {
-        let currentState = this.state;
-        currentState.gridApi = params.api;
-        this.setState(currentState);
+  constructor() {
+    super();
+    this.state = {
+      modal: false,
     };
+  }
 
-    onClick = () => {
-        let currentState = this.state;
-        currentState.modal = !currentState.modal;
-        this.setState(currentState);
-    }
+  onGridReady = (params) => {
+    let currentState = this.state;
+    currentState.gridApi = params.api;
+    this.setState(currentState);
+  };
 
-    render() {
-        return (
-            <Container >
-                <h1>Document reference</h1>
-                <ReferenceList />
-                <Button 
-                onClick={this.onClick.bind(this)}
-                
-                >Add new</Button>
-                <CreateReferenceModal modal={this.state.modal}/>
-            </Container>
-        );
-    }
+  onClick = () => {
+    let currentState = this.state;
+    currentState.modal = !currentState.modal;
+    this.setState(currentState);
+  };
+
+  render() {
+    return (
+      <Container className="r-container">
+        <Row>
+          <Col className="justify-content-center d-flex">
+            <h1>Document reference</h1>
+          </Col>
+        </Row>
+
+        <Row className="d-flex flex-row-reverse">
+          <Col xs="auto">
+            <Button onClick={this.onClick.bind(this)} color="primary">
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp; Add new
+            </Button>
+            <CreateReferenceModal modal={this.state.modal} />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col className="justify-content-center d-flex">
+            <ReferenceList />
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 }
 
 export default ViewReference;

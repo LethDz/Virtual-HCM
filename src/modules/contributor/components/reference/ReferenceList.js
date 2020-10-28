@@ -2,6 +2,8 @@ import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import React, { Component } from 'react';
 import { ReferenceModal } from "src/modules/contributor/index"
 
+
+
 class ReferenceList extends Component {
     constructor() {
         super();
@@ -41,8 +43,7 @@ class ReferenceList extends Component {
 
     render() {
         return (
-            <div>
-                <div className="ag-theme-alpine" style={{ height: '60vh', width: '80%'}}>
+            <div className="ag-theme-alpine" style={{ height: '60vh', width: '80%'}}>
                     <AgGridReact
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
@@ -57,7 +58,6 @@ class ReferenceList extends Component {
                     </AgGridReact>
 
                     <ReferenceModal modal={this.state.modal} data={this.state.selectedRow} />
-                </div>
             </div>
         );
     }

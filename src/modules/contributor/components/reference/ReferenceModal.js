@@ -1,5 +1,16 @@
-import React, { Component } from 'react';
-import { Form, Input, Button, Label, Modal, ModalHeader, ModalBody, Container, Col, Row } from 'reactstrap';
+import React, { Component } from "react";
+import {
+  Form,
+  Input,
+  Button,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Container,
+  Col,
+  Row,
+} from "reactstrap";
 
 class ReferenceModal extends Component {
   setModal = () => {
@@ -29,7 +40,7 @@ class ReferenceModal extends Component {
                     />
                   </Col>
                   <Col xs="3">
-                    <Button >Save</Button>
+                    <Button>Save</Button>
                   </Col>
                 </Row>
 
@@ -59,7 +70,7 @@ class ReferenceModal extends Component {
                     />
                   </Col>
                   <Col xs="3">
-                    <Button >Delete</Button>
+                    <Button>Delete</Button>
                   </Col>
                 </Row>
 
@@ -78,7 +89,6 @@ class ReferenceModal extends Component {
               </Form>
             </ModalBody>
           </Modal>
-
         </Container>
       </div>
     );

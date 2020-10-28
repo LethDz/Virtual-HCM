@@ -1,0 +1,10 @@
+.r-container {
+  background-color: white;
+  margin: 10px !important;
+  border-radius: 5px;
+  border-top: 2px solid #3c8dbc;
+}
+
+.r-button{
+    color: #3c8dbc;
+}
