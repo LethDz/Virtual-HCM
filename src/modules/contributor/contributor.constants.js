@@ -1,2 +1,4 @@
 export const SET_INTENT = "SET_INTENT";
 export const SET_INTENT_FULLNAME = "SET_INTENT_FULLNAME";
+
+export const GET_ALL_SYNONYMS = "GET_ALL_SYNONYMS";

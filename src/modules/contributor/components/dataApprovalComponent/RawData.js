@@ -5,35 +5,72 @@ import axiosClient from "src/common/axiosClient";
 import { KNOWLEDGE_DATA, EXTRACT_SENTENCE } from "src/constants";
 import { handleInputChange } from "src/common/handleInputChange";
 
+import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+
 class RawData extends Component {
   constructor(props) {
     super();
     this.state = {
       mode: "NORMAL",
       tokenizeData: [],
+      ner: [],
+      loading: false,
     };
   }
   handleInput = (event) => handleInputChange(event, this);
 
   stateTokenizeRawDate = () => {
+    this.setState({ loading: true });
     const paragraph = {
       paragraph: this.props.rawData,
     };
     axiosClient
       .post(KNOWLEDGE_DATA + EXTRACT_SENTENCE, paragraph)
       .then((response) => {
-        console.log(response.data.result_data);
+        let fullArray = [];
+        response.data.result_data.pos.forEach((array) => {
+          fullArray.push(...array);
+        });
+        let modifiedNer = [];
+        let ner = response.data.result_data.ner;
+        for (let sentenceIndex in ner) {
+          for (let idx in ner[sentenceIndex]) {
+            let type = ner[sentenceIndex][idx].type;
+            let word = ner[sentenceIndex][idx].word;
+            let index = ner[sentenceIndex][idx].start_idx;
+            if (sentenceIndex === 0) {
+              modifiedNer.push({
+                type: type,
+                word: word,
+                index: index,
+              });
+            } else {
+              let index = ner[sentenceIndex][idx].start_idx;
+              for (let i = 0; i < sentenceIndex; i++) {
+                index += response.data.result_data.pos[i].length;
+              }
+              modifiedNer.push({
+                type: type,
+                word: word,
+                index: index,
+              });
+            }
+          }
+        }
+
         this.setState({
           mode: "TOKENIZE",
-          tokenizeData: response.data.result_data.pos,
+          tokenizeData: fullArray,
+          ner: modifiedNer,
+          loading: false,
         });
         this.setTokenizedWordArray();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => this.setState({ loading: false }));
   };
 
   setTokenizedWordArray = () => {
-    this.props.setTokenizeWord(this.state.tokenizeData);
+    this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);
   };
 
   stateCancelTokenize = () => {
@@ -44,19 +81,46 @@ class RawData extends Component {
     if (this.state.mode === "TOKENIZE") {
       return (
         <Row>
-          <Col>
-            {this.props.getWordArray().map((data, index) => {
-              return (
-                <span className="mr-1" key={index}>
-                  {data.value}
-                </span>
-              );
-            })}
+          <Col xs="auto">
+            <div className="d-flex flex-wrap">
+              {this.props.getWordArray().map((data, index) => {
+                let flag = false;
+                this.state.ner.forEach((ner) => {
+                  if (ner.index === index) flag = true;
+                });
+                if (data.type === "V") {
+                  return (
+                    <span className="mr-1 verb word-box" key={index}>
+                      {data.value}
+                    </span>
+                  );
+                } else if (data.type === "N") {
+                  return (
+                    <span className="mr-1 noun word-box" key={index}>
+                      {data.value}
+                    </span>
+                  );
+                } else if (flag) {
+                  return (
+                    <span className="mr-1 name word-box" key={index}>
+                      {data.value}
+                    </span>
+                  );
+                } else {
+                  return (
+                    <span className="mr-1 word-box" key={index}>
+                      {data.value}
+                    </span>
+                  );
+                }
+              })}
+            </div>
           </Col>
           <Col xs="auto">
             <Button
               type="button"
               color="danger"
+              className="mt-2"
               onClick={this.stateCancelTokenize}
             >
               Cancel
@@ -73,6 +137,7 @@ class RawData extends Component {
               type="textarea"
               name="rawData"
               id="rawData"
+              value={this.props.rawData}
               onChange={this.props.onChange}
             />
           </Col>
@@ -95,7 +160,11 @@ class RawData extends Component {
         <Col>
           <Label for="rawData">Raw data:</Label>
         </Col>
-        <Col>{this.renderRawDataMode()}</Col>
+        <Col>
+          <LoadingSpinner loading={this.state.loading} text="Tokenizing">
+            {this.renderRawDataMode()}
+          </LoadingSpinner>
+        </Col>
       </Row>
     );
   }

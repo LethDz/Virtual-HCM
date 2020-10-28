@@ -50,3 +50,23 @@
   border-width: 2px;
   border-color: #6C757D;
 }
+
+.name {
+  background-color: #DC3545;
+}
+
+.verb {
+  background-color: #28A745;
+}
+
+.noun {
+  background-color: #FFF3CD;
+}
+
+.word-box {
+  padding: 2px 2px 2px 2px;
+  border: solid;
+  border-width: 0.5px;
+  border-color: black;
+  border-radius: 10%;
+}

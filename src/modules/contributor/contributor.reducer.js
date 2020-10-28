@@ -1,36 +1,15 @@
-import { SET_INTENT } from "src/modules/contributor/index";
+import { SET_INTENT, GET_ALL_SYNONYMS } from "src/modules/contributor/index";
 
 const initialState = {
-  mode: "NORMAL",
-  form: {
-    intent: "",
-    intentFullName: "",
-    questions: [],
-    componentOfQuestion: [],
-    criticalData: [],
-    coresponse: [],
-    rawData: "",
-    synonyms: [],
-    baseResponse: "",
-    documentReference: "",
-    page: "",
-  },
-  currentSelected: {
-    word: "",
-    index: "",
-  },
+  synonyms: []
 };
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_INTENT:
-      const textModified = action.payload.intent;
+    case GET_ALL_SYNONYMS:
+      const synonyms = action.payload.synonyms;
       return {
-        ...state,
-        form: {
-          ...state.form,
-          intent: textModified,
-        },
+        
       };
 
     default:

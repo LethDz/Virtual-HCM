@@ -17,9 +17,6 @@ import {
   handleInputChange,
 } from "src/common/handleInputChange";
 
-// test
-import data from "src/static/test.json";
-
 class CreateDataApprovalForm extends Component {
   constructor() {
     super();
@@ -39,6 +36,7 @@ class CreateDataApprovalForm extends Component {
       errorAlert: false,
       errorMessage: "",
       tokenizedWord: [],
+      ner: []
     };
   }
 
@@ -46,8 +44,8 @@ class CreateDataApprovalForm extends Component {
 
   handleInput = (event) => handleInputChange(event, this);
 
-  setTokenizeWord = (tokenizedWordArray) => {
-    this.setState({ tokenizedWord: tokenizedWordArray });
+  setTokenizeWord = (tokenizedWordArray, ner) => {
+    this.setState({ tokenizedWord: tokenizedWordArray, ner: ner });
   };
 
   getWordArray = () => {
@@ -261,6 +259,7 @@ class CreateDataApprovalForm extends Component {
             <RawData
               setTokenizeWord={this.setTokenizeWord}
               rawData={this.state.form.rawData}
+              ner={this.state.ner}
               getWordArray={this.getWordArray}
               onChange={this.handleInputForm}
             />

@@ -12,6 +12,10 @@ export const LOGOUT = "/logout";
 export const KNOWLEDGE_DATA = "/knowledge-data";
 export const EXTRACT_SENTENCE = "/extract-sentence";
 
+export const SYNONYM = "/synonym";
+
+export const ADD = "/add";
+
 // API Admin Route Path
 export const ADMIN_GET_USER_ALL = "/user/all";
 export const ADMIN_GET_USER = "/user/get";
