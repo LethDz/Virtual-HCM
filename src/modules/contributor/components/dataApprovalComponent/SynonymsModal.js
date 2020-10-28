@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { NewSynonymModal } from "src/modules/contributor/index";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -32,6 +33,7 @@ class SynonymsModal extends Component {
       gridColumnApi: "",
       index: "",
     };
+    this.newSynonymModal = React.createRef("");
   }
 
   setModal = (index) => {
@@ -69,6 +71,7 @@ class SynonymsModal extends Component {
   render() {
     return (
       <div>
+        <NewSynonymModal ref={this.newSynonymModal} />
         <Modal isOpen={this.state.modal} toggle={this.setModal}>
           <ModalHeader toggle={this.state.setModal}>Synonyms</ModalHeader>
           <ModalBody>
@@ -105,8 +108,16 @@ class SynonymsModal extends Component {
             </div>
           </ModalBody>
           <ModalFooter>
+            <Button
+              color="success"
+              onClick={() => {
+                this.newSynonymModal.current.toggle();
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} /> New synonym
+            </Button>
             <Button color="success" onClick={this.addSynonyms}>
-              <FontAwesomeIcon icon={faPlus} />
+              <FontAwesomeIcon icon={faPlus} /> Add
             </Button>
           </ModalFooter>
         </Modal>

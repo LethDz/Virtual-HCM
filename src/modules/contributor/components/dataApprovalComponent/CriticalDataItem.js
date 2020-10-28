@@ -67,8 +67,8 @@ class CriticalDataItem extends Component {
     return (
       <Row>
         <Col xs="auto">
-          <Input type="select" name="verbType" onChange={this.handleInput}>
-            <option selected disabled>
+          <Input defaultValue={""} type="select" name="verbType" onChange={this.handleInput}>
+            <option value="" disabled>
               None
             </option>
             {POSTags.map((value, index) => {
@@ -77,8 +77,8 @@ class CriticalDataItem extends Component {
           </Input>
         </Col>
         <Col xs="auto">
-          <Input type="select" name="word" onChange={this.handleInput}>
-            <option selected disabled>
+          <Input defaultValue={""} type="select" name="word" onChange={this.handleInput}>
+            <option value="" disabled>
               None
             </option>
             {this.props.wordArray.map((data, index) => {

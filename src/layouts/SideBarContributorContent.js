@@ -10,7 +10,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 
-import {CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM} from "src/constants";
+import {CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL} from "src/constants";
 
 const SideBarContributorContent = () => {
   const location = window.location.pathname;
@@ -19,8 +19,8 @@ const SideBarContributorContent = () => {
       <SideBarItem
         name="Data Approval"
         icon={<FontAwesomeIcon icon={faClipboardList} />}
-        link={CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM}
-        active={location.includes(CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM)}
+        link={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
+        active={location.includes(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL)}
       />
       <SideBarItem
         name="Chat Log"

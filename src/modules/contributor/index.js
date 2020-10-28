@@ -8,10 +8,12 @@ import MetaData from "src/modules/contributor/components/dataApprovalComponent/M
 import Synonyms from "src/modules/contributor/components/dataApprovalComponent/Synonyms";
 import CriticalDataItem from "src/modules/contributor/components/dataApprovalComponent/CriticalDataItem";
 import SynonymsModal from "src/modules/contributor/components/dataApprovalComponent/SynonymsModal";
+import NewSynonymModal from "src/modules/contributor/components/dataApprovalComponent/NewSynonymModal";
 import RawData from "src/modules/contributor/components/dataApprovalComponent/RawData";
 import BaseResponse from "src/modules/contributor/components/dataApprovalComponent/BaseResponse";
 import Coresponse from "src/modules/contributor/components/dataApprovalComponent/Coresponse";
 import CriticalData from "src/modules/contributor/components/dataApprovalComponent/CriticalData";
+import DataApprovalList from "src/modules/contributor/components/DataApprovalList";
 
 export * from "src/modules/contributor/contributor.actions";
 export * from "src/modules/contributor/contributor.constants.js";
@@ -20,11 +22,13 @@ export * from "src/modules/contributor/contributor.selectors.js";
 
 export {
   Contributor,
+  DataApprovalList,
+  FormTitle,
+  FormSectionTitle,
   CreateDataApprovalForm,
   SynonymsModal,
-  FormTitle,
+  NewSynonymModal,
   Synonyms,
-  FormSectionTitle,
   MetaData,
   Question,
   CriticalDataItem,

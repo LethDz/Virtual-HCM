@@ -14,7 +14,7 @@ const LayoutWrapper = (props) => {
       docked
     >
       <Header />
-      <div className="contain-body h-100 w-100 d-flex">{props.children}</div>
+      <div className="contain-body w-100 d-flex min-vh-100">{props.children}</div>
     </SideBar>
   );
 };

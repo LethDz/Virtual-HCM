@@ -1,16 +1,39 @@
 import React, { Component } from "react";
 import { Row, Col, Label, Button, Input } from "reactstrap";
 
+import axiosClient from "src/common/axiosClient";
+import { KNOWLEDGE_DATA, EXTRACT_SENTENCE } from "src/constants";
+import { handleInputChange } from "src/common/handleInputChange";
+
 class RawData extends Component {
   constructor(props) {
     super();
     this.state = {
       mode: "NORMAL",
+      tokenizeData: [],
     };
   }
+  handleInput = (event) => handleInputChange(event, this);
 
   stateTokenizeRawDate = () => {
-    this.setState({ mode: "TOKENIZE" });
+    const paragraph = {
+      paragraph: this.props.rawData,
+    };
+    axiosClient
+      .post(KNOWLEDGE_DATA + EXTRACT_SENTENCE, paragraph)
+      .then((response) => {
+        console.log(response.data.result_data);
+        this.setState({
+          mode: "TOKENIZE",
+          tokenizeData: response.data.result_data.pos,
+        });
+        this.setTokenizedWordArray();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  setTokenizedWordArray = () => {
+    this.props.setTokenizeWord(this.state.tokenizeData);
   };
 
   stateCancelTokenize = () => {
@@ -30,7 +53,7 @@ class RawData extends Component {
               );
             })}
           </Col>
-          <Col xs="1" className="p-0">
+          <Col xs="auto">
             <Button
               type="button"
               color="danger"
@@ -53,7 +76,7 @@ class RawData extends Component {
               onChange={this.props.onChange}
             />
           </Col>
-          <Col xs="1" className="p-0">
+          <Col xs="auto">
             <Button
               type="button"
               color="primary"
@@ -71,8 +94,8 @@ class RawData extends Component {
       <Row className="p-3" xs="1">
         <Col>
           <Label for="rawData">Raw data:</Label>
-          {this.renderRawDataMode()}
         </Col>
+        <Col>{this.renderRawDataMode()}</Col>
       </Row>
     );
   }

@@ -7,7 +7,9 @@ import {
   ContributorsListPage,
   ContributorCreatePage,
   ContributorPage,
-  CreateDataApprovalFormPage
+  CreateDataApprovalFormPage,
+  DataApprovalListPage
+  
 } from "src/pages/index";
 import {
   HOME_PAGE,
@@ -17,6 +19,7 @@ import {
   ADMIN_CONTRIBUTOR_CREATE_PAGE,
   CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
+  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL
 } from "src/constants";
 import ErrorBoundaryRoute from "src/common/ErrorBoundaryRoute";
 import PrivateRouteAdmin from "src/common/PrivateRouteAdmin";
@@ -47,6 +50,11 @@ const Routes = () => (
         exact
         path={CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM}
         component={CreateDataApprovalFormPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
+        component={DataApprovalListPage}
       />
     </Switch>
   </Fragment>

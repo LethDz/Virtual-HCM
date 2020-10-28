@@ -38,12 +38,26 @@ class CreateDataApprovalForm extends Component {
       },
       errorAlert: false,
       errorMessage: "",
+      tokenizedWord: [],
     };
   }
 
   handleInputForm = (event) => handleInputFormChange(event, this);
 
   handleInput = (event) => handleInputChange(event, this);
+
+  setTokenizeWord = (tokenizedWordArray) => {
+    this.setState({ tokenizedWord: tokenizedWordArray });
+  };
+
+  getWordArray = () => {
+    const rawData = this.state.tokenizedWord;
+    let wordArray = [];
+    for (let index in rawData) {
+      wordArray.push(rawData[index]);
+    }
+    return wordArray;
+  };
 
   getError = () => {
     let errorMessage = "";
@@ -67,10 +81,9 @@ class CreateDataApprovalForm extends Component {
     event.preventDefault();
     let error = this.getError();
     if (error.trim() === "") {
-      this.setState({errorAlert: false})
-    }
-    else {
-      this.setState({errorAlert: true})
+      this.setState({ errorAlert: false });
+    } else {
+      this.setState({ errorAlert: true });
     }
   };
 
@@ -192,15 +205,6 @@ class CreateDataApprovalForm extends Component {
     this.setState({ form: form });
   };
 
-  getWordArray = () => {
-    const rawData = data.token;
-    let wordArray = [];
-    for (let index in rawData) {
-      wordArray.push(rawData[index]);
-    }
-    return wordArray;
-  };
-
   removeComponent = (type, criticalIndex, index) => {
     let form = this.state.form;
     if (index > -1) {
@@ -235,8 +239,11 @@ class CreateDataApprovalForm extends Component {
     const wordArray = this.getWordArray();
 
     return (
-      <Form onSubmit={this.submitForm} style={{width:"100%"}}>
-        <Container fluid={true}>
+      <Container fluid={true}>
+        <Form
+          onSubmit={this.submitForm}
+          style={{ width: "100%", height: "100%" }}
+        >
           <FormTitle title="New data Approval" />
           <Alert isOpen={this.state.errorAlert} color="danger">
             {this.state.errorMessage}
@@ -252,6 +259,8 @@ class CreateDataApprovalForm extends Component {
           <div className="form-item form-item-data mt-3 pb-3">
             <FormSectionTitle title="Data analysis" />
             <RawData
+              setTokenizeWord={this.setTokenizeWord}
+              rawData={this.state.form.rawData}
               getWordArray={this.getWordArray}
               onChange={this.handleInputForm}
             />
@@ -289,8 +298,8 @@ class CreateDataApprovalForm extends Component {
               Create new data approval
             </Button>
           </Row>
-        </Container>
-      </Form>
+        </Form>
+      </Container>
     );
   }
 }
