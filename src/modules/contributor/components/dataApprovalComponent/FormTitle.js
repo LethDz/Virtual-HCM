@@ -5,7 +5,7 @@ const FormTitle = (props) => {
   return (
     <Row xs="1">
       <Col>
-        <h2 className="text-center m-3">{props.title}</h2>
+        <h4 className="text-center m-3">{props.title}</h4>
       </Col>
     </Row>
   );

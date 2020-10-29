@@ -50,10 +50,18 @@ class MetaData extends Component {
     }
     this.setState({ referenceList: referenceList });
     this.setReference();
-  }
+  };
 
   setReference = () => {
-    this.props.setReference(this.state.referenceList);
+    let referenceList = [];
+    this.state.referenceList.forEach((reference) => {
+      referenceList.push({
+        id: reference.id,
+        page: reference.page,
+        extra_info: reference.extra_info,
+      });
+    });
+    this.props.setReference(referenceList);
   };
 
   render() {
@@ -118,7 +126,7 @@ class MetaData extends Component {
                   <Row>
                     <Col>
                       <Row>
-                        {reference.id}: {reference.page}
+                        {reference.reference_name}; Page: {reference.page}
                       </Row>
                     </Col>
                     <Col xs="auto">

@@ -24,11 +24,10 @@ class SynonymsModal extends Component {
 
   componentDidMount = () => {
     if (this.props.synonymsList.length === 0) {
-      // axiosClient.get(SYNONYM + ALL).then((response) => {
-      //   this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts)
-      // });
+      axiosClient.get(SYNONYM + ALL).then((response) => {
+        this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts)
+      });
     }
-    
   };
 
   onGridReady = (params) => {

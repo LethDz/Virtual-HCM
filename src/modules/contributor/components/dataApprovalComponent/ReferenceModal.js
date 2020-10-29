@@ -33,7 +33,6 @@ class ReferenceModal extends Component {
       selectedReference: "",
       gridApi: "",
       gridColumnApi: "",
-    //   index: "",
       loading: false,
       page: 0,
       extraInfo: "",
@@ -43,21 +42,13 @@ class ReferenceModal extends Component {
   handleInput = (event) => handleInputChange(event, this);
 
   componentDidMount = () => {
-    const test = [
-      { reference_document_id: "1", reference_name: "HCM 1" },
-      { reference_document_id: "2", reference_name: "HCM 2" },
-      { reference_document_id: "3", reference_name: "HCM 3" },
-    ];
-    this.props.fetchAllDocumentReference(test);
-
-    // this.setState({ loading: true });
-    // axiosClient.get(REFERENCE + ALL).then((response) => {
-    //   this.props.fetchAllDocumentReference(
-    //     response.data.result_data.references
-    //   );
-    //   this.setState({ loading: false });
-    //   console.log(this.props.documentReferenceList);
-    // });
+    this.setState({ loading: true });
+    axiosClient.get(REFERENCE + ALL).then((response) => {
+      this.props.fetchAllDocumentReference(
+        response.data.result_data.references
+      );
+      this.setState({ loading: false });
+    });
   };
 
   onGridReady = (params) => {
@@ -86,6 +77,7 @@ class ReferenceModal extends Component {
       id: selectedReference.reference_document_id,
       page: this.state.page,
       extra_info: this.state.extraInfo,
+      reference_name: selectedReference.reference_name,
     };
     this.props.addReference(referenceObject);
     this.props.toggle();

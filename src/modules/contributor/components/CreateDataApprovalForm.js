@@ -12,10 +12,16 @@ import {
   CriticalData,
 } from "src/modules/contributor/index";
 import "src/static/stylesheets/contributor.css";
+import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
 import {
   handleInputFormChange,
   handleInputChange,
 } from "src/common/handleInputChange";
+import axiosClient from "src/common/axiosClient";
+import { history } from "src/common/history";
+
+import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from "src/constants";
+import { KNOWLEDGE_DATA, ADD } from "src/constants";
 
 class CreateDataApprovalForm extends Component {
   constructor() {
@@ -36,8 +42,10 @@ class CreateDataApprovalForm extends Component {
       errorMessage: "",
       tokenizedWord: [],
       ner: [],
+      loading: false,
     };
   }
+
 
   handleInputForm = (event) => handleInputFormChange(event, this);
 
@@ -75,73 +83,72 @@ class CreateDataApprovalForm extends Component {
   };
 
   submitForm = (event) => {
+    this.setState({
+      loading: true,
+    });
     event.preventDefault();
     let error = this.getError();
     if (error.trim() === "") {
-      console.log(this.prepareForm());
       this.setState({ errorAlert: false });
+      axiosClient
+        .post(KNOWLEDGE_DATA + ADD, this.prepareForm())
+        .then((response) => {
+          this.setState({
+            loading: false,
+          });
+          console.log(response);
+          history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+        })
+        .catch((err) => console.log(err));
     } else {
-      this.setState({ errorAlert: true });
+      this.setState({ errorAlert: true, loading: false });
     }
   };
 
   prepareForm = () => {
-    // Remove index from critical data
     let form = this.state.form;
-    let critical = form.criticalData;
-    let temp = [];
-    critical.forEach((critical) => {
-      temp.push({
-        type: critical.type,
-        word: critical.word,
-        verb: critical.verb,
+    // Remove meaning from synonym
+    let synonym = form.synonyms;
+    let synonymTemp = [];
+    synonym.forEach((synonym) => {
+      let synonymId = [];
+      synonym.synonyms.forEach((sy) => {
+        synonymId.push(sy.id);
       });
+      let synonymObject = {
+        word: synonym.word,
+        synonyms: synonymId,
+      };
+      synonymTemp.push(synonymObject);
     });
-    form.criticalData = temp;
+    form.synonyms = synonymTemp;
+
     return form;
-  };
-
-  addCriticalData = () => {
-    let type = document.getElementById("critical-data-type").value;
-    let temp = this.state.form.criticalData;
-    temp.push({
-      type: type,
-      word: [],
-      verb: [],
-      index: temp.length,
-    });
-    let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-    let state = this.state;
-    state.form.criticalData = sortedTemp;
-    this.setState(state);
-  };
-
-  setCriticalData = (index, type, word) => {
-    let critical = {
-      type: type,
-      word: word,
-    };
-    let state = this.state;
-    state.form.criticalData[index].word.push(critical);
-    this.setState(state);
   };
 
   addSynonym = (synonymList, index) => {
     let currentState = this.state;
     for (let i in synonymList) {
-      currentState.form.synonyms[index].synonyms.push(
-        synonymList[i].synonym_id
-      );
+      currentState.form.synonyms[index].synonyms.push({
+        id: synonymList[i].synonym_id,
+        meaning: synonymList[i].meaning,
+      });
     }
     this.setState(currentState);
   };
 
   setCoresponse = (coresponse) => {
     let form = this.state.form;
-    form.coresponse = coresponse
+    form.coresponse = coresponse;
     this.setState({ form: form });
   };
 
+  setCriticalData = (criticalData) => {
+    let form = this.state.form;
+    form.criticalData = criticalData;
+    this.setState({ form: form });
+  };
+  
   setSynonym = (word) => {
     let currentState = this.state;
     let synonymObject = {
@@ -162,16 +169,6 @@ class CreateDataApprovalForm extends Component {
     });
   };
 
-  removeCritical = (index) => {
-    let form = this.state.form;
-    if (index > -1) {
-      form.criticalData.splice(index, 1);
-    }
-    this.setState({
-      form: form,
-    });
-  };
-
   removeSynonymInWord = (wordIndex, synonymIndex) => {
     let form = this.state.form;
     if (synonymIndex > -1) {
@@ -180,16 +177,6 @@ class CreateDataApprovalForm extends Component {
     this.setState({
       form: form,
     });
-  };
-
-  setVerb = (index, type, word) => {
-    let verb = {
-      type: type,
-      word: word,
-    };
-    let state = this.state;
-    state.form.criticalData[index].verb.push(verb);
-    this.setState(state);
   };
 
   setQuestions = (questions) => {
@@ -204,34 +191,16 @@ class CreateDataApprovalForm extends Component {
     this.setState({ form: form });
   };
 
-  removeComponent = (type, criticalIndex, index) => {
-    let form = this.state.form;
-    if (index > -1) {
-      if (type === "Verb") {
-        form.criticalData[criticalIndex].verb.splice(index, 1);
-      } else if (type === "Critical") {
-        form.criticalData[criticalIndex].word.splice(index, 1);
-      }
-    }
-    let listCritical = form.criticalData[criticalIndex];
-    let list = [];
-    for (let i in listCritical) {
-      if (listCritical[i] !== null && listCritical[i] !== "")
-        list.push(listCritical[i]);
-    }
-    this.setState({
-      form: form,
-    });
-  };
-
   render() {
     const wordArray = this.getWordArray();
 
     return (
       <Container fluid={true}>
+        <LoadingSpinner loading={this.state.loading} text="Sending form" />
         <Form
           onSubmit={this.submitForm}
           style={{ width: "100%", height: "100%" }}
+          className="mb-0"
         >
           <FormTitle title="New data Approval" />
           <Alert isOpen={this.state.errorAlert} color="danger">
@@ -256,13 +225,8 @@ class CreateDataApprovalForm extends Component {
               onChange={this.handleInputForm}
             />
             <CriticalData
-              addCriticalData={this.addCriticalData}
-              removeComponent={this.removeComponent}
-              removeCritical={this.removeCritical}
-              setVerb={this.setVerb}
-              setCriticalData={this.setCriticalData}
               wordArray={wordArray}
-              criticalData={this.state.form.criticalData}
+              setCritical={this.setCriticalData}
             />
 
             <Coresponse
