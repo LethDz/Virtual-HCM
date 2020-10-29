@@ -8,6 +8,31 @@ export const GET_ALL_REFERENCE = "GET_ALL_REFERENCE";
 
 export const criticalType = ["PER", "LOC", "ORG", "MISC"];
 
+export const POSTags = [
+  "Np",
+  "Nc",
+  "Nu",
+  "N",
+  "Ny",
+  "Nb",
+  "V",
+  "Vb",
+  "A",
+  "P",
+  "R",
+  "L",
+  "M",
+  "E",
+  "C",
+  "Cc",
+  "I",
+  "T",
+  "Y",
+  "Z",
+  "X",
+  "CH",
+];
+
 export const VERB = "VERB";
 export const CRITICAL = "CRITICAL";
 

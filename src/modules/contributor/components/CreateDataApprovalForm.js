@@ -126,17 +126,6 @@ class CreateDataApprovalForm extends Component {
     return form;
   };
 
-  addSynonym = (synonymList, index) => {
-    let currentState = this.state;
-    for (let i in synonymList) {
-      currentState.form.synonyms[index].synonyms.push({
-        id: synonymList[i].synonym_id,
-        meaning: synonymList[i].meaning,
-      });
-    }
-    this.setState(currentState);
-  };
-
   setCoresponse = (coresponse) => {
     let form = this.state.form;
     form.coresponse = coresponse;
@@ -147,36 +136,6 @@ class CreateDataApprovalForm extends Component {
     let form = this.state.form;
     form.criticalData = criticalData;
     this.setState({ form: form });
-  };
-  
-  setSynonym = (word) => {
-    let currentState = this.state;
-    let synonymObject = {
-      word: word,
-      synonyms: [],
-    };
-    currentState.form.synonyms.push(synonymObject);
-    this.setState(currentState);
-  };
-
-  removeSynonym = (index) => {
-    let form = this.state.form;
-    if (index > -1) {
-      form.synonyms.splice(index, 1);
-    }
-    this.setState({
-      form: form,
-    });
-  };
-
-  removeSynonymInWord = (wordIndex, synonymIndex) => {
-    let form = this.state.form;
-    if (synonymIndex > -1) {
-      form.synonyms[wordIndex].synonyms.splice(synonymIndex, 1);
-    }
-    this.setState({
-      form: form,
-    });
   };
 
   setQuestions = (questions) => {
@@ -190,6 +149,12 @@ class CreateDataApprovalForm extends Component {
     form.documentReference = reference;
     this.setState({ form: form });
   };
+
+  setSynonym = (synonyms) => {
+    let form = this.state.form;
+    form.synonyms = synonyms;
+    this.setState({ form: form });
+  }
 
   render() {
     const wordArray = this.getWordArray();
@@ -236,13 +201,10 @@ class CreateDataApprovalForm extends Component {
             <Question className="mt-3" setQuestions={this.setQuestions} />
 
             <BaseResponse onChange={this.handleInputForm} />
+
             <Synonyms
-              addSynonym={this.addSynonym}
               setSynonym={this.setSynonym}
-              removeSynonym={this.removeSynonym}
-              removeSynonymInWord={this.removeSynonymInWord}
               wordArray={wordArray}
-              synonymList={this.state.form.synonyms}
             />
           </div>
 

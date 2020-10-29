@@ -10,7 +10,8 @@ export const LOGIN = "/auth";
 export const LOGOUT = "/logout";
 
 export const KNOWLEDGE_DATA = "/knowledge-data";
-export const EXTRACT_SENTENCE = "/extract-sentence";
+export const NLP = "/nlp";
+export const TOKENIZE = "/tokenize";
 
 export const SYNONYM = "/synonym";
 export const REFERENCE = "/reference-document";

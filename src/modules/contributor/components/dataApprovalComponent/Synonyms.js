@@ -13,9 +13,29 @@ class Synonyms extends Component {
     this.state = {
       synonymWord: "",
       isOpenSynonymModal: false,
-      index: ""
+      index: "",
+      synonyms: [],
     };
   }
+
+  setSynonymToForm = () => {
+    if (this.state.synonymWord !== "" && this.state.synonymWord !== null) {
+      let synonym = this.state.synonyms;
+      let synonymTemp = [];
+      synonym.forEach((synonym) => {
+        let synonymId = [];
+        synonym.synonyms.forEach((sy) => {
+          synonymId.push(sy.id);
+        });
+        let synonymObject = {
+          word: synonym.word,
+          synonyms: synonymId,
+        };
+        synonymTemp.push(synonymObject);
+      });
+      this.props.setSynonym(synonymTemp);
+    }
+  };
 
   handleInput = (event) => {
     handleInputChange(event, this);
@@ -23,20 +43,55 @@ class Synonyms extends Component {
 
   setSynonym = () => {
     if (this.state.synonymWord !== "" && this.state.synonymWord !== null) {
-      this.props.setSynonym(this.state.synonymWord);
+      let synonyms = this.state.synonyms;
+      synonyms.push({
+        word: this.state.synonymWord,
+        synonyms: [],
+      });
+      this.setState({ synonyms: synonyms });
     }
-  };
-
-  removeSynonym = (wordIndex, synonymIndex) => {
-    this.props.removeSynonymInWord(wordIndex, synonymIndex);
   };
 
   toggleSynonymModal = (index) => {
     this.setState({
       isOpenSynonymModal: !this.state.isOpenSynonymModal,
-      index: index
-    })
-  }
+      index: index,
+    });
+  };
+
+  addSynonym = (synonymList, index) => {
+    let synonyms = this.state.synonyms;
+    for (let i in synonymList) {
+      synonyms[index].synonyms.push({
+        id: synonymList[i].synonym_id,
+        meaning: synonymList[i].meaning,
+      });
+    }
+    this.setState({ synonyms: synonyms });
+    this.setSynonymToForm();
+  };
+
+  removeSynonym = (index) => {
+    let synonyms = this.state.synonyms;
+    if (index > -1) {
+      synonyms.splice(index, 1);
+    }
+    this.setState({
+      synonyms: synonyms,
+    });
+    this.setSynonymToForm();
+  };
+
+  removeSynonymInWord = (wordIndex, synonymIndex) => {
+    let synonyms = this.state.synonyms;
+    if (synonymIndex > -1) {
+      synonyms[wordIndex].synonyms.splice(synonymIndex, 1);
+    }
+    this.setState({
+      synonyms: synonyms,
+    });
+    this.setSynonymToForm();
+  };
 
   render() {
     return (
@@ -45,7 +100,7 @@ class Synonyms extends Component {
           index={this.state.index}
           isOpenSynonymModal={this.state.isOpenSynonymModal}
           toggleSynonymModal={this.toggleSynonymModal}
-          addSynonym={this.props.addSynonym}
+          addSynonym={this.addSynonym}
         />
         <Col>
           Synonyms:
@@ -66,14 +121,14 @@ class Synonyms extends Component {
                 })}
               </Input>
               <ListGroup>
-                {this.props.synonymList.map((word, index) => {
+                {this.state.synonyms.map((word, index) => {
                   return (
                     <ListGroupItem key={index} className="mt-1">
                       <Row>
                         <Col>
                           {word.word}
                           <ListGroup>
-                            {this.props.synonymList[index].synonyms.map(
+                            {this.state.synonyms[index].synonyms.map(
                               (synonym, indexs) => {
                                 return (
                                   <ListGroupItem key={indexs}>
@@ -83,7 +138,10 @@ class Synonyms extends Component {
                                         <Button
                                           color="danger"
                                           onClick={() => {
-                                            this.removeSynonym(index, indexs);
+                                            this.removeSynonymInWord(
+                                              index,
+                                              indexs
+                                            );
                                           }}
                                         >
                                           <FontAwesomeIcon icon={faTrashAlt} />
@@ -100,7 +158,7 @@ class Synonyms extends Component {
                           <Button
                             color="success"
                             onClick={() => {
-                              this.toggleSynonymModal(index)
+                              this.toggleSynonymModal(index);
                             }}
                           >
                             <FontAwesomeIcon icon={faPlus} /> Synonym
@@ -110,7 +168,7 @@ class Synonyms extends Component {
                           <Button
                             color="danger"
                             onClick={() => {
-                              this.props.removeSynonym(index);
+                              this.removeSynonym(index);
                             }}
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />

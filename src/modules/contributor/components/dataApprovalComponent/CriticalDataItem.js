@@ -3,6 +3,8 @@ import { Row, Col, Input, Button } from "reactstrap";
 
 import { handleInputChange } from "src/common/handleInputChange";
 
+import { VERB, CRITICAL, POSTags } from "src/modules/contributor/index";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
@@ -20,7 +22,7 @@ class CriticalDataItem extends Component {
   };
 
   setVerb = () => {
-    if (this.props.type === "Critical") {
+    if (this.props.type === CRITICAL) {
       if (this.state.verbType !== "" && this.state.word !== "") {
         this.props.setCriticalData(
           this.props.index,
@@ -28,7 +30,7 @@ class CriticalDataItem extends Component {
           this.state.word
         );
       }
-    } else if (this.props.type === "Verb") {
+    } else if (this.props.type === VERB) {
       if (this.state.verbType !== "" && this.state.word !== "") {
         this.props.setVerb(
           this.props.index,
@@ -40,34 +42,16 @@ class CriticalDataItem extends Component {
   };
 
   render() {
-    const POSTags = [
-      "Np",
-      "Nc",
-      "Nu",
-      "N",
-      "Ny",
-      "Nb",
-      "V",
-      "Vb",
-      "A",
-      "P",
-      "R",
-      "L",
-      "M",
-      "E",
-      "C",
-      "Cc",
-      "I",
-      "T",
-      "Y",
-      "Z",
-      "X",
-      "CH",
-    ];
+    
     return (
       <Row>
         <Col xs="auto">
-          <Input defaultValue={""} type="select" name="verbType" onChange={this.handleInput}>
+          <Input
+            defaultValue={""}
+            type="select"
+            name="verbType"
+            onChange={this.handleInput}
+          >
             <option value="" disabled>
               None
             </option>
@@ -77,7 +61,12 @@ class CriticalDataItem extends Component {
           </Input>
         </Col>
         <Col xs="auto">
-          <Input defaultValue={""} type="select" name="word" onChange={this.handleInput}>
+          <Input
+            defaultValue={""}
+            type="select"
+            name="word"
+            onChange={this.handleInput}
+          >
             <option value="" disabled>
               None
             </option>

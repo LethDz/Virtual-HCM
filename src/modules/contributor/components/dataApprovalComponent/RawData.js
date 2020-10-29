@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Label, Button, Input } from "reactstrap";
 
 import axiosClient from "src/common/axiosClient";
-import { KNOWLEDGE_DATA, EXTRACT_SENTENCE } from "src/constants";
+import { NLP, TOKENIZE } from "src/constants";
 import { handleInputChange } from "src/common/handleInputChange";
 
 import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
@@ -25,8 +25,9 @@ class RawData extends Component {
       paragraph: this.props.rawData,
     };
     axiosClient
-      .post(KNOWLEDGE_DATA + EXTRACT_SENTENCE, paragraph)
+      .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
+        console.log(response)
         let fullArray = [];
         response.data.result_data.pos.forEach((array) => {
           fullArray.push(...array);
