@@ -105,11 +105,6 @@ class NewSynonymModal extends Component {
               words: [],
             });
           }
-          // this.props.synonymsList.push(
-          //   {
-
-          //   }
-          // )
           
         })
         .catch((err) => {

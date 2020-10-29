@@ -31,7 +31,6 @@ class CreateDataApprovalForm extends Component {
         synonyms: [],
         baseResponse: "",
         documentReference: [],
-        page: "",
       },
       errorAlert: false,
       errorMessage: "",
@@ -79,10 +78,27 @@ class CreateDataApprovalForm extends Component {
     event.preventDefault();
     let error = this.getError();
     if (error.trim() === "") {
+      console.log(this.prepareForm());
       this.setState({ errorAlert: false });
     } else {
       this.setState({ errorAlert: true });
     }
+  };
+
+  prepareForm = () => {
+    // Remove index from critical data
+    let form = this.state.form;
+    let critical = form.criticalData;
+    let temp = [];
+    critical.forEach((critical) => {
+      temp.push({
+        type: critical.type,
+        word: critical.word,
+        verb: critical.verb,
+      });
+    });
+    form.criticalData = temp;
+    return form;
   };
 
   addCriticalData = () => {
@@ -110,22 +126,6 @@ class CreateDataApprovalForm extends Component {
     this.setState(state);
   };
 
-  addCoresponse = () => {
-    let type = document.getElementById("coresponse-type").value;
-    let word = document.getElementById("coresponse-index").value;
-    if (word.trim() !== "") {
-      let temp = this.state.form.coresponse;
-      temp.push({
-        type: type,
-        answer: word,
-      });
-      let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-      let state = this.state;
-      state.form.coresponse = sortedTemp;
-      this.setState(state);
-    }
-  };
-
   addSynonym = (synonymList, index) => {
     let currentState = this.state;
     for (let i in synonymList) {
@@ -136,10 +136,9 @@ class CreateDataApprovalForm extends Component {
     this.setState(currentState);
   };
 
-  addReference = (reference) => {
-    console.log(reference)
+  setCoresponse = (coresponse) => {
     let form = this.state.form;
-    form.documentReference.push(reference);
+    form.coresponse = coresponse
     this.setState({ form: form });
   };
 
@@ -173,18 +172,6 @@ class CreateDataApprovalForm extends Component {
     });
   };
 
-  removeReference = (index) => {
-    let form = this.state.form;
-    if (index > -1) {
-      form.documentReference.splice(index, 1);
-    }
-    this.setState({
-      form: {
-        form: form
-      },
-    });
-  }
-
   removeSynonymInWord = (wordIndex, synonymIndex) => {
     let form = this.state.form;
     if (synonymIndex > -1) {
@@ -193,10 +180,6 @@ class CreateDataApprovalForm extends Component {
     this.setState({
       form: form,
     });
-  };
-
-  toggleSubmitModal = () => {
-    this.submitModal.current.toggleSubmitModal();
   };
 
   setVerb = (index, type, word) => {
@@ -209,15 +192,6 @@ class CreateDataApprovalForm extends Component {
     this.setState(state);
   };
 
-  setCoresponse = (index, type, word) => {
-    let coresponse = {
-      type,
-      word,
-    };
-    let state = this.state;
-    state.form.coresponse[index].push(coresponse);
-  };
-
   setQuestions = (questions) => {
     let form = this.state.form;
     form.questions = questions;
@@ -226,9 +200,9 @@ class CreateDataApprovalForm extends Component {
 
   setReference = (reference) => {
     let form = this.state.form;
-    form.documentReference = reference
-    this.setState({ form: form })
-  }
+    form.documentReference = reference;
+    this.setState({ form: form });
+  };
 
   removeComponent = (type, criticalIndex, index) => {
     let form = this.state.form;
@@ -244,16 +218,6 @@ class CreateDataApprovalForm extends Component {
     for (let i in listCritical) {
       if (listCritical[i] !== null && listCritical[i] !== "")
         list.push(listCritical[i]);
-    }
-    this.setState({
-      form: form,
-    });
-  };
-
-  removeCoresponse = (index) => {
-    let form = this.state.form;
-    if (index > -1) {
-      form.coresponse.splice(index, 1);
     }
     this.setState({
       form: form,
@@ -278,8 +242,6 @@ class CreateDataApprovalForm extends Component {
             <MetaData
               documentReference={this.state.form.documentReference}
               onChange={this.handleInputForm}
-              // addReference={this.addReference}
-              // removeReference={this.removeReference}
               setReference={this.setReference}
             />
           </div>
@@ -304,10 +266,8 @@ class CreateDataApprovalForm extends Component {
             />
 
             <Coresponse
-              addCoresponse={this.addCoresponse}
-              removeCoresponse={this.removeCoresponse}
+              setCoresponse={this.setCoresponse}
               wordArray={wordArray}
-              coresponse={this.state.form.coresponse}
             />
             <Question className="mt-3" setQuestions={this.setQuestions} />
 
