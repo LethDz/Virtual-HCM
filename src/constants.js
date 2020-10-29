@@ -39,6 +39,13 @@ export const ADMIN_CONTRIBUTOR_EDIT_PAGE = `${ADMIN_CONTRIBUTOR_LIST_PAGE}/edit`
 // Contributor Page
 export const CONTRIBUTOR_PAGE = '/contributor';
 
+//Reference Document Page
+export const DOCUMENT_REFERENCE_PAGE = '/reference-document';
+export const DOCUMENT_REFERENCE_LIST_PAGE = `${DOCUMENT_REFERENCE_PAGE}/all`;
+export const DOCUMENT_REFERENCE_CREATE_PAGE = `${DOCUMENT_REFERENCE_PAGE}/add`;
+export const DOCUMENT_REFERENCE_EDIT_PAGE = `${DOCUMENT_REFERENCE_PAGE}/edit`;
+export const DOCUMENT_REFERENCE_SELECTED_PAGE = `${DOCUMENT_REFERENCE_PAGE}/edit`;
+
 // Roles
 export const ROLE_ADMIN = 'Admin';
 export const ROLE_CONTRIBUTOR = 'Contributor';

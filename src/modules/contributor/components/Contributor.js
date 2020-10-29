@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ViewReference } from "src/modules/contributor/index";
+import { ReferenceListNew} from "src/modules/contributor/index";
 import 'react-contexify/dist/ReactContexify.min.css';
 
 class Contributor extends Component {
     render() {
         return (
-                <ViewReference />
+                <ReferenceListNew />
         )
     }
 }

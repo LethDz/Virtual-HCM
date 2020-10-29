@@ -18,7 +18,7 @@ import {
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
-import PrivateRouteContributor from './common/PrivateRouteContributor';
+import PrivateRouteContributor from 'src/common/PrivateRouteContributor';
 
 const Routes = () => (
   <Fragment>

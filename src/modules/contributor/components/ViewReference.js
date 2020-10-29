@@ -3,6 +3,7 @@ import { Button, Col, Container, Row } from "reactstrap";
 import {
   CreateReferenceModal,
   ReferenceList,
+  ReferenceListNew
 } from "src/modules/contributor/index";
 import "src/static/stylesheets/reference.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -45,13 +46,13 @@ class ViewReference extends Component {
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Add new
             </Button>
-            <CreateReferenceModal modal={this.state.modal} />
+            {/* <CreateReferenceModal modal={this.state.modal} /> */}
           </Col>
         </Row>
 
         <Row>
           <Col className="justify-content-center d-flex">
-            <ReferenceList />
+            <ReferenceListNew />
           </Col>
         </Row>
       </Container>
