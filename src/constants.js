@@ -13,8 +13,11 @@ export const KNOWLEDGE_DATA = "/knowledge-data";
 export const EXTRACT_SENTENCE = "/extract-sentence";
 
 export const SYNONYM = "/synonym";
+export const REFERENCE = "/reference-document";
 
 export const ADD = "/add";
+
+export const ALL = "/all";
 
 // API Admin Route Path
 export const ADMIN_GET_USER_ALL = "/user/all";

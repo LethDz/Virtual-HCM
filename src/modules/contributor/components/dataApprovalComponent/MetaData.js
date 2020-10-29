@@ -1,17 +1,62 @@
 import React, { Component } from "react";
-import { Row, Col, Label, Input, Button } from "reactstrap";
+import {
+  Row,
+  Col,
+  Label,
+  Input,
+  Button,
+  ListGroup,
+  ListGroupItem,
+} from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
+import {
+  getAllDocumentReference,
+  fetchAllDocumentReference,
+  ReferenceModal,
+} from "src/modules/contributor/index";
+import { connect } from "react-redux";
 
 class MetaData extends Component {
-  newRefer = (e) => {
-    console.log("test")
+  constructor(props) {
+    super();
+    this.state = {
+      isOpenReferenceModal: false,
+      referenceList: [],
+    };
   }
 
+  toggleReferenceModal = () => {
+    this.setState({ isOpenReferenceModal: !this.state.isOpenReferenceModal });
+  };
+
+  newRefer = (e) => {
+    console.log("test");
+  };
+
+  addReference = (reference) => {
+    let referenceList = this.state.referenceList;
+    referenceList.push(reference);
+    this.setState({ referenceList: referenceList });
+    this.setReference();
+  };
+
+  removeReference = (index) => {
+    let referenceList = this.state.referenceList;
+    if (index > -1) {
+      referenceList.splice(index, 1);
+    }
+    this.setState({ referenceList: referenceList });
+    this.setReference();
+  }
+
+  setReference = () => {
+    this.props.setReference(this.state.referenceList);
+  };
+
   render() {
-    const references = ["HCM tap 4", "HCM tap 5", "HCM tap 6"];
     return (
       <Row className="pb-3">
         <Col className="pr-0" xs="auto">
@@ -26,7 +71,7 @@ class MetaData extends Component {
             </Label>
           </Col>
         </Col>
-        <Col className="m-1 pl-0 ml-0">
+        <Col xs="auto" className="m-1 pl-0 ml-0">
           <Input
             required
             className="m-1"
@@ -44,57 +89,66 @@ class MetaData extends Component {
             onChange={this.props.onChange}
           />
         </Col>
-        <Col className="pr-0" xs="auto">
-          <Col>
-            <Label className="label" for="reference">
-              Document reference:
-            </Label>
-          </Col>
-          <Col>
-            <Label className="label" for="page">
-              Page:
-            </Label>
-          </Col>
-        </Col>
-        <Col className="m-1 pl-0 ml-0">
-          <Col className="m-1">
-            <Input
-              required
-              className="m-1"
-              type="select"
-              name="documentReference"
-              id="reference"
-              defaultValue={""}
-              onChange={this.props.onChange}
-            >
-              <option value={""} disabled>
-                None
-              </option>
-              {references.map((reference, index) => {
-                return <option key={index}>{reference}</option>;
-              })}
-            </Input>
-          </Col>
-          <Col className="m-1">
-            <Input
-              required
-              className="m-1"
-              type="number"
-              name="page"
-              id="page"
-              min="1"
-              onChange={this.props.onChange}
-            />
-          </Col>
-        </Col>
-        <Col className="m-1 pl-0 ml-0">
-          <Button type="button" onClick={this.newRefer} color="success">
-            <FontAwesomeIcon icon={faPlus} /> New reference
-          </Button>
+        <Col className="pr-5">
+          <ReferenceModal
+            isOpen={this.state.isOpenReferenceModal}
+            toggle={this.toggleReferenceModal}
+            addReference={this.addReference}
+          />
+          <Row>
+            <Col>
+              <Label className="label" for="reference">
+                Document reference:
+              </Label>
+            </Col>
+            <Col xs="auto" className="m-1">
+              <Button
+                type="button"
+                onClick={this.toggleReferenceModal}
+                color="success"
+              >
+                <FontAwesomeIcon icon={faPlus} /> New reference
+              </Button>
+            </Col>
+          </Row>
+          <ListGroup>
+            {this.state.referenceList.map((reference, index) => {
+              return (
+                <ListGroupItem key={index}>
+                  <Row>
+                    <Col>
+                      <Row>
+                        {reference.id}: {reference.page}
+                      </Row>
+                    </Col>
+                    <Col xs="auto">
+                      <Button
+                        color="danger"
+                        onClick={() => {
+                          this.removeReference(index);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </Button>
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
         </Col>
       </Row>
     );
   }
 }
 
-export default MetaData;
+const mapStateToProps = (state) => ({
+  documentReferenceList: getAllDocumentReference(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchAllSynonyms: (documentReferenceList) =>
+    dispatch(fetchAllDocumentReference(documentReferenceList)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MetaData);

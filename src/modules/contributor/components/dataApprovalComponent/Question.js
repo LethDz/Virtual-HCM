@@ -31,6 +31,7 @@ export default class Question extends Component {
   getQuestion = () => {
     return this.questionRef.current.value;
   };
+  
   render() {
     return (
       <div className="p-3">

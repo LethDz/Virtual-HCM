@@ -1,46 +1,34 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
-import { NewSynonymModal } from "src/modules/contributor/index";
+import { NewSynonymModal, getAllSynonyms, fetchAllSynonyms } from "src/modules/contributor/index";
+import { SYNONYM, ALL } from "src/constants";
+import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import axiosClient from "src/common/axiosClient";
 
 class SynonymsModal extends Component {
   constructor() {
     super();
     this.state = {
       modal: false,
-      rowData: [
-        {
-          id: "001",
-          meaning: "test",
-          list: [300, 200],
-        },
-        {
-          id: "002",
-          meaning: "test1",
-          list: [523, 123],
-        },
-        {
-          id: "003",
-          meaning: "test2",
-          list: [653, 1234],
-        },
-      ],
       selectedSynonyms: [],
       gridApi: "",
       gridColumnApi: "",
       index: "",
+      isOpenNewSynonymModal: false,
     };
-    this.newSynonymModal = React.createRef("");
   }
 
-  setModal = (index) => {
-    let currentState = this.state;
-    currentState.modal = !currentState.modal;
-    currentState.index = index;
-    this.setState(currentState);
+  componentDidMount = () => {
+    if (this.props.synonymsList.length === 0) {
+      // axiosClient.get(SYNONYM + ALL).then((response) => {
+      //   this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts)
+      // });
+    }
+    
   };
 
   onGridReady = (params) => {
@@ -64,16 +52,28 @@ class SynonymsModal extends Component {
   };
 
   addSynonyms = () => {
-    this.props.addSynonym(this.state.selectedSynonyms, this.state.index);
-    this.setModal();
+    this.props.addSynonym(this.state.selectedSynonyms, this.props.index);
+    this.props.toggleSynonymModal(this.props.index);
+  };
+
+  toggleNewSynonymModal = () => {
+    this.setState({ isOpenNewSynonymModal: !this.state.isOpenNewSynonymModal });
   };
 
   render() {
     return (
       <div>
-        <NewSynonymModal ref={this.newSynonymModal} />
-        <Modal isOpen={this.state.modal} toggle={this.setModal}>
-          <ModalHeader toggle={this.state.setModal}>Synonyms</ModalHeader>
+        <NewSynonymModal
+          isOpen={this.state.isOpenNewSynonymModal}
+          toggle={this.toggleNewSynonymModal}
+        />
+        <Modal
+          isOpen={this.props.isOpenSynonymModal}
+          toggle={this.props.toggleSynonymModal}
+        >
+          <ModalHeader toggle={this.props.toggleSynonymModal}>
+            Synonyms
+          </ModalHeader>
           <ModalBody>
             <div
               className="ag-theme-alpine"
@@ -81,26 +81,29 @@ class SynonymsModal extends Component {
             >
               <AgGridReact
                 onGridReady={this.onGridReady}
-                rowData={this.state.rowData}
+                rowData={this.props.synonymsList}
                 rowSelection="multiple"
                 rowMultiSelectWithClick
                 onSelectionChanged={this.onSelectionChanged.bind(this)}
               >
                 <AgGridColumn
                   width={100}
-                  field="id"
+                  field="synonym_id"
+                  headerName="Id"
                   sortable
                   filter
                 ></AgGridColumn>
                 <AgGridColumn
                   width={170}
                   field="meaning"
+                  headerName="Meaning"
                   sortable
                   filter
                 ></AgGridColumn>
                 <AgGridColumn
                   width={195}
-                  field="list"
+                  field="words"
+                  headerName="Words"
                   sortable
                   filter
                 ></AgGridColumn>
@@ -111,7 +114,7 @@ class SynonymsModal extends Component {
             <Button
               color="success"
               onClick={() => {
-                this.newSynonymModal.current.toggle();
+                this.toggleNewSynonymModal();
               }}
             >
               <FontAwesomeIcon icon={faPlus} /> New synonym
@@ -126,4 +129,12 @@ class SynonymsModal extends Component {
   }
 }
 
-export default SynonymsModal;
+const mapStateToProps = (state) => ({
+  synonymsList: getAllSynonyms(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchAllSynonyms: (synonymsList) => dispatch(fetchAllSynonyms(synonymsList)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SynonymsModal);

@@ -15,9 +15,12 @@ import {
   ListGroupItem,
   Alert,
 } from "reactstrap";
+import { connect } from "react-redux";
 
 import axiosClient from "src/common/axiosClient";
 import { SYNONYM, ADD } from "src/constants";
+
+import { addSynonymToList } from "src/modules/contributor/index";
 
 import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
 
@@ -41,12 +44,6 @@ class NewSynonymModal extends Component {
   }
 
   handleInput = (event) => handleInputChange(event, this);
-
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal,
-    });
-  };
 
   tokenizeWord = (word) => {
     return word;
@@ -97,6 +94,7 @@ class NewSynonymModal extends Component {
       axiosClient
         .post(SYNONYM + ADD, synonym)
         .then((response) => {
+          console.log(response)
           this.setState({ loading: false });
           if (response.data.status) {
             this.setState({
@@ -107,6 +105,12 @@ class NewSynonymModal extends Component {
               words: [],
             });
           }
+          // this.props.synonymsList.push(
+          //   {
+
+          //   }
+          // )
+          
         })
         .catch((err) => {
           this.setState({ loading: false });
@@ -121,13 +125,13 @@ class NewSynonymModal extends Component {
   render() {
     return (
       <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
+        isOpen={this.props.isOpen}
+        toggle={this.props.toggle}
         onSubmit={this.sendCreateSynonymRequest}
       >
         <LoadingSpinner loading={this.state.loading} text="Adding new synonym">
           <Form>
-            <ModalHeader toggle={this.toggle}>New synonym</ModalHeader>
+            <ModalHeader toggle={this.props.toggle}>New synonym</ModalHeader>
             <ModalBody>
               <Alert isOpen={this.state.addSuccess} color="success">
                 Add successful
@@ -198,7 +202,7 @@ class NewSynonymModal extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="success">Create</Button>
-              <Button type="button" color="danger" onClick={this.toggle}>
+              <Button type="button" color="danger" onClick={this.props.toggle}>
                 Cancel
               </Button>
             </ModalFooter>
@@ -209,4 +213,11 @@ class NewSynonymModal extends Component {
   }
 }
 
-export default NewSynonymModal;
+const mapStateToProps = (state) => ({
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addSynonymToList: (synonym) => dispatch(addSynonymToList(synonym)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewSynonymModal);

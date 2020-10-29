@@ -2,3 +2,6 @@ export const SET_INTENT = "SET_INTENT";
 export const SET_INTENT_FULLNAME = "SET_INTENT_FULLNAME";
 
 export const GET_ALL_SYNONYMS = "GET_ALL_SYNONYMS";
+export const ADD_SYNONYM = "ADD_SYNONYM";
+
+export const GET_ALL_REFERENCE = "GET_ALL_REFERENCE";

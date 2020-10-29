@@ -66,13 +66,13 @@ class CriticalData extends Component {
                       setCriticalData={this.props.setCriticalData}
                     />
                     <ListGroup>
-                      {this.props.criticalData[index].subjectComponents.map(
+                      {this.props.criticalData[index].word.map(
                         (word, index) => {
                           return (
                             <ListGroupItem className="mt-1" key={index}>
                               <Row>
                                 <Col>
-                                  {word.type}: {word.subjectComponent}
+                                  {word.type}: {word.word}
                                 </Col>
                                 <Col xs="auto">
                                   <Button

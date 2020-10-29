@@ -25,18 +25,18 @@ class CreateDataApprovalForm extends Component {
         intent: "",
         intentFullName: "",
         questions: [],
-        subjects: [],
+        criticalData: [],
         coresponse: [],
         rawData: "",
         synonyms: [],
         baseResponse: "",
-        documentReference: "",
+        documentReference: [],
         page: "",
       },
       errorAlert: false,
       errorMessage: "",
       tokenizedWord: [],
-      ner: []
+      ner: [],
     };
   }
 
@@ -62,11 +62,11 @@ class CreateDataApprovalForm extends Component {
     if (this.state.form.questions.length === 0) {
       errorMessage = `${errorMessage}Question field required at least one question; `;
     }
-    if (this.state.form.subjects.length === 0) {
+    if (this.state.form.criticalData.length === 0) {
       errorMessage = `${errorMessage}Subject field required at least one subject; `;
     }
-    for (let i in this.state.form.subjects) {
-      if (this.state.form.subjects[i].subjectComponents.length === 0)
+    for (let i in this.state.form.criticalData) {
+      if (this.state.form.criticalData[i].word.length === 0)
         errorMessage = `${errorMessage}Subject at index ${i} required at least one component; `;
     }
     this.setState({
@@ -87,26 +87,26 @@ class CreateDataApprovalForm extends Component {
 
   addCriticalData = () => {
     let type = document.getElementById("critical-data-type").value;
-    let temp = this.state.form.subjects;
+    let temp = this.state.form.criticalData;
     temp.push({
       type: type,
-      subjectComponents: [],
+      word: [],
       verb: [],
       index: temp.length,
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
     let state = this.state;
-    state.form.subjects = sortedTemp;
+    state.form.criticalData = sortedTemp;
     this.setState(state);
   };
 
   setCriticalData = (index, type, word) => {
     let critical = {
       type: type,
-      subjectComponent: word,
+      word: word,
     };
     let state = this.state;
-    state.form.subjects[index].subjectComponents.push(critical);
+    state.form.criticalData[index].word.push(critical);
     this.setState(state);
   };
 
@@ -117,7 +117,7 @@ class CreateDataApprovalForm extends Component {
       let temp = this.state.form.coresponse;
       temp.push({
         type: type,
-        word: word,
+        answer: word,
       });
       let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
       let state = this.state;
@@ -129,9 +129,18 @@ class CreateDataApprovalForm extends Component {
   addSynonym = (synonymList, index) => {
     let currentState = this.state;
     for (let i in synonymList) {
-      currentState.form.synonyms[index].synonyms.push(synonymList[i]);
+      currentState.form.synonyms[index].synonyms.push(
+        synonymList[i].synonym_id
+      );
     }
     this.setState(currentState);
+  };
+
+  addReference = (reference) => {
+    console.log(reference)
+    let form = this.state.form;
+    form.documentReference.push(reference);
+    this.setState({ form: form });
   };
 
   setSynonym = (word) => {
@@ -157,12 +166,24 @@ class CreateDataApprovalForm extends Component {
   removeCritical = (index) => {
     let form = this.state.form;
     if (index > -1) {
-      form.subjects.splice(index, 1);
+      form.criticalData.splice(index, 1);
     }
     this.setState({
       form: form,
     });
   };
+
+  removeReference = (index) => {
+    let form = this.state.form;
+    if (index > -1) {
+      form.documentReference.splice(index, 1);
+    }
+    this.setState({
+      form: {
+        form: form
+      },
+    });
+  }
 
   removeSynonymInWord = (wordIndex, synonymIndex) => {
     let form = this.state.form;
@@ -184,7 +205,7 @@ class CreateDataApprovalForm extends Component {
       word: word,
     };
     let state = this.state;
-    state.form.subjects[index].verb.push(verb);
+    state.form.criticalData[index].verb.push(verb);
     this.setState(state);
   };
 
@@ -203,16 +224,22 @@ class CreateDataApprovalForm extends Component {
     this.setState({ form: form });
   };
 
+  setReference = (reference) => {
+    let form = this.state.form;
+    form.documentReference = reference
+    this.setState({ form: form })
+  }
+
   removeComponent = (type, criticalIndex, index) => {
     let form = this.state.form;
     if (index > -1) {
       if (type === "Verb") {
-        form.subjects[criticalIndex].verb.splice(index, 1);
+        form.criticalData[criticalIndex].verb.splice(index, 1);
       } else if (type === "Critical") {
-        form.subjects[criticalIndex].subjectComponents.splice(index, 1);
+        form.criticalData[criticalIndex].word.splice(index, 1);
       }
     }
-    let listCritical = form.subjects[criticalIndex];
+    let listCritical = form.criticalData[criticalIndex];
     let list = [];
     for (let i in listCritical) {
       if (listCritical[i] !== null && listCritical[i] !== "")
@@ -249,8 +276,11 @@ class CreateDataApprovalForm extends Component {
           <div className="form-item form-item-meta">
             <FormSectionTitle title="Meta data" />
             <MetaData
+              documentReference={this.state.form.documentReference}
               onChange={this.handleInputForm}
-              invalidInput={this.state.invalidInput}
+              // addReference={this.addReference}
+              // removeReference={this.removeReference}
+              setReference={this.setReference}
             />
           </div>
 
@@ -270,7 +300,7 @@ class CreateDataApprovalForm extends Component {
               setVerb={this.setVerb}
               setCriticalData={this.setCriticalData}
               wordArray={wordArray}
-              criticalData={this.state.form.subjects}
+              criticalData={this.state.form.criticalData}
             />
 
             <Coresponse

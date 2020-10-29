@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { Row, Col, Button, Input, ListGroup, ListGroupItem } from "reactstrap";
 import { handleInputChange } from "src/common/handleInputChange";
 
@@ -12,8 +12,9 @@ class Synonyms extends Component {
     super();
     this.state = {
       synonymWord: "",
+      isOpenSynonymModal: false,
+      index: ""
     };
-    this.modalRef = createRef("");
   }
 
   handleInput = (event) => {
@@ -30,10 +31,22 @@ class Synonyms extends Component {
     this.props.removeSynonymInWord(wordIndex, synonymIndex);
   };
 
+  toggleSynonymModal = (index) => {
+    this.setState({
+      isOpenSynonymModal: !this.state.isOpenSynonymModal,
+      index: index
+    })
+  }
+
   render() {
     return (
       <Row className="p-3" xs="1">
-        <SynonymsModal ref={this.modalRef} addSynonym={this.props.addSynonym} />
+        <SynonymsModal
+          index={this.state.index}
+          isOpenSynonymModal={this.state.isOpenSynonymModal}
+          toggleSynonymModal={this.toggleSynonymModal}
+          addSynonym={this.props.addSynonym}
+        />
         <Col>
           Synonyms:
           <Row>
@@ -87,7 +100,7 @@ class Synonyms extends Component {
                           <Button
                             color="success"
                             onClick={() => {
-                              this.modalRef.current.setModal(index);
+                              this.toggleSynonymModal(index)
                             }}
                           >
                             <FontAwesomeIcon icon={faPlus} /> Synonym
