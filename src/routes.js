@@ -6,6 +6,7 @@ import {
   AdminPage,
   ContributorsListPage,
   ContributorCreatePage,
+  ContributorEditPage,
 } from 'src/pages/index';
 import {
   HOME_PAGE,
@@ -13,6 +14,7 @@ import {
   ADMIN_PAGE,
   ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_CONTRIBUTOR_CREATE_PAGE,
+  ADMIN_CONTRIBUTOR_EDIT_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -32,6 +34,11 @@ const Routes = () => (
         exact
         path={ADMIN_CONTRIBUTOR_CREATE_PAGE}
         component={ContributorCreatePage}
+      />
+      <PrivateRouteAdmin
+        exact
+        path={ADMIN_CONTRIBUTOR_EDIT_PAGE()}
+        component={ContributorEditPage}
       />
     </Switch>
   </Fragment>

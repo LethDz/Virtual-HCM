@@ -19,34 +19,43 @@ import {
 } from 'reactstrap';
 import 'src/static/stylesheets/contributor.create.css';
 import avatar from 'src/static/images/img_avatar.png';
-import { ADMIN_ADD_USER } from 'src/constants';
+import { ADMIN_EDIT_USER, ADMIN_GET_USER, imgBase64 } from 'src/constants';
 import { connect } from 'react-redux';
-import { addContributorToList } from 'src/modules/admin';
+import {
+  getContributorDetail,
+  editContributor,
+  pullContributor,
+  BtnChangeStatus,
+} from 'src/modules/admin';
 import { handleInputChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import { changeToFormatDateVN, getDateNowToString } from 'src/common/getDate';
+import {
+  changeToFormatDateVN,
+  getDateNowToString,
+  isoFormatDate,
+} from 'src/common/getDate';
 
-class ContributorCreate extends Component {
+class ContributorEdit extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      imageSrc: null,
+      avatar: null,
       username: '',
       fullname: '',
       gender: '0',
-      phoneNumber: '',
+      phone_number: '',
       address: '',
-      placeOfBirth: '',
-      dateOfBirth: '',
+      place_of_birth: '',
+      date_of_birth: '',
       nationality: '',
-      idNumber: '',
-      imagePath: '',
-      email: '',
+      id_number: '',
+      imagePath: null,
+      status: false,
       successAlert: false,
-      errorAlert: false,
       loading: false,
+      errorAlert: false,
     };
   }
 
@@ -63,6 +72,36 @@ class ContributorCreate extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    console.log(this.props);
+    if (
+      this.props.contributorDetail &&
+      this.props.contributorDetail.user_id === this.props.id
+    ) {
+      this.setState({
+        ...this.props.contributorDetail,
+      });
+    } else {
+      this.setLoading(true);
+      axiosClient
+        .get(ADMIN_GET_USER(this.props.id))
+        .then((response) => {
+          if (response.data.status) {
+            const user = response.data.result_data;
+            this.props.pullContributor(user);
+            this.setState({
+              ...user,
+            });
+          } else {
+            this.setErrorAlert(true);
+          }
+          this.setLoading(false);
+        })
+        .catch((error) => {
+          this.setLoading(false);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+        });
+    }
   }
 
   componentWillUnmount() {
@@ -76,26 +115,26 @@ class ContributorCreate extends Component {
     handleInputChange(event, this);
   };
 
-  onAddAccount = (event) => {
+  onUpdateAccount = (event) => {
     event.preventDefault();
     this.setLoading(true);
     this.setErrorAlert(false);
     this.setSuccessAlert(false);
 
     let userData = new FormData();
-    userData.append('username', this.state.username);
+    userData.append('id', this.props.getContributorDetail.user_id);
     userData.append('fullname', this.state.fullname);
     userData.append('nationality', this.state.nationality);
-    userData.append('place_of_birth', this.state.placeOfBirth);
+    userData.append('place_of_birth', this.state.place_of_birth);
     userData.append(
       'date_of_birth',
-      changeToFormatDateVN(this.state.dateOfBirth, '/')
+      changeToFormatDateVN(this.state.date_of_birth, '/')
     );
     userData.append('address', this.state.address);
-    userData.append('id_number', this.state.idNumber);
-    userData.append('phone_number', this.state.phoneNumber);
+    userData.append('id_number', this.state.id_number);
+    userData.append('phone_number', this.state.phone_number);
     userData.append('email', this.state.email);
-    userData.append('avatar', this.state.imagePath);
+    this.state.imagePath && userData.append('avatar', this.state.imagePath);
     userData.append('gender', parseInt(this.state.gender));
 
     const config = {
@@ -105,11 +144,14 @@ class ContributorCreate extends Component {
     };
 
     axiosClient
-      .post(ADMIN_ADD_USER, userData, config)
+      .post(ADMIN_EDIT_USER, userData, config)
       .then((response) => {
         if (response.data.status) {
           const user = response.data.result_data;
-          this.props.addContributorToList(user);
+          this.props.editContributor(user);
+          this.setState({
+            ...user,
+          });
           this.setSuccessAlert(true);
         } else {
           this.setErrorAlert(true);
@@ -151,6 +193,14 @@ class ContributorCreate extends Component {
       });
   };
 
+  onReset = () => {
+    this._isMounted &&
+      this.setState({
+        ...this.props.contributorDetail,
+        imagePath: null,
+      });
+  };
+
   render() {
     return (
       <Fragment>
@@ -165,7 +215,7 @@ class ContributorCreate extends Component {
                 className="m-3 w-100"
               >
                 <FontAwesomeIcon icon={faSmile} />
-                &nbsp; Add new account successfully
+                &nbsp; Update successfully.
               </Alert>
             </Row>
           )}
@@ -187,7 +237,7 @@ class ContributorCreate extends Component {
               <h5 className="mt-2 mb-2">Create Account</h5>
             </Col>
           </Row>
-          <Form className="mt-5" onSubmit={this.onAddAccount}>
+          <Form className="mt-5" onSubmit={this.onUpdateAccount}>
             <Row>
               <Col>
                 <FormGroup row>
@@ -233,7 +283,7 @@ class ContributorCreate extends Component {
                       id="male"
                       required
                       value={0}
-                      checked={this.state.gender === '0'}
+                      checked={this.state.gender === 0}
                       onChange={this.inputChange}
                     />
                     &nbsp;Male
@@ -244,26 +294,10 @@ class ContributorCreate extends Component {
                       name="gender"
                       id="female"
                       value={1}
-                      checked={this.state.gender === '1'}
+                      checked={this.state.gender === 1}
                       onChange={this.inputChange}
                     />
                     &nbsp;Female
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Label for="email" sm={2}>
-                    Email:
-                  </Label>
-                  <Col sm={10}>
-                    <Input
-                      type="email"
-                      name="email"
-                      id="email"
-                      placeholder="Enter an email"
-                      required
-                      value={this.state.email}
-                      onChange={this.inputChange}
-                    />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -273,10 +307,10 @@ class ContributorCreate extends Component {
                   <Col sm={10}>
                     <Input
                       type="text"
-                      name="phoneNumber"
+                      name="phone_number"
                       id="phoneNumber"
                       placeholder="Enter phone number"
-                      value={this.state.phoneNumber}
+                      value={this.state.phone_number}
                       onChange={this.inputChange}
                     />
                   </Col>
@@ -304,12 +338,15 @@ class ContributorCreate extends Component {
                   <Col sm={10}>
                     <Input
                       type="date"
-                      name="dateOfBirth"
+                      name="date_of_birth"
                       id="dateOfBirth"
                       min="1900-1-1"
                       max={getDateNowToString('-')}
                       required
-                      value={this.state.dateOfBirth}
+                      value={
+                        this.state.date_of_birth !== '' &&
+                        isoFormatDate(this.state.date_of_birth)
+                      }
                       onChange={this.inputChange}
                     />
                   </Col>
@@ -321,11 +358,11 @@ class ContributorCreate extends Component {
                   <Col sm={10}>
                     <Input
                       type="text"
-                      name="placeOfBirth"
+                      name="place_of_birth"
                       id="placeOfBirth"
                       placeholder="Enter place of birth"
                       required
-                      value={this.state.placeOfBirth}
+                      value={this.state.place_of_birth}
                       onChange={this.inputChange}
                     />
                   </Col>
@@ -353,12 +390,24 @@ class ContributorCreate extends Component {
                   <Col sm={10}>
                     <Input
                       type="text"
-                      name="idNumber"
+                      name="id_number"
                       id="idNumber"
                       placeholder="Enter id number"
                       required
-                      value={this.state.idNumber}
+                      value={this.state.id_number}
                       onChange={this.inputChange}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="idNumber" sm={2}>
+                    Status:
+                  </Label>
+                  <Col sm={10}>
+                    <BtnChangeStatus
+                      data={this.state.contributorDetail}
+                      context={this}
+                      value={this.state.status}
                     />
                   </Col>
                 </FormGroup>
@@ -371,7 +420,9 @@ class ContributorCreate extends Component {
                     id="avatarImage"
                     alt="avatar"
                     className="create-contributor-image"
-                    src={this.state.imageSrc ? this.state.imageSrc : avatar}
+                    src={
+                      this.state.avatar ? imgBase64(this.state.avatar) : avatar
+                    }
                   ></img>
                 </Row>
                 <Row className="justify-content-center">
@@ -394,7 +445,7 @@ class ContributorCreate extends Component {
             <Row className="mt-4">
               <Col>
                 <Row className="justify-content-end mr-1">
-                  <Button type="reset">
+                  <Button onClick={this.onReset}>
                     <FontAwesomeIcon icon={faTimes} />
                     &nbsp; Cancel
                   </Button>
@@ -404,7 +455,7 @@ class ContributorCreate extends Component {
                 <Row className="justify-content-start mr-1">
                   <Button color="info" type="submit">
                     <FontAwesomeIcon icon={faPlus} />
-                    &nbsp; Create
+                    &nbsp; Edit
                   </Button>
                 </Row>
               </Col>
@@ -416,9 +467,14 @@ class ContributorCreate extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  addContributorToList: (contributor) =>
-    dispatch(addContributorToList(contributor)),
+const mapStateToProps = (state) => ({
+  contributorDetail: getContributorDetail(state),
 });
 
-export default connect(null, mapDispatchToProps)(ContributorCreate);
+const mapDispatchToProps = (dispatch) => ({
+  editContributor: (contributorDetail) =>
+    dispatch(editContributor(contributorDetail)),
+  pullContributor: (contributor) => dispatch(pullContributor(contributor)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContributorEdit);

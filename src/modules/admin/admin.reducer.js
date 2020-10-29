@@ -3,6 +3,8 @@ import {
   ADD_CONTRIBUTOR_TO_LIST,
   EDIT_CONTRIBUTOR,
   GET_CONTRIBUTORS_LIST,
+  CHANGE_CONTRIBUTOR_STATUS,
+  PULL_CONTRIBUTOR_DETAIL,
 } from 'src/modules/admin';
 
 const initialState = {
@@ -21,7 +23,8 @@ export const adminReducer = (state = initialState, action) => {
 
     case ADD_CONTRIBUTOR_TO_LIST:
       const contributor = action.payload.contributor;
-      const newContributorsList = state.contributorsList.push(contributor);
+      let newContributorsList = state.contributorsList;
+      newContributorsList.push(contributor);
       return {
         ...state,
         contributorsList: newContributorsList,
@@ -29,11 +32,48 @@ export const adminReducer = (state = initialState, action) => {
 
     case EDIT_CONTRIBUTOR:
       const contributorDetail = action.payload.contributorDetail;
+      let list = state.contributorsList;
+      list.map((contributor) => {
+        if (contributor.user_id === contributorDetail.user_id) {
+          contributor = contributorDetail;
+        }
+
+        return contributor;
+      });
       return {
         ...state,
         contributorDetail: contributorDetail,
+        contributorsList: list,
       };
-    
+
+    case PULL_CONTRIBUTOR_DETAIL:
+      const detail = action.payload.contributor;
+      return {
+        ...state,
+        contributorDetail: detail,
+      };
+
+    case CHANGE_CONTRIBUTOR_STATUS:
+      const id = action.payload.id;
+      let conList = state.contributorsList;
+      let conDetail = state.contributorDetail;
+      conList.map((contributor) => {
+        if (contributor.user_id === id) {
+          contributor.active = !contributor.active;
+        }
+        return contributor;
+      });
+
+      if (state.contributorDetail && state.contributorDetail.user_id === id) {
+        conDetail.active = !conDetail.active;
+      }
+
+      return {
+        ...state,
+        contributorDetail: conDetail,
+        contributorsList: conList,
+      };
+
     case LOGOUT:
       return initialState;
 

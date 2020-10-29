@@ -1,13 +1,14 @@
 import React from 'react';
 import SideBarAdminContent from 'src/layouts/SideBarAdminContent';
 import SideBarContributorContent from 'src/layouts/SideBarContributorContent';
-import { ROLE_ADMIN, ROLE_CONTRIBUTOR } from 'src/constants';
+import { imgBase64, ROLE_ADMIN, ROLE_CONTRIBUTOR } from 'src/constants';
 import {
   getTheCurrentUserRole,
   getUserData,
 } from 'src/common/authorizationChecking';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import avatar from 'src/static/images/img_avatar.png';
 
 const switchLayout = (role) => {
   if (role === ROLE_ADMIN) {
@@ -30,7 +31,11 @@ const SideBarContent = () => {
       </div>
       <div className="profile">
         <div className="avatar-image">
-          <img className="img-circle" alt="User-Avatar"></img>
+          <img
+            className="img-circle"
+            alt="User-Avatar"
+            src={user.avatar ? imgBase64(user.avatar) : avatar}
+          ></img>
         </div>
         <div className="user-name">
           <p>{user.username}</p>

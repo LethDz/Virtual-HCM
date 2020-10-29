@@ -31,7 +31,7 @@
 }
 
 .sidebar-item .list-group-item {
-  color: #B8C7CE;
+  color: #b8c7ce;
   background-color: #222d32;
   border: none;
 }
@@ -61,7 +61,7 @@
 
 .side-navbar {
   padding: 0.4rem;
-  background-color: #367FA9;
+  background-color: #367fa9;
 }
 
 .side-navbar-title {
@@ -72,12 +72,13 @@
 }
 
 .avatar-image {
-  content: url('../images/img_avatar.png');
+  float: left;
+}
+
+.img-circle {
   border-radius: 50%;
-  width: 100%;
   max-width: 45px;
   height: auto;
-  float: left;
 }
 
 .user-name {
@@ -90,7 +91,7 @@
 }
 
 .sidebar-link.active {
-  background-color: #1E282C !important;
+  background-color: #1e282c !important;
   border-left: 3px solid #007bff;
 }
 

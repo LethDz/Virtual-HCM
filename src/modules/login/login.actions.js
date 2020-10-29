@@ -1,4 +1,4 @@
-import { FORBIDDEN, USER_NOT_FOUND, WRONG_PASSWORD } from "src/constants";
+import { BOTH_USERNAME_AND_PASSWORD_REQUIRED, FORBIDDEN, USER_NOT_FOUND, WRONG_PASSWORD } from "src/constants";
 
 // Show the login error message 
 export const showLoginError = (data, component) => {
@@ -6,23 +6,22 @@ export const showLoginError = (data, component) => {
     const resultData = data.result_data;
     if (
       resultData.error_detail &&
-      resultData.error_detail === USER_NOT_FOUND &&
       resultData.status_code === FORBIDDEN
     ) {
-      component._isMounted &&
+      resultData.error_detail === USER_NOT_FOUND && component._isMounted &&
         component.setState({
           usernameInvalid: true,
         });
-    }
 
-    if (
-      resultData.error_detail &&
-      resultData.error_detail === WRONG_PASSWORD &&
-      resultData.status_code === FORBIDDEN
-    ) {
-      component._isMounted &&
+      resultData.error_detail === WRONG_PASSWORD && component._isMounted &&
         component.setState({
           passwordInvalid: true,
+        });
+
+      resultData.error_detail === BOTH_USERNAME_AND_PASSWORD_REQUIRED && component._isMounted &&
+        component.setState({
+          passwordInvalid: true,
+          usernameInvalid: true,
         });
     }
   }
