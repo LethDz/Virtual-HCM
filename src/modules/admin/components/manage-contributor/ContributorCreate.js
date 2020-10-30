@@ -47,6 +47,7 @@ class ContributorCreate extends Component {
       successAlert: false,
       errorAlert: false,
       loading: false,
+      errorList: [],
     };
   }
 
@@ -113,6 +114,7 @@ class ContributorCreate extends Component {
           this.setSuccessAlert(true);
         } else {
           this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
       })
@@ -151,6 +153,13 @@ class ContributorCreate extends Component {
       });
   };
 
+  setErrorList = (list) => {
+    this._isMounted &&
+      this.setState({
+        errorList: list,
+      });
+  };
+
   render() {
     return (
       <Fragment>
@@ -178,7 +187,12 @@ class ContributorCreate extends Component {
                 className="m-3 w-100"
               >
                 <FontAwesomeIcon icon={faFrown} />
-                &nbsp; Unexpected error has been occurs. Please try again !
+                &nbsp;{' '}
+                {this.state.errorList.length !== 0
+                  ? this.state.errorList.map((element, index) => (
+                      <li key={index + ' error'}>{element}</li>
+                    ))
+                  : 'Unexpected error has been occurred. Please Try Again !!!'}
               </Alert>
             </Row>
           )}
@@ -222,7 +236,7 @@ class ContributorCreate extends Component {
                     />
                   </Col>
                 </FormGroup>
-                <FormGroup row>
+                <FormGroup row className="align-items-center">
                   <Label for="gender" sm={2}>
                     Gender:
                   </Label>
@@ -233,7 +247,7 @@ class ContributorCreate extends Component {
                       id="male"
                       required
                       value={0}
-                      checked={this.state.gender === '0'}
+                      checked={parseInt(this.state.gender) === 0}
                       onChange={this.inputChange}
                     />
                     &nbsp;Male
@@ -244,10 +258,21 @@ class ContributorCreate extends Component {
                       name="gender"
                       id="female"
                       value={1}
-                      checked={this.state.gender === '1'}
+                      checked={parseInt(this.state.gender) === 1}
                       onChange={this.inputChange}
                     />
                     &nbsp;Female
+                  </Col>
+                  <Col sm={2} className="ml-2 align-self-center text-center">
+                    <Input
+                      type="radio"
+                      name="gender"
+                      id="unknown"
+                      value={2}
+                      checked={parseInt(this.state.gender) === 2}
+                      onChange={this.inputChange}
+                    />
+                    &nbsp;Unknown
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -266,7 +291,7 @@ class ContributorCreate extends Component {
                     />
                   </Col>
                 </FormGroup>
-                <FormGroup row>
+                <FormGroup row className="align-items-center">
                   <Label for="phoneNumber" sm={2}>
                     Phone number:
                   </Label>

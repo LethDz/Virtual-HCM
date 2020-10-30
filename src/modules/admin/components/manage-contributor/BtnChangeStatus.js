@@ -1,6 +1,6 @@
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import axiosClient from 'src/common/axiosClient';
@@ -25,13 +25,15 @@ const BtnChangeStatus = (props) => {
           props.editStatusOfUser(rowData.user_id);
           context.setContributorsList && context.setContributorsList([]);
           context.setSuccessAlert(true);
+          context.setAccountStatus && context.setAccountStatus(!props.value);
         } else {
           context.setErrorAlert(true);
         }
       })
       .then(() => {
         context.setLoading(false);
-        context.setContributorsList && context.setContributorsList(context.props.contributors);
+        context.setContributorsList &&
+          context.setContributorsList(context.props.contributors);
       })
       .catch(() => {
         context.setSuccessAlert(false);
@@ -41,10 +43,24 @@ const BtnChangeStatus = (props) => {
   };
 
   return (
-    <Button color={props.value ? 'danger' : 'success'} onClick={changeStatus}>
-      <FontAwesomeIcon icon={props.value ? faTimes : faCheck} color="white" />
-      &nbsp; {props.value ? 'Disable' : 'Active'}
-    </Button>
+    <Fragment>
+      <span className={props.value ? 'text-success' : 'text-danger'}>
+        <FontAwesomeIcon
+          icon={props.value ? faCheck : faTimes}
+          color={props.value ? 'green' : 'red'}
+        />{' '}
+        {props.value ? 'Active' : 'Disabled'}
+      </span>
+      &nbsp;
+      <Button
+        color={props.value ? 'danger' : 'success'}
+        size="sm"
+        onClick={changeStatus}
+      >
+        <FontAwesomeIcon icon={props.value ? faTimes : faCheck} color="white" />
+        &nbsp; {props.value ? 'Disable' : 'Active'}
+      </Button>
+    </Fragment>
   );
 };
 

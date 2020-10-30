@@ -45,6 +45,7 @@ class ContributorsList extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    this.setStyleForGrid();
   }
 
   componentWillUnmount() {

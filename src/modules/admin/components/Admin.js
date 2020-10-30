@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class Admin extends Component {
   render() {
-    return <div>list</div>;
+    return <div></div>;
   }
 }
 

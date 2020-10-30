@@ -32,14 +32,14 @@ export const adminReducer = (state = initialState, action) => {
 
     case EDIT_CONTRIBUTOR:
       const contributorDetail = action.payload.contributorDetail;
-      let list = state.contributorsList;
-      list.map((contributor) => {
+      let list = state.contributorsList.map((contributor) => {
         if (contributor.user_id === contributorDetail.user_id) {
           contributor = contributorDetail;
         }
 
         return contributor;
       });
+
       return {
         ...state,
         contributorDetail: contributorDetail,
@@ -55,9 +55,8 @@ export const adminReducer = (state = initialState, action) => {
 
     case CHANGE_CONTRIBUTOR_STATUS:
       const id = action.payload.id;
-      let conList = state.contributorsList;
       let conDetail = state.contributorDetail;
-      conList.map((contributor) => {
+      let conList = state.contributorsList.map((contributor) => {
         if (contributor.user_id === id) {
           contributor.active = !contributor.active;
         }

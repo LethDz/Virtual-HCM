@@ -52,33 +52,44 @@ class ContributorEdit extends Component {
       nationality: '',
       id_number: '',
       imagePath: null,
-      status: false,
+      active: false,
       successAlert: false,
       loading: false,
       errorAlert: false,
+      email: '',
+      errorList: [],
     };
   }
 
   onUploadImage = (event) => {
     if (!event.target.files || event.target.files.length === 0) {
-      this._isMounted && this.setState({ imageSrc: null });
+      this._isMounted &&
+        this.setState({ avatar: this.props.contributorDetail.avatar });
       return;
     }
 
     const src = event.target.files[0];
     const objectURL = URL.createObjectURL(src);
-    this._isMounted && this.setState({ imageSrc: objectURL, imagePath: src });
+    this._isMounted && this.setState({ avatar: objectURL, imagePath: src });
   };
 
   componentDidMount() {
     this._isMounted = true;
-    console.log(this.props);
     if (
       this.props.contributorDetail &&
-      this.props.contributorDetail.user_id === this.props.id
+      this.props.contributorDetail.user_id === parseInt(this.props.id)
     ) {
       this.setState({
         ...this.props.contributorDetail,
+        phone_number: this.props.contributorDetail.phone_number
+          ? this.props.contributorDetail.phone_number
+          : '',
+        email: this.props.contributorDetail.email
+          ? this.props.contributorDetail.email
+          : '',
+        date_of_birth: isoFormatDate(
+          this.props.contributorDetail.date_of_birth
+        ),
       });
     } else {
       this.setLoading(true);
@@ -90,9 +101,13 @@ class ContributorEdit extends Component {
             this.props.pullContributor(user);
             this.setState({
               ...user,
+              phone_number: user.phone_number ? user.phone_number : '',
+              date_of_birth: isoFormatDate(user.date_of_birth),
+              email: user.email ? user.email : '',
             });
           } else {
             this.setErrorAlert(true);
+            this.setErrorList(response.data.messages);
           }
           this.setLoading(false);
         })
@@ -122,7 +137,7 @@ class ContributorEdit extends Component {
     this.setSuccessAlert(false);
 
     let userData = new FormData();
-    userData.append('id', this.props.getContributorDetail.user_id);
+    userData.append('id', this.props.contributorDetail.user_id);
     userData.append('fullname', this.state.fullname);
     userData.append('nationality', this.state.nationality);
     userData.append('place_of_birth', this.state.place_of_birth);
@@ -151,10 +166,14 @@ class ContributorEdit extends Component {
           this.props.editContributor(user);
           this.setState({
             ...user,
+            phone_number: user.phone_number ? user.phone_number : '',
+            date_of_birth: isoFormatDate(user.date_of_birth),
+            email: user.email ? user.email : '',
           });
           this.setSuccessAlert(true);
         } else {
           this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
       })
@@ -198,6 +217,29 @@ class ContributorEdit extends Component {
       this.setState({
         ...this.props.contributorDetail,
         imagePath: null,
+        phone_number: this.props.contributorDetail.phone_number
+          ? this.props.contributorDetail.phone_number
+          : '',
+        date_of_birth: isoFormatDate(
+          this.props.contributorDetail.date_of_birth
+        ),
+        email: this.props.contributorDetail.email
+          ? this.props.contributorDetail.email
+          : '',
+      });
+  };
+
+  setErrorList = (list) => {
+    this._isMounted &&
+      this.setState({
+        errorList: list,
+      });
+  };
+
+  setAccountStatus = (status) => {
+    this._isMounted &&
+      this.setState({
+        active: status,
       });
   };
 
@@ -228,7 +270,12 @@ class ContributorEdit extends Component {
                 className="m-3 w-100"
               >
                 <FontAwesomeIcon icon={faFrown} />
-                &nbsp; Unexpected error has been occurs. Please try again !
+                &nbsp;{' '}
+                {this.state.errorList.length !== 0
+                  ? this.state.errorList.map((element, index) => (
+                      <li key={index + ' error'}>{element}</li>
+                    ))
+                  : 'Unexpected error has been occurred. Please Try Again !!!'}
               </Alert>
             </Row>
           )}
@@ -253,6 +300,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.username}
                       onChange={this.inputChange}
+                      disabled
                     />
                   </Col>
                 </FormGroup>
@@ -283,7 +331,7 @@ class ContributorEdit extends Component {
                       id="male"
                       required
                       value={0}
-                      checked={this.state.gender === 0}
+                      checked={parseInt(this.state.gender) === 0}
                       onChange={this.inputChange}
                     />
                     &nbsp;Male
@@ -294,13 +342,24 @@ class ContributorEdit extends Component {
                       name="gender"
                       id="female"
                       value={1}
-                      checked={this.state.gender === 1}
+                      checked={parseInt(this.state.gender) === 1}
                       onChange={this.inputChange}
                     />
                     &nbsp;Female
                   </Col>
+                  <Col sm={2} className="ml-2 align-self-center text-center">
+                    <Input
+                      type="radio"
+                      name="gender"
+                      id="unknown"
+                      value={2}
+                      checked={parseInt(this.state.gender) === 2}
+                      onChange={this.inputChange}
+                    />
+                    &nbsp;Unknown
+                  </Col>
                 </FormGroup>
-                <FormGroup row>
+                <FormGroup row className="align-items-center">
                   <Label for="phoneNumber" sm={2}>
                     Phone number:
                   </Label>
@@ -311,6 +370,21 @@ class ContributorEdit extends Component {
                       id="phoneNumber"
                       placeholder="Enter phone number"
                       value={this.state.phone_number}
+                      onChange={this.inputChange}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="email" sm={2}>
+                    Email:
+                  </Label>
+                  <Col sm={10}>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder="Enter an email"
+                      value={this.state.email}
                       onChange={this.inputChange}
                     />
                   </Col>
@@ -343,10 +417,7 @@ class ContributorEdit extends Component {
                       min="1900-1-1"
                       max={getDateNowToString('-')}
                       required
-                      value={
-                        this.state.date_of_birth !== '' &&
-                        isoFormatDate(this.state.date_of_birth)
-                      }
+                      value={this.state.date_of_birth}
                       onChange={this.inputChange}
                     />
                   </Col>
@@ -399,15 +470,16 @@ class ContributorEdit extends Component {
                     />
                   </Col>
                 </FormGroup>
-                <FormGroup row>
-                  <Label for="idNumber" sm={2}>
+                <FormGroup row className="align-items-center">
+                  <Label for="status" sm={2}>
                     Status:
                   </Label>
                   <Col sm={10}>
                     <BtnChangeStatus
-                      data={this.state.contributorDetail}
+                      id="status"
+                      data={this.props.contributorDetail}
                       context={this}
-                      value={this.state.status}
+                      value={this.state.active}
                     />
                   </Col>
                 </FormGroup>
@@ -421,7 +493,12 @@ class ContributorEdit extends Component {
                     alt="avatar"
                     className="create-contributor-image"
                     src={
-                      this.state.avatar ? imgBase64(this.state.avatar) : avatar
+                      this.state.avatar
+                        ? this.state.avatar ===
+                          this.props.contributorDetail.avatar
+                          ? imgBase64(this.state.avatar)
+                          : this.state.avatar
+                        : avatar
                     }
                   ></img>
                 </Row>
