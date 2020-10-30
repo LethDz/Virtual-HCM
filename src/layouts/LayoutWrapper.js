@@ -3,6 +3,7 @@ import Header from 'src/layouts/Header';
 import SideBar from 'react-sidebar';
 import SideBarContent from 'src/layouts/SideBarContent';
 import 'src/static/stylesheets/layout.css';
+import { ChatWidget } from 'src/modules/chat';
 
 const LayoutWrapper = (props) => {
   return (

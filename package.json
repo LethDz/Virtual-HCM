@@ -18,7 +18,7 @@
     "bootstrap": "^4.5.2",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
-    "react-contexify": "^4.1.1",
+    "react-chat-window": "^1.2.1",
     "react-dom": "^16.13.1",
     "react-loading-overlay": "^1.0.1",
     "react-redux": "^7.2.1",
