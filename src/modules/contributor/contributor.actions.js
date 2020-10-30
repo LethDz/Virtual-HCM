@@ -1,5 +1,4 @@
-import { ADD_SYNONYM, GET_ALL_SYNONYMS } from "src/modules/contributor/index";
-import { GET_ALL_REFERENCE } from "./contributor.constants";
+import { ADD_SYNONYM, GET_ALL_SYNONYMS, GET_ALL_REFERENCE } from "src/modules/contributor/index";
 
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,

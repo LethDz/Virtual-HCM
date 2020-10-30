@@ -1,5 +1,8 @@
-import { GET_ALL_SYNONYMS } from "src/modules/contributor/index";
-import { GET_ALL_REFERENCE } from "./contributor.constants";
+import { LOGOUT } from "src/constants";
+import {
+  GET_ALL_SYNONYMS,
+  GET_ALL_REFERENCE,
+} from "src/modules/contributor/index";
 
 const initialState = {
   synonymsList: [],
@@ -20,6 +23,9 @@ export const contributorReducer = (state = initialState, action) => {
         ...state,
         documentReferenceList,
       };
+    }
+    case LOGOUT: {
+      return initialState;
     }
     default:
       return state;

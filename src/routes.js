@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from "ag-grid-reactreact";
 import { Switch } from "react-router-dom";
 import {
   HomePage,
@@ -6,22 +6,24 @@ import {
   AdminPage,
   ContributorsListPage,
   ContributorCreatePage,
-  ContributorEditPage, ContributorPage,
+  ContributorEditPage,
+  ContributorPage,
   CreateDataApprovalFormPage,
-  DataApprovalListPage
-} from 'src/pages/index';
+  DataApprovalListPage,
+} from "src/pages/index";
 import {
   HOME_PAGE,
   LOGIN_PAGE,
   ADMIN_PAGE,
   ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_CONTRIBUTOR_CREATE_PAGE,
-  ADMIN_CONTRIBUTOR_EDIT_PAGE, CONTRIBUTOR_PAGE,
+  ADMIN_CONTRIBUTOR_EDIT_PAGE,
+  CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
-  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL
-} from 'src/constants';
-import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
-import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
+  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+} from "src/constants";
+import ErrorBoundaryRoute from "src/common/ErrorBoundaryRoute";
+import PrivateRouteAdmin from "src/common/PrivateRouteAdmin";
 import PrivateRouteContributor from "src/common/PrivateRouteContributor";
 
 const Routes = () => (
@@ -58,7 +60,8 @@ const Routes = () => (
       <PrivateRouteContributor
         exact
         path={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
-        component={DataApprovalListPage} />
+        component={DataApprovalListPage}
+      />
     </Switch>
   </Fragment>
 );
