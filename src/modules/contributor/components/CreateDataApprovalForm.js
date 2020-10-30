@@ -46,7 +46,6 @@ class CreateDataApprovalForm extends Component {
     };
   }
 
-
   handleInputForm = (event) => handleInputFormChange(event, this);
 
   handleInput = (event) => handleInputChange(event, this);
@@ -91,7 +90,7 @@ class CreateDataApprovalForm extends Component {
     if (error.trim() === "") {
       this.setState({ errorAlert: false });
       axiosClient
-        .post(KNOWLEDGE_DATA + ADD, this.prepareForm())
+        .post(KNOWLEDGE_DATA + ADD, this.state.form)
         .then((response) => {
           this.setState({
             loading: false,
@@ -103,27 +102,6 @@ class CreateDataApprovalForm extends Component {
     } else {
       this.setState({ errorAlert: true, loading: false });
     }
-  };
-
-  prepareForm = () => {
-    let form = this.state.form;
-    // Remove meaning from synonym
-    let synonym = form.synonyms;
-    let synonymTemp = [];
-    synonym.forEach((synonym) => {
-      let synonymId = [];
-      synonym.synonyms.forEach((sy) => {
-        synonymId.push(sy.id);
-      });
-      let synonymObject = {
-        word: synonym.word,
-        synonyms: synonymId,
-      };
-      synonymTemp.push(synonymObject);
-    });
-    form.synonyms = synonymTemp;
-
-    return form;
   };
 
   setCoresponse = (coresponse) => {
@@ -154,7 +132,21 @@ class CreateDataApprovalForm extends Component {
     let form = this.state.form;
     form.synonyms = synonyms;
     this.setState({ form: form });
-  }
+  };
+
+  setRawData = (rawData) => {
+    let form = this.state.form;
+    form.rawData = rawData;
+    this.setState({ form: form });
+  };
+
+  setBaseResponse = (baseResponse) => {
+    let form = this.state.form;
+    form.baseResponse = baseResponse;
+    this.setState({
+      form: form,
+    });
+  };
 
   render() {
     const wordArray = this.getWordArray();
@@ -174,19 +166,16 @@ class CreateDataApprovalForm extends Component {
           <div className="form-item form-item-meta">
             <FormSectionTitle title="Meta data" />
             <MetaData
-              documentReference={this.state.form.documentReference}
               onChange={this.handleInputForm}
               setReference={this.setReference}
             />
           </div>
-
           <div className="form-item form-item-data mt-3 pb-3">
             <FormSectionTitle title="Data analysis" />
             <RawData
               setTokenizeWord={this.setTokenizeWord}
-              rawData={this.state.form.rawData}
-              ner={this.state.ner}
               getWordArray={this.getWordArray}
+              setRawData={this.setRawData}
               onChange={this.handleInputForm}
             />
             <CriticalData
@@ -202,10 +191,7 @@ class CreateDataApprovalForm extends Component {
 
             <BaseResponse onChange={this.handleInputForm} />
 
-            <Synonyms
-              setSynonym={this.setSynonym}
-              wordArray={wordArray}
-            />
+            <Synonyms setSynonym={this.setSynonym} wordArray={wordArray} />
           </div>
 
           <Row className="d-flex justify-content-around pt-3 pb-3">

@@ -15,14 +15,18 @@ class RawData extends Component {
       tokenizeData: [],
       ner: [],
       loading: false,
+      rawData: ""
     };
   }
-  handleInput = (event) => handleInputChange(event, this);
+  handleInput = (event) => {
+    handleInputChange(event, this);
+    this.props.onChange(event, this)
+  }
 
   stateTokenizeRawDate = () => {
     this.setState({ loading: true });
     const paragraph = {
-      paragraph: this.props.rawData,
+      paragraph: this.state.rawData,
     };
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
@@ -70,6 +74,10 @@ class RawData extends Component {
       .catch((err) => this.setState({ loading: false }));
   };
 
+  setRawData = () => {
+    this.props.setRawData(this.state.rawData)
+  }
+
   setTokenizedWordArray = () => {
     this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);
   };
@@ -84,7 +92,7 @@ class RawData extends Component {
         <Row>
           <Col xs="auto">
             <div className="d-flex flex-wrap">
-              {this.props.getWordArray().map((data, index) => {
+              {this.state.tokenizeData.map((data, index) => {
                 let flag = false;
                 this.state.ner.forEach((ner) => {
                   if (ner.index === index) flag = true;
@@ -138,8 +146,8 @@ class RawData extends Component {
               type="textarea"
               name="rawData"
               id="rawData"
-              value={this.props.rawData}
-              onChange={this.props.onChange}
+              value={this.state.rawData}
+              onChange={this.handleInput}
             />
           </Col>
           <Col xs="auto">
