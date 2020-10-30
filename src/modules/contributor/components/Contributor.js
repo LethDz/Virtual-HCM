@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import 'react-contexify/dist/ReactContexify.min.css';
 
 class Contributor extends Component {
     render() {
