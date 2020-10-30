@@ -3,6 +3,7 @@ import Header from 'src/layouts/Header';
 import SideBar from 'react-sidebar';
 import SideBarContent from 'src/layouts/SideBarContent';
 import 'src/static/stylesheets/layout.css';
+import { ChatWidget } from 'src/modules/chat';
 
 const LayoutWrapper = (props) => {
   return (
@@ -14,7 +15,8 @@ const LayoutWrapper = (props) => {
       docked
     >
       <Header />
-      <div className="contain-body h-100 w-100 d-flex">{props.children}</div>
+      <div className="contain-body min-vh-100 d-flex">{props.children}</div>
+      <ChatWidget />
     </SideBar>
   );
 };
