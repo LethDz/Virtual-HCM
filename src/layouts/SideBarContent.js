@@ -14,7 +14,6 @@ const switchLayout = (role) => {
   if (role === ROLE_ADMIN) {
     return <SideBarAdminContent />;
   }
-  console.log(role);
   if (role === ROLE_CONTRIBUTOR) {
     return <SideBarContributorContent />;
   }
