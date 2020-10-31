@@ -7,8 +7,8 @@ import GenList from "src/modules/contributor/components/dataApprovalComponent/Ge
 import GenSynonyms from "src/modules/contributor/components/dataApprovalComponent/GenSynonyms";
 import SynonymsModal from "src/modules/contributor/components/dataApprovalComponent/SynonymsModal";
 import ReferenceList from "src/modules/contributor/components/reference/ReferenceList";
-import CreateReferenceModal from "src/modules/contributor/components/reference/CreateReferenceModal"
-import ReferenceModal from "src/modules/contributor/components/reference/ReferenceModal"
+import CreateReferenceModal from "src/modules/contributor/components/reference/CreateReferenceModal";
+import ReferenceModal from "src/modules/contributor/components/reference/ReferenceModal";
 
 export * from "src/modules/contributor/contributor.actions";
 export * from "src/modules/contributor/contributor.constants.js";
