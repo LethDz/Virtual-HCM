@@ -8,68 +8,52 @@ import {
   ModalHeader,
   ModalBody,
   Container,
-  Col,
-  Row,
+  FormGroup,
 } from "reactstrap";
 
 class ReferenceModal extends Component {
-
   render() {
     return (
       <div className="ag-theme-alpine">
         <Container>
-          <Modal isOpen={this.props.modal} toggle={this.props.toggle}>
+          <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
             <ModalHeader toggle={this.props.toggle}>
               Document Reference
             </ModalHeader>
             <ModalBody>
-              <h5>ID: {this.props.data.reference_document_id}</h5>
-              <Form>
-                <Row>
-                  <Col xs="3">
-                    <Label>Reference name: </Label>
-                  </Col>
-                  <Col xs="6">
-                    <Input
-                      id="reference"
-                      type="text"
-                      value={this.props.data.reference_name}
-                    />
-                  </Col>
-                  <Col xs="3">
-                    <Button className="r-button">Edit</Button>
-                  </Col>
-                </Row>
+              <Form className="justify-content-center">
+                <h5>ID: {this.props.data.reference_document_id}</h5>
+                <FormGroup>
+                  <Label>Reference name: </Label>
+                  <Input
+                    id="reference"
+                    type="text"
+                    value={this.props.data.reference_name}
+                  />
+                </FormGroup>
 
-                <Row>
-                  <Col xs="3">
-                    <Label>Author: </Label>
-                  </Col>
-                  <Col xs="6">
-                    <Input
-                      id="reference"
-                      type="text"
-                      value={this.props.data.author}
-                    />
-                  </Col>
-                  <Col xs="3"></Col>
-                </Row>
+                <FormGroup>
+                  <Label>Link: </Label>
+                  <Input
+                    id="reference"
+                    type="text"
+                    value={this.props.data.link}
+                  />
+                </FormGroup>
 
-                <Row>
-                  <Col xs="3">
-                    <Label>Link: </Label>
-                  </Col>
-                  <Col xs="6">
-                    <Input
-                      id="reference"
-                      type="text"
-                      value={this.props.data.link}
-                    />
-                  </Col>
-                  <Col xs="3">
-                    <Button className="r-button">Delete</Button>
-                  </Col>
-                </Row>
+                <FormGroup>
+                  <Label>Author: </Label>
+                  <Input
+                    id="reference"
+                    type="text"
+                    value={this.props.data.author}
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                <Button className="r-button">Edit</Button>
+                <Button className="r-button">Delete</Button>
+                </FormGroup>
               </Form>
             </ModalBody>
           </Modal>

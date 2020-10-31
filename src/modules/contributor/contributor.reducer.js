@@ -1,42 +1,32 @@
-import { LOGOUT } from 'src/constants';
+import { LOGOUT } from "src/constants";
 import {
-  ADD_REFERENCE_TO_LIST,
-  EDIT_REFERENCE,
-  GET_REFERENCE_LIST,
-} from 'src/modules/contributor';
+  GET_ALL_SYNONYMS,
+  GET_ALL_REFERENCE,
+} from "src/modules/contributor/index";
 
 const initialState = {
-  referenceList: [],
-  referenceDetail: null,
+  synonymsList: [],
+  documentReferenceList: [],
 };
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_REFERENCE_LIST:
-      const referenceList = action.payload.referenceList;
+    case GET_ALL_SYNONYMS:
+      const synonymsList = action.payload.synonymsList;
       return {
         ...state,
-        referenceList: referenceList,
+        synonymsList,
       };
-
-    case ADD_REFERENCE_TO_LIST:
-      const reference = action.payload.reference;
-      const newReferenceList = state.referenceList.push(reference);
+    case GET_ALL_REFERENCE: {
+      const documentReferenceList = action.payload.documentReferenceList;
       return {
         ...state,
-        referenceList: newReferenceList,
+        documentReferenceList,
       };
-
-    case EDIT_REFERENCE:
-      const referenceDetail = action.payload.referenceDetail;
-      return {
-        ...state,
-        referenceDetail: referenceDetail,
-      };
-    
-    case LOGOUT:
+    }
+    case LOGOUT: {
       return initialState;
-
+    }
     default:
       return state;
   }

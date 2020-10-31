@@ -1,5 +1,4 @@
 import Contributor from "src/modules/contributor/components/Contributor";
-import CreateDataApprovalForm from "src/modules/contributor/components/CreateDataApprovalForm";
 
 import Intent from "src/modules/contributor/components/dataApprovalComponent/Intent";
 import Question from "src/modules/contributor/components/dataApprovalComponent/Question";
@@ -17,7 +16,6 @@ export * from "src/modules/contributor/contributor.selectors.js";
 
 export {
   Contributor,
-  CreateDataApprovalForm,
   Intent,
   Question,
   GenList,

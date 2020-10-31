@@ -1,5 +1,2 @@
-export const getContributorReducer = (store) => store.contributorReducer;
-export const getReferenceList = (store) =>
-  getContributorReducer(store).referenceList;
-export const getContributorDetail = (store) =>
-  getContributorReducer(store).referenceDetail;
+export const getAllSynonyms = (store) => store.contributorReducer.synonymsList;
+export const getAllDocumentReference = (store) => store.contributorReducer.documentReferenceList;

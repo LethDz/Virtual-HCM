@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   ReferenceModal,
   CreateReferenceModal,
-  getReferenceList,
+  getAllDocumentReference,
   fetchAllDocumentReference,
 } from "src/modules/contributor/index";
 import { DOCUMENT_REFERENCE_LIST_PAGE } from "src/constants";
@@ -66,7 +66,7 @@ class ReferenceList extends Component {
     });
   };
 
-  toggleDetail = () => {
+  toggleReferenceDetail = () => {
     this.setState({
       modalDetail: !this.state.modalDetail,
     });
@@ -116,7 +116,7 @@ class ReferenceList extends Component {
               <ReferenceModal
                 isOpen={this.state.modalDetail}
                 data={this.state.selectedReference}
-                toggle={this.state.toggleDetail}
+                toggle={this.toggleReferenceDetail}
               />
             </div>
           </Col>
@@ -127,7 +127,7 @@ class ReferenceList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  referenceList: getReferenceList(state),
+  referenceList: getAllDocumentReference(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
