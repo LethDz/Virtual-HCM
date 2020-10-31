@@ -8,7 +8,7 @@ import {
   getAllDocumentReference,
   fetchAllDocumentReference,
 } from "src/modules/contributor/index";
-import { DOCUMENT_REFERENCE_LIST_PAGE } from "src/constants";
+import { REFERENCE, ALL, ADD } from "src/constants";
 import { columnRefFieldDef } from "src/modules/contributor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -24,7 +24,6 @@ class ReferenceList extends Component {
       referenceList: [],
       modalReferenceCreate: false,
       modalReferenceDetail: false,
-      id: "",
       containerHeight: 0,
       selectedReference: {},
       loading: false,
@@ -37,7 +36,7 @@ class ReferenceList extends Component {
       .clientHeight;
     this.setState({ loading: true, containerHeight });
     axiosClient
-      .get(DOCUMENT_REFERENCE_LIST_PAGE)
+      .get(REFERENCE + ALL)
       .then((response) => {
         const references = response.data.result_data.references;
         this.props.fetchAllDocumentReference(references);
@@ -82,6 +81,15 @@ class ReferenceList extends Component {
       modalReferenceCreate: !this.state.modalReferenceCreate,
     });
   };
+
+  addReference = (newReference) => {
+    axiosClient.post(REFERENCE + ADD, newReference).then((response) => {
+      this.setState({
+        loading: true,
+      });
+      console.log(response);
+    });
+  };
   render() {
     return (
       <Container id="cl-container" className="cl-container">
@@ -103,6 +111,7 @@ class ReferenceList extends Component {
             <CreateReferenceModal
               isOpen={this.state.modalReferenceCreate}
               toggle={this.toggleReferenceCreate}
+              addReference={this.addReference}
             />
           </Col>
         </Row>
