@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "src/static/stylesheets/reference.css";
 
+
 class CreateReferenceModal extends Component {
   render() {
     return (
@@ -40,16 +41,16 @@ class CreateReferenceModal extends Component {
 
             <FormGroup>
               <Label>Cover</Label>
-              <Input type="url" />
+              <Input type="url" placeholder="Cover link"/>
             </FormGroup>
           </Form>
-          <ModalFooter>
+        </ModalBody>
+        <ModalFooter>
             <Button className="r-button">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
           </ModalFooter>
-        </ModalBody>
       </Modal>
     );
   }

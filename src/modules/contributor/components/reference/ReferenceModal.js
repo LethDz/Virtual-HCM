@@ -10,9 +10,9 @@ import {
   Container,
   FormGroup,
   ModalFooter,
-  Row,
-  Col
 } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 class ReferenceModal extends Component {
   constructor() {
@@ -23,56 +23,62 @@ class ReferenceModal extends Component {
   }
   render() {
     return (
-      <div className="ag-theme-alpine">
-        <Container>
-          <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
-            <ModalHeader toggle={this.props.toggle}>
-              Document Reference
-            </ModalHeader>
-            <ModalBody>
-              <Form className="justify-content-center">
+      <Container>
+        <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+          <ModalHeader toggle={this.props.toggle}>
+            Document Reference
+          </ModalHeader>
+          <ModalBody>
+            <Form>
+              <Label>
                 <h5>ID: {this.props.data.reference_document_id}</h5>
-                <FormGroup>
-                  <Label>Reference name: </Label>
-                  <Input
-                    id="reference"
-                    type="text"
-                    value={this.props.data.reference_name}
-                  />
-                </FormGroup>
+              </Label>
 
-                <FormGroup>
-                  <Label>Link: </Label>
-                  <Input
-                    id="reference"
-                    type="text"
-                    value={this.props.data.link}
-                  />
-                </FormGroup>
+              <FormGroup>
+                <Label>Reference name: </Label>
+                <Input
+                  id="reference"
+                  type="text"
+                  value={this.props.data.reference_name}
+                />
+              </FormGroup>
 
-                <FormGroup>
-                  <Label>Author: </Label>
-                  <Input
-                    id="reference"
-                    type="text"
-                    value={this.props.data.author}
-                  />
-                </FormGroup>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Row>
-                <Col xs="auto">
-                  <Button className="r-button">Edit</Button>
-                </Col>
-                <Col xs="auto">
-                  <Button className="r-button">Delete</Button>
-                </Col>
-              </Row>
-            </ModalFooter>
-          </Modal>
-        </Container>
-      </div>
+              <FormGroup>
+                <Label>Link: </Label>
+                <Input
+                  id="reference"
+                  type="text"
+                  value={this.props.data.link}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Author: </Label>
+                <Input
+                  id="reference"
+                  type="text"
+                  value={this.props.data.author}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Cover</Label>
+                <Input type="url" value={this.props.data.cover} />
+              </FormGroup>
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            <Button className="r-button">
+              <FontAwesomeIcon icon={faEdit} color="white" />
+              &nbsp;Edit
+            </Button>
+            <Button color="danger">
+              <FontAwesomeIcon icon={faTrash} color="white" />
+              &nbsp;Delete
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </Container>
     );
   }
 }
