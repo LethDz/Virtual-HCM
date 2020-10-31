@@ -13,6 +13,7 @@ import { columnRefFieldDef } from "src/modules/contributor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axiosClient from "src/common/axiosClient";
+import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
 import "src/static/stylesheets/reference.css";
 
 class ReferenceList extends Component {
@@ -26,15 +27,23 @@ class ReferenceList extends Component {
       id: "",
       containerHeight: 0,
       selectedReference: {},
+      loading: false,
     };
   }
 
   componentDidMount() {
     this._isMounted = true;
-    const containerHeight = document.getElementById("r-container").clientHeight;
-    this.setState({
-      containerHeight,
-    });
+    const containerHeight = document.getElementById("cl-container")
+      .clientHeight;
+    this.setState({ loading: true, containerHeight });
+    axiosClient
+      .get(DOCUMENT_REFERENCE_LIST_PAGE)
+      .then((response) => {
+        const references = response.data.result_data.references;
+        this.props.fetchAllDocumentReference(references);
+        this.setState({ loading: false });
+      })
+      .catch((error) => {});
   }
 
   componentWillUnmount() {
@@ -44,13 +53,7 @@ class ReferenceList extends Component {
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    axiosClient
-      .get(DOCUMENT_REFERENCE_LIST_PAGE)
-      .then((response) => {
-        const references = response.data.result_data.references;
-        this.props.fetchAllDocumentReference(references);
-      })
-      .catch((error) => {});
+    this.gridApi.sizeColumnsToFit();
   };
 
   onRowDoubleClicked = () => {
@@ -69,17 +72,17 @@ class ReferenceList extends Component {
   };
 
   onCreateClick = () => {
-    let currentState = this.state;
-    currentState.modalCreate = !currentState.modalCreate;
-    this.setState(currentState);
+    this.setState({
+      modalCreate: !this.state.modalCreate,
+    });
   };
 
   render() {
     return (
-      <Container id="r-container" className="r-container">
+      <Container id="cl-container" className="cl-container">
         <Row>
           <Col className="justify-content-center d-flex">
-            <h1>Document reference</h1>
+            <h5>Document reference</h5>
           </Col>
         </Row>
 
@@ -95,28 +98,30 @@ class ReferenceList extends Component {
             <CreateReferenceModal modal={this.state.modalCreate} />
           </Col>
         </Row>
-
-        <Row>
-          <Col className="justify-content-center d-flex">
-            <div
-              className="ag-theme-alpine"
-              style={{ height: "60vh", width: "95%" }}
-            >
-              <AgGridReact
-                onGridReady={this.onGridReady}
-                rowData={this.props.referenceList}
-                rowSelection="single"
-                onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
-                columnDefs={columnRefFieldDef}
-              ></AgGridReact>
-              <ReferenceModal
-                isOpen={this.state.modalDetail}
-                data={this.state.selectedReference}
-                toggle={this.toggleReferenceDetail}
-              />
-            </div>
-          </Col>
-        </Row>
+        <LoadingSpinner
+          loading={this.state.loading}
+          text="Loading reference"
+        ></LoadingSpinner>
+        <div
+          className="ag-theme-alpine"
+          style={{
+            height: `${this.state.containerHeight - 200}px`,
+            marginTop: "10px",
+          }}
+        >
+          <AgGridReact
+            onGridReady={this.onGridReady}
+            rowData={this.props.referenceList}
+            rowSelection="single"
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+            columnDefs={columnRefFieldDef}
+          ></AgGridReact>
+          <ReferenceModal
+            isOpen={this.state.modalDetail}
+            data={this.state.selectedReference}
+            toggle={this.toggleReferenceDetail}
+          />
+        </div>
       </Container>
     );
   }
