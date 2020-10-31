@@ -1,67 +1,138 @@
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import React, { Component } from 'react';
-import { ReferenceModal } from "src/modules/contributor/index"
-
-
+import { AgGridReact } from "ag-grid-react";
+import React, { Component } from "react";
+import { Button, Col, Container, Row } from "reactstrap";
+import { connect } from "react-redux";
+import {
+  ReferenceModal,
+  CreateReferenceModal,
+  getReferenceList,
+  fetchAllDocumentReference,
+} from "src/modules/contributor/index";
+import { DOCUMENT_REFERENCE_LIST_PAGE } from "src/constants";
+import { columnRefFieldDef } from "src/modules/contributor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import axiosClient from "src/common/axiosClient";
+import "src/static/stylesheets/reference.css";
 
 class ReferenceList extends Component {
-    constructor() {
-        super();
-        this.state = {
-            modal: false,
-            rowData: [
-                { id: "1", reference: "Ho Chi Minh Toan Tap 1", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
-                { id: "2", reference: "Ho Chi Minh Toan Tap 2", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
-                { id: "3", reference: "Ho Chi Minh Toan Tap 3", author: "Ho Chi Minh", link: "hochiminh.vn", createdBy: "Dam Tung", editBy: "Dung" },
-            ],
-            gridApi: "",
-            selectedRow: {
-                id: "",
-                reference: "",
-                author: "",
-                link: "",
-                createdBy: "",
-                editBy: ""
-            }
-        };
-    }
+  _isMounted = false;
+  constructor() {
+    super();
+    this.state = {
+      referenceList: [],
+      modalCreate: false,
+      modalDetail: false,
+      id: "",
+      containerHeight: 0,
+      selectedReference: {},
+    };
+  }
 
-    onGridReady = (params) => {
-        let currentState = this.state;
-        currentState.gridApi = params.api;
-        this.setState(currentState);
-        
-    }
+  componentDidMount() {
+    this._isMounted = true;
+    const containerHeight = document.getElementById("r-container").clientHeight;
+    this.setState({
+      containerHeight,
+    });
+  }
 
-    onRowDoubleClicked = () => {
-        let currentState = this.state;
-        let selectedNodes = currentState.gridApi.getSelectedNodes();
-        let selectedRow = selectedNodes.map(node => node.data);
-        currentState.selectedRow = selectedRow[0];
-        currentState.modal = !currentState.modal;
-        this.setState(currentState);
-    }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
-    render() {
-        return (
-            <div className="ag-theme-alpine" style={{ height: '60vh', width: '80%'}}>
-                    <AgGridReact
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        rowSelection="single"
-                        onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
-                    >
-                        <AgGridColumn field="id" sortable filter></AgGridColumn>
-                        <AgGridColumn field="reference" sortable filter></AgGridColumn>
-                        <AgGridColumn field="author" sortable filter></AgGridColumn>
-                        <AgGridColumn field="createdBy" sortable filter></AgGridColumn>
-                        <AgGridColumn field="editBy" sortable filter></AgGridColumn>
-                    </AgGridReact>
+  onGridReady = (params) => {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    axiosClient
+      .get(DOCUMENT_REFERENCE_LIST_PAGE)
+      .then((response) => {
+        const references = response.data.result_data.references;
+        // sessionStorage.setItem("references", JSON.stringify(references));
+        this.props.fetchAllDocumentReference(references);
+        this.setState({
+          referenceList: references,
+        });
+      })
+      .catch((error) => {});
+  };
 
-                    <ReferenceModal modal={this.state.modal} data={this.state.selectedRow} />
+  onRowDoubleClicked = () => {
+    let selectedRows = this.gridApi.getSelectedRows();
+    let data = selectedRows.length === 1 ? selectedRows[0] : "";
+    this.setState({
+      selectedReference: data,
+      modalDetail: !this.state.modalDetail,
+    });
+  };
+
+  toggleDetail = () => {
+    this.setState({
+      modalDetail: !this.state.modalDetail,
+    });
+  };
+
+  onCreateClick = () => {
+    let currentState = this.state;
+    currentState.modalCreate = !currentState.modalCreate;
+    this.setState(currentState);
+  };
+
+  render() {
+    return (
+      <Container id="r-container" className="r-container">
+        <Row>
+          <Col className="justify-content-center d-flex">
+            <h1>Document reference</h1>
+          </Col>
+        </Row>
+
+        <Row className="d-flex flex-row-reverse">
+          <Col xs="auto">
+            <Button
+              onClick={this.onCreateClick.bind(this)}
+              className="r-button"
+            >
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp; Add new
+            </Button>
+            <CreateReferenceModal modal={this.state.modalCreate} />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col className="justify-content-center d-flex">
+            <div
+              className="ag-theme-alpine"
+              style={{ height: "60vh", width: "95%" }}
+            >
+              <AgGridReact
+                onGridReady={this.onGridReady}
+                rowData={this.state.referenceList}
+                rowSelection="single"
+                onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+                columnDefs={columnRefFieldDef}
+              ></AgGridReact>
+              <ReferenceModal
+                isOpen={this.state.modalDetail}
+                data={this.state.selectedReference}
+                toggle={this.state.toggleDetail}
+              />
             </div>
-        );
-    }
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 }
 
-export default ReferenceList;
+const mapStateToProps = (state) => ({
+  referenceList: getReferenceList(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchAllDocumentReference: (referenceList) =>
+    dispatch(fetchAllDocumentReference(referenceList)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReferenceList);

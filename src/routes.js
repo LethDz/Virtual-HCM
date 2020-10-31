@@ -37,6 +37,7 @@ const Routes = () => (
         path={ADMIN_CONTRIBUTOR_CREATE_PAGE}
         component={ContributorCreatePage}
       />
+      
     </Switch>
   </Fragment>
 );

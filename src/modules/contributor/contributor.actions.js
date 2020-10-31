@@ -4,7 +4,7 @@ import {
     EDIT_REFERENCE,
   } from 'src/modules/contributor';
   
-  export const getReferenceList = (referenceList) => ({
+  export const fetchAllDocumentReference = (referenceList) => ({
     type: GET_REFERENCE_LIST,
     payload: {
         referenceList,

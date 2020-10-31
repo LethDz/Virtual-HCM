@@ -13,21 +13,18 @@ import {
 } from "reactstrap";
 
 class ReferenceModal extends Component {
-  setModal = () => {
-    let currentState = this.state;
-    currentState.modal = !currentState.modal;
-    this.setState(currentState);
-  };
 
   render() {
     return (
       <div className="ag-theme-alpine">
         <Container>
-          <Modal isOpen={this.props.modal}>
-            <ModalHeader>Document Reference</ModalHeader>
+          <Modal isOpen={this.props.modal} toggle={this.props.toggle}>
+            <ModalHeader toggle={this.props.toggle}>
+              Document Reference
+            </ModalHeader>
             <ModalBody>
-              <h5>ID: {this.props.data.id}</h5>
-              <Form onSubmit={(e) => e.preventDefault()}>
+              <h5>ID: {this.props.data.reference_document_id}</h5>
+              <Form>
                 <Row>
                   <Col xs="3">
                     <Label>Reference name: </Label>
@@ -36,7 +33,7 @@ class ReferenceModal extends Component {
                     <Input
                       id="reference"
                       type="text"
-                      value={this.props.data.reference}
+                      value={this.props.data.reference_name}
                     />
                   </Col>
                   <Col xs="3">
@@ -72,19 +69,6 @@ class ReferenceModal extends Component {
                   <Col xs="3">
                     <Button className="r-button">Delete</Button>
                   </Col>
-                </Row>
-
-                <Row>
-                  <Col xs="3">
-                    <Label>Reference type: </Label>
-                  </Col>
-                  <Col xs="6">
-                    <Input type="select" name="select" id="referenceType">
-                      <option value="book">Book</option>
-                      <option value="link">Link</option>
-                    </Input>
-                  </Col>
-                  <Col xs="3"></Col>
                 </Row>
               </Form>
             </ModalBody>

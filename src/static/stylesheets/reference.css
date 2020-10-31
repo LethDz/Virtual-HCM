@@ -6,7 +6,12 @@
   margin-top: 50px !important;
 }
 
-.r-button{
+.r-button {
   background-color: #3c8dbc !important;
   border: 1px solid #367fa9 !important;
+}
+
+.r-ag-grid {
+  height: "60vh" !important;
+  width: "80%" !important;
 }
