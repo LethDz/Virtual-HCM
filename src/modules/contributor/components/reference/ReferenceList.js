@@ -48,11 +48,7 @@ class ReferenceList extends Component {
       .get(DOCUMENT_REFERENCE_LIST_PAGE)
       .then((response) => {
         const references = response.data.result_data.references;
-        // sessionStorage.setItem("references", JSON.stringify(references));
         this.props.fetchAllDocumentReference(references);
-        this.setState({
-          referenceList: references,
-        });
       })
       .catch((error) => {});
   };
@@ -108,7 +104,7 @@ class ReferenceList extends Component {
             >
               <AgGridReact
                 onGridReady={this.onGridReady}
-                rowData={this.state.referenceList}
+                rowData={this.props.referenceList}
                 rowSelection="single"
                 onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
                 columnDefs={columnRefFieldDef}

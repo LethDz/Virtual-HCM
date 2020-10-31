@@ -9,9 +9,18 @@ import {
   ModalBody,
   Container,
   FormGroup,
+  ModalFooter,
+  Row,
+  Col
 } from "reactstrap";
 
 class ReferenceModal extends Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: false,
+    };
+  }
   render() {
     return (
       <div className="ag-theme-alpine">
@@ -49,13 +58,18 @@ class ReferenceModal extends Component {
                     value={this.props.data.author}
                   />
                 </FormGroup>
-
-                <FormGroup>
-                <Button className="r-button">Edit</Button>
-                <Button className="r-button">Delete</Button>
-                </FormGroup>
               </Form>
             </ModalBody>
+            <ModalFooter>
+              <Row>
+                <Col xs="auto">
+                  <Button className="r-button">Edit</Button>
+                </Col>
+                <Col xs="auto">
+                  <Button className="r-button">Delete</Button>
+                </Col>
+              </Row>
+            </ModalFooter>
           </Modal>
         </Container>
       </div>
