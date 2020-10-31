@@ -19,19 +19,31 @@ class CreateReferenceModal extends Component {
   constructor() {
     super();
     this.state = {
-      reference: {
-        reference_name: "",
-        link: "",
-        author: "",
-        cover: null,
-      },
+      reference_name: "",
+      link: "",
+      author: "",
+      cover: null,
     };
   }
+
+  onFileChange = (event) => { 
+    this.setState({ cover: event.target.files[0] }); 
+  }; 
 
   handleInput = (event) => handleInputChange(event, this);
 
   addReference = () => {
-    this.props.addReference(this.state.reference);
+    let cover = this.state.cover;
+    let formData = new FormData();
+    formData.append('image', cover);
+    formData.append('name', cover.name);
+    let newReference = {
+      reference_name: this.state.reference_name,
+      link: this.state.link,
+      author: this.state.author,
+      cover: formData,
+    };
+    this.props.addReference(newReference);
     this.props.toggle();
   };
 
@@ -48,8 +60,9 @@ class CreateReferenceModal extends Component {
               <Input
                 required
                 type="text"
+                name="reference_name"
                 placeholder="Reference name"
-                value={this.state.reference.reference_name}
+                value={this.state.reference_name}
                 onChange={this.handleInput}
               />
             </FormGroup>
@@ -59,8 +72,9 @@ class CreateReferenceModal extends Component {
               <Input
                 required
                 type="text"
+                name="author"
                 placeholder="Author"
-                value={this.state.reference.author}
+                value={this.state.author}
                 onChange={this.handleInput}
               />
             </FormGroup>
@@ -70,8 +84,9 @@ class CreateReferenceModal extends Component {
               <Input
                 required
                 type="text"
+                name="link"
                 placeholder="Link"
-                value={this.state.reference.link}
+                value={this.state.link}
                 onChange={this.handleInput}
               />
             </FormGroup>
@@ -82,17 +97,15 @@ class CreateReferenceModal extends Component {
                 required
                 type="file"
                 placeholder="Cover"
-                value={this.state.reference.cover}
-                onChange={this.handleInput}
+                name="cover"
+                // value={this.state.cover}
+                onChange={this.onFileChange}
               />
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button 
-          className="r-button"
-          onClick = {this.addReference}
-          >
+          <Button className="r-button" onClick={this.addReference}>
             <FontAwesomeIcon icon={faPlus} color="white" />
             &nbsp; Create
           </Button>

@@ -85,7 +85,7 @@ class ReferenceList extends Component {
   addReference = (newReference) => {
     axiosClient.post(REFERENCE + ADD, newReference).then((response) => {
       this.setState({
-        loading: true,
+        loading: false,
       });
       console.log(response);
     });
