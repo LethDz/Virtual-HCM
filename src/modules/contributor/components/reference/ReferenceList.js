@@ -22,8 +22,8 @@ class ReferenceList extends Component {
     super();
     this.state = {
       referenceList: [],
-      modalCreate: false,
-      modalDetail: false,
+      modalReferenceCreate: false,
+      modalReferenceDetail: false,
       id: "",
       containerHeight: 0,
       selectedReference: {},
@@ -61,22 +61,27 @@ class ReferenceList extends Component {
     let data = selectedRows.length === 1 ? selectedRows[0] : "";
     this.setState({
       selectedReference: data,
-      modalDetail: !this.state.modalDetail,
+      modalReferenceDetail: !this.state.modalReferenceDetail,
     });
   };
 
   toggleReferenceDetail = () => {
     this.setState({
-      modalDetail: !this.state.modalDetail,
+      modalReferenceDetail: !this.state.modalReferenceDetail,
     });
   };
 
-  onCreateClick = () => {
+  onReferenceCreateClick = () => {
     this.setState({
-      modalCreate: !this.state.modalCreate,
+      modalReferenceCreate: !this.state.modalReferenceCreate,
     });
   };
 
+  toggleReferenceCreate = () => {
+    this.setState({
+      modalReferenceCreate: !this.state.modalReferenceCreate,
+    });
+  };
   render() {
     return (
       <Container id="cl-container" className="cl-container">
@@ -89,13 +94,16 @@ class ReferenceList extends Component {
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
             <Button
-              onClick={this.onCreateClick.bind(this)}
+              onClick={this.onReferenceCreateClick.bind(this)}
               className="r-button"
             >
               <FontAwesomeIcon icon={faPlus} color="white" />
-              &nbsp; Add new
+              &nbsp; Create
             </Button>
-            <CreateReferenceModal modal={this.state.modalCreate} />
+            <CreateReferenceModal
+              isOpen={this.state.modalReferenceCreate}
+              toggle={this.toggleReferenceCreate}
+            />
           </Col>
         </Row>
         <LoadingSpinner
@@ -117,7 +125,7 @@ class ReferenceList extends Component {
             columnDefs={columnRefFieldDef}
           ></AgGridReact>
           <ReferenceModal
-            isOpen={this.state.modalDetail}
+            isOpen={this.state.modalReferenceDetail}
             data={this.state.selectedReference}
             toggle={this.toggleReferenceDetail}
           />

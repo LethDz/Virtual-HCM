@@ -81,14 +81,14 @@ export const columnRefFieldDef = [
   {
     field: "reference_document_id",
     headerName: "ID",
-    width: "70",
+    width: "90",
     sortable: true,
     filter: true,
   },
   {
     field: "reference_name",
     headerName: "Name",
-    width: "350",
+    width: "330",
     sortable: true,
     filter: true,
   },
@@ -109,7 +109,7 @@ export const columnRefFieldDef = [
   {
     field: "cdate",
     headerName: "Created Date",
-    width: "200",
+    width: "120",
     sortable: true,
     filter: true,
   },

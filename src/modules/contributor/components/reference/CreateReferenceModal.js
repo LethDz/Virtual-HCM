@@ -8,15 +8,18 @@ import {
   ModalBody,
   FormGroup,
   Label,
+  ModalFooter,
 } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "src/static/stylesheets/reference.css";
 
 class CreateReferenceModal extends Component {
   render() {
     return (
-      <Modal isOpen={this.props.modal}>
-        <ModalHeader toggle={!this.props.modal}>
-          Add New Document Reference
+      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+        <ModalHeader toggle={this.props.toggle}>
+          Create New Document Reference
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -36,14 +39,16 @@ class CreateReferenceModal extends Component {
             </FormGroup>
 
             <FormGroup>
-              <Label>Reference type</Label>
-              <Input type="select" name="select" id="referenceType">
-                <option value="book">Book</option>
-                <option value="link">Link</option>
-              </Input>
+              <Label>Cover</Label>
+              <Input type="url" />
             </FormGroup>
-            <Button className="r-button">Add</Button>
           </Form>
+          <ModalFooter>
+            <Button className="r-button">
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp; Create
+            </Button>
+          </ModalFooter>
         </ModalBody>
       </Modal>
     );
