@@ -5,7 +5,6 @@ export const GET_ALL_SYNONYMS = "GET_ALL_SYNONYMS";
 export const ADD_SYNONYM = "ADD_SYNONYM";
 
 export const GET_ALL_REFERENCE = "GET_ALL_REFERENCE";
-export const ADD_REFERENCE = "ADD_REFERENCE";
 
 export const criticalType = ["PER", "LOC", "ORG", "MISC"];
 
@@ -77,7 +76,6 @@ export const columnFieldDef = [
 ];
 
 // Column Reference Field Definition
-
 export const columnRefFieldDef = [
   {
     field: "reference_document_id",

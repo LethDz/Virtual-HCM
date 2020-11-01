@@ -10,10 +10,13 @@ import {
   Container,
   FormGroup,
   ModalFooter,
+  Col,
+  Row,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { handleInputChange } from "src/common/handleInputChange";
+import { imgBase64 } from "src/constants";
 
 class ReferenceModal extends Component {
   constructor() {
@@ -24,7 +27,30 @@ class ReferenceModal extends Component {
       link: "",
       author: "",
       cover: null,
+      imagePath: null,
     };
+  }
+
+  onUploadImage = (event) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      this._isMounted && this.setState({ avatar: this.props.data.cover });
+      return;
+    }
+
+    const src = event.target.files[0];
+    const objectURL = URL.createObjectURL(src);
+    this._isMounted && this.setState({ cover: objectURL, imagePath: src });
+  };
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    if (this.state.imageSrc) {
+      URL.revokeObjectURL(this.state.imageSrc);
+    }
   }
 
   handleInput = (event) => handleInputChange(event, this);
@@ -40,14 +66,23 @@ class ReferenceModal extends Component {
   };
 
   editReference = () => {
-    let newReference = {
-      reference_document_id: this.state.reference_document_id,
-      reference_name: this.state.reference_name,
-      link: this.state.link,
-      author: this.state.author,
-      cover: this.state.cover,
-    };
+    let newReference = new FormData();
+    newReference.append(
+      "reference_document_id",
+      this.state.reference_document_id
+    );
+    newReference.append("reference_name", this.state.reference_name);
+    newReference.append("link", this.state.link);
+    newReference.append("author", this.state.author);
+    newReference.append("cover", this.state.imagePath);
     this.props.editReference(newReference);
+    this.props.toggle();
+  };
+
+  deleteReference = () => {
+    let id = new FormData();
+    id.append("id", this.state.reference_document_id);
+    this.props.deleteReference(id);
     this.props.toggle();
   };
 
@@ -98,15 +133,39 @@ class ReferenceModal extends Component {
                 />
               </FormGroup>
 
-              {/* <FormGroup>
-                <Label>Cover</Label>
-                <Input
-                  type="file"
-                  name="cover"
-                  // value={this.state.cover}
-                  onChange={this.handleInput}
-                />
-              </FormGroup> */}
+              <Col>
+                <Row className="justify-content-center mb-3">
+                  <img
+                    type="image"
+                    name="cover"
+                    id="coverImage"
+                    alt="cover"
+                    className="cover-image"
+                    src={
+                      this.state.cover
+                        ? this.state.cover === this.props.data.cover
+                          ? imgBase64(this.state.cover)
+                          : this.state.cover
+                        : null
+                    }
+                  ></img>
+                </Row>
+                <Row className="justify-content-center">
+                  <div className="upload-btn-wrapper">
+                    <Button color="primary" className="btn-upload-custom">
+                      Upload avatar
+                    </Button>
+                    <Input
+                      className="h-100 upload-hidden"
+                      type="file"
+                      name="avatar"
+                      id="avatar"
+                      accept="image/*"
+                      onChange={this.onUploadImage}
+                    />
+                  </div>
+                </Row>
+              </Col>
             </Form>
           </ModalBody>
           <ModalFooter>
@@ -114,7 +173,7 @@ class ReferenceModal extends Component {
               <FontAwesomeIcon icon={faEdit} color="white" />
               &nbsp;Edit
             </Button>
-            <Button color="danger">
+            <Button color="danger" onClick={this.deleteReference}>
               <FontAwesomeIcon icon={faTrash} color="white" />
               &nbsp;Delete
             </Button>

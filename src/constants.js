@@ -22,6 +22,8 @@ export const ALL = "/all";
 
 export const EDIT = "/edit";
 
+export const DELETE = "/delete";
+
 // API Admin Route Path
 export const ADMIN_GET_USER_ALL = '/user/all';
 export const ADMIN_GET_USER = (id) => (`/user/get?id=${id}`);

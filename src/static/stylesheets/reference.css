@@ -24,7 +24,7 @@
 
 .cover-image {
   width: 100%;
-  max-width: 200px;
-  height: 200px;
+  max-width: 100px;
+  height: 100px;
   border: 1px solid #4391BE;
 }

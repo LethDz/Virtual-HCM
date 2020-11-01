@@ -2,13 +2,11 @@ import { LOGOUT } from "src/constants";
 import {
   GET_ALL_SYNONYMS,
   GET_ALL_REFERENCE,
-  ADD_REFERENCE,
 } from "src/modules/contributor/index";
 
 const initialState = {
   synonymsList: [],
   documentReferenceList: [],
-  newDocumentReference: {},
 };
 
 export const contributorReducer = (state = initialState, action) => {
@@ -26,13 +24,7 @@ export const contributorReducer = (state = initialState, action) => {
         documentReferenceList,
       };
     }
-    case ADD_REFERENCE: {
-      const newDocumentReference = action.payload.newDocumentReference;
-      return {
-        ...state,
-        newDocumentReference,
-      };
-    }
+    
     case LOGOUT: {
       return initialState;
     }

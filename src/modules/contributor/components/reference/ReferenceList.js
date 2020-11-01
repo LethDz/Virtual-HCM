@@ -8,7 +8,7 @@ import {
   getAllDocumentReference,
   fetchAllDocumentReference,
 } from "src/modules/contributor/index";
-import { REFERENCE, ALL, ADD, EDIT } from "src/constants";
+import { REFERENCE, ALL, ADD, EDIT, DELETE } from "src/constants";
 import { columnRefFieldDef } from "src/modules/contributor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +18,7 @@ import "src/static/stylesheets/reference.css";
 
 class ReferenceList extends Component {
   _isMounted = false;
+
   constructor() {
     super();
     this.state = {
@@ -100,9 +101,25 @@ class ReferenceList extends Component {
   };
 
   editReference = (newReference) => {
-    axiosClient.post(REFERENCE + EDIT, newReference).then((response) => {
-      this.setState({});
-      console.log(response);
+    this.setState({ loading: true });
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axiosClient
+      .post(REFERENCE + EDIT, newReference, config)
+      .then((response) => {
+        this.setRowData();
+        this.gridApi.setRowData(this.props.referenceList);
+      });
+  };
+
+  deleteReference = (id) => {
+    this.setState({ loading: true });
+    axiosClient.post(REFERENCE + DELETE, id).then((response) => {
+      this.setRowData();
+      this.gridApi.setRowData(this.props.referenceList);
     });
   };
   render() {
@@ -153,6 +170,7 @@ class ReferenceList extends Component {
             data={this.state.selectedReference}
             toggle={this.toggleReferenceDetail}
             editReference={this.editReference}
+            deleteReference={this.deleteReference}
           />
         </div>
       </Container>

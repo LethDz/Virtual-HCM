@@ -12,7 +12,7 @@ import {
   Row,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import "src/static/stylesheets/reference.css";
 import { handleInputChange } from "src/common/handleInputChange";
 
@@ -47,7 +47,6 @@ class CreateReferenceModal extends Component {
       this._isMounted && this.setState({ imageSrc: null });
       return;
     }
-
     const src = event.target.files[0];
     const objectURL = URL.createObjectURL(src);
     this._isMounted && this.setState({ imageSrc: objectURL, imagePath: src });
@@ -120,10 +119,12 @@ class CreateReferenceModal extends Component {
               </Row>
               <Row className="justify-content-center">
                 <div className="upload-btn-wrapper">
-                  <Button color="primary" className="btn-upload-custom">
-                    Upload cover
+                  <Button className="btn-upload-custom r-button">
+                    <FontAwesomeIcon icon={faUpload} color="white" />
+                    &nbsp; Upload
                   </Button>
                   <Input
+                    className="h-100 upload-hidden"
                     type="file"
                     name="coverFile"
                     id="coverFile"
