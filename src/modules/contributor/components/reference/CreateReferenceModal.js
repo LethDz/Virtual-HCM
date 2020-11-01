@@ -9,6 +9,7 @@ import {
   FormGroup,
   Label,
   ModalFooter,
+  Row,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -16,33 +17,48 @@ import "src/static/stylesheets/reference.css";
 import { handleInputChange } from "src/common/handleInputChange";
 
 class CreateReferenceModal extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
       reference_name: "",
       link: "",
       author: "",
-      cover: null,
+      imageSrc: null,
+      imagePath: "",
     };
   }
 
-  onFileChange = (event) => { 
-    this.setState({ cover: event.target.files[0] }); 
-  }; 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    if (this.state.imageSrc) {
+      URL.revokeObjectURL(this.state.imageSrc);
+    }
+  }
 
   handleInput = (event) => handleInputChange(event, this);
 
+  onUploadImage = (event) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      this._isMounted && this.setState({ imageSrc: null });
+      return;
+    }
+
+    const src = event.target.files[0];
+    const objectURL = URL.createObjectURL(src);
+    this._isMounted && this.setState({ imageSrc: objectURL, imagePath: src });
+  };
+
   addReference = () => {
-    let cover = this.state.cover;
-    let formData = new FormData();
-    formData.append('image', cover);
-    formData.append('name', cover.name);
-    let newReference = {
-      reference_name: this.state.reference_name,
-      link: this.state.link,
-      author: this.state.author,
-      cover: formData,
-    };
+    let newReference = new FormData();
+    newReference.append("reference_name", this.state.reference_name);
+    newReference.append("link", this.state.link);
+    newReference.append("author", this.state.author);
+    newReference.append("cover", this.state.imagePath);
     this.props.addReference(newReference);
     this.props.toggle();
   };
@@ -93,14 +109,29 @@ class CreateReferenceModal extends Component {
 
             <FormGroup>
               <Label>Cover</Label>
-              <Input
-                required
-                type="file"
-                placeholder="Cover"
-                name="cover"
-                // value={this.state.cover}
-                onChange={this.onFileChange}
-              />
+              <Row className="justify-content-center mb-3">
+                <img
+                  type="image"
+                  name="coverImage"
+                  alt="cover"
+                  className="cover-image"
+                  src={this.state.imageSrc}
+                ></img>
+              </Row>
+              <Row className="justify-content-center">
+                <div className="upload-btn-wrapper">
+                  <Button color="primary" className="btn-upload-custom">
+                    Upload cover
+                  </Button>
+                  <Input
+                    type="file"
+                    name="coverFile"
+                    id="coverFile"
+                    accept="image/*"
+                    onChange={this.onUploadImage}
+                  />
+                </div>
+              </Row>
             </FormGroup>
           </Form>
         </ModalBody>

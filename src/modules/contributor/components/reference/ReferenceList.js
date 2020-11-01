@@ -8,7 +8,7 @@ import {
   getAllDocumentReference,
   fetchAllDocumentReference,
 } from "src/modules/contributor/index";
-import { REFERENCE, ALL, ADD } from "src/constants";
+import { REFERENCE, ALL, ADD, EDIT } from "src/constants";
 import { columnRefFieldDef } from "src/modules/contributor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -30,11 +30,7 @@ class ReferenceList extends Component {
     };
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-    const containerHeight = document.getElementById("cl-container")
-      .clientHeight;
-    this.setState({ loading: true, containerHeight });
+  setRowData = () => {
     axiosClient
       .get(REFERENCE + ALL)
       .then((response) => {
@@ -43,6 +39,14 @@ class ReferenceList extends Component {
         this.setState({ loading: false });
       })
       .catch((error) => {});
+  };
+
+  componentDidMount() {
+    this._isMounted = true;
+    const containerHeight = document.getElementById("cl-container")
+      .clientHeight;
+    this.setState({ loading: true, containerHeight });
+    this.setRowData();
   }
 
   componentWillUnmount() {
@@ -83,10 +87,21 @@ class ReferenceList extends Component {
   };
 
   addReference = (newReference) => {
-    axiosClient.post(REFERENCE + ADD, newReference).then((response) => {
-      this.setState({
-        loading: false,
-      });
+    this.setState({ loading: true });
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axiosClient.post(REFERENCE + ADD, newReference, config).then((response) => {
+      this.setRowData();
+      this.gridApi.setRowData(this.props.referenceList);
+    });
+  };
+
+  editReference = (newReference) => {
+    axiosClient.post(REFERENCE + EDIT, newReference).then((response) => {
+      this.setState({});
       console.log(response);
     });
   };
@@ -137,6 +152,7 @@ class ReferenceList extends Component {
             isOpen={this.state.modalReferenceDetail}
             data={this.state.selectedReference}
             toggle={this.toggleReferenceDetail}
+            editReference={this.editReference}
           />
         </div>
       </Container>
