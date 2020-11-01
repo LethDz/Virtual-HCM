@@ -10,9 +10,11 @@ import {
   Label,
   ModalFooter,
   Row,
+  Container,
+  Col,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import "src/static/stylesheets/reference.css";
 import { handleInputChange } from "src/common/handleInputChange";
 
@@ -70,74 +72,75 @@ class CreateReferenceModal extends Component {
         </ModalHeader>
         <ModalBody>
           <Form>
-            <FormGroup>
-              <Label>Reference name</Label>
-              <Input
-                required
-                type="text"
-                name="reference_name"
-                placeholder="Reference name"
-                value={this.state.reference_name}
-                onChange={this.handleInput}
-              />
-            </FormGroup>
+            <Container>
+              <Row>
+                <Col className="col-3">
+                  <Row className="justify-content-center mb-3">
+                    <img
+                      type="image"
+                      name="coverImage"
+                      alt="book cover"
+                      className="cover-image"
+                      src={this.state.imageSrc}
+                    ></img>
+                  </Row>
+                  <Row className="justify-content-center upload-btn-wrapper">
+                    <Button color="warning">
+                      <FontAwesomeIcon icon={faFolderOpen} color="white" />
+                    </Button>
+                    <Input
+                      className="upload-hidden"
+                      type="file"
+                      name="coverFile"
+                      id="coverFile"
+                      accept="image/*"
+                      onChange={this.onUploadImage}
+                    />
+                  </Row>
+                </Col>
+                <Col className="col-9">
+                  <FormGroup>
+                    <Label>Reference name</Label>
+                    <Input
+                      required
+                      type="text"
+                      name="reference_name"
+                      placeholder="Reference name"
+                      value={this.state.reference_name}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
 
-            <FormGroup>
-              <Label>Author</Label>
-              <Input
-                required
-                type="text"
-                name="author"
-                placeholder="Author"
-                value={this.state.author}
-                onChange={this.handleInput}
-              />
-            </FormGroup>
+                  <FormGroup>
+                    <Label>Author</Label>
+                    <Input
+                      required
+                      type="text"
+                      name="author"
+                      placeholder="Author"
+                      value={this.state.author}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
 
-            <FormGroup>
-              <Label>Link</Label>
-              <Input
-                required
-                type="text"
-                name="link"
-                placeholder="Link"
-                value={this.state.link}
-                onChange={this.handleInput}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Cover</Label>
-              <Row className="justify-content-center mb-3">
-                <img
-                  type="image"
-                  name="coverImage"
-                  alt="cover"
-                  className="cover-image"
-                  src={this.state.imageSrc}
-                ></img>
+                  <FormGroup>
+                    <Label>Link</Label>
+                    <Input
+                      required
+                      type="text"
+                      name="link"
+                      placeholder="Link"
+                      value={this.state.link}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                </Col>
               </Row>
-              <Row className="justify-content-center">
-                <div className="upload-btn-wrapper">
-                  <Button className="btn-upload-custom r-button">
-                    <FontAwesomeIcon icon={faUpload} color="white" />
-                    &nbsp; Upload
-                  </Button>
-                  <Input
-                    className="h-100 upload-hidden"
-                    type="file"
-                    name="coverFile"
-                    id="coverFile"
-                    accept="image/*"
-                    onChange={this.onUploadImage}
-                  />
-                </div>
-              </Row>
-            </FormGroup>
+            </Container>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button className="r-button" onClick={this.addReference}>
+          <Button color="primary" onClick={this.addReference}>
             <FontAwesomeIcon icon={faPlus} color="white" />
             &nbsp; Create
           </Button>

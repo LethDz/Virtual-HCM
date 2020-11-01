@@ -88,38 +88,42 @@ class ReferenceList extends Component {
   };
 
   addReference = (newReference) => {
-    this.setState({ loading: true });
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
     axiosClient.post(REFERENCE + ADD, newReference, config).then((response) => {
-      this.setRowData();
-      this.gridApi.setRowData(this.props.referenceList);
+      if (response.data.status) {
+        this.setState({ loading: true });
+        this.setRowData();
+        this.gridApi.setRowData(this.props.referenceList);
+      }
     });
   };
 
   editReference = (newReference) => {
-    this.setState({ loading: true });
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
-    axiosClient
-      .post(REFERENCE + EDIT, newReference, config)
-      .then((response) => {
+    axiosClient.post(REFERENCE + EDIT, newReference, config).then((response) => {
+      if (response.data.status) {
+        this.setState({ loading: true });
         this.setRowData();
         this.gridApi.setRowData(this.props.referenceList);
-      });
+      }
+    });
   };
 
   deleteReference = (id) => {
-    this.setState({ loading: true });
     axiosClient.post(REFERENCE + DELETE, id).then((response) => {
-      this.setRowData();
-      this.gridApi.setRowData(this.props.referenceList);
+      if (response.data.status) {
+        this.setState({ loading: true });
+        this.setRowData();
+        this.gridApi.setRowData(this.props.referenceList);
+      }
     });
   };
   render() {

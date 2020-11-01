@@ -14,7 +14,11 @@ import {
   Row,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faTrash,
+  faFolderOpen,
+} from "@fortawesome/free-solid-svg-icons";
 import { handleInputChange } from "src/common/handleInputChange";
 import { imgBase64 } from "src/constants";
 
@@ -99,73 +103,76 @@ class ReferenceModal extends Component {
           </ModalHeader>
           <ModalBody>
             <Form>
-              <Label>
-                <h5>ID: {this.state.reference_document_id}</h5>
-              </Label>
+              <Container>
+                <Row>
+                  <Col className="col-3">
+                    <Row className="justify-content-center mb-3">
+                      <img
+                        type="image"
+                        name="cover"
+                        id="coverImage"
+                        alt="cover"
+                        className="cover-image"
+                        src={
+                          this.state.cover
+                            ? this.state.cover === this.props.data.cover
+                              ? imgBase64(this.state.cover)
+                              : this.state.cover
+                            : null
+                        }
+                      ></img>
+                    </Row>
+                    <Row className="justify-content-center upload-btn-wrapper">
+                      <Button color="warning">
+                        <FontAwesomeIcon icon={faFolderOpen} color="white" />
+                      </Button>
+                      <Input
+                        className="h-100 upload-hidden"
+                        type="file"
+                        name="avatar"
+                        id="avatar"
+                        accept="image/*"
+                        onChange={this.onUploadImage}
+                      />
+                    </Row>
+                  </Col>
+                  <Col className="col-9">
+                    <Label>
+                      <h5>ID: {this.state.reference_document_id}</h5>
+                    </Label>
 
-              <FormGroup>
-                <Label>Reference name: </Label>
-                <Input
-                  name="reference_name"
-                  type="text"
-                  value={this.state.reference_name}
-                  onChange={this.handleInput}
-                />
-              </FormGroup>
+                    <FormGroup>
+                      <Label>Reference name: </Label>
+                      <Input
+                        name="reference_name"
+                        type="text"
+                        value={this.state.reference_name}
+                        onChange={this.handleInput}
+                      />
+                    </FormGroup>
 
-              <FormGroup>
-                <Label>Link: </Label>
-                <Input
-                  name="link"
-                  type="text"
-                  value={this.state.link}
-                  onChange={this.handleInput}
-                />
-              </FormGroup>
+                    <FormGroup>
+                      <Label>Link: </Label>
+                      <Input
+                        name="link"
+                        type="text"
+                        value={this.state.link}
+                        onChange={this.handleInput}
+                      />
+                    </FormGroup>
 
-              <FormGroup>
-                <Label>Author: </Label>
-                <Input
-                  name="author"
-                  type="text"
-                  value={this.state.author}
-                  onChange={this.handleInput}
-                />
-              </FormGroup>
-
-              <Col>
-                <Row className="justify-content-center mb-3">
-                  <img
-                    type="image"
-                    name="cover"
-                    id="coverImage"
-                    alt="cover"
-                    className="cover-image"
-                    src={
-                      this.state.cover
-                        ? this.state.cover === this.props.data.cover
-                          ? imgBase64(this.state.cover)
-                          : this.state.cover
-                        : null
-                    }
-                  ></img>
+                    <FormGroup>
+                      <Label>Author: </Label>
+                      <Input
+                        name="author"
+                        type="text"
+                        value={this.state.author}
+                        onChange={this.handleInput}
+                      />
+                    </FormGroup>
+                  </Col>
                 </Row>
-                <Row className="justify-content-center">
-                  <div className="upload-btn-wrapper">
-                    <Button color="primary" className="btn-upload-custom">
-                      Upload avatar
-                    </Button>
-                    <Input
-                      className="h-100 upload-hidden"
-                      type="file"
-                      name="avatar"
-                      id="avatar"
-                      accept="image/*"
-                      onChange={this.onUploadImage}
-                    />
-                  </div>
-                </Row>
-              </Col>
+              </Container>
             </Form>
           </ModalBody>
           <ModalFooter>

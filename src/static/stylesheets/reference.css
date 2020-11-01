@@ -15,7 +15,6 @@
 }
 
 .upload-btn-wrapper input[type='file'] {
-  font-size: 100px;
   position: absolute;
   left: 0;
   top: 0;
@@ -25,6 +24,8 @@
 .cover-image {
   width: 100%;
   max-width: 100px;
-  height: 100px;
+  height: 150px;
   border: 1px solid #4391BE;
+  border-radius: 4%;;
 }
+
