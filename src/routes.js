@@ -8,7 +8,6 @@ import {
   ContributorsListPage,
   ContributorCreatePage,
   ContributorEditPage,
-  ContributorPage,
   CreateDataApprovalFormPage,
   DataApprovalListPage,
 } from 'src/pages/index';
@@ -20,7 +19,6 @@ import {
   ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_CONTRIBUTOR_CREATE_PAGE,
   ADMIN_CONTRIBUTOR_EDIT_PAGE,
-  CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
 } from 'src/constants';

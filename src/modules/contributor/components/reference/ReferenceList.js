@@ -32,15 +32,24 @@ class ReferenceList extends Component {
   }
 
   setRowData = () => {
-    axiosClient
-      .get(REFERENCE + ALL)
-      .then((response) => {
-        const references = response.data.result_data.references;
-        this.props.fetchAllDocumentReference(references);
-        this.setState({ loading: false });
-      })
-      .catch((error) => {
+    if (this.props.referenceList.length === 0) {
+      axiosClient
+        .get(REFERENCE + ALL)
+        .then((response) => {
+          const references = response.data.result_data.references;
+          this.props.fetchAllDocumentReference(references);
+          this.setState({ loading: false, referenceList: references });
+        })
+        .catch((error) => {});
+    } else {
+      this.setReferenceList(this.props.referenceList);
+    }
+  };
 
+  setReferenceList = (list) => {
+    this._isMounted &&
+      this.setState({
+        referenceList: list,
       });
   };
 
@@ -50,7 +59,6 @@ class ReferenceList extends Component {
       .clientHeight;
     this.setState({ loading: true, containerHeight });
     this.setRowData();
-    
   }
 
   componentWillUnmount() {
@@ -66,10 +74,11 @@ class ReferenceList extends Component {
   onRowDoubleClicked = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let data = selectedRows.length === 1 ? selectedRows[0] : "";
-    this.setState({
-      selectedReference: data,
-      modalReferenceDetail: !this.state.modalReferenceDetail,
-    });
+    this._isMounted &&
+      this.setState({
+        selectedReference: data,
+        modalReferenceDetail: !this.state.modalReferenceDetail,
+      });
   };
 
   toggleReferenceDetail = () => {
@@ -116,12 +125,18 @@ class ReferenceList extends Component {
       .post(REFERENCE + EDIT, newReference, config)
       .then((response) => {
         if (response.data.status) {
-          this.setRowData();
-          this.gridApi.setRowData(this.props.referenceList);
-        }else{
+          this.setState({
+            referenceList: [],
+          });
+        } else {
           this.setState({ loading: false });
           console.log(response.data.status);
         }
+      })
+      .then(() => {
+        this.setState({
+          referenceList: this.props.referenceList,
+        });
       });
   };
 
@@ -172,7 +187,7 @@ class ReferenceList extends Component {
         >
           <AgGridReact
             onGridReady={this.onGridReady}
-            rowData={this.props.referenceList}
+            rowData={this.state.referenceList}
             rowSelection="single"
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
