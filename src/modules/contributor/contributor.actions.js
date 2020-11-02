@@ -29,7 +29,7 @@ export const fetchAllDocumentReference = (documentReferenceList) => ({
   },
 });
 
-export const getReferenceDetail = (reference) => ({
+export const pullReferenceDetail = (reference) => ({
   type: GET_REFERENCE_DETAIL,
   payload: {
     reference,
@@ -50,9 +50,9 @@ export const addReferenceToList = (reference) => ({
   },
 });
 
-export const deleteReference = (reference) => ({
+export const deleteReference = (id) => ({
   type: DELETE_REFERENCE,
   payload: {
-    reference,
+    id,
   },
 });

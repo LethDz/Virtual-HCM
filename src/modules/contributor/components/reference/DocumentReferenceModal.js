@@ -23,8 +23,16 @@ import { handleInputChange } from 'src/common/handleInputChange';
 import {
   getReferenceDetail,
   editReferenceDetail,
+  pullReferenceDetail,
+  deleteReference,
 } from 'src/modules/contributor/index';
-import { imgBase64, REFERENCE, EDIT, GET_REFERENCE } from 'src/constants';
+import {
+  imgBase64,
+  REFERENCE,
+  EDIT,
+  GET_REFERENCE,
+  DELETE_REFERENCE,
+} from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -42,7 +50,6 @@ class DocumentReferenceModal extends Component {
       imagePath: null,
       id: '',
       loading: false,
-      referenceDetail: {},
     };
   }
 
@@ -86,11 +93,10 @@ class DocumentReferenceModal extends Component {
         .then((response) => {
           if (response.data.status) {
             const reference = response.data.result_data.references;
-            this.props.getReferenceDetail(reference);
+            this.props.pullReferenceDetail(reference);
             this.setState({
               ...reference,
               loading: false,
-              referenceDetail: reference
             });
           } else {
             this.setLoading(false);
@@ -142,9 +148,18 @@ class DocumentReferenceModal extends Component {
   };
 
   deleteReference = () => {
-    let id = new FormData();
-    id.append('id', this.state.reference_document_id);
-    this.props.deleteReference(id);
+    this.setLoading(true);
+    axiosClient
+      .get(REFERENCE + DELETE_REFERENCE(this.props.id))
+      .then((response) => {
+        if (response.data.status) {
+          this.props.deleteReference(this.state.id);
+          this.setLoading(false);
+        } else {
+          this.setLoading(false);
+        }
+      });
+    this.props.deleteReference();
     this.props.toggle();
   };
 
@@ -171,7 +186,7 @@ class DocumentReferenceModal extends Component {
                         src={
                           this.state.cover
                             ? this.state.cover ===
-                              this.state.referenceDetail.cover
+                              this.props.referenceDetail.cover
                               ? imgBase64(this.state.cover)
                               : this.state.cover
                             : null
@@ -258,7 +273,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   editReferenceDetail: (referenceDetail) =>
     dispatch(editReferenceDetail(referenceDetail)),
-  getReferenceDetail: (reference) => dispatch(getReferenceDetail(reference)),
+  pullReferenceDetail: (reference) => dispatch(pullReferenceDetail(reference)),
+
+  deleteReference: (id) => dispatch(deleteReference(id)),
 });
 
 export default connect(

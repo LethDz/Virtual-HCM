@@ -8,7 +8,7 @@ import {
   fetchAllDocumentReference,
   DocumentReferenceModal,
 } from 'src/modules/contributor/index';
-import { REFERENCE, ALL, DELETE } from 'src/constants';
+import { REFERENCE, ALL} from 'src/constants';
 import { columnRefFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -139,13 +139,16 @@ class ReferenceList extends Component {
     });
   };
 
-  deleteReference = (id) => {
-    this.setState({ loading: true });
-    axiosClient.post(REFERENCE + DELETE, id).then((response) => {
-      if (response.data.status) {
-        this.setRowData();
-        this.gridApi.setRowData(this.props.referenceList);
-      }
+  deleteReference = () => {
+    // this.setState({ loading: true });
+    // axiosClient.post(REFERENCE + DELETE, id).then((response) => {
+    //   if (response.data.status) {
+    //     this.setRowData();
+    //     this.gridApi.setRowData(this.props.referenceList);
+    //   }
+    // });
+    this.setState({
+      referenceList: this.props.referenceList,
     });
   };
   render() {
