@@ -5,6 +5,10 @@ export const GET_ALL_SYNONYMS = "GET_ALL_SYNONYMS";
 export const ADD_SYNONYM = "ADD_SYNONYM";
 
 export const GET_ALL_REFERENCE = "GET_ALL_REFERENCE";
+export const EDIT_REFERENCE = "EDIT_REFERENCE";
+export const ADD_REFERENCE_TO_LIST = "ADD_REFERENCE_TO_LIST";
+export const GET_REFERENCE_DETAIL = "GET_REFERENCE_DETAIL";
+export const DELETE_REFERENCE = "DELETE_REFERENCE";
 
 export const criticalType = ["PER", "LOC", "ORG", "MISC"];
 

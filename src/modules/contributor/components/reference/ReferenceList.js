@@ -1,20 +1,20 @@
-import { AgGridReact } from "ag-grid-react";
-import React, { Component } from "react";
-import { Button, Col, Container, Row } from "reactstrap";
-import { connect } from "react-redux";
+import { AgGridReact } from 'ag-grid-react';
+import React, { Component } from 'react';
+import { Button, Col, Container, Row } from 'reactstrap';
+import { connect } from 'react-redux';
 import {
-  ReferenceModal,
   CreateReferenceModal,
   getAllDocumentReference,
   fetchAllDocumentReference,
-} from "src/modules/contributor/index";
-import { REFERENCE, ALL, ADD, EDIT, DELETE } from "src/constants";
-import { columnRefFieldDef } from "src/modules/contributor";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import axiosClient from "src/common/axiosClient";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
-import "src/static/stylesheets/reference.css";
+  DocumentReferenceModal,
+} from 'src/modules/contributor/index';
+import { REFERENCE, ALL, ADD, EDIT, DELETE } from 'src/constants';
+import { columnRefFieldDef } from 'src/modules/contributor';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import 'src/static/stylesheets/reference.css';
 
 class ReferenceList extends Component {
   _isMounted = false;
@@ -55,7 +55,7 @@ class ReferenceList extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const containerHeight = document.getElementById("cl-container")
+    const containerHeight = document.getElementById('cl-container')
       .clientHeight;
     this.setState({ loading: true, containerHeight });
     this.setRowData();
@@ -73,7 +73,7 @@ class ReferenceList extends Component {
 
   onRowDoubleClicked = () => {
     let selectedRows = this.gridApi.getSelectedRows();
-    let data = selectedRows.length === 1 ? selectedRows[0] : "";
+    let data = selectedRows.length === 1 ? selectedRows[0] : '';
     this._isMounted &&
       this.setState({
         selectedReference: data,
@@ -102,22 +102,33 @@ class ReferenceList extends Component {
   addReference = (newReference) => {
     const config = {
       headers: {
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
     };
     this.setState({ loading: true });
-    axiosClient.post(REFERENCE + ADD, newReference, config).then((response) => {
-      if (response.data.status) {
-        this.setRowData();
-        this.gridApi.setRowData(this.props.referenceList);
-      }
-    });
+    axiosClient
+      .post(REFERENCE + ADD, newReference, config)
+      .then((response) => {
+        if (response.data.status) {
+          this.setState({
+            referenceList: [],
+          });
+        } else {
+          this.setState({ loading: false });
+          console.log(response.data.status);
+        }
+      })
+      .then(() => {
+        this.setState({
+          referenceList: this.props.referenceList,
+        });
+      });
   };
 
   editReference = (newReference) => {
     const config = {
       headers: {
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
     };
     this.setState({ loading: true });
@@ -167,11 +178,13 @@ class ReferenceList extends Component {
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
-            <CreateReferenceModal
-              isOpen={this.state.modalReferenceCreate}
-              toggle={this.toggleReferenceCreate}
-              addReference={this.addReference}
-            />
+            {this.state.modalReferenceDetail && (
+              <CreateReferenceModal
+                isOpen={this.state.modalReferenceCreate}
+                toggle={this.toggleReferenceCreate}
+                addReference={this.addReference}
+              />
+            )}
           </Col>
         </Row>
         <LoadingSpinner
@@ -182,7 +195,7 @@ class ReferenceList extends Component {
           className="ag-theme-alpine"
           style={{
             height: `${this.state.containerHeight - 200}px`,
-            marginTop: "10px",
+            marginTop: '10px',
           }}
         >
           <AgGridReact
@@ -192,13 +205,15 @@ class ReferenceList extends Component {
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
           ></AgGridReact>
-          <ReferenceModal
-            isOpen={this.state.modalReferenceDetail}
-            data={this.state.selectedReference}
-            toggle={this.toggleReferenceDetail}
-            editReference={this.editReference}
-            deleteReference={this.deleteReference}
-          />
+          {this.state.modalReferenceDetail && (
+            <DocumentReferenceModal
+              isOpen={this.state.modalReferenceDetail}
+              data={this.state.selectedReference}
+              toggle={this.toggleReferenceDetail}
+              editReference={this.editReference}
+              deleteReference={this.deleteReference}
+            />
+          )}
         </div>
       </Container>
     );

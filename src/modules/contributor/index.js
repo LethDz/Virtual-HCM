@@ -5,7 +5,7 @@ import FormSectionTitle from 'src/modules/contributor/components/dataApprovalCom
 import SynonymsModal from 'src/modules/contributor/components/dataApprovalComponent/SynonymsModal';
 import ReferenceList from 'src/modules/contributor/components/reference/ReferenceList';
 import CreateReferenceModal from 'src/modules/contributor/components/reference/CreateReferenceModal';
-import ReferenceModal from 'src/modules/contributor/components/reference/ReferenceModal';
+import DocumentReferenceModal from 'src/modules/contributor/components/reference/DocumentReferenceModal';
 import ReferenceModal from 'src/modules/contributor/components/dataApprovalComponent/ReferenceModal';
 import NewSynonymModal from 'src/modules/contributor/components/dataApprovalComponent/NewSynonymModal';
 import Question from 'src/modules/contributor/components/dataApprovalComponent/Question';
@@ -26,14 +26,9 @@ export * from 'src/modules/contributor/contributor.selectors.js';
 
 export {
   Contributor,
-  Intent,
-  Question,
-  GenList,
-  GenSynonyms,
-  SynonymsModal,
   ReferenceList,
   CreateReferenceModal,
-  ReferenceModal,
+  DocumentReferenceModal,
   DataApprovalList,
   SynonymsModal,
   NewSynonymModal,

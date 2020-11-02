@@ -22,7 +22,7 @@ import {
 import { handleInputChange } from "src/common/handleInputChange";
 import { imgBase64 } from "src/constants";
 
-class ReferenceModal extends Component {
+class DocumentReferenceModal extends Component {
   constructor() {
     super();
     this.state = {
@@ -191,4 +191,4 @@ class ReferenceModal extends Component {
   }
 }
 
-export default ReferenceModal;
+export default DocumentReferenceModal;
