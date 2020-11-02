@@ -39,7 +39,9 @@ class ReferenceList extends Component {
         this.props.fetchAllDocumentReference(references);
         this.setState({ loading: false });
       })
-      .catch((error) => {});
+      .catch((error) => {
+
+      });
   };
 
   componentDidMount() {
@@ -48,6 +50,7 @@ class ReferenceList extends Component {
       .clientHeight;
     this.setState({ loading: true, containerHeight });
     this.setRowData();
+    
   }
 
   componentWillUnmount() {
@@ -93,9 +96,9 @@ class ReferenceList extends Component {
         "content-type": "multipart/form-data",
       },
     };
+    this.setState({ loading: true });
     axiosClient.post(REFERENCE + ADD, newReference, config).then((response) => {
       if (response.data.status) {
-        this.setState({ loading: true });
         this.setRowData();
         this.gridApi.setRowData(this.props.referenceList);
       }
@@ -108,19 +111,24 @@ class ReferenceList extends Component {
         "content-type": "multipart/form-data",
       },
     };
-    axiosClient.post(REFERENCE + EDIT, newReference, config).then((response) => {
-      if (response.data.status) {
-        this.setState({ loading: true });
-        this.setRowData();
-        this.gridApi.setRowData(this.props.referenceList);
-      }
-    });
+    this.setState({ loading: true });
+    axiosClient
+      .post(REFERENCE + EDIT, newReference, config)
+      .then((response) => {
+        if (response.data.status) {
+          this.setRowData();
+          this.gridApi.setRowData(this.props.referenceList);
+        }else{
+          this.setState({ loading: false });
+          console.log(response.data.status);
+        }
+      });
   };
 
   deleteReference = (id) => {
+    this.setState({ loading: true });
     axiosClient.post(REFERENCE + DELETE, id).then((response) => {
       if (response.data.status) {
-        this.setState({ loading: true });
         this.setRowData();
         this.gridApi.setRowData(this.props.referenceList);
       }
