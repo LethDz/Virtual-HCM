@@ -8,7 +8,12 @@ import {
   faCogs,
   faTachometerAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { ADMIN_CONTRIBUTOR_LIST_PAGE, ADMIN_PAGE } from 'src/constants';
+import {
+  ADMIN_CONFIGURE_SYSTEM_PAGE,
+  ADMIN_CONTRIBUTOR_LIST_PAGE,
+  ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
+  ADMIN_PAGE,
+} from 'src/constants';
 
 const SideBarAdminContent = () => {
   const location = window.location.pathname;
@@ -29,12 +34,14 @@ const SideBarAdminContent = () => {
       <SideBarItem
         name="Manage Training Process"
         icon={<FontAwesomeIcon icon={faServer} />}
-        link="manage-training-process"
+        link={ADMIN_MANAGE_TRAINING_PROCESS_PAGE}
+        active={location.includes(ADMIN_MANAGE_TRAINING_PROCESS_PAGE)}
       />
       <SideBarItem
         name="Configure System"
         icon={<FontAwesomeIcon icon={faCogs} />}
-        link="configure-system"
+        link={ADMIN_CONFIGURE_SYSTEM_PAGE}
+        active={location.includes(ADMIN_CONFIGURE_SYSTEM_PAGE)}
       />
     </ListGroup>
   );
