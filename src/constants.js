@@ -20,9 +20,11 @@ export const ADD = '/add';
 
 export const ALL = '/all';
 
-export const EDIT = "/edit";
+export const EDIT = '/edit';
 
-export const DELETE = "/delete";
+export const DELETE = '/delete';
+
+export const GET_REFERENCE= (id) => `/get?reference_document_id=${id}`;
 
 // API Admin Route Path
 export const ADMIN_GET_USER_ALL = '/user/all';

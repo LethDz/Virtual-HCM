@@ -66,7 +66,7 @@ export const contributorReducer = (state = initialState, action) => {
 
     case DELETE_REFERENCE:
       const deleteReference = action.payload.reference;
-      const pos = -1;
+      let pos = -1;
       let listAferDelete = state.documentReferenceList.map((reference, index) => {
         if (
           reference.reference_document_id ===

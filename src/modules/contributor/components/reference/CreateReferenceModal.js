@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Form,
   Input,
@@ -12,22 +12,26 @@ import {
   Row,
   Container,
   Col,
-} from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faFolderOpen } from "@fortawesome/free-solid-svg-icons";
-import "src/static/stylesheets/reference.css";
-import { handleInputChange } from "src/common/handleInputChange";
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import 'src/static/stylesheets/reference.css';
+import { handleInputChange } from 'src/common/handleInputChange';
+import axiosClient from 'src/common/axiosClient';
+import { REFERENCE, ADD } from 'src/constants';
+import { connect } from 'react-redux';
+import { addReferenceToList } from 'src/modules/contributor';
 
 class CreateReferenceModal extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      reference_name: "",
-      link: "",
-      author: "",
+      reference_name: '',
+      link: '',
+      author: '',
       imageSrc: null,
-      imagePath: "",
+      imagePath: '',
     };
   }
 
@@ -54,13 +58,30 @@ class CreateReferenceModal extends Component {
     this._isMounted && this.setState({ imageSrc: objectURL, imagePath: src });
   };
 
-  addReference = () => {
+  addReference = (event) => {
+    event.preventDefault();
     let newReference = new FormData();
-    newReference.append("reference_name", this.state.reference_name);
-    newReference.append("link", this.state.link);
-    newReference.append("author", this.state.author);
-    newReference.append("cover", this.state.imagePath);
-    this.props.addReference(newReference);
+    newReference.append('reference_name', this.state.reference_name);
+    newReference.append('link', this.state.link);
+    newReference.append('author', this.state.author);
+    newReference.append('cover', this.state.imagePath);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    axiosClient
+      .post(REFERENCE + ADD, newReference, config)
+      .then((response) => {
+        if (response.data.status) {
+          const reference = response.data.result_data;
+          this.props.addReferenceToList(reference);
+        } else {
+          console.log(response.data.status);
+        }
+      })
+      .catch(() => {});
+    this.props.addReference();
     this.props.toggle();
   };
 
@@ -70,8 +91,8 @@ class CreateReferenceModal extends Component {
         <ModalHeader toggle={this.props.toggle}>
           Create New Document Reference
         </ModalHeader>
-        <ModalBody>
-          <Form>
+        <Form onSubmit={this.addReference}>
+          <ModalBody>
             <Container>
               <Row>
                 <Col className="col-3">
@@ -137,17 +158,20 @@ class CreateReferenceModal extends Component {
                 </Col>
               </Row>
             </Container>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={this.addReference}>
-            <FontAwesomeIcon icon={faPlus} color="white" />
-            &nbsp; Create
-          </Button>
-        </ModalFooter>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" type="submit">
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp; Create
+            </Button>
+          </ModalFooter>
+        </Form>
       </Modal>
     );
   }
 }
 
-export default CreateReferenceModal;
+const mapDispatchToProps = (dispatch) => ({
+  addReferenceToList: (reference) => dispatch(addReferenceToList(reference)),
+});
+export default connect(null, mapDispatchToProps)(CreateReferenceModal);

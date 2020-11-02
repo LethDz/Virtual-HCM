@@ -8,7 +8,7 @@ import {
   fetchAllDocumentReference,
   DocumentReferenceModal,
 } from 'src/modules/contributor/index';
-import { REFERENCE, ALL, ADD, EDIT, DELETE } from 'src/constants';
+import { REFERENCE, ALL, DELETE } from 'src/constants';
 import { columnRefFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -28,6 +28,7 @@ class ReferenceList extends Component {
       containerHeight: 0,
       selectedReference: {},
       loading: false,
+      selectedId: '',
     };
   }
 
@@ -73,12 +74,16 @@ class ReferenceList extends Component {
 
   onRowDoubleClicked = () => {
     let selectedRows = this.gridApi.getSelectedRows();
-    let data = selectedRows.length === 1 ? selectedRows[0] : '';
+    let id =
+      selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
     this._isMounted &&
       this.setState({
-        selectedReference: data,
+        // selectedReference: data,
+        selectedId: id,
         modalReferenceDetail: !this.state.modalReferenceDetail,
       });
+
+    console.log(id);
   };
 
   toggleReferenceDetail = () => {
@@ -99,56 +104,39 @@ class ReferenceList extends Component {
     });
   };
 
-  addReference = (newReference) => {
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-    this.setState({ loading: true });
-    axiosClient
-      .post(REFERENCE + ADD, newReference, config)
-      .then((response) => {
-        if (response.data.status) {
-          this.setState({
-            referenceList: [],
-          });
-        } else {
-          this.setState({ loading: false });
-          console.log(response.data.status);
-        }
-      })
-      .then(() => {
-        this.setState({
-          referenceList: this.props.referenceList,
-        });
-      });
+  addReference = () => {
+    this.setState({
+      referenceList: this.props.referenceList,
+    });
   };
 
   editReference = (newReference) => {
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-    this.setState({ loading: true });
-    axiosClient
-      .post(REFERENCE + EDIT, newReference, config)
-      .then((response) => {
-        if (response.data.status) {
-          this.setState({
-            referenceList: [],
-          });
-        } else {
-          this.setState({ loading: false });
-          console.log(response.data.status);
-        }
-      })
-      .then(() => {
-        this.setState({
-          referenceList: this.props.referenceList,
-        });
-      });
+    // const config = {
+    //   headers: {
+    //     'content-type': 'multipart/form-data',
+    //   },
+    // };
+    // this.setState({ loading: true });
+    // axiosClient
+    //   .post(REFERENCE + EDIT, newReference, config)
+    //   .then((response) => {
+    //     if (response.data.status) {
+    //       this.setState({
+    //         referenceList: [],
+    //       });
+    //     } else {
+    //       this.setState({ loading: false });
+    //       console.log(response.data.status);
+    //     }
+    //   })
+    //   .then(() => {
+    //     this.setState({
+    //       referenceList: this.props.referenceList,
+    //     });
+    //   });
+    this.setState({
+      referenceList: this.props.referenceList,
+    });
   };
 
   deleteReference = (id) => {
@@ -178,7 +166,7 @@ class ReferenceList extends Component {
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
-            {this.state.modalReferenceDetail && (
+            {this.state.modalReferenceCreate && (
               <CreateReferenceModal
                 isOpen={this.state.modalReferenceCreate}
                 toggle={this.toggleReferenceCreate}
@@ -208,7 +196,8 @@ class ReferenceList extends Component {
           {this.state.modalReferenceDetail && (
             <DocumentReferenceModal
               isOpen={this.state.modalReferenceDetail}
-              data={this.state.selectedReference}
+              // data={this.state.selectedReference}
+              id={this.state.selectedId}
               toggle={this.toggleReferenceDetail}
               editReference={this.editReference}
               deleteReference={this.deleteReference}
