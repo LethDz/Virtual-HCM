@@ -285,7 +285,6 @@ class ContributorCreate extends Component {
                       name="email"
                       id="email"
                       placeholder="Enter an email"
-                      required
                       value={this.state.email}
                       onChange={this.inputChange}
                     />
