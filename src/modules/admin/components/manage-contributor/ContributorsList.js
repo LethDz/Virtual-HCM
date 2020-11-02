@@ -1,13 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Alert, Button, Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import 'src/static/stylesheets/contributor.list.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faEdit,
-  faFrown,
-  faSmile,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -26,6 +21,8 @@ import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
 import { getContributorsList, pullContributorsList } from 'src/modules/admin';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 
 class ContributorsList extends Component {
   _isMounted = false;
@@ -81,8 +78,8 @@ class ContributorsList extends Component {
       this.setLoading(false);
       this.setErrorAlert(false);
       this.setSuccessAlert(false);
-      setTimeout(this.setStyleForGrid(), 1000);
       this.setContributorsList(this.props.contributors);
+      this.setStyleForGrid();
     }
   };
 
@@ -143,6 +140,10 @@ class ContributorsList extends Component {
       });
   };
 
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
   render() {
     return (
       <Fragment>
@@ -152,31 +153,19 @@ class ContributorsList extends Component {
           className="cl-container container min-vh-100"
           ref={this.conRef}
         >
-          {this.state.errorAlert && (
-            <Row>
-              <Alert
-                color="danger"
-                isOpen={this.state.errorAlert}
-                toggle={this.onDismiss('errorAlert')}
-                className="m-3 w-100"
-              >
-                <FontAwesomeIcon icon={faFrown} /> &nbsp; Unexpected Error has
-                been occurred ! Please try again.
-              </Alert>
-            </Row>
-          )}
           {this.state.successAlert && (
-            <Row>
-              <Alert
-                color="success"
-                isOpen={this.state.successAlert}
-                toggle={() => this.onDismiss('successAlert')}
-                className="m-3 w-100"
-              >
-                <FontAwesomeIcon icon={faSmile} />
-                &nbsp; Request is successfully.
-              </Alert>
-            </Row>
+            <SuccessAlert
+              successAlert={this.state.successAlert}
+              text="Request is successfully"
+              onDismiss={() => this.onDismiss('successAlert')}
+            />
+          )}
+          {this.state.errorAlert && (
+            <ErrorAlert
+              errorAlert={this.state.errorAlert}
+              errorList={this.state.errorList}
+              onDismiss={() => this.onDismiss('errorAlert')}
+            />
           )}
           <Row>
             <Col className="justify-content-center d-flex">
@@ -212,6 +201,12 @@ class ContributorsList extends Component {
                   &nbsp; Edit
                 </Button>
               )}
+            </Col>
+            <Col xs="auto" className="mr-auto">
+              <Button color="info" onClick={this.sizeToFit}>
+                <FontAwesomeIcon icon={faWrench} color="white" />
+                &nbsp; Size column to Fit
+              </Button>
             </Col>
           </Row>
           <div

@@ -1,13 +1,7 @@
-import {
-  faFrown,
-  faPlus,
-  faSmile,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, Fragment } from 'react';
 import {
-  Alert,
   Button,
   Col,
   Container,
@@ -19,13 +13,16 @@ import {
 } from 'reactstrap';
 import 'src/static/stylesheets/contributor.create.css';
 import avatar from 'src/static/images/img_avatar.png';
-import { ADMIN_ADD_USER } from 'src/constants';
+import { ADMIN_ADD_USER, ADMIN_CONTRIBUTOR_LIST_PAGE } from 'src/constants';
 import { connect } from 'react-redux';
 import { addContributorToList } from 'src/modules/admin';
 import { handleInputChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { changeToFormatDateVN, getDateNowToString } from 'src/common/getDate';
+import BackButton from 'src/common/BackButton';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 
 class ContributorCreate extends Component {
   _isMounted = false;
@@ -49,6 +46,8 @@ class ContributorCreate extends Component {
       loading: false,
       errorList: [],
     };
+
+    this.titleRef = React.createRef();
   }
 
   onUploadImage = (event) => {
@@ -112,16 +111,19 @@ class ContributorCreate extends Component {
           const user = response.data.result_data;
           this.props.addContributorToList(user);
           this.setSuccessAlert(true);
+          this.resetFormAfterSubmit();
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
+        this.scrollToRef();
       })
       .catch(() => {
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
+        this.scrollToRef();
       });
   };
 
@@ -160,45 +162,61 @@ class ContributorCreate extends Component {
       });
   };
 
+  scrollToRef = () => {
+    this.titleRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
+  };
+
+  resetFormAfterSubmit = () => {
+    this._isMounted &&
+      this.setState({
+        imageSrc: null,
+        username: '',
+        fullname: '',
+        gender: '0',
+        phoneNumber: '',
+        address: '',
+        placeOfBirth: '',
+        dateOfBirth: '',
+        nationality: '',
+        idNumber: '',
+        imagePath: '',
+        email: '',
+      });
+  };
+
   render() {
     return (
       <Fragment>
         <LoadingSpinner loading={this.state.loading} text={'Loading'} />
         <Container className="cl-create-container">
           {this.state.successAlert && (
-            <Row>
-              <Alert
-                color="success"
-                isOpen={this.state.successAlert}
-                toggle={() => this.onDismiss('successAlert')}
-                className="m-3 w-100"
-              >
-                <FontAwesomeIcon icon={faSmile} />
-                &nbsp; Add new account successfully
-              </Alert>
-            </Row>
+            <SuccessAlert
+              successAlert={this.state.successAlert}
+              text="Add new account successfully"
+              onDismiss={() => this.onDismiss('successAlert')}
+            />
           )}
           {this.state.errorAlert && (
-            <Row>
-              <Alert
-                color="danger"
-                isOpen={this.state.errorAlert}
-                toggle={() => this.onDismiss('errorAlert')}
-                className="m-3 w-100"
-              >
-                <FontAwesomeIcon icon={faFrown} />
-                &nbsp;{' '}
-                {this.state.errorList.length !== 0
-                  ? this.state.errorList.map((element, index) => (
-                      <li key={index + ' error'}>{element}</li>
-                    ))
-                  : 'Unexpected error has been occurred. Please Try Again !!!'}
-              </Alert>
-            </Row>
+            <ErrorAlert
+              errorAlert={this.state.errorAlert}
+              errorList={this.state.errorList}
+              onDismiss={() => this.onDismiss('errorAlert')}
+            />
           )}
           <Row>
+            <Col xs="auto" className="mt-2">
+              <BackButton
+                text={'Back to List'}
+                link={ADMIN_CONTRIBUTOR_LIST_PAGE}
+              />
+            </Col>
             <Col className="justify-content-center d-flex">
-              <h5 className="mt-2 mb-2">Create Account</h5>
+              <h5 className="mt-2 mb-2" ref={this.titleRef}>
+                Create Account
+              </h5>
             </Col>
           </Row>
           <Form className="mt-5" onSubmit={this.onAddAccount}>
