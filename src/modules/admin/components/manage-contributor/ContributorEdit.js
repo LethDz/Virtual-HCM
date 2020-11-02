@@ -1,13 +1,7 @@
-import {
-  faFrown,
-  faPlus,
-  faSmile,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, Fragment } from 'react';
 import {
-  Alert,
   Button,
   Col,
   Container,
@@ -19,7 +13,12 @@ import {
 } from 'reactstrap';
 import 'src/static/stylesheets/contributor.create.css';
 import avatar from 'src/static/images/img_avatar.png';
-import { ADMIN_EDIT_USER, ADMIN_GET_USER, imgBase64 } from 'src/constants';
+import {
+  ADMIN_CONTRIBUTOR_LIST_PAGE,
+  ADMIN_EDIT_USER,
+  ADMIN_GET_USER,
+  imgBase64,
+} from 'src/constants';
 import { connect } from 'react-redux';
 import {
   getContributorDetail,
@@ -35,6 +34,9 @@ import {
   getDateNowToString,
   isoFormatDate,
 } from 'src/common/getDate';
+import BackButton from 'src/common/BackButton';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 
 class ContributorEdit extends Component {
   _isMounted = false;
@@ -59,6 +61,8 @@ class ContributorEdit extends Component {
       email: '',
       errorList: [],
     };
+
+    this.titleRef = React.createRef();
   }
 
   onUploadImage = (event) => {
@@ -176,11 +180,13 @@ class ContributorEdit extends Component {
           this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
+        this.scrollToRef();
       })
       .catch(() => {
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
+        this.scrollToRef();
       });
   };
 
@@ -227,6 +233,7 @@ class ContributorEdit extends Component {
           ? this.props.contributorDetail.email
           : '',
       });
+    this.scrollToRef();
   };
 
   setErrorList = (list) => {
@@ -243,45 +250,43 @@ class ContributorEdit extends Component {
       });
   };
 
+  scrollToRef = () => {
+    this.titleRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
+  };
+
   render() {
     return (
       <Fragment>
         <LoadingSpinner loading={this.state.loading} text={'Loading'} />
         <Container className="cl-create-container">
           {this.state.successAlert && (
-            <Row>
-              <Alert
-                color="success"
-                isOpen={this.state.successAlert}
-                toggle={() => this.onDismiss('successAlert')}
-                className="m-3 w-100"
-              >
-                <FontAwesomeIcon icon={faSmile} />
-                &nbsp; Update successfully.
-              </Alert>
-            </Row>
+            <SuccessAlert
+              successAlert={this.state.successAlert}
+              text="Edit account successfully"
+              onDismiss={() => this.onDismiss('successAlert')}
+            />
           )}
           {this.state.errorAlert && (
-            <Row>
-              <Alert
-                color="danger"
-                isOpen={this.state.errorAlert}
-                toggle={() => this.onDismiss('errorAlert')}
-                className="m-3 w-100"
-              >
-                <FontAwesomeIcon icon={faFrown} />
-                &nbsp;{' '}
-                {this.state.errorList.length !== 0
-                  ? this.state.errorList.map((element, index) => (
-                      <li key={index + ' error'}>{element}</li>
-                    ))
-                  : 'Unexpected error has been occurred. Please Try Again !!!'}
-              </Alert>
-            </Row>
+            <ErrorAlert
+              errorAlert={this.state.errorAlert}
+              errorList={this.state.errorList}
+              onDismiss={() => this.onDismiss('errorAlert')}
+            />
           )}
           <Row>
+            <Col xs="auto" className="mt-2">
+              <BackButton
+                text={'Back to List'}
+                link={ADMIN_CONTRIBUTOR_LIST_PAGE}
+              />
+            </Col>
             <Col className="justify-content-center d-flex">
-              <h5 className="mt-2 mb-2">Create Account</h5>
+              <h5 className="mt-2 mb-2" ref={this.titleRef}>
+                Edit Account
+              </h5>
             </Col>
           </Row>
           <Form className="mt-5" onSubmit={this.onUpdateAccount}>
