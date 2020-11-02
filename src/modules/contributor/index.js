@@ -6,6 +6,7 @@ import FormSectionTitle from "src/modules/contributor/components/dataApprovalCom
 import SynonymsModal from "src/modules/contributor/components/dataApprovalComponent/SynonymsModal";
 import ReferenceModal from "src/modules/contributor/components/dataApprovalComponent/ReferenceModal";
 import NewSynonymModal from "src/modules/contributor/components/dataApprovalComponent/NewSynonymModal";
+import GenSynonymSentenceModal from "src/modules/contributor/components/dataApprovalComponent/GenSynonymSentenceModal";
 import Question from "src/modules/contributor/components/dataApprovalComponent/Question";
 import MetaData from "src/modules/contributor/components/dataApprovalComponent/MetaData";
 import Synonyms from "src/modules/contributor/components/dataApprovalComponent/Synonyms";
@@ -14,6 +15,7 @@ import RawData from "src/modules/contributor/components/dataApprovalComponent/Ra
 import BaseResponse from "src/modules/contributor/components/dataApprovalComponent/BaseResponse";
 import Coresponse from "src/modules/contributor/components/dataApprovalComponent/Coresponse";
 import CriticalData from "src/modules/contributor/components/dataApprovalComponent/CriticalData";
+import GenSynonymSentence from "src/modules/contributor/components/dataApprovalComponent/GenSynonymSentence";
 import DataApprovalList from "src/modules/contributor/components/DataApprovalList";
 
 export * from "src/modules/contributor/contributor.actions";
@@ -27,7 +29,9 @@ export {
   SynonymsModal,
   NewSynonymModal,
   ReferenceModal,
+  GenSynonymSentenceModal,
   MetaData,
+  GenSynonymSentence,
   FormTitle,
   FormSectionTitle,
   CreateDataApprovalForm,

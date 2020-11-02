@@ -10,6 +10,7 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  GenSynonymSentence,
 } from "src/modules/contributor/index";
 import "src/static/stylesheets/contributor.css";
 import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
@@ -192,6 +193,11 @@ class CreateDataApprovalForm extends Component {
             <BaseResponse onChange={this.handleInputForm} />
 
             <Synonyms setSynonym={this.setSynonym} wordArray={wordArray} />
+
+            <GenSynonymSentence
+              tokenizedWordArray={this.state.tokenizedWord}
+              synonymsArray={this.state.form.synonyms}
+            />
           </div>
 
           <Row className="d-flex justify-content-around pt-3 pb-3">

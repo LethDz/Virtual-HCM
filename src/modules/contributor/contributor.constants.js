@@ -74,3 +74,14 @@ export const columnFieldDef = [
     filter: true,
   },
 ];
+
+export const columnGenSentenceDef = [
+  {
+    field: "sentence",
+    headerName: "Sentence",
+    width: 465,
+    sortable: true,
+    filter: "agSetColumnFilter",
+    filterParams: { applyMiniFilterWhileTyping: true },
+  },
+];

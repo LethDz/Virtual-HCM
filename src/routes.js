@@ -1,4 +1,4 @@
-import React, { Fragment } from "ag-grid-reactreact";
+import React, { Fragment } from "react";
 import { Switch } from "react-router-dom";
 import {
   HomePage,

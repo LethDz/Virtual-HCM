@@ -13,11 +13,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 class Coresponse extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       coresponse: [],
     };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   addCoresponse = () => {
@@ -30,9 +39,11 @@ class Coresponse extends Component {
         answer: word,
       });
       let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-      this.setState({
-        coresponse: sortedTemp,
-      });
+      if (this._isMounted) {
+        this.setState({
+          coresponse: sortedTemp,
+        });
+      }
     }
     this.setCoresponse();
   };
@@ -42,9 +53,11 @@ class Coresponse extends Component {
     if (index > -1) {
       coresponse.splice(index, 1);
     }
-    this.setState({
-      coresponse: coresponse,
-    });
+    if (this._isMounted) {
+      this.setState({
+        coresponse: coresponse,
+      });
+    }
     this.setCoresponse();
   };
 

@@ -8,6 +8,7 @@ import { handleInputChange } from "src/common/handleInputChange";
 import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
 
 class RawData extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -15,23 +16,34 @@ class RawData extends Component {
       tokenizeData: [],
       ner: [],
       loading: false,
-      rawData: ""
+      rawData: "",
     };
   }
-  handleInput = (event) => {
-    handleInputChange(event, this);
-    this.props.onChange(event, this)
+
+  componentDidMount() {
+    this._isMounted = true;
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  componentDidCatch;
+
+  handleInput = (event) => {
+    handleInputChange(event, this);
+    this.props.onChange(event, this);
+  };
+
   stateTokenizeRawDate = () => {
-    this.setState({ loading: true });
+    if (this._isMounted) this.setState({ loading: true });
     const paragraph = {
       paragraph: this.state.rawData,
     };
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
-        console.log(response)
+        console.log(response);
         let fullArray = [];
         response.data.result_data.pos.forEach((array) => {
           fullArray.push(...array);
@@ -63,27 +75,28 @@ class RawData extends Component {
           }
         }
 
-        this.setState({
-          mode: "TOKENIZE",
-          tokenizeData: fullArray,
-          ner: modifiedNer,
-          loading: false,
-        });
+        if (this._isMounted)
+          this.setState({
+            mode: "TOKENIZE",
+            tokenizeData: fullArray,
+            ner: modifiedNer,
+            loading: false,
+          });
         this.setTokenizedWordArray();
       })
       .catch((err) => this.setState({ loading: false }));
   };
 
   setRawData = () => {
-    this.props.setRawData(this.state.rawData)
-  }
+    this.props.setRawData(this.state.rawData);
+  };
 
   setTokenizedWordArray = () => {
     this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);
   };
 
   stateCancelTokenize = () => {
-    this.setState({ mode: "NORMAL" });
+    if (this._isMounted) this.setState({ mode: "NORMAL" });
   };
 
   renderRawDataMode = () => {

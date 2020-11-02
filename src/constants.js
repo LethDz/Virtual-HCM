@@ -17,7 +17,7 @@ export const SYNONYM = "/synonym";
 export const REFERENCE = "/reference-document";
 
 export const ADD = "/add";
-
+export const GENERATE_SIMILARIES = "/generate-similaries"
 export const ALL = "/all";
 
 // API Admin Route Path
