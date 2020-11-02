@@ -32,8 +32,8 @@
 
 .create-contributor-image {
   width: 100%;
-  max-width: 480px;
-  height: 480px;
+  max-width: 400px;
+  height: 400px;
   border: 1px solid #4391BE;
   border-radius: 50%;
 }

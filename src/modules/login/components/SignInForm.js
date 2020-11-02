@@ -35,6 +35,8 @@ class SignInForm extends Component {
     this._isMounted &&
       this.setState({
         loading: true,
+        passwordInvalid: false,
+        usernameInvalid: false,
       });
 
     const data = {

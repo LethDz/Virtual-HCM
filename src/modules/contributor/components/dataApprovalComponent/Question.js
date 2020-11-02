@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Input, Button } from "reactstrap";
+import { Input, Button, Row, Col } from "reactstrap";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default class Question extends Component {
   constructor() {
@@ -28,41 +31,52 @@ export default class Question extends Component {
   getQuestion = () => {
     return this.questionRef.current.value;
   };
+  
   render() {
     return (
-      <div>
-        <div className="row">
-          <div>Question</div>
-          <div className="col-9">
-            <Input
-              innerRef={this.questionRef}
-              type="text"
-              name="question"
-              id="question"
-            />
-          </div>
-          <div>
-            <Button
-              onClick={() => {
-                this.addQuestion(this.getQuestion());
-                this.props.setQuestions(this.state.questions);
-              }}
-            >
-              Add question
-            </Button>
-          </div>
-        </div>
+      <div className="p-3">
+        <Row xs="1">
+          <Col>Question</Col>
+          <Col>
+            <Row>
+              <Col>
+                <Input
+                  innerRef={this.questionRef}
+                  type="text"
+                  name="question"
+                  id="question"
+                />
+              </Col>
+              <Col xs="auto">
+                <Button
+                  color="success"
+                  onClick={() => {
+                    if (this.getQuestion().trim() !== "") {
+                      this.addQuestion(this.getQuestion());
+                      this.props.setQuestions(this.state.questions);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <div>
-          {this.state.questions.map((question) => (
-            <div className="mt-2">
-              <span className="mr-3" key={question}>- {question}</span>
+          {this.state.questions.map((question, index) => (
+            <div key={index} className="mt-2">
+              <span className="mr-3">
+                - {question}
+              </span>
               <Button
+                color="danger"
                 onClick={() => {
                   this.removeQuestion(question);
                   this.props.setQuestions(this.state.questions);
                 }}
               >
-                Remove
+                <FontAwesomeIcon icon={faTrashAlt} />
               </Button>
             </div>
           ))}

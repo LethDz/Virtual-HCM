@@ -24,7 +24,6 @@ export const contributorReducer = (state = initialState, action) => {
         documentReferenceList,
       };
     }
-    
     case LOGOUT: {
       return initialState;
     }
