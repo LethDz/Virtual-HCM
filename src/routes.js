@@ -1,5 +1,5 @@
-import React, { Fragment } from "ag-grid-reactreact";
-import { Switch } from "react-router-dom";
+import React, { Fragment } from 'react';
+import { Switch } from 'react-router-dom';
 import {
   HomePage,
   LoginPage,
@@ -10,7 +10,7 @@ import {
   ContributorPage,
   CreateDataApprovalFormPage,
   DataApprovalListPage,
-} from "src/pages/index";
+} from 'src/pages/index';
 import {
   HOME_PAGE,
   LOGIN_PAGE,
@@ -21,10 +21,10 @@ import {
   CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
-} from "src/constants";
-import ErrorBoundaryRoute from "src/common/ErrorBoundaryRoute";
-import PrivateRouteAdmin from "src/common/PrivateRouteAdmin";
-import PrivateRouteContributor from "src/common/PrivateRouteContributor";
+} from 'src/constants';
+import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
+import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
+import PrivateRouteContributor from 'src/common/PrivateRouteContributor';
 
 const Routes = () => (
   <Fragment>
