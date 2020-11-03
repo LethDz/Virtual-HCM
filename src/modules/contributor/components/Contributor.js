@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { ReferenceList } from "src/modules/contributor/index";
+import { ReferenceList } from "src/modules/contributor";
 
 class Contributor extends Component {
   render() {
-    return <ReferenceList />;
+    return <div></div>;
   }
 }
 

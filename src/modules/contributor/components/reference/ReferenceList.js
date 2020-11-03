@@ -8,7 +8,7 @@ import {
   fetchAllDocumentReference,
   DocumentReferenceModal,
 } from 'src/modules/contributor/index';
-import { REFERENCE, ALL} from 'src/constants';
+import { REFERENCE, ALL } from 'src/constants';
 import { columnRefFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +26,6 @@ class ReferenceList extends Component {
       modalReferenceCreate: false,
       modalReferenceDetail: false,
       containerHeight: 0,
-      selectedReference: {},
       loading: false,
       selectedId: '',
     };
@@ -34,6 +33,7 @@ class ReferenceList extends Component {
 
   setRowData = () => {
     if (this.props.referenceList.length === 0) {
+      this.setState({ loading: true });
       axiosClient
         .get(REFERENCE + ALL)
         .then((response) => {
@@ -58,7 +58,7 @@ class ReferenceList extends Component {
     this._isMounted = true;
     const containerHeight = document.getElementById('cl-container')
       .clientHeight;
-    this.setState({ loading: true, containerHeight });
+    this.setState({ containerHeight });
     this.setRowData();
   }
 
@@ -78,12 +78,9 @@ class ReferenceList extends Component {
       selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
     this._isMounted &&
       this.setState({
-        // selectedReference: data,
         selectedId: id,
         modalReferenceDetail: !this.state.modalReferenceDetail,
       });
-
-    console.log(id);
   };
 
   toggleReferenceDetail = () => {
@@ -104,53 +101,12 @@ class ReferenceList extends Component {
     });
   };
 
-  addReference = () => {
+  updateReferenceList = () => {
     this.setState({
       referenceList: this.props.referenceList,
     });
   };
 
-  editReference = (newReference) => {
-    // const config = {
-    //   headers: {
-    //     'content-type': 'multipart/form-data',
-    //   },
-    // };
-    // this.setState({ loading: true });
-    // axiosClient
-    //   .post(REFERENCE + EDIT, newReference, config)
-    //   .then((response) => {
-    //     if (response.data.status) {
-    //       this.setState({
-    //         referenceList: [],
-    //       });
-    //     } else {
-    //       this.setState({ loading: false });
-    //       console.log(response.data.status);
-    //     }
-    //   })
-    //   .then(() => {
-    //     this.setState({
-    //       referenceList: this.props.referenceList,
-    //     });
-    //   });
-    this.setState({
-      referenceList: this.props.referenceList,
-    });
-  };
-
-  deleteReference = () => {
-    // this.setState({ loading: true });
-    // axiosClient.post(REFERENCE + DELETE, id).then((response) => {
-    //   if (response.data.status) {
-    //     this.setRowData();
-    //     this.gridApi.setRowData(this.props.referenceList);
-    //   }
-    // });
-    this.setState({
-      referenceList: this.props.referenceList,
-    });
-  };
   render() {
     return (
       <Container id="cl-container" className="cl-container">
@@ -162,10 +118,7 @@ class ReferenceList extends Component {
 
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
-            <Button
-              onClick={this.onReferenceCreateClick.bind(this)}
-              className="r-button"
-            >
+            <Button onClick={this.onReferenceCreateClick} className="r-button">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
@@ -173,7 +126,7 @@ class ReferenceList extends Component {
               <CreateReferenceModal
                 isOpen={this.state.modalReferenceCreate}
                 toggle={this.toggleReferenceCreate}
-                addReference={this.addReference}
+                updateReferenceList={this.setReferenceList}
               />
             )}
           </Col>
@@ -199,11 +152,9 @@ class ReferenceList extends Component {
           {this.state.modalReferenceDetail && (
             <DocumentReferenceModal
               isOpen={this.state.modalReferenceDetail}
-              // data={this.state.selectedReference}
               id={this.state.selectedId}
               toggle={this.toggleReferenceDetail}
-              editReference={this.editReference}
-              deleteReference={this.deleteReference}
+              updateReferenceList={this.setReferenceList}
             />
           )}
         </div>

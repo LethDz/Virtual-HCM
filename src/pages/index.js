@@ -9,6 +9,7 @@ import ConfigureSystemPage from 'src/pages/admin/configure-system/ConfigureSyste
 import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/ManageTrainingProcessPage';
 import CreateDataApprovalFormPage from 'src/pages/contributor/manage-data-approval/DataApprovalCreateForm';
 import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/DataApprovalList';
+import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 
 export {
   HomePage,
@@ -22,4 +23,5 @@ export {
   ContributorEditPage,
   ManageTrainingProcessPage,
   ConfigureSystemPage,
+  ReferenceListPage
 };

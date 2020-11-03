@@ -10,7 +10,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 
-import {CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL} from "src/constants";
+import {CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL, REFERENCE_LIST_PAGE} from "src/constants";
 
 const SideBarContributorContent = () => {
   const location = window.location.pathname;
@@ -35,7 +35,8 @@ const SideBarContributorContent = () => {
       <SideBarItem
         name="Document Reference"
         icon={<FontAwesomeIcon icon={faFileAlt} />}
-        link="document-reference"
+        link={REFERENCE_LIST_PAGE}
+        active={location.includes(REFERENCE_LIST_PAGE)}
       />
       <SideBarItem
         name="Reports"

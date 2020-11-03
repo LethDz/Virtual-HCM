@@ -22,11 +22,12 @@ export const contributorReducer = (state = initialState, action) => {
         ...state,
         synonymsList,
       };
+
     case GET_ALL_REFERENCE: {
-      const documentReferenceList = action.payload.documentReferenceList;
+      const list = action.payload.documentReferenceList;
       return {
         ...state,
-        documentReferenceList,
+        documentReferenceList: list,
       };
     }
     case ADD_REFERENCE_TO_LIST:
@@ -67,20 +68,19 @@ export const contributorReducer = (state = initialState, action) => {
     case DELETE_REFERENCE:
       const deleteID = action.payload.id;
       let pos = -1;
-      let listAferDelete = state.documentReferenceList.map((reference, index) => {
-        if (
-          reference.reference_document_id ===
-          deleteID
-        ) {
-          pos = index;
-        }
+      let listAfterDelete = state.documentReferenceList.map(
+        (reference, index) => {
+          if (reference.reference_document_id === deleteID) {
+            pos = index;
+          }
 
-        return reference;
-      });
-     
+          return reference;
+        }
+      );
+      listAfterDelete.splice(pos, 1);
       return {
         ...state,
-        documentReferenceList: listAferDelete,
+        documentReferenceList: listAfterDelete,
       };
     case LOGOUT: {
       return initialState;
