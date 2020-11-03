@@ -4,27 +4,29 @@ import {
   HomePage,
   LoginPage,
   AdminPage,
+  ContributorPage,
   ContributorsListPage,
   ContributorCreatePage,
   ContributorEditPage,
-  ContributorPage,
   CreateDataApprovalFormPage,
   DataApprovalListPage,
   ManageTrainingProcessPage,
   ConfigureSystemPage,
+  ReferenceListPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
   LOGIN_PAGE,
   ADMIN_PAGE,
+  CONTRIBUTOR_PAGE,
   ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_CONTRIBUTOR_CREATE_PAGE,
   ADMIN_CONTRIBUTOR_EDIT_PAGE,
-  CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
   ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
   ADMIN_CONFIGURE_SYSTEM_PAGE,
+  REFERENCE_LIST_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -36,6 +38,11 @@ const Routes = () => (
       <ErrorBoundaryRoute exact path={HOME_PAGE} component={HomePage} />
       <ErrorBoundaryRoute exact path={LOGIN_PAGE} component={LoginPage} />
       <PrivateRouteAdmin exact path={ADMIN_PAGE} component={AdminPage} />
+      <PrivateRouteContributor
+        exact
+        path={CONTRIBUTOR_PAGE}
+        component={ContributorPage}
+      />
       <PrivateRouteAdmin
         exact
         path={ADMIN_CONTRIBUTOR_LIST_PAGE}
@@ -75,6 +82,11 @@ const Routes = () => (
         exact
         path={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
         component={DataApprovalListPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={REFERENCE_LIST_PAGE}
+        component={ReferenceListPage}
       />
     </Switch>
   </Fragment>
