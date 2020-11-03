@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { ReferenceList } from "src/modules/contributor";
+
 
 class Contributor extends Component {
   render() {
