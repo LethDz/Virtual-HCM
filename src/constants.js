@@ -22,6 +22,12 @@ export const ADD = '/add';
 export const GENERATE_SIMILARIES = '/generate-similaries';
 export const ALL = '/all';
 
+export const EDIT = '/edit';
+
+export const DELETE_REFERENCE = (id) => `/delete?reference_document_id=${id}`;
+
+export const GET_REFERENCE = (id) => `/get?reference_document_id=${id}`;
+
 // API Admin Route Path
 export const ADMIN_GET_USER_ALL = '/user/all';
 export const ADMIN_GET_USER = (id) => `/user/get?id=${id}`;
@@ -61,6 +67,7 @@ export const ADMIN_CONFIGURE_SYSTEM_PAGE = `${ADMIN_PAGE}/configure-system`;
 export const CONTRIBUTOR_PAGE = '/contributor';
 export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-approval`;
 export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
+export const REFERENCE_LIST_PAGE = '/references';
 
 // Roles
 export const ROLE_ADMIN = 'Admin';

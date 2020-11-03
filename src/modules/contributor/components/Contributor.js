@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class Contributor extends Component {
   render() {
-    return <div>contributor</div>;
+    return <div></div>;
   }
 }
 

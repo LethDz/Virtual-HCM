@@ -5,6 +5,10 @@ export const GET_ALL_SYNONYMS = 'GET_ALL_SYNONYMS';
 export const ADD_SYNONYM = 'ADD_SYNONYM';
 
 export const GET_ALL_REFERENCE = 'GET_ALL_REFERENCE';
+export const EDIT_REFERENCE = 'EDIT_REFERENCE';
+export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
+export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
+export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 
@@ -125,6 +129,38 @@ export const columnSynonymListRef = [
     width: 195,
     field: 'words',
     headerName: 'Words',
+    sortable: true,
+    filter: true,
+  },
+];
+
+// Column Reference Field Definition
+export const columnRefFieldDef = [
+  {
+    field: 'reference_document_id',
+    headerName: 'ID',
+    width: 60,
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'reference_name',
+    headerName: 'Name',
+    width: 230,
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'link',
+    headerName: 'Link',
+    width: 300,
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'author',
+    headerName: 'Author',
+    width: 350,
     sortable: true,
     filter: true,
   },

@@ -36,4 +36,5 @@
   height: 400px;
   border: 1px solid #4391BE;
   border-radius: 50%;
+  object-fit: cover;
 }

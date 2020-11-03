@@ -14,6 +14,7 @@ import {
 import {
   CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+  REFERENCE_LIST_PAGE
 } from 'src/constants';
 
 const SideBarContributorContent = () => {
@@ -45,7 +46,8 @@ const SideBarContributorContent = () => {
       <SideBarItem
         name="Document Reference"
         icon={<FontAwesomeIcon icon={faFileAlt} />}
-        link="document-reference"
+        link={REFERENCE_LIST_PAGE}
+        active={location.includes(REFERENCE_LIST_PAGE)}
       />
       <SideBarItem
         name="Reports"
