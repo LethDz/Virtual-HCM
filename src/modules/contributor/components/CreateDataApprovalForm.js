@@ -25,6 +25,7 @@ import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from "src/constants";
 import { KNOWLEDGE_DATA, ADD } from "src/constants";
 
 class CreateDataApprovalForm extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
@@ -44,15 +45,46 @@ class CreateDataApprovalForm extends Component {
       tokenizedWord: [],
       ner: [],
       loading: false,
+      hoverWord: '',
+      hoverWordFromSynonym: '',
     };
   }
+
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
 
   handleInputForm = (event) => handleInputFormChange(event, this);
 
   handleInput = (event) => handleInputChange(event, this);
 
   setTokenizeWord = (tokenizedWordArray, ner) => {
-    this.setState({ tokenizedWord: tokenizedWordArray, ner: ner });
+    let tokenizedWord = this.state.tokenizedWord;
+    let nerArray = this.state.ner;
+
+    tokenizedWordArray.forEach((word) => {
+      let flag = false;
+      tokenizedWord.forEach((current) => {
+        if (current.value === word.value) {
+          flag = true;
+        }
+      });
+      if (!flag) tokenizedWord.push(word);
+    });
+
+    ner.forEach((ner) => {
+      if (!nerArray.includes(ner)) nerArray.push(ner);
+    });
+
+    if (this._isMounted)
+      this.setState({
+        tokenizedWord: tokenizedWord,
+        ner: nerArray,
+      });
   };
 
   getWordArray = () => {
@@ -96,7 +128,6 @@ class CreateDataApprovalForm extends Component {
           this.setState({
             loading: false,
           });
-          console.log(response);
           history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
         })
         .catch((err) => console.log(err));
@@ -149,31 +180,41 @@ class CreateDataApprovalForm extends Component {
     });
   };
 
+  hover = (word, from) => {
+    // console.log(word);
+    if (from === "SYNONYM") this.setState({ hoverWord: word, hoverWordFromSynonym: word });
+    else {
+      this.setState({ hoverWord: word });
+    }
+  };
+
   render() {
     const wordArray = this.getWordArray();
 
     return (
       <Container fluid={true}>
-        <LoadingSpinner loading={this.state.loading} text="Sending form" />
+        <LoadingSpinner loading={this.state.loading} text='Sending form' />
         <Form
           onSubmit={this.submitForm}
           style={{ width: "100%", height: "100%" }}
-          className="mb-0"
+          className='mb-0'
         >
-          <FormTitle title="New data Approval" />
-          <Alert isOpen={this.state.errorAlert} color="danger">
+          <FormTitle title='New data Approval' />
+          <Alert isOpen={this.state.errorAlert} color='danger'>
             {this.state.errorMessage}
           </Alert>
-          <div className="form-item form-item-meta">
-            <FormSectionTitle title="Meta data" />
+          <div className='form-item form-item-meta'>
+            <FormSectionTitle title='Meta data' />
             <MetaData
               onChange={this.handleInputForm}
               setReference={this.setReference}
             />
           </div>
-          <div className="form-item form-item-data mt-3 pb-3">
-            <FormSectionTitle title="Data analysis" />
+          <div className='form-item form-item-data mt-3 pb-3'>
+            <FormSectionTitle title='Data analysis' />
             <RawData
+              hover={this.hover}
+              hoverWord={this.state.hoverWordFromSynonym}
               setTokenizeWord={this.setTokenizeWord}
               getWordArray={this.getWordArray}
               setRawData={this.setRawData}
@@ -188,11 +229,22 @@ class CreateDataApprovalForm extends Component {
               setCoresponse={this.setCoresponse}
               wordArray={wordArray}
             />
-            <Question className="mt-3" setQuestions={this.setQuestions} />
+            <Question
+              className='mt-3'
+              setQuestions={this.setQuestions}
+              setTokenizeWord={this.setTokenizeWord}
+              hover={this.hover}
+              hoverWord={this.state.hoverWordFromSynonym}
+            />
 
             <BaseResponse onChange={this.handleInputForm} />
 
-            <Synonyms setSynonym={this.setSynonym} wordArray={wordArray} />
+            <Synonyms
+              setSynonym={this.setSynonym}
+              wordArray={wordArray}
+              hover={this.hover}
+              hoverWord={this.state.hoverWord}
+            />
 
             <GenSynonymSentence
               tokenizedWordArray={this.state.tokenizedWord}
@@ -200,8 +252,8 @@ class CreateDataApprovalForm extends Component {
             />
           </div>
 
-          <Row className="d-flex justify-content-around pt-3 pb-3">
-            <Button type="submit" color="info">
+          <Row className='d-flex justify-content-around pt-3 pb-3'>
+            <Button type='submit' color='info'>
               Create new data approval
             </Button>
           </Row>

@@ -28,8 +28,6 @@ class RawData extends Component {
     this._isMounted = false;
   }
 
-  componentDidCatch;
-
   handleInput = (event) => {
     handleInputChange(event, this);
     this.props.onChange(event, this);
@@ -43,7 +41,6 @@ class RawData extends Component {
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
-        console.log(response);
         let fullArray = [];
         response.data.result_data.pos.forEach((array) => {
           fullArray.push(...array);
@@ -84,7 +81,9 @@ class RawData extends Component {
           });
         this.setTokenizedWordArray();
       })
-      .catch((err) => this.setState({ loading: false }));
+      .catch((err) => {
+        if (this._isMounted) this.setState({ loading: false });
+      });
   };
 
   setRawData = () => {
@@ -99,50 +98,63 @@ class RawData extends Component {
     if (this._isMounted) this.setState({ mode: "NORMAL" });
   };
 
+  genData = () => {};
+
   renderRawDataMode = () => {
     if (this.state.mode === "TOKENIZE") {
       return (
         <Row>
-          <Col xs="auto">
-            <div className="d-flex flex-wrap">
+          <Col xs='auto'>
+            <div className='d-flex flex-wrap'>
               {this.state.tokenizeData.map((data, index) => {
                 let flag = false;
                 this.state.ner.forEach((ner) => {
                   if (ner.index === index) flag = true;
                 });
-                if (data.type === "V") {
-                  return (
-                    <span className="mr-1 verb word-box" key={index}>
-                      {data.value}
-                    </span>
-                  );
-                } else if (data.type === "N") {
-                  return (
-                    <span className="mr-1 noun word-box" key={index}>
-                      {data.value}
-                    </span>
-                  );
-                } else if (flag) {
-                  return (
-                    <span className="mr-1 name word-box" key={index}>
-                      {data.value}
-                    </span>
-                  );
-                } else {
-                  return (
-                    <span className="mr-1 word-box" key={index}>
-                      {data.value}
-                    </span>
-                  );
+                let className = "mr-1 word-box ";
+                if (this.props.hoverWord === data.value) {
+                  className += "hover-word ";
                 }
+
+                if (data.type === "V") {
+                  className += "verb ";
+                } else if (data.type === "N") {
+                  className += "noun ";
+                } else if (flag) {
+                  className += "name ";
+                }
+
+                let reactNode = React.createElement(
+                  "span",
+                  {
+                    className: className,
+                    key: index,
+                    onMouseOver: (event) => {
+                      this.props.hover(data.value, "RAW_DATA");
+                      let currentClassName = event.target.className;
+                      if (!currentClassName.includes("hover-word")) {
+                        currentClassName += "hover-word";
+                      }
+                      event.target.className = currentClassName;
+                    },
+                    onMouseLeave: (event) => {
+                      this.props.hover("", "RAW_DATA");
+                      let currentClassName = event.target.className;
+                      let newClassName = currentClassName.replace("hover-word", "");
+                      event.target.className = newClassName;
+                    },
+                  },
+                  data.value
+                );
+                return reactNode;
               })}
             </div>
           </Col>
-          <Col xs="auto">
+          <Col xs='auto'>
             <Button
-              type="button"
-              color="danger"
-              className="mt-2"
+              type='button'
+              color='danger'
+              className='mt-2'
               onClick={this.stateCancelTokenize}
             >
               Cancel
@@ -156,17 +168,17 @@ class RawData extends Component {
           <Col>
             <Input
               required
-              type="textarea"
-              name="rawData"
-              id="rawData"
+              type='textarea'
+              name='rawData'
+              id='rawData'
               value={this.state.rawData}
               onChange={this.handleInput}
             />
           </Col>
-          <Col xs="auto">
+          <Col xs='auto'>
             <Button
-              type="button"
-              color="primary"
+              type='button'
+              color='primary'
               onClick={this.stateTokenizeRawDate}
             >
               Tokenize
@@ -178,12 +190,12 @@ class RawData extends Component {
   };
   render() {
     return (
-      <Row className="p-3" xs="1">
+      <Row className='p-3' xs='1'>
         <Col>
-          <Label for="rawData">Raw data:</Label>
+          <Label for='rawData'>Raw data:</Label>
         </Col>
         <Col>
-          <LoadingSpinner loading={this.state.loading} text="Tokenizing">
+          <LoadingSpinner loading={this.state.loading} text='Tokenizing'>
             {this.renderRawDataMode()}
           </LoadingSpinner>
         </Col>

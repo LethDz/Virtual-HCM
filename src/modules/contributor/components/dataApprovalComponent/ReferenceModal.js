@@ -9,10 +9,11 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { AgGridReact } from "ag-grid-react";
 import {
   getAllDocumentReference,
   fetchAllDocumentReference,
+  columnReferenceListDef,
 } from "src/modules/contributor/index";
 import { REFERENCE, ALL } from "src/constants";
 import { connect } from "react-redux";
@@ -26,6 +27,7 @@ import axiosClient from "src/common/axiosClient";
 import { handleInputChange } from "src/common/handleInputChange";
 
 class ReferenceModal extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
@@ -42,20 +44,24 @@ class ReferenceModal extends Component {
   handleInput = (event) => handleInputChange(event, this);
 
   componentDidMount = () => {
-    this.setState({ loading: true });
-    axiosClient.get(REFERENCE + ALL).then((response) => {
-      this.props.fetchAllDocumentReference(
-        response.data.result_data.references
-      );
-      this.setState({ loading: false });
-    });
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
   };
 
   onGridReady = (params) => {
-    let currentState = this.state;
-    currentState.gridApi = params.api;
-    currentState.gridColumnApi = params.columnApi;
-    this.setState(currentState);
+    this.setState({ loading: true }, () => {
+      axiosClient.get(REFERENCE + ALL).then((response) => {
+        this.props.fetchAllDocumentReference(
+          response.data.result_data.references
+        );
+        if (this._isMounted) this.setState({ loading: false });
+      });
+    });
+    if (this._isMounted)
+      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
 
   onSelectionChanged = () => {
@@ -68,7 +74,7 @@ class ReferenceModal extends Component {
     });
     let currentState = this.state;
     currentState.selectedReference = selectedRow[0];
-    this.setState(currentState);
+    if (this._isMounted) this.setState(currentState);
   };
 
   addReference = () => {
@@ -103,22 +109,8 @@ class ReferenceModal extends Component {
                   rowSelection="single"
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
-                >
-                  <AgGridColumn
-                    width={100}
-                    field="reference_document_id"
-                    headerName="Id"
-                    sortable
-                    filter
-                  ></AgGridColumn>
-                  <AgGridColumn
-                    width={365}
-                    field="reference_name"
-                    headerName="Name"
-                    sortable
-                    filter
-                  ></AgGridColumn>
-                </AgGridReact>
+                  columnDefs={columnReferenceListDef}
+                ></AgGridReact>
               </div>
               <FormGroup>
                 <Label>Page</Label>

@@ -85,3 +85,44 @@ export const columnGenSentenceDef = [
     filterParams: { applyMiniFilterWhileTyping: true },
   },
 ];
+
+export const columnReferenceListDef = [
+  {
+    width: 100,
+    field: "reference_document_id",
+    headerName: "Id",
+    sortable: true,
+    filter: true,
+  },
+  {
+    width: 365,
+    field: "reference_name",
+    headerName: "Name",
+    sortable: true,
+    filter: true,
+  },
+];
+
+export const columnSynonymListRef = [
+  {
+    width: 100,
+    field: "synonym_id",
+    headerName: "Id",
+    sortable: true,
+    filter: true,
+  },
+  {
+    width: 170,
+    field: "meaning",
+    headerName: "Meaning",
+    sortable: true,
+    filter: true,
+  },
+  {
+    width: 195,
+    field: "words",
+    headerName: "Words",
+    sortable: true,
+    filter: true,
+  },
+];

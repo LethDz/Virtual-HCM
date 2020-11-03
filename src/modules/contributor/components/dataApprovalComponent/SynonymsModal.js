@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
-import { NewSynonymModal, getAllSynonyms, fetchAllSynonyms } from "src/modules/contributor/index";
+import { AgGridReact } from "ag-grid-react";
+import {
+  NewSynonymModal,
+  getAllSynonyms,
+  fetchAllSynonyms,
+  columnSynonymListRef,
+} from "src/modules/contributor/index";
+import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
 import { SYNONYM, ALL } from "src/constants";
 import { connect } from "react-redux";
 
@@ -18,23 +24,20 @@ class SynonymsModal extends Component {
       gridApi: "",
       gridColumnApi: "",
       index: "",
+      loading: false,
       isOpenNewSynonymModal: false,
     };
   }
 
-  componentDidMount = () => {
+  onGridReady = (params) => {
     if (this.props.synonymsList.length === 0) {
+      this.setState({ loading: true });
       axiosClient.get(SYNONYM + ALL).then((response) => {
-        this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts)
+        this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts);
+        this.setState({ loading: false });
       });
     }
-  };
-
-  onGridReady = (params) => {
-    let currentState = this.state;
-    currentState.gridApi = params.api;
-    currentState.gridColumnApi = params.columnApi;
-    this.setState(currentState);
+    this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
 
   onSelectionChanged = () => {
@@ -66,62 +69,44 @@ class SynonymsModal extends Component {
           isOpen={this.state.isOpenNewSynonymModal}
           toggle={this.toggleNewSynonymModal}
         />
+
         <Modal
           isOpen={this.props.isOpenSynonymModal}
           toggle={this.props.toggleSynonymModal}
         >
-          <ModalHeader toggle={this.props.toggleSynonymModal}>
-            Synonyms
-          </ModalHeader>
-          <ModalBody>
-            <div
-              className="ag-theme-alpine"
-              style={{ height: 400, width: 465 }}
-            >
-              <AgGridReact
-                onGridReady={this.onGridReady}
-                rowData={this.props.synonymsList}
-                rowSelection="multiple"
-                rowMultiSelectWithClick
-                onSelectionChanged={this.onSelectionChanged.bind(this)}
+          <LoadingSpinner loading={this.state.loading} text='Loading synonyms'>
+            <ModalHeader toggle={this.props.toggleSynonymModal}>
+              Synonyms
+            </ModalHeader>
+            <ModalBody>
+              <div
+                className='ag-theme-alpine'
+                style={{ height: 400, width: 465 }}
               >
-                <AgGridColumn
-                  width={100}
-                  field="synonym_id"
-                  headerName="Id"
-                  sortable
-                  filter
-                ></AgGridColumn>
-                <AgGridColumn
-                  width={170}
-                  field="meaning"
-                  headerName="Meaning"
-                  sortable
-                  filter
-                ></AgGridColumn>
-                <AgGridColumn
-                  width={195}
-                  field="words"
-                  headerName="Words"
-                  sortable
-                  filter
-                ></AgGridColumn>
-              </AgGridReact>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="success"
-              onClick={() => {
-                this.toggleNewSynonymModal();
-              }}
-            >
-              <FontAwesomeIcon icon={faPlus} /> New synonym
-            </Button>
-            <Button color="success" onClick={this.addSynonyms}>
-              <FontAwesomeIcon icon={faPlus} /> Add
-            </Button>
-          </ModalFooter>
+                <AgGridReact
+                  onGridReady={this.onGridReady}
+                  rowData={this.props.synonymsList}
+                  rowSelection='multiple'
+                  rowMultiSelectWithClick
+                  onSelectionChanged={this.onSelectionChanged.bind(this)}
+                  columnDefs={columnSynonymListRef}
+                ></AgGridReact>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color='success'
+                onClick={() => {
+                  this.toggleNewSynonymModal();
+                }}
+              >
+                <FontAwesomeIcon icon={faPlus} /> New synonym
+              </Button>
+              <Button color='success' onClick={this.addSynonyms}>
+                <FontAwesomeIcon icon={faPlus} /> Add
+              </Button>
+            </ModalFooter>
+          </LoadingSpinner>
         </Modal>
       </div>
     );

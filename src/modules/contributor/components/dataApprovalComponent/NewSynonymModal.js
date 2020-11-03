@@ -94,7 +94,6 @@ class NewSynonymModal extends Component {
       axiosClient
         .post(SYNONYM + ADD, synonym)
         .then((response) => {
-          console.log(response)
           this.setState({ loading: false });
           if (response.data.status) {
             this.setState({
@@ -111,7 +110,6 @@ class NewSynonymModal extends Component {
           this.setState({ loading: false });
           console.log(err);
         });
-      console.log(synonym);
     } else {
       this.setState({ errorAlert: true });
     }
