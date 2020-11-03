@@ -1,21 +1,31 @@
-import React from "react";
-import { ListGroup } from "reactstrap";
-import SideBarItem from "src/layouts/SideBarItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from 'react';
+import { ListGroup } from 'reactstrap';
+import SideBarItem from 'src/layouts/SideBarItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBook,
   faFileAlt,
   faNewspaper,
   faClipboardList,
   faComments,
-} from "@fortawesome/free-solid-svg-icons";
+  faTachometerAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
-import {CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL} from "src/constants";
+import {
+  CONTRIBUTOR_PAGE,
+  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+} from 'src/constants';
 
 const SideBarContributorContent = () => {
   const location = window.location.pathname;
   return (
     <ListGroup flush>
+      <SideBarItem
+        name="Dashboard"
+        icon={<FontAwesomeIcon icon={faTachometerAlt} />}
+        link={CONTRIBUTOR_PAGE}
+        active={location === CONTRIBUTOR_PAGE}
+      />
       <SideBarItem
         name="Data Approval"
         icon={<FontAwesomeIcon icon={faClipboardList} />}

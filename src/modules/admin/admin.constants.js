@@ -11,7 +11,7 @@ export const PULL_CONTRIBUTOR_DETAIL = 'PULL_CONTRIBUTOR_DETAIL';
 // Column Field Definition
 export const columnFieldDef = (width) => {
   const numberOfElement = fields(width).length;
-  const columnWidth = width / numberOfElement;
+  const columnWidth = (width - 50) / numberOfElement;
   return fields(columnWidth);
 };
 
@@ -22,7 +22,7 @@ const fields = (width) => [
     sortable: true,
     filter: true,
     resizable: true,
-    width: width,
+    width: 100,
   },
   {
     headerName: 'Username',
