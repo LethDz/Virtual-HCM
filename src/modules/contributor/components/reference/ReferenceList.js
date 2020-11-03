@@ -1,6 +1,6 @@
 import { AgGridReact } from 'ag-grid-react';
 import React, { Component } from 'react';
-import { Button, Col, Container, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
   CreateReferenceModal,
@@ -15,10 +15,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import 'src/static/stylesheets/reference.css';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 
 class ReferenceList extends Component {
   _isMounted = false;
-
   constructor() {
     super();
     this.state = {
@@ -26,14 +27,17 @@ class ReferenceList extends Component {
       modalReferenceCreate: false,
       modalReferenceDetail: false,
       containerHeight: 0,
+      containerWidth: 0,
       loading: false,
       selectedId: '',
     };
+
+    this.conRef = React.createRef();
   }
 
-  setRowData = () => {
+  setRowData = async () => {
     if (this.props.referenceList.length === 0) {
-      this.setState({ loading: true });
+      this._isMounted && this.setState({ loading: true });
       axiosClient
         .get(REFERENCE + ALL)
         .then((response) => {
@@ -41,9 +45,17 @@ class ReferenceList extends Component {
           this.props.fetchAllDocumentReference(references);
           this.setState({ loading: false, referenceList: references });
         })
-        .catch((error) => {});
+        .then(() => {
+          this.setStyleForGrid();
+        })
+        .catch((error) => {
+          this.setLoading(false);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+        });
     } else {
-      this.setReferenceList(this.props.referenceList);
+      await this.setReferenceList(this.props.referenceList);
+      await this.setStyleForGrid();
     }
   };
 
@@ -56,20 +68,18 @@ class ReferenceList extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const containerHeight = document.getElementById('cl-container')
-      .clientHeight;
-    this.setState({ containerHeight });
-    this.setRowData();
+    this.setStyleForGrid();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
   }
 
-  onGridReady = (params) => {
+  onGridReady = async (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    this.gridApi.sizeColumnsToFit();
+    await this.setRowData();
+    await this.gridApi.sizeColumnsToFit();
   };
 
   onRowDoubleClicked = () => {
@@ -107,15 +117,79 @@ class ReferenceList extends Component {
     });
   };
 
+  setStyleForGrid = () => {
+    const containerHeight =
+      this.conRef.current && this.conRef.current.clientHeight;
+    const containerWidth =
+      this.conRef.current && this.conRef.current.clientWidth;
+    this._isMounted &&
+      this.setState({
+        containerHeight,
+        containerWidth,
+      });
+  };
+
+  setLoading = (status) => {
+    this._isMounted &&
+      this.setState({
+        loading: status,
+      });
+  };
+
+  onDismiss = (name) => {
+    this._isMounted &&
+      this.setState({
+        [name]: false,
+      });
+  };
+
+  setSuccessAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        successAlert: status,
+      });
+  };
+
+  setErrorAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        errorAlert: status,
+      });
+  };
+
+  setErrorList = (list) => {
+    this._isMounted &&
+      this.setState({
+        errorList: list,
+      });
+  };
+
   render() {
     return (
-      <Container id="cl-container" className="cl-container">
+      <div
+        id="cl-container"
+        className="container cl-container min-vh-100"
+        ref={this.conRef}
+      >
         <Row>
           <Col className="justify-content-center d-flex">
             <h5>Document reference</h5>
           </Col>
         </Row>
-
+        {this.state.successAlert && (
+          <SuccessAlert
+            successAlert={this.state.successAlert}
+            text="Loading reference is successfully"
+            onDismiss={() => this.onDismiss('successAlert')}
+          />
+        )}
+        {this.state.errorAlert && (
+          <ErrorAlert
+            errorAlert={this.state.errorAlert}
+            errorList={this.state.errorList}
+            onDismiss={() => this.onDismiss('errorAlert')}
+          />
+        )}
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
             <Button onClick={this.onReferenceCreateClick} className="r-button">
@@ -158,7 +232,7 @@ class ReferenceList extends Component {
             />
           )}
         </div>
-      </Container>
+      </div>
     );
   }
 }
