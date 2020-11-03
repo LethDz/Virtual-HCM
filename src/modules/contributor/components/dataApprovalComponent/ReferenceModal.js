@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Modal,
@@ -8,23 +8,23 @@ import {
   FormGroup,
   Label,
   Input,
-} from "reactstrap";
-import { AgGridReact } from "ag-grid-react";
+} from 'reactstrap';
+import { AgGridReact } from 'ag-grid-react';
 import {
   getAllDocumentReference,
   fetchAllDocumentReference,
   columnReferenceListDef,
-} from "src/modules/contributor/index";
-import { REFERENCE, ALL } from "src/constants";
-import { connect } from "react-redux";
+} from 'src/modules/contributor/index';
+import { REFERENCE, ALL } from 'src/constants';
+import { connect } from 'react-redux';
 
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import axiosClient from "src/common/axiosClient";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import axiosClient from 'src/common/axiosClient';
 
-import { handleInputChange } from "src/common/handleInputChange";
+import { handleInputChange } from 'src/common/handleInputChange';
 
 class ReferenceModal extends Component {
   _isMounted = false;
@@ -32,12 +32,12 @@ class ReferenceModal extends Component {
     super();
     this.state = {
       modal: false,
-      selectedReference: "",
-      gridApi: "",
-      gridColumnApi: "",
+      selectedReference: '',
+      gridApi: '',
+      gridColumnApi: '',
       loading: false,
       page: 0,
-      extraInfo: "",
+      extraInfo: '',
     };
   }
 
@@ -68,7 +68,7 @@ class ReferenceModal extends Component {
     let nodes = this.state.gridApi.getSelectedNodes();
     let selectedRow = [];
     nodes.forEach((node) => {
-      if (typeof node !== "undefined") {
+      if (typeof node !== 'undefined') {
         selectedRow.push(node.data);
       }
     });

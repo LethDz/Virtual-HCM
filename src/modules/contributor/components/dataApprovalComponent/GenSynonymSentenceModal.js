@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Modal,
@@ -6,18 +6,18 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from "reactstrap";
-import { AgGridReact } from "ag-grid-react";
-import { columnGenSentenceDef } from "src/modules/contributor/index";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+} from 'reactstrap';
+import { AgGridReact } from 'ag-grid-react';
+import { columnGenSentenceDef } from 'src/modules/contributor/index';
+import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class GenSynonymSentenceModal extends Component {
   constructor(props) {
     super();
     this.state = {
-      gridApi: "",
-      gridColumnApi: "",
+      gridApi: '',
+      gridColumnApi: '',
       selectedSentence: [],
     };
   }
@@ -29,7 +29,7 @@ class GenSynonymSentenceModal extends Component {
     let nodes = this.state.gridApi.getSelectedNodes();
     let selectedRow = [];
     nodes.forEach((node) => {
-      if (typeof node !== "undefined") {
+      if (typeof node !== 'undefined') {
         selectedRow.push(node.data);
       }
     });

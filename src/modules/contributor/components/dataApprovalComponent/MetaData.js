@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Row,
   Col,
@@ -7,17 +7,17 @@ import {
   Button,
   ListGroup,
   ListGroupItem,
-} from "reactstrap";
+} from 'reactstrap';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import {
   getAllDocumentReference,
   fetchAllDocumentReference,
   ReferenceModal,
-} from "src/modules/contributor/index";
-import { connect } from "react-redux";
+} from 'src/modules/contributor/index';
+import { connect } from 'react-redux';
 
 class MetaData extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class MetaData extends Component {
   };
 
   newRefer = (e) => {
-    console.log("test");
+    console.log('test');
   };
 
   addReference = (reference) => {

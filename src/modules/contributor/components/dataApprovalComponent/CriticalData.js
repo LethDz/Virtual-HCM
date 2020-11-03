@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Col,
   Label,
@@ -7,28 +7,31 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
-} from "reactstrap";
-import { CriticalDataItem, criticalType, CRITICAL, VERB } from "src/modules/contributor/index";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+} from 'reactstrap';
 import {
-  handleInputChange,
-} from "src/common/handleInputChange";
+  CriticalDataItem,
+  criticalType,
+  CRITICAL,
+  VERB,
+} from 'src/modules/contributor/index';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { handleInputChange } from 'src/common/handleInputChange';
 
 class CriticalData extends Component {
   constructor(props) {
     super();
     this.state = {
       criticalData: [],
-      type: criticalType[0]
+      type: criticalType[0],
     };
   }
 
   handleInput = (event) => handleInputChange(event, this);
 
   addCriticalData = () => {
-    let type = this.state.type
+    let type = this.state.type;
     let temp = this.state.criticalData;
     temp.push({
       type: type,
@@ -39,7 +42,7 @@ class CriticalData extends Component {
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
 
     this.setState({ criticalData: sortedTemp });
-    this.setCritical()
+    this.setCritical();
   };
 
   setCriticalData = (index, type, word) => {
@@ -50,7 +53,7 @@ class CriticalData extends Component {
     let criticalData = this.state.criticalData;
     criticalData[index].word.push(critical);
     this.setState({ criticalData: criticalData });
-    this.setCritical()
+    this.setCritical();
   };
 
   removeCritical = (index) => {
@@ -61,7 +64,7 @@ class CriticalData extends Component {
     this.setState({
       criticalData: criticalData,
     });
-    this.setCritical()
+    this.setCritical();
   };
 
   setVerb = (index, type, word) => {
@@ -72,7 +75,7 @@ class CriticalData extends Component {
     let criticalData = this.state.criticalData;
     criticalData[index].verb.push(verb);
     this.setState({ criticalData: criticalData });
-    this.setCritical()
+    this.setCritical();
   };
 
   removeComponent = (type, criticalIndex, index) => {
@@ -87,18 +90,18 @@ class CriticalData extends Component {
     let listCritical = criticalData[criticalIndex];
     let list = [];
     for (let i in listCritical) {
-      if (listCritical[i] !== null && listCritical[i] !== "")
+      if (listCritical[i] !== null && listCritical[i] !== '')
         list.push(listCritical[i]);
     }
     this.setState({
       criticalData: criticalData,
     });
-    this.setCritical()
+    this.setCritical();
   };
 
   setCritical = () => {
-    this.props.setCritical(this.reformatCritical())
-  }
+    this.props.setCritical(this.reformatCritical());
+  };
 
   reformatCritical = () => {
     let critical = this.state.criticalData;
@@ -110,8 +113,8 @@ class CriticalData extends Component {
         verb: critical.verb,
       });
     });
-    return criticalTemp
-  }
+    return criticalTemp;
+  };
 
   render() {
     return (
@@ -119,7 +122,12 @@ class CriticalData extends Component {
         <Label>Subject</Label>
         <Row>
           <Col xs="auto">
-            <Input type="select" name="type" value={this.state.type} onChange={this.handleInput}>
+            <Input
+              type="select"
+              name="type"
+              value={this.state.type}
+              onChange={this.handleInput}
+            >
               {criticalType.map((value, index) => {
                 return <option key={index}>{value}</option>;
               })}

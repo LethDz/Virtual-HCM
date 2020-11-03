@@ -83,6 +83,8 @@ export const columnGenSentenceDef = [
     sortable: true,
     filter: "agSetColumnFilter",
     filterParams: { applyMiniFilterWhileTyping: true },
+    checkboxSelection: true,
+    headerCheckboxSelection: true,
   },
 ];
 

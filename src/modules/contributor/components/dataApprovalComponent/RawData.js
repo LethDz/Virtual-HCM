@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { Row, Col, Label, Button, Input } from "reactstrap";
+import React, { Component } from 'react';
+import { Row, Col, Label, Button, Input } from 'reactstrap';
 
-import axiosClient from "src/common/axiosClient";
-import { NLP, TOKENIZE } from "src/constants";
-import { handleInputChange } from "src/common/handleInputChange";
+import axiosClient from 'src/common/axiosClient';
+import { NLP, TOKENIZE } from 'src/constants';
+import { handleInputChange } from 'src/common/handleInputChange';
 
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class RawData extends Component {
   _isMounted = false;
   constructor(props) {
     super();
     this.state = {
-      mode: "NORMAL",
+      mode: 'NORMAL',
       tokenizeData: [],
       ner: [],
       loading: false,
-      rawData: "",
+      rawData: '',
     };
   }
 
@@ -74,7 +74,7 @@ class RawData extends Component {
 
         if (this._isMounted)
           this.setState({
-            mode: "TOKENIZE",
+            mode: 'TOKENIZE',
             tokenizeData: fullArray,
             ner: modifiedNer,
             loading: false,
@@ -95,52 +95,55 @@ class RawData extends Component {
   };
 
   stateCancelTokenize = () => {
-    if (this._isMounted) this.setState({ mode: "NORMAL" });
+    if (this._isMounted) this.setState({ mode: 'NORMAL' });
   };
 
   genData = () => {};
 
   renderRawDataMode = () => {
-    if (this.state.mode === "TOKENIZE") {
+    if (this.state.mode === 'TOKENIZE') {
       return (
         <Row>
-          <Col xs='auto'>
-            <div className='d-flex flex-wrap'>
+          <Col xs="auto">
+            <div className="d-flex flex-wrap">
               {this.state.tokenizeData.map((data, index) => {
                 let flag = false;
                 this.state.ner.forEach((ner) => {
                   if (ner.index === index) flag = true;
                 });
-                let className = "mr-1 word-box ";
+                let className = 'mr-1 word-box ';
                 if (this.props.hoverWord === data.value) {
-                  className += "hover-word ";
+                  className += 'hover-word ';
                 }
 
-                if (data.type === "V") {
-                  className += "verb ";
-                } else if (data.type === "N") {
-                  className += "noun ";
+                if (data.type === 'V') {
+                  className += 'verb ';
+                } else if (data.type === 'N') {
+                  className += 'noun ';
                 } else if (flag) {
-                  className += "name ";
+                  className += 'name ';
                 }
 
                 let reactNode = React.createElement(
-                  "span",
+                  'span',
                   {
                     className: className,
                     key: index,
                     onMouseOver: (event) => {
-                      this.props.hover(data.value, "RAW_DATA");
+                      this.props.hover(data.value, 'RAW_DATA');
                       let currentClassName = event.target.className;
-                      if (!currentClassName.includes("hover-word")) {
-                        currentClassName += "hover-word";
+                      if (!currentClassName.includes('hover-word')) {
+                        currentClassName += 'hover-word';
                       }
                       event.target.className = currentClassName;
                     },
                     onMouseLeave: (event) => {
-                      this.props.hover("", "RAW_DATA");
+                      this.props.hover('', 'RAW_DATA');
                       let currentClassName = event.target.className;
-                      let newClassName = currentClassName.replace("hover-word", "");
+                      let newClassName = currentClassName.replace(
+                        'hover-word',
+                        ''
+                      );
                       event.target.className = newClassName;
                     },
                   },
@@ -150,11 +153,11 @@ class RawData extends Component {
               })}
             </div>
           </Col>
-          <Col xs='auto'>
+          <Col xs="auto">
             <Button
-              type='button'
-              color='danger'
-              className='mt-2'
+              type="button"
+              color="danger"
+              className="mt-2"
               onClick={this.stateCancelTokenize}
             >
               Cancel
@@ -168,17 +171,17 @@ class RawData extends Component {
           <Col>
             <Input
               required
-              type='textarea'
-              name='rawData'
-              id='rawData'
+              type="textarea"
+              name="rawData"
+              id="rawData"
               value={this.state.rawData}
               onChange={this.handleInput}
             />
           </Col>
-          <Col xs='auto'>
+          <Col xs="auto">
             <Button
-              type='button'
-              color='primary'
+              type="button"
+              color="primary"
               onClick={this.stateTokenizeRawDate}
             >
               Tokenize
@@ -190,12 +193,12 @@ class RawData extends Component {
   };
   render() {
     return (
-      <Row className='p-3' xs='1'>
+      <Row className="p-3" xs="1">
         <Col>
-          <Label for='rawData'>Raw data:</Label>
+          <Label for="rawData">Raw data:</Label>
         </Col>
         <Col>
-          <LoadingSpinner loading={this.state.loading} text='Tokenizing'>
+          <LoadingSpinner loading={this.state.loading} text="Tokenizing">
             {this.renderRawDataMode()}
           </LoadingSpinner>
         </Col>

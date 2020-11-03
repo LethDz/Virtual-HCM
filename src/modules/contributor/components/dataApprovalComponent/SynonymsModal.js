@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { AgGridReact } from "ag-grid-react";
+import React, { Component } from 'react';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { AgGridReact } from 'ag-grid-react';
 import {
   NewSynonymModal,
   getAllSynonyms,
   fetchAllSynonyms,
   columnSynonymListRef,
-} from "src/modules/contributor/index";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
-import { SYNONYM, ALL } from "src/constants";
-import { connect } from "react-redux";
+} from 'src/modules/contributor/index';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { SYNONYM, ALL } from 'src/constants';
+import { connect } from 'react-redux';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import axiosClient from "src/common/axiosClient";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import axiosClient from 'src/common/axiosClient';
 
 class SynonymsModal extends Component {
   constructor() {
@@ -21,9 +21,9 @@ class SynonymsModal extends Component {
     this.state = {
       modal: false,
       selectedSynonyms: [],
-      gridApi: "",
-      gridColumnApi: "",
-      index: "",
+      gridApi: '',
+      gridColumnApi: '',
+      index: '',
       loading: false,
       isOpenNewSynonymModal: false,
     };
@@ -44,7 +44,7 @@ class SynonymsModal extends Component {
     let nodes = this.state.gridApi.getSelectedNodes();
     let selectedRow = [];
     nodes.forEach((node) => {
-      if (typeof node !== "undefined") {
+      if (typeof node !== 'undefined') {
         selectedRow.push(node.data);
       }
     });
@@ -74,19 +74,19 @@ class SynonymsModal extends Component {
           isOpen={this.props.isOpenSynonymModal}
           toggle={this.props.toggleSynonymModal}
         >
-          <LoadingSpinner loading={this.state.loading} text='Loading synonyms'>
+          <LoadingSpinner loading={this.state.loading} text="Loading synonyms">
             <ModalHeader toggle={this.props.toggleSynonymModal}>
               Synonyms
             </ModalHeader>
             <ModalBody>
               <div
-                className='ag-theme-alpine'
+                className="ag-theme-alpine"
                 style={{ height: 400, width: 465 }}
               >
                 <AgGridReact
                   onGridReady={this.onGridReady}
                   rowData={this.props.synonymsList}
-                  rowSelection='multiple'
+                  rowSelection="multiple"
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   columnDefs={columnSynonymListRef}
@@ -95,14 +95,14 @@ class SynonymsModal extends Component {
             </ModalBody>
             <ModalFooter>
               <Button
-                color='success'
+                color="success"
                 onClick={() => {
                   this.toggleNewSynonymModal();
                 }}
               >
                 <FontAwesomeIcon icon={faPlus} /> New synonym
               </Button>
-              <Button color='success' onClick={this.addSynonyms}>
+              <Button color="success" onClick={this.addSynonyms}>
                 <FontAwesomeIcon icon={faPlus} /> Add
               </Button>
             </ModalFooter>

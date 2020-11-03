@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Button, Container, Row, Form, Alert } from "reactstrap";
+import React, { Component } from 'react';
+import { Button, Container, Row, Form, Alert } from 'reactstrap';
 import {
   Question,
   FormTitle,
@@ -11,18 +11,18 @@ import {
   Coresponse,
   CriticalData,
   GenSynonymSentence,
-} from "src/modules/contributor/index";
-import "src/static/stylesheets/contributor.css";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+} from 'src/modules/contributor/index';
+import 'src/static/stylesheets/contributor.css';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   handleInputFormChange,
   handleInputChange,
-} from "src/common/handleInputChange";
-import axiosClient from "src/common/axiosClient";
-import { history } from "src/common/history";
+} from 'src/common/handleInputChange';
+import axiosClient from 'src/common/axiosClient';
+import { history } from 'src/common/history';
 
-import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from "src/constants";
-import { KNOWLEDGE_DATA, ADD } from "src/constants";
+import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { KNOWLEDGE_DATA, ADD } from 'src/constants';
 
 class CreateDataApprovalForm extends Component {
   _isMounted = false;
@@ -30,18 +30,18 @@ class CreateDataApprovalForm extends Component {
     super();
     this.state = {
       form: {
-        intent: "",
-        intentFullName: "",
+        intent: '',
+        intentFullName: '',
         questions: [],
         criticalData: [],
         coresponse: [],
-        rawData: "",
+        rawData: '',
         synonyms: [],
-        baseResponse: "",
+        baseResponse: '',
         documentReference: [],
       },
       errorAlert: false,
-      errorMessage: "",
+      errorMessage: '',
       tokenizedWord: [],
       ner: [],
       loading: false,
@@ -97,7 +97,7 @@ class CreateDataApprovalForm extends Component {
   };
 
   getError = () => {
-    let errorMessage = "";
+    let errorMessage = '';
     if (this.state.form.questions.length === 0) {
       errorMessage = `${errorMessage}Question field required at least one question; `;
     }
@@ -120,7 +120,7 @@ class CreateDataApprovalForm extends Component {
     });
     event.preventDefault();
     let error = this.getError();
-    if (error.trim() === "") {
+    if (error.trim() === '') {
       this.setState({ errorAlert: false });
       axiosClient
         .post(KNOWLEDGE_DATA + ADD, this.state.form)
@@ -182,7 +182,8 @@ class CreateDataApprovalForm extends Component {
 
   hover = (word, from) => {
     // console.log(word);
-    if (from === "SYNONYM") this.setState({ hoverWord: word, hoverWordFromSynonym: word });
+    if (from === 'SYNONYM')
+      this.setState({ hoverWord: word, hoverWordFromSynonym: word });
     else {
       this.setState({ hoverWord: word });
     }
@@ -193,25 +194,25 @@ class CreateDataApprovalForm extends Component {
 
     return (
       <Container fluid={true}>
-        <LoadingSpinner loading={this.state.loading} text='Sending form' />
+        <LoadingSpinner loading={this.state.loading} text="Sending form" />
         <Form
           onSubmit={this.submitForm}
-          style={{ width: "100%", height: "100%" }}
-          className='mb-0'
+          style={{ width: '100%', height: '100%' }}
+          className="mb-0"
         >
-          <FormTitle title='New data Approval' />
-          <Alert isOpen={this.state.errorAlert} color='danger'>
+          <FormTitle title="New data Approval" />
+          <Alert isOpen={this.state.errorAlert} color="danger">
             {this.state.errorMessage}
           </Alert>
-          <div className='form-item form-item-meta'>
-            <FormSectionTitle title='Meta data' />
+          <div className="form-item form-item-meta">
+            <FormSectionTitle title="Meta data" />
             <MetaData
               onChange={this.handleInputForm}
               setReference={this.setReference}
             />
           </div>
-          <div className='form-item form-item-data mt-3 pb-3'>
-            <FormSectionTitle title='Data analysis' />
+          <div className="form-item form-item-data mt-3 pb-3">
+            <FormSectionTitle title="Data analysis" />
             <RawData
               hover={this.hover}
               hoverWord={this.state.hoverWordFromSynonym}
@@ -230,7 +231,7 @@ class CreateDataApprovalForm extends Component {
               wordArray={wordArray}
             />
             <Question
-              className='mt-3'
+              className="mt-3"
               setQuestions={this.setQuestions}
               setTokenizeWord={this.setTokenizeWord}
               hover={this.hover}
@@ -252,8 +253,8 @@ class CreateDataApprovalForm extends Component {
             />
           </div>
 
-          <Row className='d-flex justify-content-around pt-3 pb-3'>
-            <Button type='submit' color='info'>
+          <Row className="d-flex justify-content-around pt-3 pb-3">
+            <Button type="submit" color="info">
               Create new data approval
             </Button>
           </Row>

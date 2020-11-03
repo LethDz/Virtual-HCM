@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Row, Col, Label, Button, ListGroup, ListGroupItem } from "reactstrap";
+import React, { Component } from 'react';
+import { Row, Col, Label, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
-import { GenSynonymSentenceModal } from "src/modules/contributor/index";
-import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { NLP, GENERATE_SIMILARIES } from "src/constants";
-import axiosClient from "src/common/axiosClient";
+import { GenSynonymSentenceModal } from 'src/modules/contributor/index';
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { NLP, GENERATE_SIMILARIES } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
 
 class GenSynonymSentence extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class GenSynonymSentence extends Component {
     this.props.tokenizedWordArray.forEach((word) => {
       tokenizedWordArray.push(word.value);
     });
-    return tokenizedWordArray.join(" ");
+    return tokenizedWordArray.join(' ');
   };
 
   createSynonymArray = () => {

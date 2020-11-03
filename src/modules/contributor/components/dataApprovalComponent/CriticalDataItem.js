@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { Row, Col, Input, Button } from "reactstrap";
+import React, { Component } from 'react';
+import { Row, Col, Input, Button } from 'reactstrap';
 
-import { handleInputChange } from "src/common/handleInputChange";
+import { handleInputChange } from 'src/common/handleInputChange';
 
-import { VERB, CRITICAL, POSTags } from "src/modules/contributor/index";
+import { VERB, CRITICAL, POSTags } from 'src/modules/contributor/index';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 class CriticalDataItem extends Component {
   constructor(props) {
     super();
     this.state = {
-      verbType: "",
-      word: "",
+      verbType: '',
+      word: '',
     };
   }
 
@@ -23,7 +23,7 @@ class CriticalDataItem extends Component {
 
   setVerb = () => {
     if (this.props.type === CRITICAL) {
-      if (this.state.verbType !== "" && this.state.word !== "") {
+      if (this.state.verbType !== '' && this.state.word !== '') {
         this.props.setCriticalData(
           this.props.index,
           this.state.verbType,
@@ -31,7 +31,7 @@ class CriticalDataItem extends Component {
         );
       }
     } else if (this.props.type === VERB) {
-      if (this.state.verbType !== "" && this.state.word !== "") {
+      if (this.state.verbType !== '' && this.state.word !== '') {
         this.props.setVerb(
           this.props.index,
           this.state.verbType,
@@ -42,12 +42,11 @@ class CriticalDataItem extends Component {
   };
 
   render() {
-    
     return (
       <Row>
         <Col xs="auto">
           <Input
-            defaultValue={""}
+            defaultValue={''}
             type="select"
             name="verbType"
             onChange={this.handleInput}
@@ -62,7 +61,7 @@ class CriticalDataItem extends Component {
         </Col>
         <Col xs="auto">
           <Input
-            defaultValue={""}
+            defaultValue={''}
             type="select"
             name="word"
             onChange={this.handleInput}

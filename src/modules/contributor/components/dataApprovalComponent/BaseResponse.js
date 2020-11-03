@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Row, Col, Label, Input } from "reactstrap";
+import React, { Component } from 'react';
+import { Row, Col, Label, Input } from 'reactstrap';
 
 class BaseResponse extends Component {
   render() {

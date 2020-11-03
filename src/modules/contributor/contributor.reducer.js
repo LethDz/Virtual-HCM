@@ -1,8 +1,8 @@
-import { LOGOUT } from "src/constants";
+import { LOGOUT } from 'src/constants';
 import {
   GET_ALL_SYNONYMS,
   GET_ALL_REFERENCE,
-} from "src/modules/contributor/index";
+} from 'src/modules/contributor/index';
 
 const initialState = {
   synonymsList: [],

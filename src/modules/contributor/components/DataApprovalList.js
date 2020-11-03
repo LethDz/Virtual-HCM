@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Container, Button, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
-import { CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM } from "src/constants";
-import { columnFieldDef } from "src/modules/contributor/index";
-import { AgGridReact } from "ag-grid-react";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Container, Button, Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM } from 'src/constants';
+import { columnFieldDef } from 'src/modules/contributor/index';
+import { AgGridReact } from 'ag-grid-react';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 class DataApprovalList extends Component {
   _isMounted = false;
@@ -20,7 +20,7 @@ class DataApprovalList extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const containerHeight = document.getElementById("cl-container")
+    const containerHeight = document.getElementById('cl-container')
       .clientHeight;
     this.setState({
       containerHeight,
@@ -45,7 +45,7 @@ class DataApprovalList extends Component {
 
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
-    let id = selectedRows.length === 1 ? selectedRows[0].id : "";
+    let id = selectedRows.length === 1 ? selectedRows[0].id : '';
     this.setState({
       id,
     });
@@ -76,7 +76,7 @@ class DataApprovalList extends Component {
           className="ag-theme-alpine"
           style={{
             height: `${this.state.containerHeight - 200}px`,
-            marginTop: "10px",
+            marginTop: '10px',
           }}
         >
           <AgGridReact

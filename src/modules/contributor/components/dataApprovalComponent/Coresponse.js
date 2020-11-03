@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Col,
   Row,
@@ -7,10 +7,10 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
-} from "reactstrap";
+} from 'reactstrap';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 class Coresponse extends Component {
   _isMounted = false;
@@ -30,9 +30,9 @@ class Coresponse extends Component {
   }
 
   addCoresponse = () => {
-    let type = document.getElementById("coresponse-type").value;
-    let word = document.getElementById("coresponse-index").value;
-    if (word.trim() !== "") {
+    let type = document.getElementById('coresponse-type').value;
+    let word = document.getElementById('coresponse-index').value;
+    if (word.trim() !== '') {
       let temp = this.state.coresponse;
       temp.push({
         type: type,
@@ -66,7 +66,7 @@ class Coresponse extends Component {
   };
 
   render() {
-    const questionType = ["WHAT", "WHEN", "WHERE", "WHO", "WHY", "HOW"];
+    const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
     return (
       <Col>
         <Label>Coresponse</Label>

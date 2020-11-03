@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Modal,
@@ -14,30 +14,30 @@ import {
   ListGroup,
   ListGroupItem,
   Alert,
-} from "reactstrap";
-import { connect } from "react-redux";
+} from 'reactstrap';
+import { connect } from 'react-redux';
 
-import axiosClient from "src/common/axiosClient";
-import { SYNONYM, ADD } from "src/constants";
+import axiosClient from 'src/common/axiosClient';
+import { SYNONYM, ADD } from 'src/constants';
 
-import { addSynonymToList } from "src/modules/contributor/index";
+import { addSynonymToList } from 'src/modules/contributor/index';
 
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { handleInputChange } from "src/common/handleInputChange";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { handleInputChange } from 'src/common/handleInputChange';
 
 class NewSynonymModal extends Component {
   constructor(props) {
     super();
     this.state = {
       modal: false,
-      word: "",
-      meaning: "",
+      word: '',
+      meaning: '',
       words: [],
       errorAlert: false,
-      errorMessage: "",
+      errorMessage: '',
       loading: false,
       addSuccess: null,
     };
@@ -51,7 +51,7 @@ class NewSynonymModal extends Component {
 
   addToList = () => {
     let word = this.state.word;
-    if (word.trim() !== "") {
+    if (word.trim() !== '') {
       let tokenizedWord = this.tokenizeWord(word);
       let words = this.state.words;
       words.push(tokenizedWord);
@@ -72,7 +72,7 @@ class NewSynonymModal extends Component {
   };
 
   getError = () => {
-    let errorMessage = "";
+    let errorMessage = '';
     if (this.state.words.length === 0) {
       errorMessage = `${errorMessage}Words field required at least one word; `;
     }
@@ -85,7 +85,7 @@ class NewSynonymModal extends Component {
   sendCreateSynonymRequest = (event) => {
     this.setState({ loading: true });
     event.preventDefault();
-    if (this.getError().trim() === "") {
+    if (this.getError().trim() === '') {
       this.setState({ errorAlert: false });
       let synonym = {
         meaning: this.state.meaning,
@@ -99,12 +99,11 @@ class NewSynonymModal extends Component {
             this.setState({
               addSuccess: true,
               errorAlert: false,
-              word: "",
-              meaning: "",
+              word: '',
+              meaning: '',
               words: [],
             });
           }
-          
         })
         .catch((err) => {
           this.setState({ loading: false });
@@ -206,8 +205,7 @@ class NewSynonymModal extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({
   addSynonymToList: (synonym) => dispatch(addSynonymToList(synonym)),

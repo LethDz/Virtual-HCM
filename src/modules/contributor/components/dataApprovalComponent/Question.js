@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Input, Button, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
+import React, { Component } from 'react';
+import { Input, Button, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { NLP, TOKENIZE } from "src/constants";
-import axiosClient from "src/common/axiosClient";
-import { handleInputChange } from "src/common/handleInputChange";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { NLP, TOKENIZE } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
+import { handleInputChange } from 'src/common/handleInputChange';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 export default class Question extends Component {
   constructor() {
     super();
     this.state = {
-      question: "",
+      question: '',
       questions: [],
       tokenizeData: [],
       ner: [],
@@ -65,14 +65,14 @@ export default class Question extends Component {
         }
 
         let questionsTemp = this.state.questions;
-        let questionTemp = "";
+        let questionTemp = '';
         fullArray.forEach((word) => {
-          questionTemp += word.value + " ";
+          questionTemp += word.value + ' ';
         });
         questionsTemp.push(questionTemp);
 
         this.setState({
-          question: "",
+          question: '',
           tokenizeData: fullArray,
           ner: modifiedNer,
           loading: false,
@@ -100,26 +100,26 @@ export default class Question extends Component {
 
   render() {
     return (
-      <div className='p-3'>
-        <LoadingSpinner loading={this.state.loading} text='Tokenizing question'>
-          <Row xs='1'>
+      <div className="p-3">
+        <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
+          <Row xs="1">
             <Col>Question</Col>
             <Col>
               <Row>
                 <Col>
                   <Input
-                    type='text'
-                    name='question'
-                    id='question'
+                    type="text"
+                    name="question"
+                    id="question"
                     value={this.state.question}
                     onChange={this.handleInput}
                   />
                 </Col>
-                <Col xs='auto'>
+                <Col xs="auto">
                   <Button
-                    color='success'
+                    color="success"
                     onClick={() => {
-                      if (this.getQuestion().trim() !== "") {
+                      if (this.getQuestion().trim() !== '') {
                         this.addQuestion(this.getQuestion());
                         this.props.setQuestions(this.state.questions);
                       }
@@ -132,40 +132,40 @@ export default class Question extends Component {
             </Col>
           </Row>
           <div>
-            <ListGroup className='mt-1'>
+            <ListGroup className="mt-1">
               {this.state.questions.map((question, index) => {
-                let wordArray = question.split(" ");
+                let wordArray = question.split(' ');
                 return (
                   <ListGroupItem key={index}>
                     <Row>
                       <Col>
                         {wordArray.map((value, index) => {
-                          let className = "";
+                          let className = '';
                           if (this.props.hoverWord === value) {
-                            className += "hover-word";
+                            className += 'hover-word';
                           }
 
                           return React.createElement(
-                            "span",
+                            'span',
                             {
                               key: index,
                               className: className,
                               onMouseOver: (event) => {
-                                this.props.hover(value, "QUESTION");
-                                event.target.className = "hover-word";
+                                this.props.hover(value, 'QUESTION');
+                                event.target.className = 'hover-word';
                               },
                               onMouseLeave: (event) => {
-                                this.props.hover("", "QUESTION");
-                                event.target.className = "";
+                                this.props.hover('', 'QUESTION');
+                                event.target.className = '';
                               },
                             },
-                            (value += " ")
+                            (value += ' ')
                           );
                         })}
                       </Col>
-                      <Col xs='auto'>
+                      <Col xs="auto">
                         <Button
-                          color='danger'
+                          color="danger"
                           onClick={() => {
                             this.removeQuestion(question);
                             this.props.setQuestions(this.state.questions);
