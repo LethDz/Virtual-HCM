@@ -91,8 +91,8 @@ class ContributorsList extends Component {
   };
 
   setStyleForGrid = () => {
-    const containerHeight = this.conRef.current.clientHeight;
-    const containerWidth = this.conRef.current.clientWidth;
+    const containerHeight = this.conRef.current && this.conRef.current.clientHeight;
+    const containerWidth = this.conRef.current && this.conRef.current.clientWidth;
     this._isMounted &&
       this.setState({
         containerHeight,
