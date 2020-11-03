@@ -9,17 +9,10 @@
   dependencies:
     "@ag-grid-community/core" "~24.1.0"
 
-"@ag-grid-community/core@^24.1.0", "@ag-grid-community/core@~24.1.0":
+"@ag-grid-community/core@~24.1.0":
   version "24.1.0"
   resolved "https://registry.yarnpkg.com/@ag-grid-community/core/-/core-24.1.0.tgz#d768a5085a8cf7ee5b1f7a37a42cb704d5488338"
   integrity sha512-dmC7rgEoe6NIsGrBK4vENWorJ/yZxNU4TyaWp1Rwn0iCJENNOSbtjA8QejyTzKtLyWcYPlfkXxG1q2irAfRD7A==
-
-"@ag-grid-community/react@^24.1.1":
-  version "24.1.1"
-  resolved "https://registry.yarnpkg.com/@ag-grid-community/react/-/react-24.1.1.tgz#5d801beec1aff608370ea10412cc97694dd7df48"
-  integrity sha512-cdbPZoSbzyGX+aKuxrdZMo8bujAY7LClwZu46w8sW699UiMa0ykKTmfWOHYecpYJemLWG91mgSuqT2opmdg4Vw==
-  dependencies:
-    prop-types "^15.6.2"
 
 "@babel/code-frame@7.8.3", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.8.3":
   version "7.8.3"
@@ -2764,11 +2757,6 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
-
-boostrap@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/boostrap/-/boostrap-2.0.0.tgz#f0a5256bc379c5da540564389e48e85e9ccff9fc"
-  integrity sha512-JEeFMOweKeGXEM9rt95eaVISOkluG9aKcl0jQCETOVH9jynCZxuBZe2oWgcWJpj5wqYWZl625SnW7OgHT2Ineg==
 
 bootstrap@^4.5.2:
   version "4.5.2"
@@ -9581,11 +9569,6 @@ react-dev-utils@^10.2.1:
     strip-ansi "6.0.0"
     text-table "0.2.0"
 
-react-dom-factories@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-dom-factories/-/react-dom-factories-1.0.2.tgz#eb7705c4db36fb501b3aa38ff759616aa0ff96e0"
-  integrity sha1-63cFxNs2+1AbOqOP91lhaqD/luA=
-
 react-dom@16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -9800,11 +9783,6 @@ react@^16.13.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-
-reactjs-popup@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/reactjs-popup/-/reactjs-popup-2.0.4.tgz#53f585a2b19fb730b127a166ffffa2672e144fa1"
-  integrity sha512-G5jTXL2JkClKAYAdqedf+K9QvbNsFWvdbrXW1/vWiyanuCU/d7DtQzQux+uKOz2HeNVRsFQHvs7abs0Z7VLAhg==
 
 reactstrap@^8.6.0:
   version "8.6.0"

@@ -2,10 +2,10 @@ import React from "react";
 import LayoutWrapper from "src/layouts/LayoutWrapper";
 import { ReferenceList } from "src/modules/contributor";
 
-const DataApprovalListPage = () => (
+const ReferencelListPage = () => (
   <LayoutWrapper>
     <ReferenceList />
   </LayoutWrapper>
 );
 
-export default DataApprovalListPage;
+export default ReferencelListPage;
