@@ -65,7 +65,9 @@ class ReferenceModal extends Component {
         })
         .catch((err) => {
           this._isMounted && this.setState({ loading: false });
-          console.log(err);
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         });
     } else {
       this.setState({ loading: false });

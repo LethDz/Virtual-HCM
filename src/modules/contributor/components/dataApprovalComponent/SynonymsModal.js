@@ -19,7 +19,6 @@ class SynonymsModal extends Component {
   constructor() {
     super();
     this.state = {
-      modal: false,
       selectedSynonyms: [],
       gridApi: '',
       gridColumnApi: '',
@@ -32,17 +31,30 @@ class SynonymsModal extends Component {
   onGridReady = (params) => {
     if (this.props.synonymsList.length === 0) {
       this.setState({ loading: true });
-      axiosClient.get(SYNONYM + ALL).then((response) => {
-        if (response.data.status) {
-          this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts);
-          this.setState({ loading: false });
-          this.props.setAlertMessage('Load synonym successful');
-          this.props.setSuccessAlert(true);
-        } else {
+      axiosClient
+        .get(SYNONYM + ALL)
+        .then((response) => {
+          if (response.data.status) {
+            this.props.fetchAllSynonyms(
+              response.data.result_data.synonym_dicts
+            );
+            this.setState({ loading: false });
+            this.props.setAlertMessage('Load synonym successful');
+            this.props.setSuccessAlert(true);
+          } else {
+            this.props.scrollToTop();
+            this.props.setErrorAlert(true);
+            this.props.setErrorList(response.data.messages);
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            loading: false,
+          });
           this.props.setErrorAlert(true);
-          this.props.setErrorList(response.data.messages);
-        }
-      });
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
+        });
     }
     this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
@@ -72,11 +84,17 @@ class SynonymsModal extends Component {
   render() {
     return (
       <div>
-        <NewSynonymModal
-          isOpen={this.state.isOpenNewSynonymModal}
-          toggle={this.toggleNewSynonymModal}
-        />
-
+        {this.state.isOpenNewSynonymModal && (
+          <NewSynonymModal
+            scrollToTop={this.scrollToTop}
+            setAlertMessage={this.setAlertMessage}
+            setSuccessAlert={this.setSuccessAlert}
+            setErrorAlert={this.setErrorAlert}
+            setErrorList={this.setErrorList}
+            isOpen={this.state.isOpenNewSynonymModal}
+            toggle={this.toggleNewSynonymModal}
+          />
+        )}
         <Modal
           isOpen={this.props.isOpenSynonymModal}
           toggle={this.props.toggleSynonymModal}

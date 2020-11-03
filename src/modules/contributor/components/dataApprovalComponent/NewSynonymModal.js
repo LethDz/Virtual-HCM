@@ -104,10 +104,21 @@ class NewSynonymModal extends Component {
               words: [],
             });
           }
+
+          this.setState({
+            loading: false,
+          });
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         })
         .catch((err) => {
-          this.setState({ loading: false });
-          console.log(err);
+          this.setState({
+            loading: false,
+          });
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         });
     } else {
       this.setState({ errorAlert: true });

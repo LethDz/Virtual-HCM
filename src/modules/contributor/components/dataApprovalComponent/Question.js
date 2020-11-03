@@ -34,7 +34,8 @@ export default class Question extends Component {
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
-        if (response.data.status) {let fullArray = [];
+        if (response.data.status) {
+          let fullArray = [];
           response.data.result_data.pos.forEach((array) => {
             fullArray.push(...array);
           });
@@ -64,14 +65,14 @@ export default class Question extends Component {
               }
             }
           }
-  
+
           let questionsTemp = this.state.questions;
           let questionTemp = '';
           fullArray.forEach((word) => {
             questionTemp += word.value + ' ';
           });
           questionsTemp.push(questionTemp);
-  
+
           this.setState({
             question: '',
             tokenizeData: fullArray,
@@ -79,19 +80,25 @@ export default class Question extends Component {
             loading: false,
             questions: questionsTemp,
           });
-          this.props.setAlertMessage("Tokenize question successful")
+          this.props.setAlertMessage('Tokenize question successful');
           this.props.setSuccessAlert(true);
-          
         } else {
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);
+          this.props.scrollToTop();
         }
-        
       })
       .then(() => {
         this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);
       })
-      .catch((err) => this.setState({ loading: false }));
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
+      });
   };
 
   removeQuestion = (question) => {
@@ -172,6 +179,10 @@ export default class Question extends Component {
                           );
                         })}
                         <GenSynonymSentence
+                          setAlertMessage={this.props.setAlertMessage}
+                          setSuccessAlert={this.props.setSuccessAlert}
+                          setErrorAlert={this.props.setErrorAlert}
+                          setErrorList={this.props.setErrorList}
                           index={index}
                           tokenizedWordArray={wordArray}
                           synonymsArray={this.props.synonymsArray}

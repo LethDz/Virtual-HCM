@@ -94,16 +94,20 @@ class Synonyms extends Component {
   render() {
     return (
       <Row className="p-3" xs="1">
-        <SynonymsModal
-          setAlertMessage={this.props.setAlertMessage}
-          setSuccessAlert={this.props.setSuccessAlert}
-          setErrorAlert={this.props.setErrorAlert}
-          setErrorList={this.props.setErrorList}
-          index={this.state.index}
-          isOpenSynonymModal={this.state.isOpenSynonymModal}
-          toggleSynonymModal={this.toggleSynonymModal}
-          addSynonym={this.addSynonym}
-        />
+        {this.state.isOpenSynonymModal && (
+          <SynonymsModal
+            scrollToTop={this.scrollToTop}
+            setAlertMessage={this.props.setAlertMessage}
+            setSuccessAlert={this.props.setSuccessAlert}
+            setErrorAlert={this.props.setErrorAlert}
+            setErrorList={this.props.setErrorList}
+            index={this.state.index}
+            isOpenSynonymModal={this.state.isOpenSynonymModal}
+            toggleSynonymModal={this.toggleSynonymModal}
+            addSynonym={this.addSynonym}
+          />
+        )}
+
         <Col>
           Synonyms:
           <Row>

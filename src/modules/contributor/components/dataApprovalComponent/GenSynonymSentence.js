@@ -67,7 +67,14 @@ class GenSynonymSentence extends Component {
           loading: true,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
+      });
   };
 
   setSelectedSentence = (selectedSentences) => {
@@ -95,13 +102,15 @@ class GenSynonymSentence extends Component {
   render() {
     return (
       <div className="p-3">
-        <GenSynonymSentenceModal
-          toggle={this.toggleGenerateModal}
-          similaries={this.state.similaries}
-          loading={!this.state.loading}
-          isOpen={this.state.isOpenGenerateModal}
-          setSelectedSentence={this.setSelectedSentence}
-        />
+        {this.state.isOpenGenerateModal && (
+          <GenSynonymSentenceModal
+            toggle={this.toggleGenerateModal}
+            similaries={this.state.similaries}
+            loading={!this.state.loading}
+            isOpen={this.state.isOpenGenerateModal}
+            setSelectedSentence={this.setSelectedSentence}
+          />
+        )}
         <Row xs="1">
           <Col xs="auto">
             <Label>Gen synonym sentences:</Label>

@@ -98,11 +98,17 @@ class MetaData extends Component {
           />
         </Col>
         <Col className="pr-5">
-          <ReferenceModal
-            isOpen={this.state.isOpenReferenceModal}
-            toggle={this.toggleReferenceModal}
-            addReference={this.addReference}
-          />
+          {this.state.isOpenReferenceModal && (
+            <ReferenceModal
+              isOpen={this.state.isOpenReferenceModal}
+              toggle={this.toggleReferenceModal}
+              addReference={this.addReference}
+              setErrorAlert={this.props.setErrorAlert}
+              setSuccessAlert={this.props.setSuccessAlert}
+              scrollToTop={this.props.scrollToTop}
+            />
+          )}
+
           <Row>
             <Col>
               <Label className="label" for="reference">

@@ -278,8 +278,6 @@ class CreateDataApprovalForm extends Component {
                 />
               )}
             </div>
-            {/* 
-            <FormTitle title="Create new knowledge data" ref={this.titleRef} /> */}
             <Row xs="1">
               <Col>
                 <h5 className="text-center m-3" ref={this.titleRef}>
@@ -291,6 +289,11 @@ class CreateDataApprovalForm extends Component {
             <MetaData
               onChange={this.handleInputForm}
               setReference={this.setReference}
+              scrollToTop={this.scrollToTop}
+              setAlertMessage={this.setAlertMessage}
+              setSuccessAlert={this.setSuccessAlert}
+              setErrorAlert={this.setErrorAlert}
+              setErrorList={this.setErrorList}
             />
             <FormSectionTitle title="Data analysis" />
             <RawData
@@ -316,6 +319,7 @@ class CreateDataApprovalForm extends Component {
               wordArray={wordArray}
             />
             <Question
+              scrollToTop={this.scrollToTop}
               setAlertMessage={this.setAlertMessage}
               setSuccessAlert={this.setSuccessAlert}
               setErrorAlert={this.setErrorAlert}
@@ -332,6 +336,7 @@ class CreateDataApprovalForm extends Component {
             <BaseResponse onChange={this.handleInputForm} />
 
             <Synonyms
+              scrollToTop={this.scrollToTop}
               setAlertMessage={this.setAlertMessage}
               setSuccessAlert={this.setSuccessAlert}
               setErrorAlert={this.setErrorAlert}

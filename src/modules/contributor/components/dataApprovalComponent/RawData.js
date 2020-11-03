@@ -92,6 +92,9 @@ class RawData extends Component {
       })
       .catch((err) => {
         if (this._isMounted) this.setState({ loading: false });
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
       });
   };
 
