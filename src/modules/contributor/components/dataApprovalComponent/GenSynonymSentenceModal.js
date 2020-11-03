@@ -9,7 +9,6 @@ import {
 } from 'reactstrap';
 import { AgGridReact } from 'ag-grid-react';
 import { columnGenSentenceDef } from 'src/modules/contributor/index';
-import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class GenSynonymSentenceModal extends Component {
@@ -58,7 +57,6 @@ class GenSynonymSentenceModal extends Component {
                 style={{ height: 400, width: 465 }}
               >
                 <AgGridReact
-                  modules={[SetFilterModule]}
                   onGridReady={this.onGridReady}
                   rowData={this.props.similaries}
                   onFirstDataRendered={this.firstDataRendered}

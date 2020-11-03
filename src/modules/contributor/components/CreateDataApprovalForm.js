@@ -10,7 +10,6 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
-  GenSynonymSentence,
 } from 'src/modules/contributor/index';
 import 'src/static/stylesheets/contributor.css';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -150,7 +149,10 @@ class CreateDataApprovalForm extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    form.questions = questions;
+    form.questions.push({
+      question: questions,
+      generated_questions: [],
+    });
     this.setState({ form: form });
   };
 
@@ -180,8 +182,22 @@ class CreateDataApprovalForm extends Component {
     });
   };
 
+  setGeneratedSentences = (generatedSentences, index) => {
+    console.log(generatedSentences);
+    console.log(index);
+    let generatedQuestion = [];
+    generatedSentences.forEach((sentence) => {
+      generatedQuestion.push({
+        question: sentence.sentence,
+        accept: 1,
+      });
+    });
+    let form = this.state.form;
+    form.questions[index].generated_questions = generatedQuestion;
+    this.setState({ form: form });
+  };
+
   hover = (word, from) => {
-    // console.log(word);
     if (from === 'SYNONYM')
       this.setState({ hoverWord: word, hoverWordFromSynonym: word });
     else {
@@ -200,7 +216,7 @@ class CreateDataApprovalForm extends Component {
           style={{ width: '100%', height: '100%' }}
           className="mb-0"
         >
-          <FormTitle title="New data Approval" />
+          <FormTitle title="Create new knowledge data" />
           <Alert isOpen={this.state.errorAlert} color="danger">
             {this.state.errorMessage}
           </Alert>
@@ -234,8 +250,10 @@ class CreateDataApprovalForm extends Component {
               className="mt-3"
               setQuestions={this.setQuestions}
               setTokenizeWord={this.setTokenizeWord}
+              setGeneratedSentences={this.setGeneratedSentences}
               hover={this.hover}
               hoverWord={this.state.hoverWordFromSynonym}
+              synonymsArray={this.state.form.synonyms}
             />
 
             <BaseResponse onChange={this.handleInputForm} />
@@ -245,11 +263,6 @@ class CreateDataApprovalForm extends Component {
               wordArray={wordArray}
               hover={this.hover}
               hoverWord={this.state.hoverWord}
-            />
-
-            <GenSynonymSentence
-              tokenizedWordArray={this.state.tokenizedWord}
-              synonymsArray={this.state.form.synonyms}
             />
           </div>
 

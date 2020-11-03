@@ -31,7 +31,7 @@ class GenSynonymSentence extends Component {
   createTokenizeSentence = () => {
     let tokenizedWordArray = [];
     this.props.tokenizedWordArray.forEach((word) => {
-      tokenizedWordArray.push(word.value);
+      tokenizedWordArray.push(word);
     });
     return tokenizedWordArray.join(' ');
   };
@@ -71,7 +71,12 @@ class GenSynonymSentence extends Component {
   };
 
   setSelectedSentence = (selectedSentences) => {
-    this.setState({ selectedSentences: selectedSentences });
+    this.setState({ selectedSentences: selectedSentences }, () => {
+      this.props.setGeneratedSentences(
+        this.state.selectedSentences,
+        this.props.index
+      );
+    });
   };
 
   removeSelectedGenSentence = (index) => {
@@ -79,7 +84,12 @@ class GenSynonymSentence extends Component {
     if (index > -1) {
       selectedSentence.splice(index, 1);
     }
-    this.setState({ selectedSentence: selectedSentence });
+    this.setState({ selectedSentence: selectedSentence }, () => {
+      this.props.setGeneratedSentences(
+        this.state.selectedSentences,
+        this.props.index
+      );
+    });
   };
 
   render() {

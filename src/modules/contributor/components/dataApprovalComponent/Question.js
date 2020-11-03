@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Button, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { GenSynonymSentence } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -121,7 +122,7 @@ export default class Question extends Component {
                     onClick={() => {
                       if (this.getQuestion().trim() !== '') {
                         this.addQuestion(this.getQuestion());
-                        this.props.setQuestions(this.state.questions);
+                        this.props.setQuestions(this.state.question);
                       }
                     }}
                   >
@@ -162,6 +163,14 @@ export default class Question extends Component {
                             (value += ' ')
                           );
                         })}
+                        <GenSynonymSentence
+                          index={index}
+                          tokenizedWordArray={wordArray}
+                          synonymsArray={this.props.synonymsArray}
+                          setGeneratedSentences={
+                            this.props.setGeneratedSentences
+                          }
+                        />
                       </Col>
                       <Col xs="auto">
                         <Button
