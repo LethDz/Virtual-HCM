@@ -41,45 +41,54 @@ class RawData extends Component {
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
-        let fullArray = [];
-        response.data.result_data.pos.forEach((array) => {
-          fullArray.push(...array);
-        });
-        let modifiedNer = [];
-        let ner = response.data.result_data.ner;
-        for (let sentenceIndex in ner) {
-          for (let idx in ner[sentenceIndex]) {
-            let type = ner[sentenceIndex][idx].type;
-            let word = ner[sentenceIndex][idx].word;
-            let index = ner[sentenceIndex][idx].start_idx;
-            if (sentenceIndex === 0) {
-              modifiedNer.push({
-                type: type,
-                word: word,
-                index: index,
-              });
-            } else {
+        if (response.data.status) {
+          let fullArray = [];
+          response.data.result_data.pos.forEach((array) => {
+            fullArray.push(...array);
+          });
+          let modifiedNer = [];
+          let ner = response.data.result_data.ner;
+          for (let sentenceIndex in ner) {
+            for (let idx in ner[sentenceIndex]) {
+              let type = ner[sentenceIndex][idx].type;
+              let word = ner[sentenceIndex][idx].word;
               let index = ner[sentenceIndex][idx].start_idx;
-              for (let i = 0; i < sentenceIndex; i++) {
-                index += response.data.result_data.pos[i].length;
+              if (sentenceIndex === 0) {
+                modifiedNer.push({
+                  type: type,
+                  word: word,
+                  index: index,
+                });
+              } else {
+                let index = ner[sentenceIndex][idx].start_idx;
+                for (let i = 0; i < sentenceIndex; i++) {
+                  index += response.data.result_data.pos[i].length;
+                }
+                modifiedNer.push({
+                  type: type,
+                  word: word,
+                  index: index,
+                });
               }
-              modifiedNer.push({
-                type: type,
-                word: word,
-                index: index,
-              });
             }
           }
-        }
 
-        if (this._isMounted)
-          this.setState({
-            mode: 'TOKENIZE',
-            tokenizeData: fullArray,
-            ner: modifiedNer,
-            loading: false,
-          });
-        this.setTokenizedWordArray();
+          if (this._isMounted)
+            this.setState({
+              mode: 'TOKENIZE',
+              tokenizeData: fullArray,
+              ner: modifiedNer,
+              loading: false,
+            });
+          this.setTokenizedWordArray();
+          this.props.setAlertMessage('Tokenize successful');
+          this.props.setSuccessAlert(true);
+          this.props.scrollToTop();
+        } else {
+          this.props.setErrorAlert(true);
+          this.props.setErrorList(response.data.messages);
+          this.props.scrollToTop();
+        }
       })
       .catch((err) => {
         if (this._isMounted) this.setState({ loading: false });

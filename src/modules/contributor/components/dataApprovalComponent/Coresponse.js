@@ -82,7 +82,7 @@ class Coresponse extends Component {
             <Input id="coresponse-index" />
           </Col>
           <Col xs="auto">
-            <Button color="success" onClick={this.addCoresponse}>
+            <Button color="primary" onClick={this.addCoresponse}>
               <FontAwesomeIcon icon={faPlus} /> Coresponse
             </Button>
           </Col>

@@ -81,7 +81,7 @@ export const columnGenSentenceDef = [
     headerName: 'Sentence',
     width: 465,
     sortable: true,
-    filter: 'agSetColumnFilter',
+    filter: true,
     filterParams: { applyMiniFilterWhileTyping: true },
     checkboxSelection: true,
     headerCheckboxSelection: true,

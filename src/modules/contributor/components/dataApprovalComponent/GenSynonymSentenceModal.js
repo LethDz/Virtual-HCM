@@ -71,9 +71,6 @@ class GenSynonymSentenceModal extends Component {
               <Button color="success" onClick={this.setSelectedSentence}>
                 Create
               </Button>
-              <Button type="button" color="danger" onClick={this.props.toggle}>
-                Cancel
-              </Button>
             </ModalFooter>
           </Form>
         </LoadingSpinner>

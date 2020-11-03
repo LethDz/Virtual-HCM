@@ -1,7 +1,6 @@
 import Contributor from 'src/modules/contributor/components/Contributor';
 import CreateDataApprovalForm from 'src/modules/contributor/components/CreateDataApprovalForm';
 
-import FormTitle from 'src/modules/contributor/components/dataApprovalComponent/FormTitle';
 import FormSectionTitle from 'src/modules/contributor/components/dataApprovalComponent/FormSectionTitle';
 import SynonymsModal from 'src/modules/contributor/components/dataApprovalComponent/SynonymsModal';
 import ReferenceModal from 'src/modules/contributor/components/dataApprovalComponent/ReferenceModal';
@@ -32,7 +31,6 @@ export {
   GenSynonymSentenceModal,
   MetaData,
   GenSynonymSentence,
-  FormTitle,
   FormSectionTitle,
   CreateDataApprovalForm,
   Synonyms,

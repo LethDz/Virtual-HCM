@@ -33,8 +33,15 @@ class SynonymsModal extends Component {
     if (this.props.synonymsList.length === 0) {
       this.setState({ loading: true });
       axiosClient.get(SYNONYM + ALL).then((response) => {
-        this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts);
-        this.setState({ loading: false });
+        if (response.data.status) {
+          this.props.fetchAllSynonyms(response.data.result_data.synonym_dicts);
+          this.setState({ loading: false });
+          this.props.setAlertMessage('Load synonym successful');
+          this.props.setSuccessAlert(true);
+        } else {
+          this.props.setErrorAlert(true);
+          this.props.setErrorList(response.data.messages);
+        }
       });
     }
     this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
@@ -95,7 +102,7 @@ class SynonymsModal extends Component {
             </ModalBody>
             <ModalFooter>
               <Button
-                color="success"
+                color="warning"
                 onClick={() => {
                   this.toggleNewSynonymModal();
                 }}

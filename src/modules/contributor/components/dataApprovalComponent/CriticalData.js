@@ -135,7 +135,7 @@ class CriticalData extends Component {
           </Col>
 
           <Col xs="auto">
-            <Button color="success" onClick={this.addCriticalData}>
+            <Button color="primary" onClick={this.addCriticalData}>
               <FontAwesomeIcon icon={faPlus} /> Subject
             </Button>
           </Col>

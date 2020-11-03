@@ -95,6 +95,10 @@ class Synonyms extends Component {
     return (
       <Row className="p-3" xs="1">
         <SynonymsModal
+          setAlertMessage={this.props.setAlertMessage}
+          setSuccessAlert={this.props.setSuccessAlert}
+          setErrorAlert={this.props.setErrorAlert}
+          setErrorList={this.props.setErrorList}
           index={this.state.index}
           isOpenSynonymModal={this.state.isOpenSynonymModal}
           toggleSynonymModal={this.toggleSynonymModal}

@@ -193,7 +193,7 @@ class NewSynonymModal extends Component {
               </ListGroup>
             </ModalBody>
             <ModalFooter>
-              <Button color="success">Create</Button>
+              <Button color="info">Create</Button>
               <Button type="button" color="danger" onClick={this.props.toggle}>
                 Cancel
               </Button>

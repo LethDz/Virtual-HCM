@@ -52,14 +52,25 @@ class ReferenceModal extends Component {
   };
 
   onGridReady = (params) => {
-    this.setState({ loading: true }, () => {
-      axiosClient.get(REFERENCE + ALL).then((response) => {
-        this.props.fetchAllDocumentReference(
-          response.data.result_data.references
-        );
-        if (this._isMounted) this.setState({ loading: false });
-      });
-    });
+    this.setState({ loading: true });
+
+    if (this.props.documentReferenceList.length === 0) {
+      axiosClient
+        .get(REFERENCE + ALL)
+        .then((response) => {
+          this.props.fetchAllDocumentReference(
+            response.data.result_data.references
+          );
+          this._isMounted && this.setState({ loading: false });
+        })
+        .catch((err) => {
+          this._isMounted && this.setState({ loading: false });
+          console.log(err);
+        });
+    } else {
+      this.setState({ loading: false });
+    }
+
     if (this._isMounted)
       this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
@@ -91,57 +102,55 @@ class ReferenceModal extends Component {
 
   render() {
     return (
-      <div>
-        <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
-          <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
-          <ModalBody>
-            <LoadingSpinner
-              loading={this.state.loading}
-              text="Loading reference"
+      <Modal
+        isOpen={this.props.isOpen}
+        toggle={this.props.toggle}
+      >
+        <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
+        <ModalBody>
+          <LoadingSpinner loading={this.state.loading} text="Loading reference">
+            <div
+              className="ag-theme-alpine"
+              style={{ height: 400, width: 465 }}
             >
-              <div
-                className="ag-theme-alpine"
-                style={{ height: 400, width: 465 }}
-              >
-                <AgGridReact
-                  onGridReady={this.onGridReady}
-                  rowData={this.props.documentReferenceList}
-                  rowSelection="single"
-                  rowMultiSelectWithClick
-                  onSelectionChanged={this.onSelectionChanged.bind(this)}
-                  columnDefs={columnReferenceListDef}
-                ></AgGridReact>
-              </div>
-              <FormGroup>
-                <Label>Page</Label>
-                <Input
-                  type="number"
-                  name="page"
-                  min="0"
-                  value={this.state.page}
-                  onChange={this.handleInput}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Extra info</Label>
-                <Input
-                  name="extraInfo"
-                  value={this.state.extraInfo}
-                  onChange={this.handleInput}
-                />
-              </FormGroup>
-            </LoadingSpinner>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="success">
-              <FontAwesomeIcon icon={faPlus} /> New reference
-            </Button>
-            <Button color="success" onClick={this.addReference}>
-              <FontAwesomeIcon icon={faPlus} /> Add
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+              <AgGridReact
+                onGridReady={this.onGridReady}
+                rowData={this.props.documentReferenceList}
+                rowSelection="single"
+                rowMultiSelectWithClick
+                onSelectionChanged={this.onSelectionChanged.bind(this)}
+                columnDefs={columnReferenceListDef}
+              ></AgGridReact>
+            </div>
+            <FormGroup>
+              <Label>Page</Label>
+              <Input
+                type="number"
+                name="page"
+                min="0"
+                value={this.state.page}
+                onChange={this.handleInput}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Extra info</Label>
+              <Input
+                name="extraInfo"
+                value={this.state.extraInfo}
+                onChange={this.handleInput}
+              />
+            </FormGroup>
+          </LoadingSpinner>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="warning">
+            <FontAwesomeIcon icon={faPlus} /> New reference
+          </Button>
+          <Button color="success" onClick={this.addReference}>
+            <FontAwesomeIcon icon={faPlus} /> Add
+          </Button>
+        </ModalFooter>
+      </Modal>
     );
   }
 }

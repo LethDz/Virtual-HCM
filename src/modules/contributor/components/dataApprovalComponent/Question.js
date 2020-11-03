@@ -34,51 +34,59 @@ export default class Question extends Component {
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
-        let fullArray = [];
-        response.data.result_data.pos.forEach((array) => {
-          fullArray.push(...array);
-        });
-        let modifiedNer = [];
-        let ner = response.data.result_data.ner;
-        for (let sentenceIndex in ner) {
-          for (let idx in ner[sentenceIndex]) {
-            let type = ner[sentenceIndex][idx].type;
-            let word = ner[sentenceIndex][idx].word;
-            let index = ner[sentenceIndex][idx].start_idx;
-            if (sentenceIndex === 0) {
-              modifiedNer.push({
-                type: type,
-                word: word,
-                index: index,
-              });
-            } else {
+        if (response.data.status) {let fullArray = [];
+          response.data.result_data.pos.forEach((array) => {
+            fullArray.push(...array);
+          });
+          let modifiedNer = [];
+          let ner = response.data.result_data.ner;
+          for (let sentenceIndex in ner) {
+            for (let idx in ner[sentenceIndex]) {
+              let type = ner[sentenceIndex][idx].type;
+              let word = ner[sentenceIndex][idx].word;
               let index = ner[sentenceIndex][idx].start_idx;
-              for (let i = 0; i < sentenceIndex; i++) {
-                index += response.data.result_data.pos[i].length;
+              if (sentenceIndex === 0) {
+                modifiedNer.push({
+                  type: type,
+                  word: word,
+                  index: index,
+                });
+              } else {
+                let index = ner[sentenceIndex][idx].start_idx;
+                for (let i = 0; i < sentenceIndex; i++) {
+                  index += response.data.result_data.pos[i].length;
+                }
+                modifiedNer.push({
+                  type: type,
+                  word: word,
+                  index: index,
+                });
               }
-              modifiedNer.push({
-                type: type,
-                word: word,
-                index: index,
-              });
             }
           }
+  
+          let questionsTemp = this.state.questions;
+          let questionTemp = '';
+          fullArray.forEach((word) => {
+            questionTemp += word.value + ' ';
+          });
+          questionsTemp.push(questionTemp);
+  
+          this.setState({
+            question: '',
+            tokenizeData: fullArray,
+            ner: modifiedNer,
+            loading: false,
+            questions: questionsTemp,
+          });
+          this.props.setAlertMessage("Tokenize question successful")
+          this.props.setSuccessAlert(true);
+          
+        } else {
+          this.props.setErrorAlert(true);
+          this.props.setErrorList(response.data.messages);
         }
-
-        let questionsTemp = this.state.questions;
-        let questionTemp = '';
-        fullArray.forEach((word) => {
-          questionTemp += word.value + ' ';
-        });
-        questionsTemp.push(questionTemp);
-
-        this.setState({
-          question: '',
-          tokenizeData: fullArray,
-          ner: modifiedNer,
-          loading: false,
-          questions: questionsTemp,
-        });
+        
       })
       .then(() => {
         this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);

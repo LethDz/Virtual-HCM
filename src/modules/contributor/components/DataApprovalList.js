@@ -53,7 +53,7 @@ class DataApprovalList extends Component {
 
   render() {
     return (
-      <Container id="cl-container" className="cl-container">
+      <Container id="cl-container" className="cl-container vh-100">
         <Row>
           <Col className="justify-content-center d-flex">
             <h5 className="mt-2 mb-2">Account List</h5>
