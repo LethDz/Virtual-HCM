@@ -8,6 +8,7 @@ export const API_PREFIX = '/api';
 // API Common Route Path
 export const LOGIN = '/auth';
 export const LOGOUT = '/logout';
+export const FIRST_LOGIN_CHANGE_PASSWORD = '/user/update-password-first-login';
 
 export const KNOWLEDGE_DATA = '/knowledge-data';
 export const NLP = '/nlp';

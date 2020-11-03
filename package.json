@@ -32,7 +32,8 @@
     "react-sidebar": "^3.0.2",
     "reactjs-popup": "^2.0.4",
     "reactstrap": "^8.6.0",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "terminal-in-react": "^4.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
