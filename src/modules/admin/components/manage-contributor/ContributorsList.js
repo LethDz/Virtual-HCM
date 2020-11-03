@@ -36,6 +36,7 @@ class ContributorsList extends Component {
       errorAlert: false,
       successAlert: false,
       contributorsList: [],
+      errorList: [],
     };
     this.conRef = React.createRef('');
   }
@@ -91,8 +92,10 @@ class ContributorsList extends Component {
   };
 
   setStyleForGrid = () => {
-    const containerHeight = this.conRef.current && this.conRef.current.clientHeight;
-    const containerWidth = this.conRef.current && this.conRef.current.clientWidth;
+    const containerHeight =
+      this.conRef.current && this.conRef.current.clientHeight;
+    const containerWidth =
+      this.conRef.current && this.conRef.current.clientWidth;
     this._isMounted &&
       this.setState({
         containerHeight,
