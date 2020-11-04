@@ -117,30 +117,38 @@ class CreateDataApprovalForm extends Component {
     this.setErrorAlert(true);
     this.setErrorList(errorMessage);
     this.scrollToTop();
-    this.setState({
-      loading: false,
-    });
+    if (this._isMounted)
+      this.setState({
+        loading: false,
+      });
   };
 
   submitForm = (event) => {
-    this.setState({
-      loading: true,
-    });
+    if (this._isMounted)
+      this.setState({
+        loading: true,
+      });
     event.preventDefault();
     this.setError(() => {
       if (this.state.errorList.length === 0) {
-        this.setState({ errorAlert: false });
+        if (this._isMounted) this.setState({ errorAlert: false });
         axiosClient
           .post(KNOWLEDGE_DATA + ADD, this.state.form)
           .then((response) => {
-            this.setState({
-              loading: false,
-            });
+            if (this._isMounted)
+              this.setState({
+                loading: false,
+              });
             history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+            this.scrollToTop();
+          });
       } else {
-        this.setState({ errorAlert: true, loading: false });
+        if (this._isMounted)
+          this.setState({ errorAlert: true, loading: false });
       }
     });
   };
@@ -148,13 +156,13 @@ class CreateDataApprovalForm extends Component {
   setCoresponse = (coresponse) => {
     let form = this.state.form;
     form.coresponse = coresponse;
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   setCriticalData = (criticalData) => {
     let form = this.state.form;
     form.criticalData = criticalData;
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   setQuestions = (questions) => {
@@ -163,33 +171,34 @@ class CreateDataApprovalForm extends Component {
       question: questions,
       generated_questions: [],
     });
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   setReference = (reference) => {
     let form = this.state.form;
     form.documentReference = reference;
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   setRawData = (rawData) => {
     let form = this.state.form;
     form.rawData = rawData;
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   setBaseResponse = (baseResponse) => {
     let form = this.state.form;
     form.baseResponse = baseResponse;
-    this.setState({
-      form: form,
-    });
+    if (this._isMounted)
+      this.setState({
+        form: form,
+      });
   };
 
   setGeneratedSentences = (generatedSentences, index) => {
@@ -202,15 +211,16 @@ class CreateDataApprovalForm extends Component {
     });
     let form = this.state.form;
     form.questions[index].generated_questions = generatedQuestion;
-    this.setState({ form: form });
+    if (this._isMounted) this.setState({ form: form });
   };
 
   hover = (word, from) => {
     if (from === 'SYNONYM')
-      this.setState({ hoverWord: word, hoverWordFromSynonym: word });
-    else {
-      this.setState({ hoverWord: word });
-    }
+      if (this._isMounted)
+        this.setState({ hoverWord: word, hoverWordFromSynonym: word });
+      else {
+        if (this._isMounted) this.setState({ hoverWord: word });
+      }
   };
 
   setSuccessAlert = (status) => {

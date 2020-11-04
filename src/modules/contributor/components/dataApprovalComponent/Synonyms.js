@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 class Synonyms extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -17,6 +18,14 @@ class Synonyms extends Component {
       synonyms: [],
     };
   }
+
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
 
   setSynonymToForm = () => {
     if (this.state.synonymWord !== '' && this.state.synonymWord !== null) {
@@ -48,15 +57,16 @@ class Synonyms extends Component {
         word: this.state.synonymWord,
         synonyms: [],
       });
-      this.setState({ synonyms: synonyms });
+      if (this._isMounted) this.setState({ synonyms: synonyms });
     }
   };
 
   toggleSynonymModal = (index) => {
-    this.setState({
-      isOpenSynonymModal: !this.state.isOpenSynonymModal,
-      index: index,
-    });
+    if (this._isMounted)
+      this.setState({
+        isOpenSynonymModal: !this.state.isOpenSynonymModal,
+        index: index,
+      });
   };
 
   addSynonym = (synonymList, index) => {
@@ -64,8 +74,7 @@ class Synonyms extends Component {
     for (let i in synonymList) {
       synonyms[index].synonyms.push(synonymList[i]);
     }
-
-    this.setState({ synonyms: synonyms });
+    if (this._isMounted) this.setState({ synonyms: synonyms });
     this.setSynonymToForm();
   };
 
@@ -74,9 +83,10 @@ class Synonyms extends Component {
     if (index > -1) {
       synonyms.splice(index, 1);
     }
-    this.setState({
-      synonyms: synonyms,
-    });
+    if (this._isMounted)
+      this.setState({
+        synonyms: synonyms,
+      });
     this.setSynonymToForm();
   };
 
@@ -85,9 +95,10 @@ class Synonyms extends Component {
     if (synonymIndex > -1) {
       synonyms[wordIndex].synonyms.splice(synonymIndex, 1);
     }
-    this.setState({
-      synonyms: synonyms,
-    });
+    if (this._isMounted)
+      this.setState({
+        synonyms: synonyms,
+      });
     this.setSynonymToForm();
   };
 

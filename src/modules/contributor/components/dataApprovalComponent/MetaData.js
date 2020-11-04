@@ -20,6 +20,7 @@ import {
 import { connect } from 'react-redux';
 
 class MetaData extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -28,8 +29,17 @@ class MetaData extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   toggleReferenceModal = () => {
-    this.setState({ isOpenReferenceModal: !this.state.isOpenReferenceModal });
+    if (this._isMounted)
+      this.setState({ isOpenReferenceModal: !this.state.isOpenReferenceModal });
   };
 
   newRefer = (e) => {
@@ -39,7 +49,7 @@ class MetaData extends Component {
   addReference = (reference) => {
     let referenceList = this.state.referenceList;
     referenceList.push(reference);
-    this.setState({ referenceList: referenceList });
+    if (this._isMounted) this.setState({ referenceList: referenceList });
     this.setReference();
   };
 
@@ -48,7 +58,7 @@ class MetaData extends Component {
     if (index > -1) {
       referenceList.splice(index, 1);
     }
-    this.setState({ referenceList: referenceList });
+    if (this._isMounted) this.setState({ referenceList: referenceList });
     this.setReference();
   };
 

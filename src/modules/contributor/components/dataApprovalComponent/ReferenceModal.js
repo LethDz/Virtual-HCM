@@ -70,7 +70,7 @@ class ReferenceModal extends Component {
           this.props.scrollToTop();
         });
     } else {
-      this.setState({ loading: false });
+      this._isMounted && this.setState({ loading: false });
     }
 
     if (this._isMounted)
@@ -104,10 +104,7 @@ class ReferenceModal extends Component {
 
   render() {
     return (
-      <Modal
-        isOpen={this.props.isOpen}
-        toggle={this.props.toggle}
-      >
+      <ModalHeader isOpen={this.props.isOpen} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
         <ModalBody>
           <LoadingSpinner loading={this.state.loading} text="Loading reference">
@@ -152,7 +149,7 @@ class ReferenceModal extends Component {
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </ModalFooter>
-      </Modal>
+      </ModalHeader>
     );
   }
 }

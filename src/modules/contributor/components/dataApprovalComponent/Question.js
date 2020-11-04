@@ -10,6 +10,7 @@ import { handleInputChange } from 'src/common/handleInputChange';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 export default class Question extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
@@ -21,12 +22,20 @@ export default class Question extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   handleInput = (event) => {
     handleInputChange(event, this);
   };
 
   addQuestion = (question) => {
-    this.setState({ loading: true });
+    if (this._isMounted) this.setState({ loading: true });
     const paragraph = {
       paragraph: question,
     };
@@ -72,14 +81,14 @@ export default class Question extends Component {
             questionTemp += word.value + ' ';
           });
           questionsTemp.push(questionTemp);
-
-          this.setState({
-            question: '',
-            tokenizeData: fullArray,
-            ner: modifiedNer,
-            loading: false,
-            questions: questionsTemp,
-          });
+          if (this._isMounted)
+            this.setState({
+              question: '',
+              tokenizeData: fullArray,
+              ner: modifiedNer,
+              loading: false,
+              questions: questionsTemp,
+            });
           this.props.setAlertMessage('Tokenize question successful');
           this.props.setSuccessAlert(true);
         } else {
@@ -92,9 +101,10 @@ export default class Question extends Component {
         this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);
       })
       .catch((err) => {
-        this.setState({
-          loading: false,
-        });
+        if (this._isMounted)
+          this.setState({
+            loading: false,
+          });
         this.props.setErrorAlert(true);
         this.props.setSuccessAlert(false);
         this.props.scrollToTop();
@@ -107,7 +117,7 @@ export default class Question extends Component {
     if (index > -1) {
       questionsTemp.splice(index, 1);
     }
-    this.setState(questionsTemp);
+    if (this._isMounted) this.setState(questionsTemp);
   };
 
   getQuestion = () => {

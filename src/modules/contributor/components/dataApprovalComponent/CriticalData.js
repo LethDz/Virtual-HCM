@@ -18,8 +18,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { handleInputChange } from 'src/common/handleInputChange';
+import { P } from '@fullpage/react-fullpage';
 
 class CriticalData extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -27,6 +29,14 @@ class CriticalData extends Component {
       type: criticalType[0],
     };
   }
+
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
 
   handleInput = (event) => handleInputChange(event, this);
 
@@ -40,8 +50,7 @@ class CriticalData extends Component {
       index: temp.length,
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-
-    this.setState({ criticalData: sortedTemp });
+    if (this._isMounted) this.setState({ criticalData: sortedTemp });
     this.setCritical();
   };
 
@@ -52,7 +61,7 @@ class CriticalData extends Component {
     };
     let criticalData = this.state.criticalData;
     criticalData[index].word.push(critical);
-    this.setState({ criticalData: criticalData });
+    if (this._isMounted) this.setState({ criticalData: criticalData });
     this.setCritical();
   };
 
@@ -61,9 +70,10 @@ class CriticalData extends Component {
     if (index > -1) {
       criticalData.splice(index, 1);
     }
-    this.setState({
-      criticalData: criticalData,
-    });
+    if (this._isMounted)
+      this.setState({
+        criticalData: criticalData,
+      });
     this.setCritical();
   };
 
@@ -74,7 +84,7 @@ class CriticalData extends Component {
     };
     let criticalData = this.state.criticalData;
     criticalData[index].verb.push(verb);
-    this.setState({ criticalData: criticalData });
+    if (this._isMounted) this.setState({ criticalData: criticalData });
     this.setCritical();
   };
 
@@ -93,9 +103,10 @@ class CriticalData extends Component {
       if (listCritical[i] !== null && listCritical[i] !== '')
         list.push(listCritical[i]);
     }
-    this.setState({
-      criticalData: criticalData,
-    });
+    if (this._isMounted)
+      this.setState({
+        criticalData: criticalData,
+      });
     this.setCritical();
   };
 

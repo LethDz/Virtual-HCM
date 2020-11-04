@@ -16,6 +16,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 
 class SynonymsModal extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
@@ -28,9 +29,17 @@ class SynonymsModal extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   onGridReady = (params) => {
     if (this.props.synonymsList.length === 0) {
-      this.setState({ loading: true });
+      if (this._isMounted) this.setState({ loading: true });
       axiosClient
         .get(SYNONYM + ALL)
         .then((response) => {
@@ -48,15 +57,17 @@ class SynonymsModal extends Component {
           }
         })
         .catch((err) => {
-          this.setState({
-            loading: false,
-          });
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
           this.props.scrollToTop();
         });
     }
-    this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
+    if (this._isMounted)
+      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
 
   onSelectionChanged = () => {
@@ -69,7 +80,7 @@ class SynonymsModal extends Component {
     });
     let currentState = this.state;
     currentState.selectedSynonyms = selectedRow;
-    this.setState(currentState);
+    if (this._isMounted) this.setState(currentState);
   };
 
   addSynonyms = () => {
@@ -78,7 +89,10 @@ class SynonymsModal extends Component {
   };
 
   toggleNewSynonymModal = () => {
-    this.setState({ isOpenNewSynonymModal: !this.state.isOpenNewSynonymModal });
+    if (this._isMounted)
+      this.setState({
+        isOpenNewSynonymModal: !this.state.isOpenNewSynonymModal,
+      });
   };
 
   render() {

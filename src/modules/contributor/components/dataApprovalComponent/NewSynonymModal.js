@@ -29,6 +29,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 class NewSynonymModal extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -43,6 +44,14 @@ class NewSynonymModal extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   handleInput = (event) => handleInputChange(event, this);
 
   tokenizeWord = (word) => {
@@ -55,9 +64,10 @@ class NewSynonymModal extends Component {
       let tokenizedWord = this.tokenizeWord(word);
       let words = this.state.words;
       words.push(tokenizedWord);
-      this.setState({
-        words: words,
-      });
+      if (this._isMounted)
+        this.setState({
+          words: words,
+        });
     }
   };
 
@@ -66,9 +76,10 @@ class NewSynonymModal extends Component {
     if (index > -1) {
       words.splice(index, 1);
     }
-    this.setState({
-      words: words,
-    });
+    if (this._isMounted)
+      this.setState({
+        words: words,
+      });
   };
 
   getError = () => {
@@ -76,17 +87,18 @@ class NewSynonymModal extends Component {
     if (this.state.words.length === 0) {
       errorMessage = `${errorMessage}Words field required at least one word; `;
     }
-    this.setState({
-      errorMessage: errorMessage,
-    });
+    if (this._isMounted)
+      this.setState({
+        errorMessage: errorMessage,
+      });
     return errorMessage;
   };
 
   sendCreateSynonymRequest = (event) => {
-    this.setState({ loading: true });
+    if (this._isMounted) this.setState({ loading: true });
     event.preventDefault();
     if (this.getError().trim() === '') {
-      this.setState({ errorAlert: false });
+      if (this._isMounted) this.setState({ errorAlert: false });
       let synonym = {
         meaning: this.state.meaning,
         words: this.state.words,
@@ -94,34 +106,36 @@ class NewSynonymModal extends Component {
       axiosClient
         .post(SYNONYM + ADD, synonym)
         .then((response) => {
-          this.setState({ loading: false });
+          if (this._isMounted) this.setState({ loading: false });
           if (response.data.status) {
-            this.setState({
-              addSuccess: true,
-              errorAlert: false,
-              word: '',
-              meaning: '',
-              words: [],
-            });
+            if (this._isMounted)
+              this.setState({
+                addSuccess: true,
+                errorAlert: false,
+                word: '',
+                meaning: '',
+                words: [],
+              });
           }
-
-          this.setState({
-            loading: false,
-          });
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
           this.props.scrollToTop();
         })
         .catch((err) => {
-          this.setState({
-            loading: false,
-          });
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
           this.props.scrollToTop();
         });
     } else {
-      this.setState({ errorAlert: true });
+      if (this._isMounted) this.setState({ errorAlert: true });
     }
   };
 

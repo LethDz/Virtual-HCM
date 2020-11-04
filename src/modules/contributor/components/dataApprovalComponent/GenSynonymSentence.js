@@ -9,6 +9,7 @@ import { NLP, GENERATE_SIMILARIES } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 
 class GenSynonymSentence extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -19,8 +20,17 @@ class GenSynonymSentence extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   toggleGenerateModal = () => {
-    this.setState({ isOpenGenerateModal: !this.state.isOpenGenerateModal });
+    if (this._isMounted)
+      this.setState({ isOpenGenerateModal: !this.state.isOpenGenerateModal });
     if (!this.state.isOpenGenerateModal) this.generateSentences();
   };
 
@@ -62,15 +72,17 @@ class GenSynonymSentence extends Component {
             data.push({ sentence: sentence });
           });
         });
-        this.setState({
-          similaries: data,
-          loading: true,
-        });
+        if (this._isMounted)
+          this.setState({
+            similaries: data,
+            loading: true,
+          });
       })
       .catch((err) => {
-        this.setState({
-          loading: false,
-        });
+        if (this._isMounted)
+          this.setState({
+            loading: false,
+          });
         this.props.setErrorAlert(true);
         this.props.setSuccessAlert(false);
         this.props.scrollToTop();
@@ -78,12 +90,13 @@ class GenSynonymSentence extends Component {
   };
 
   setSelectedSentence = (selectedSentences) => {
-    this.setState({ selectedSentences: selectedSentences }, () => {
-      this.props.setGeneratedSentences(
-        this.state.selectedSentences,
-        this.props.index
-      );
-    });
+    if (this._isMounted)
+      this.setState({ selectedSentences: selectedSentences }, () => {
+        this.props.setGeneratedSentences(
+          this.state.selectedSentences,
+          this.props.index
+        );
+      });
   };
 
   removeSelectedGenSentence = (index) => {
@@ -91,12 +104,13 @@ class GenSynonymSentence extends Component {
     if (index > -1) {
       selectedSentence.splice(index, 1);
     }
-    this.setState({ selectedSentence: selectedSentence }, () => {
-      this.props.setGeneratedSentences(
-        this.state.selectedSentences,
-        this.props.index
-      );
-    });
+    if (this._isMounted)
+      this.setState({ selectedSentence: selectedSentence }, () => {
+        this.props.setGeneratedSentences(
+          this.state.selectedSentences,
+          this.props.index
+        );
+      });
   };
 
   render() {

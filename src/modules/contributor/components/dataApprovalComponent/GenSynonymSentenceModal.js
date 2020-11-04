@@ -12,6 +12,7 @@ import { columnGenSentenceDef } from 'src/modules/contributor/index';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class GenSynonymSentenceModal extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -20,8 +21,18 @@ class GenSynonymSentenceModal extends Component {
       selectedSentence: [],
     };
   }
+
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   onGridReady = (params) => {
-    this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
+    if (this._isMounted)
+      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
 
   onSelectionChanged = () => {
@@ -32,7 +43,7 @@ class GenSynonymSentenceModal extends Component {
         selectedRow.push(node.data);
       }
     });
-    this.setState({ selectedSentence: selectedRow });
+    if (this._isMounted) this.setState({ selectedSentence: selectedRow });
   };
 
   setSelectedSentence = () => {
