@@ -104,7 +104,7 @@ class ReferenceModal extends Component {
 
   render() {
     return (
-      <ModalHeader isOpen={this.props.isOpen} toggle={this.props.toggle}>
+      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
         <ModalBody>
           <LoadingSpinner loading={this.state.loading} text="Loading reference">
@@ -149,7 +149,7 @@ class ReferenceModal extends Component {
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </ModalFooter>
-      </ModalHeader>
+      </Modal>
     );
   }
 }

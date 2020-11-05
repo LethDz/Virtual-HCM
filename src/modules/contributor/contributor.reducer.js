@@ -6,16 +6,34 @@ import {
   ADD_REFERENCE_TO_LIST,
   GET_REFERENCE_DETAIL,
   DELETE_REFERENCE,
+  GET_ALL_DATA_APPROVAL,
+  GET_DATA_APPROVAL,
 } from 'src/modules/contributor/index';
 
 const initialState = {
   synonymsList: [],
   documentReferenceList: [],
+  dataApprovalList: [],
   referenceDetail: null,
+  dataApprovalDetail: null
 };
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_ALL_DATA_APPROVAL:
+      const dataApprovalList = action.payload.dataApprovalList;
+      return {
+        ...state,
+        dataApprovalList,
+      };
+
+    case GET_DATA_APPROVAL:
+      const dataApproval = action.payload.dataApproval;
+      return {
+        ...state,
+        dataApprovalDetail: dataApproval
+      }
+
     case GET_ALL_SYNONYMS:
       const synonymsList = action.payload.synonymsList;
       return {

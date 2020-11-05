@@ -25,11 +25,13 @@ class MetaData extends Component {
     super();
     this.state = {
       isOpenReferenceModal: false,
-      referenceList: [],
+      referenceList: props.referenceValue ? props.referenceValue : [],
     };
   }
 
   componentDidMount = () => {
+    this._isMounted &&
+      this.setState({ referenceList: this.props.referenceValue });
     this._isMounted = true;
   };
 
@@ -96,6 +98,7 @@ class MetaData extends Component {
             type="text"
             name="intent"
             id="intent"
+            value={this.props.intentValue}
             onChange={this.props.onChange}
           />
           <Input
@@ -104,6 +107,7 @@ class MetaData extends Component {
             type="text"
             name="intentFullName"
             id="intentFullName"
+            value={this.props.intentFullNameValue}
             onChange={this.props.onChange}
           />
         </Col>

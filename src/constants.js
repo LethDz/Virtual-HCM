@@ -69,6 +69,14 @@ export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-app
 export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
 export const REFERENCE_LIST_PAGE = '/references';
 
+export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
+  intent
+    ? `${CONTRIBUTOR_PAGE}/data-approval/get/${intent}`
+    : `${CONTRIBUTOR_PAGE}/data-approval/get/:intent`;
+
+export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>
+  `${KNOWLEDGE_DATA}/get?intent=${intent}`;
+
 // Roles
 export const ROLE_ADMIN = 'Admin';
 export const ROLE_CONTRIBUTOR = 'Contributor';

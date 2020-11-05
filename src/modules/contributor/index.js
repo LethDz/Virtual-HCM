@@ -19,6 +19,7 @@ import CriticalData from 'src/modules/contributor/components/dataApprovalCompone
 import DataApprovalList from 'src/modules/contributor/components/DataApprovalList';
 import GenSynonymSentence from 'src/modules/contributor/components/dataApprovalComponent/GenSynonymSentence';
 import CreateDataApprovalForm from 'src/modules/contributor/components/CreateDataApprovalForm';
+import DataApprovalDetail from 'src/modules/contributor/components/DataApprovalDetail';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -28,6 +29,7 @@ export * from 'src/modules/contributor/contributor.selectors.js';
 export {
   Contributor,
   ReferenceList,
+  DataApprovalDetail,
   CreateReferenceModal,
   DocumentReferenceModal,
   DataApprovalList,

@@ -1,8 +1,13 @@
+import StatusBar from 'src/modules/contributor/components/dataApprovalListComponent/StatusBar';
+
 export const SET_INTENT = 'SET_INTENT';
 export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
 
 export const GET_ALL_SYNONYMS = 'GET_ALL_SYNONYMS';
 export const ADD_SYNONYM = 'ADD_SYNONYM';
+
+export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
+export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
 
 export const GET_ALL_REFERENCE = 'GET_ALL_REFERENCE';
 export const EDIT_REFERENCE = 'EDIT_REFERENCE';
@@ -40,42 +45,51 @@ export const POSTags = [
 export const VERB = 'VERB';
 export const CRITICAL = 'CRITICAL';
 
+export const context = (component) => ({
+  componentParent: component,
+});
+
+export const frameworkComponents = {
+  statusBar: StatusBar,
+};
+
 export const columnFieldDef = [
   {
-    field: 'user_id',
-    headerName: 'ID',
+    field: 'intent',
+    headerName: 'Intent',
     sortable: true,
     filter: true,
   },
   {
-    field: 'username',
-    headerName: 'Question',
+    field: 'intent_fullname',
+    headerName: 'Intent fullname',
     sortable: true,
     filter: true,
   },
   {
-    field: 'fullname',
-    headerName: 'Answer',
-    sortable: true,
-    filter: true,
-  },
-  {
-    field: 'date_of_birth',
-    headerName: 'Created date',
-    sortable: true,
-    filter: true,
-  },
-  {
-    field: 'email',
+    field: 'create_user',
     headerName: 'Created by',
     sortable: true,
     filter: true,
   },
   {
-    field: 'active',
+    field: 'edit_user',
+    headerName: 'Modified by',
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Last modified date',
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'status',
     headerName: 'Status',
     sortable: true,
     filter: true,
+    // cellRenderer: 'statusBar',
   },
 ];
 

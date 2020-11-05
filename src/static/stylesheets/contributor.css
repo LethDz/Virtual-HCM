@@ -71,3 +71,8 @@
 .hover-word {
   background-color: rgb(175, 233, 68) !important;
 }
+
+.progress-bar-list {
+  margin: auto;
+  height: 42px;
+}
