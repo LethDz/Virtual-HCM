@@ -4,7 +4,23 @@ import 'src/static/stylesheets/training.process.css';
 import Terminal from 'terminal-in-react';
 
 class ManageTrainingProcess extends Component {
+  componentDidMount() {
+    this.onChangeTerminalStyle();
+  }
+
   showMsg = () => 'Hello World';
+
+  onChangeTerminalStyle = () => {
+    let terminal = document.getElementsByClassName('terminal-base');
+    let inputTerminal = document.getElementsByClassName('btarSP');
+    inputTerminal[0].addEventListener('focus', () => {
+      terminal[0].style.boxShadow = '0px 0px 5px 1px #7E8083';
+    });
+
+    inputTerminal[0].addEventListener('blur', () => {
+      terminal[0].style.boxShadow = 'unset';
+    });
+  };
 
   render() {
     return (
@@ -22,9 +38,12 @@ class ManageTrainingProcess extends Component {
         <Row className="mb-3">
           <Col>
             <Terminal
-              color="green"
-              backgroundColor="black"
-              style={{ fontWeight: 'bold', fontSize: '1em' }}
+              color="black"
+              backgroundColor="white"
+              prompt="black"
+              style={{
+                fontSize: '1.1em',
+              }}
               commands={{
                 'open-google': (arg, print, runCommand) => {
                   window.open('https://www.google.com/', '_blank');
@@ -45,7 +64,7 @@ class ManageTrainingProcess extends Component {
                 popup: 'alert',
               }}
               msg="You can write anything here. Example - Hello! My name is Foo and I like Bar."
-              // hideTopBar={true}
+              hideTopBar={true}
               allowTabs={false}
             />
           </Col>

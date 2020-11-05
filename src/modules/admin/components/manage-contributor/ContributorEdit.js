@@ -485,6 +485,7 @@ class ContributorEdit extends Component {
                       data={this.props.contributorDetail}
                       context={this}
                       value={this.state.active}
+                      editPage={true}
                     />
                   </Col>
                 </FormGroup>

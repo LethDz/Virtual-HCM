@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+	background-color: #EBEBEB;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  width: 7px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #EBEBEB;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  width: 7px;
+  background-image: linear-gradient(to top, #6fe1ba, #3ccac1, #0db2c1, #1899b9, #367fa9);
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  width: 7px;
+  background-image: linear-gradient(to left, #6fe1ba, #3ccac1, #0db2c1, #1899b9, #367fa9);
+}
