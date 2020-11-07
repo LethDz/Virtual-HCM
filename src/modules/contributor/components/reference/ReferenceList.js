@@ -30,6 +30,9 @@ class ReferenceList extends Component {
       containerWidth: 0,
       loading: false,
       selectedId: '',
+      errorAlert: false,
+      successAlert: false,
+      errorList: [],
     };
 
     this.conRef = React.createRef();
