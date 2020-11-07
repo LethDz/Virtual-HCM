@@ -67,6 +67,7 @@ export const CONTRIBUTOR_PAGE = '/contributor';
 export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-approval`;
 export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
 export const REFERENCE_LIST_PAGE = '/references';
+export const SYNONYM_LIST_PAGE = '/synonyms';
 
 // Roles
 export const ROLE_ADMIN = 'Admin';

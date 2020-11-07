@@ -1,79 +1,82 @@
-export const SET_INTENT = "SET_INTENT";
-export const SET_INTENT_FULLNAME = "SET_INTENT_FULLNAME";
+export const SET_INTENT = 'SET_INTENT';
+export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
 
-export const GET_ALL_SYNONYMS = "GET_ALL_SYNONYMS";
-export const ADD_SYNONYM = "ADD_SYNONYM";
+export const GET_ALL_SYNONYMS = 'GET_ALL_SYNONYMS';
+export const ADD_SYNONYM = 'ADD_SYNONYM';
+export const EDIT_SYNONYM = 'EDIT_SYNONYM';
+export const GET_SYNONYM_DETAIL = 'GET_SYNONYM_DETAIL';
+export const DELETE_SYNONYM = 'DELETE_SYNONYM';
 
-export const GET_ALL_REFERENCE = "GET_ALL_REFERENCE";
-export const EDIT_REFERENCE = "EDIT_REFERENCE";
-export const ADD_REFERENCE_TO_LIST = "ADD_REFERENCE_TO_LIST";
-export const GET_REFERENCE_DETAIL = "GET_REFERENCE_DETAIL";
-export const DELETE_REFERENCE = "DELETE_REFERENCE";
+export const GET_ALL_REFERENCE = 'GET_ALL_REFERENCE';
+export const EDIT_REFERENCE = 'EDIT_REFERENCE';
+export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
+export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
+export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
-export const criticalType = ["PER", "LOC", "ORG", "MISC"];
+export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 
 export const POSTags = [
-  "Np",
-  "Nc",
-  "Nu",
-  "N",
-  "Ny",
-  "Nb",
-  "V",
-  "Vb",
-  "A",
-  "P",
-  "R",
-  "L",
-  "M",
-  "E",
-  "C",
-  "Cc",
-  "I",
-  "T",
-  "Y",
-  "Z",
-  "X",
-  "CH",
+  'Np',
+  'Nc',
+  'Nu',
+  'N',
+  'Ny',
+  'Nb',
+  'V',
+  'Vb',
+  'A',
+  'P',
+  'R',
+  'L',
+  'M',
+  'E',
+  'C',
+  'Cc',
+  'I',
+  'T',
+  'Y',
+  'Z',
+  'X',
+  'CH',
 ];
 
-export const VERB = "VERB";
-export const CRITICAL = "CRITICAL";
+export const VERB = 'VERB';
+export const CRITICAL = 'CRITICAL';
 
 export const columnFieldDef = [
   {
-    field: "user_id",
-    headerName: "ID",
+    field: 'user_id',
+    headerName: 'ID',
     sortable: true,
     filter: true,
   },
   {
-    field: "username",
-    headerName: "Question",
+    field: 'username',
+    headerName: 'Question',
     sortable: true,
     filter: true,
   },
   {
-    field: "fullname",
-    headerName: "Answer",
+    field: 'fullname',
+    headerName: 'Answer',
     sortable: true,
     filter: true,
   },
   {
-    field: "date_of_birth",
-    headerName: "Created date",
+    field: 'date_of_birth',
+    headerName: 'Created date',
     sortable: true,
     filter: true,
   },
   {
-    field: "email",
-    headerName: "Created by",
+    field: 'email',
+    headerName: 'Created by',
     sortable: true,
     filter: true,
   },
   {
-    field: "active",
-    headerName: "Status",
+    field: 'active',
+    headerName: 'Status',
     sortable: true,
     filter: true,
   },
@@ -82,30 +85,55 @@ export const columnFieldDef = [
 // Column Reference Field Definition
 export const columnRefFieldDef = [
   {
-    field: "reference_document_id",
-    headerName: "ID",
+    field: 'reference_document_id',
+    headerName: 'ID',
     width: 60,
     sortable: true,
     filter: true,
   },
   {
-    field: "reference_name",
-    headerName: "Name",
+    field: 'reference_name',
+    headerName: 'Name',
     width: 230,
     sortable: true,
     filter: true,
   },
   {
-    field: "link",
-    headerName: "Link",
+    field: 'link',
+    headerName: 'Link',
     width: 300,
     sortable: true,
     filter: true,
   },
   {
-    field: "author",
-    headerName: "Author",
+    field: 'author',
+    headerName: 'Author',
     width: 350,
+    sortable: true,
+    filter: true,
+  },
+];
+
+// Column Synonym Field Definition
+export const columnSynonymFieldDef = [
+  {
+    field: 'synonym_id',
+    headerName: 'ID',
+    width: 60,
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'meaning',
+    headerName: 'Meaning',
+    width: 230,
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'words',
+    headerName: 'Words',
+    width: 300,
     sortable: true,
     filter: true,
   },

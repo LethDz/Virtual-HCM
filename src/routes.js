@@ -13,6 +13,7 @@ import {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
+  SynonymListPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -27,6 +28,7 @@ import {
   ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
   ADMIN_CONFIGURE_SYSTEM_PAGE,
   REFERENCE_LIST_PAGE,
+  SYNONYM_LIST_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -87,6 +89,11 @@ const Routes = () => (
         exact
         path={REFERENCE_LIST_PAGE}
         component={ReferenceListPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={SYNONYM_LIST_PAGE}
+        component={SynonymListPage}
       />
     </Switch>
   </Fragment>

@@ -18,6 +18,7 @@ import Coresponse from 'src/modules/contributor/components/dataApprovalComponent
 import CriticalData from 'src/modules/contributor/components/dataApprovalComponent/CriticalData';
 import DataApprovalList from 'src/modules/contributor/components/DataApprovalList';
 import CreateDataApprovalForm from 'src/modules/contributor/components/CreateDataApprovalForm';
+import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -44,4 +45,5 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
+  SynonymList,
 };

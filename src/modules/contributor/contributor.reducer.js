@@ -1,6 +1,10 @@
 import { LOGOUT } from 'src/constants';
 import {
   GET_ALL_SYNONYMS,
+  ADD_SYNONYM,
+  GET_SYNONYM_DETAIL,
+  EDIT_SYNONYM,
+  DELETE_SYNONYM,
   GET_ALL_REFERENCE,
   EDIT_REFERENCE,
   ADD_REFERENCE_TO_LIST,
@@ -12,10 +16,12 @@ const initialState = {
   synonymsList: [],
   documentReferenceList: [],
   referenceDetail: null,
+  synonymDetail: null,
 };
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
+    //cases for synonym
     case GET_ALL_SYNONYMS:
       const synonymsList = action.payload.synonymsList;
       return {
@@ -23,6 +29,55 @@ export const contributorReducer = (state = initialState, action) => {
         synonymsList,
       };
 
+    case ADD_SYNONYM:
+      const synonym = action.payload.synonym;
+      let newSynonymList = state.synonymsList;
+      newSynonymList.push(synonym);
+      return {
+        ...state,
+        synonymsList: newSynonymList,
+      };
+
+    case GET_SYNONYM_DETAIL:
+      const newSynonymDetail = action.payload.synonym;
+      return {
+        ...state,
+        synonymDetail: newSynonymDetail,
+      };
+
+    case EDIT_SYNONYM:
+      const synonymDetail = action.payload.synonymDetail;
+      let listSynonym = state.synonymList.map((synonym) => {
+        if (synonym.synonym_id === synonymDetail.synonym_id) {
+          synonym = synonymDetail;
+        }
+
+        return synonym;
+      });
+
+      return {
+        ...state,
+        synonymDetail: synonymDetail,
+        synonymList: listSynonym,
+      };
+
+    case DELETE_SYNONYM:
+      const deleteSynonymId = action.payload.synonymId;
+      let deletePosition = -1;
+      let newList = state.synonymList.map((synonym, index) => {
+        if (synonym.synonym_id === deleteSynonymId) {
+          deletePosition = index;
+        }
+
+        return synonym;
+      });
+      newList.splice(deletePosition, 1);
+      return {
+        ...state,
+        synonymList: newList,
+      };
+
+    //cases for document reference
     case GET_ALL_REFERENCE: {
       const list = action.payload.documentReferenceList;
       return {

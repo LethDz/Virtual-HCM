@@ -1,0 +1,195 @@
+import React, { Component } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import { Button, Col, Row } from 'reactstrap';
+import { SYNONYM, ALL } from 'src/constants';
+import { columnSynonymFieldDef } from 'src/modules/contributor';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import { connect } from 'react-redux';
+import { getAllSynonyms, fetchAllSynonyms } from 'src/modules/contributor';
+
+class SynonymList extends Component {
+  _isMounted = false;
+  constructor() {
+    super();
+    this.state = {
+      synonymList: [],
+      modalSynonymCreate: false,
+      modalSynonymDetail: false,
+      containerHeight: 0,
+      containerWidth: 0,
+      loading: false,
+      selectedId: '',
+      errorAlert: false,
+      successAlert: false,
+      errorList: [],
+    };
+    this.conRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+    this.setStyleForGrid();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  onGridReady = async (params) => {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    await this.setRowData();
+    await this.gridApi.sizeColumnsToFit();
+  };
+
+  setRowData = async () => {
+    if (this.props.synonymList.length === 0) {
+      this._isMounted && this.setLoading(true);
+      axiosClient
+        .get(SYNONYM + ALL)
+        .then((response) => {
+          const synonyms = response.data.result_data.synonym_dicts;
+          this.props.fetchAllDocumentReference(synonyms);
+          this.setSynonymList(synonyms);
+          this.setLoading(false);
+        })
+        .then(() => {
+          this.setStyleForGrid();
+        })
+        .catch((error) => {
+          this.setLoading(false);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+        });
+    } else {
+      await this.setSynonymList(this.props.synonymList);
+      await this.setStyleForGrid();
+    }
+  };
+
+  setSynonymList = (list) => {
+    this._isMounted &&
+      this.setState({
+        synonymList: list,
+      });
+  };
+
+  setStyleForGrid = () => {
+    const containerHeight =
+      this.conRef.current && this.conRef.current.clientHeight;
+    const containerWidth =
+      this.conRef.current && this.conRef.current.clientWidth;
+    this._isMounted &&
+      this.setState({
+        containerHeight,
+        containerWidth,
+      });
+  };
+
+  setLoading = (status) => {
+    this._isMounted &&
+      this.setState({
+        loading: status,
+      });
+  };
+
+  onDismiss = (name) => {
+    this._isMounted &&
+      this.setState({
+        [name]: false,
+      });
+  };
+
+  setSuccessAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        successAlert: status,
+      });
+  };
+
+  setErrorAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        errorAlert: status,
+      });
+  };
+
+  setErrorList = (list) => {
+    this._isMounted &&
+      this.setState({
+        errorList: list,
+      });
+  };
+
+  render() {
+    return (
+      <div
+        id="cl-container"
+        className="container cl-container min-vh-100"
+        ref={this.conRef}
+      >
+        <Row>
+          <Col className="justify-content-center d-flex">
+            <h5 className="mt-2 mb-2">Synonyms</h5>
+          </Col>
+        </Row>
+        {this.state.successAlert && (
+          <SuccessAlert
+            successAlert={this.state.successAlert}
+            text="Loading reference is successfully"
+            onDismiss={() => this.onDismiss('successAlert')}
+          />
+        )}
+        {this.state.errorAlert && (
+          <ErrorAlert
+            errorAlert={this.state.errorAlert}
+            errorList={this.state.errorList}
+            onDismiss={() => this.onDismiss('errorAlert')}
+          />
+        )}
+        <Row className="d-flex flex-row-reverse">
+          <Col xs="auto">
+            <Button onClick={this.onReferenceCreateClick} color="success">
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp; Create
+            </Button>
+          </Col>
+        </Row>
+        <LoadingSpinner
+          loading={this.state.loading}
+          text="Loading"
+        ></LoadingSpinner>
+        <div
+          className="ag-theme-alpine"
+          style={{
+            height: `${this.state.containerHeight - 200}px`,
+            marginTop: '10px',
+          }}
+        >
+          <AgGridReact
+            onGridReady={this.onGridReady}
+            rowData={this.state.synonymList}
+            rowSelection="single"
+            columnDefs={columnSynonymFieldDef}
+          ></AgGridReact>
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  synonymList: getAllSynonyms(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchAllSynonyms: (synonymList) =>
+    dispatch(fetchAllSynonyms(synonymList)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SynonymList);
