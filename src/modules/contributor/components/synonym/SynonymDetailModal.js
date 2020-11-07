@@ -163,7 +163,16 @@ class SynonymDetailModal extends Component {
                   />
                 </FormGroup>
 
-                <Label>Words: </Label>
+                <FormGroup>
+                  <Label>Words: </Label>
+                  <Input
+                    name="words"
+                    type="textarea"
+                    required
+                    value={this.state.words}
+                    onChange={this.handleInput}
+                  />
+                </FormGroup>
                 
               </Container>
             </ModalBody>
