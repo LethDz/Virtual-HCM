@@ -11,6 +11,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { connect } from 'react-redux';
 import { getAllSynonyms, fetchAllSynonyms } from 'src/modules/contributor';
+import {SynonymDetailModal} from 'src/modules/contributor'
 
 class SynonymList extends Component {
   _isMounted = false;
@@ -72,11 +73,34 @@ class SynonymList extends Component {
     }
   };
 
+  onRowDoubleClicked = () => {
+    let selectedRows = this.gridApi.getSelectedRows();
+    let id =
+      selectedRows.length === 1 ? selectedRows[0].synonym_id : '';
+    this._isMounted &&
+      this.setState({
+        selectedId: id,
+        modalSynonymDetail: !this.state.modalSynonymDetail,
+      });
+  };
+
   setSynonymList = (list) => {
     this._isMounted &&
       this.setState({
         synonymList: list,
       });
+  };
+
+  toggleSynonymDetail = () => {
+    this.setState({
+      modalSynonymDetail: !this.state.modalSynonymDetail,
+    });
+  };
+
+  updateSynonymList = () => {
+    this.setState({
+      synonymList: this.props.synonymList,
+    });
   };
 
   setStyleForGrid = () => {
@@ -176,7 +200,16 @@ class SynonymList extends Component {
             rowData={this.state.synonymList}
             rowSelection="single"
             columnDefs={columnSynonymFieldDef}
+            onRowDoubleClicked={this.onRowDoubleClicked}
           ></AgGridReact>
+          {this.state.modalSynonymDetail && (
+            <SynonymDetailModal
+              isOpen={this.state.modalSynonymDetail}
+              id={this.state.selectedId}
+              toggle={this.toggleSynonymDetail}
+              updateSynonymList={this.setSynonymList}
+            />
+          )}
         </div>
       </div>
     );

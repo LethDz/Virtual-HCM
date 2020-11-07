@@ -19,6 +19,7 @@ import CriticalData from 'src/modules/contributor/components/dataApprovalCompone
 import DataApprovalList from 'src/modules/contributor/components/DataApprovalList';
 import CreateDataApprovalForm from 'src/modules/contributor/components/CreateDataApprovalForm';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
+import SynonymDetailModal from 'src/modules/contributor/components/synonym/SynonymDetailModal';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -46,4 +47,5 @@ export {
   Coresponse,
   CriticalData,
   SynonymList,
+  SynonymDetailModal,
 };

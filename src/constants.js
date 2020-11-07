@@ -15,6 +15,7 @@ export const NLP = '/nlp';
 export const TOKENIZE = '/tokenize';
 
 export const SYNONYM = '/synonym';
+export const GET_SYNONYM = (id) => `/get?id=${id}`;
 export const REFERENCE = '/reference-document';
 
 export const ADD = '/add';
