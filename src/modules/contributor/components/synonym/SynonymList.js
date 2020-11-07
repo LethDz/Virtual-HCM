@@ -54,7 +54,7 @@ class SynonymList extends Component {
         .get(SYNONYM + ALL)
         .then((response) => {
           const synonyms = response.data.result_data.synonym_dicts;
-          this.props.fetchAllDocumentReference(synonyms);
+          this.props.fetchAllSynonyms(synonyms);
           this.setSynonymList(synonyms);
           this.setLoading(false);
         })
@@ -141,7 +141,7 @@ class SynonymList extends Component {
         {this.state.successAlert && (
           <SuccessAlert
             successAlert={this.state.successAlert}
-            text="Loading reference is successfully"
+            text="Loading synonym is successfully"
             onDismiss={() => this.onDismiss('successAlert')}
           />
         )}
