@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import 'src/static/stylesheets/training.process.css';
 import Terminal from 'terminal-in-react';
-import { 
-  API_URL, 
-  TRAINING_PROCESS_PAGE_PROCESS_CHECK 
-} from 'src/constants';
-import axiosClient from 'src/common/axiosClient';
 
 class ManageTrainingProcess extends Component {
   constructor() {
@@ -36,25 +31,25 @@ class ManageTrainingProcess extends Component {
       this.setState({
         loading: status,
       });
-  };
+  }
 
   setSuccessAlert = (status) => {
     this._isMounted &&
       this.setState({
         successAlert: status,
       });
-  };
+  }
 
   setErrorAlert = (status) => {
     this._isMounted &&
       this.setState({
         errorAlert: status,
       });
-  };
+  }
 
   onUnload = e => {
     if(this.connected()){
-      this.trainSocket.close();
+      this.trainSocket.close(1000);
     }
   }
 
@@ -79,33 +74,11 @@ class ManageTrainingProcess extends Component {
     inputTerminal[0].addEventListener('blur', () => {
       terminal[0].style.boxShadow = 'unset';
     });
-  };
+  }
 
   connected = () => {
     return this.trainSocket && (this.trainSocket.readyState === WebSocket.OPEN);
   }
-
-  // get_process_status = () => {
-  //   if(this.connected()){
-  //     axiosClient
-  //       .get(TRAINING_PROCESS_PAGE_PROCESS_CHECK)
-  //       .then((response) => {
-  //         if (response.data.status) {
-  //           return response.data.result_data;
-  //         } else {
-  //           this.setErrorAlert(true);
-  //           this.setSuccessAlert(false);
-  //           this.state.trainSocket.close();
-  //         }
-  //         this.setLoading(false);
-  //       })
-  //       .catch(() => {
-  //         this.setLoading(false);
-  //         this.setErrorAlert(true);
-  //         this.state.trainSocket.close();
-  //       });
-  //   }
-  // }
 
   create_websocket_connection = (terminal) => {
     let _self = this;
@@ -125,22 +98,30 @@ class ManageTrainingProcess extends Component {
             terminal(received.data);
             break;
           case 'running_status':
-            let status = received.data
+            let running_status = received.data
             switch(_self.current_state){
               case _self.commands.START:
-                if(status){
+                if(running_status){
                   terminal('Training process already started');
                 } else {
                   _self.start_training(terminal);
                 }
                 break;
               case _self.commands.STOP:
-                if(!status){
+                if(!running_status){
                   terminal('Training process not started');
                 } else {
                   _self.stop_training(terminal);
                 }
                 break;
+            }
+            break;
+          case 'stop_status':
+            let stop_status = received.data
+            if(stop_status){
+              terminal('TRAINING PROCESS STOPPED SUCCESSFULLY');
+            } else {
+              terminal('[CRITICAL] TRAINING PROCESS FAILED TO STOP. PLEASE RESTART THE SERVER !');
             }
             break;
           default:
