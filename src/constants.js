@@ -19,6 +19,7 @@ export const REFERENCE = '/reference-document';
 
 export const ADD = '/add';
 
+export const GENERATE_SIMILARIES = '/generate-similaries';
 export const ALL = '/all';
 
 export const EDIT = '/edit';
@@ -67,6 +68,14 @@ export const CONTRIBUTOR_PAGE = '/contributor';
 export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-approval`;
 export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
 export const REFERENCE_LIST_PAGE = '/references';
+
+export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
+  intent
+    ? `${CONTRIBUTOR_PAGE}/data-approval/get/${intent}`
+    : `${CONTRIBUTOR_PAGE}/data-approval/get/:intent`;
+
+export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>
+  `${KNOWLEDGE_DATA}/get?intent=${intent}`;
 
 // Roles
 export const ROLE_ADMIN = 'Admin';

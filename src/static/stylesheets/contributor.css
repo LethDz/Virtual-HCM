@@ -65,8 +65,14 @@
 
 .word-box {
   padding: 2px 2px 2px 2px;
-  border: solid;
-  border-width: 0.5px;
-  border-color: black;
   border-radius: 10%;
+}
+
+.hover-word {
+  background-color: rgb(175, 233, 68) !important;
+}
+
+.progress-bar-list {
+  margin: auto;
+  height: 42px;
 }

@@ -10,6 +10,7 @@ import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/M
 import CreateDataApprovalFormPage from 'src/pages/contributor/manage-data-approval/DataApprovalCreateForm';
 import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/DataApprovalList';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
+import DataApprovalDetailPage from 'src/pages/contributor/manage-data-approval/DataApprovalDetailPage';
 
 export {
   HomePage,
@@ -23,5 +24,6 @@ export {
   ContributorEditPage,
   ManageTrainingProcessPage,
   ConfigureSystemPage,
-  ReferenceListPage
+  ReferenceListPage,
+  DataApprovalDetailPage,
 };

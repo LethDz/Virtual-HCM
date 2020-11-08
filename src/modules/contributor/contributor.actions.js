@@ -6,7 +6,24 @@ import {
   ADD_REFERENCE_TO_LIST,
   GET_REFERENCE_DETAIL,
   DELETE_REFERENCE,
+  GET_ALL_DATA_APPROVAL,
+  GET_DATA_APPROVAL
 } from 'src/modules/contributor/index';
+
+export const fetchAllDataApproval = (dataApprovalList) => ({
+  type: GET_ALL_DATA_APPROVAL,
+  payload: {
+    dataApprovalList,
+  },
+});
+
+export const pullDataApproval = (dataApproval) => ({
+  type: GET_DATA_APPROVAL,
+  payload: {
+    dataApproval
+  }
+})
+
 
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,

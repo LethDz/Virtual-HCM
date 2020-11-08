@@ -1,31 +1,40 @@
-import React, { Component } from "react";
-import { Row, Col, Button, Input, ListGroup, ListGroupItem } from "reactstrap";
-import { handleInputChange } from "src/common/handleInputChange";
+import React, { Component } from 'react';
+import { Row, Col, Button, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { handleInputChange } from 'src/common/handleInputChange';
 
-import { SynonymsModal } from "src/modules/contributor/index";
+import { SynonymsModal } from 'src/modules/contributor/index';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 class Synonyms extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
-      synonymWord: "",
+      synonymWord: '',
       isOpenSynonymModal: false,
-      index: "",
+      index: '',
       synonyms: [],
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   setSynonymToForm = () => {
-    if (this.state.synonymWord !== "" && this.state.synonymWord !== null) {
-      let synonym = this.state.synonyms;
+    if (this.state.synonymWord !== '' && this.state.synonymWord !== null) {
+      let synonyms = this.state.synonyms;
       let synonymTemp = [];
-      synonym.forEach((synonym) => {
+      synonyms.forEach((synonym) => {
         let synonymId = [];
         synonym.synonyms.forEach((sy) => {
-          synonymId.push(sy.id);
+          synonymId.push(sy.synonym_id);
         });
         let synonymObject = {
           word: synonym.word,
@@ -42,32 +51,30 @@ class Synonyms extends Component {
   };
 
   setSynonym = () => {
-    if (this.state.synonymWord !== "" && this.state.synonymWord !== null) {
+    if (this.state.synonymWord !== '' && this.state.synonymWord !== null) {
       let synonyms = this.state.synonyms;
       synonyms.push({
         word: this.state.synonymWord,
         synonyms: [],
       });
-      this.setState({ synonyms: synonyms });
+      if (this._isMounted) this.setState({ synonyms: synonyms });
     }
   };
 
   toggleSynonymModal = (index) => {
-    this.setState({
-      isOpenSynonymModal: !this.state.isOpenSynonymModal,
-      index: index,
-    });
+    if (this._isMounted)
+      this.setState({
+        isOpenSynonymModal: !this.state.isOpenSynonymModal,
+        index: index,
+      });
   };
 
   addSynonym = (synonymList, index) => {
     let synonyms = this.state.synonyms;
     for (let i in synonymList) {
-      synonyms[index].synonyms.push({
-        id: synonymList[i].synonym_id,
-        meaning: synonymList[i].meaning,
-      });
+      synonyms[index].synonyms.push(synonymList[i]);
     }
-    this.setState({ synonyms: synonyms });
+    if (this._isMounted) this.setState({ synonyms: synonyms });
     this.setSynonymToForm();
   };
 
@@ -76,9 +83,10 @@ class Synonyms extends Component {
     if (index > -1) {
       synonyms.splice(index, 1);
     }
-    this.setState({
-      synonyms: synonyms,
-    });
+    if (this._isMounted)
+      this.setState({
+        synonyms: synonyms,
+      });
     this.setSynonymToForm();
   };
 
@@ -87,21 +95,30 @@ class Synonyms extends Component {
     if (synonymIndex > -1) {
       synonyms[wordIndex].synonyms.splice(synonymIndex, 1);
     }
-    this.setState({
-      synonyms: synonyms,
-    });
+    if (this._isMounted)
+      this.setState({
+        synonyms: synonyms,
+      });
     this.setSynonymToForm();
   };
 
   render() {
     return (
       <Row className="p-3" xs="1">
-        <SynonymsModal
-          index={this.state.index}
-          isOpenSynonymModal={this.state.isOpenSynonymModal}
-          toggleSynonymModal={this.toggleSynonymModal}
-          addSynonym={this.addSynonym}
-        />
+        {this.state.isOpenSynonymModal && (
+          <SynonymsModal
+            scrollToTop={this.scrollToTop}
+            setAlertMessage={this.props.setAlertMessage}
+            setSuccessAlert={this.props.setSuccessAlert}
+            setErrorAlert={this.props.setErrorAlert}
+            setErrorList={this.props.setErrorList}
+            index={this.state.index}
+            isOpenSynonymModal={this.state.isOpenSynonymModal}
+            toggleSynonymModal={this.toggleSynonymModal}
+            addSynonym={this.addSynonym}
+          />
+        )}
+
         <Col>
           Synonyms:
           <Row>
@@ -110,7 +127,7 @@ class Synonyms extends Component {
                 type="select"
                 id="coresponse-index"
                 name="synonymWord"
-                defaultValue={""}
+                defaultValue={''}
                 onChange={this.handleInput}
               >
                 <option value="" disabled>
@@ -133,7 +150,37 @@ class Synonyms extends Component {
                                 return (
                                   <ListGroupItem key={indexs}>
                                     <Row>
-                                      <Col>{synonym.meaning}</Col>
+                                      <Col>
+                                        {synonym.meaning}:&nbsp;
+                                        {synonym.words.map((key, index) => {
+                                          const hoverWord = this.props
+                                            .hoverWord;
+                                          let className = '';
+                                          if (hoverWord.trim() === key.trim()) {
+                                            className += 'hover-word';
+                                          }
+                                          return React.createElement(
+                                            'span',
+                                            {
+                                              className: className,
+                                              key: index,
+                                              onMouseOver: (event) => {
+                                                this.props.hover(
+                                                  word.word,
+                                                  'SYNONYM'
+                                                );
+                                                event.target.className =
+                                                  'hover-word';
+                                              },
+                                              onMouseLeave: (event) => {
+                                                this.props.hover('', 'SYNONYM');
+                                                event.target.className = '';
+                                              },
+                                            },
+                                            (key += ' ')
+                                          );
+                                        })}
+                                      </Col>
                                       <Col xs="auto">
                                         <Button
                                           color="danger"

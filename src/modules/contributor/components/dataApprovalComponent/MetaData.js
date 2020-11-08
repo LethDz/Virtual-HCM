@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Row,
   Col,
@@ -7,39 +7,51 @@ import {
   Button,
   ListGroup,
   ListGroupItem,
-} from "reactstrap";
+} from 'reactstrap';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import {
   getAllDocumentReference,
   fetchAllDocumentReference,
   ReferenceModal,
-} from "src/modules/contributor/index";
-import { connect } from "react-redux";
+} from 'src/modules/contributor/index';
+import { connect } from 'react-redux';
 
 class MetaData extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       isOpenReferenceModal: false,
-      referenceList: [],
+      referenceList: props.referenceValue ? props.referenceValue : [],
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted &&
+      this.setState({ referenceList: this.props.referenceValue });
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
+
   toggleReferenceModal = () => {
-    this.setState({ isOpenReferenceModal: !this.state.isOpenReferenceModal });
+    if (this._isMounted)
+      this.setState({ isOpenReferenceModal: !this.state.isOpenReferenceModal });
   };
 
   newRefer = (e) => {
-    console.log("test");
+    console.log('test');
   };
 
   addReference = (reference) => {
     let referenceList = this.state.referenceList;
     referenceList.push(reference);
-    this.setState({ referenceList: referenceList });
+    if (this._isMounted) this.setState({ referenceList: referenceList });
     this.setReference();
   };
 
@@ -48,7 +60,7 @@ class MetaData extends Component {
     if (index > -1) {
       referenceList.splice(index, 1);
     }
-    this.setState({ referenceList: referenceList });
+    if (this._isMounted) this.setState({ referenceList: referenceList });
     this.setReference();
   };
 
@@ -62,6 +74,31 @@ class MetaData extends Component {
       });
     });
     this.props.setReference(referenceList);
+  };
+
+  getReferenceInfo = (ref) => {
+    console.log('missing ' + ref.id);
+    if (this.props.documentReferenceList.length === 0) {
+      console.log('calling api');
+      return <p>Calling api{ref.id}</p>;
+    } else {
+      let referenceList = [];
+      this.props.documentReferenceList.forEach((reference) => {
+        if (reference.reference_document_id === ref.id) {
+          console.log(reference);
+          // return ;
+          referenceList.push({
+            extra_info: reference.extra_info,
+            id: reference.reference_document_id,
+            page: ref.page,
+            reference_name: reference.reference_name,
+          });
+          return <p>{reference.reference_name}</p>;
+        }
+      });
+
+      this._isMounted && this.setState({ referenceList: referenceList });
+    }
   };
 
   render() {
@@ -86,6 +123,7 @@ class MetaData extends Component {
             type="text"
             name="intent"
             id="intent"
+            value={this.props.intentValue}
             onChange={this.props.onChange}
           />
           <Input
@@ -94,15 +132,22 @@ class MetaData extends Component {
             type="text"
             name="intentFullName"
             id="intentFullName"
+            value={this.props.intentFullNameValue}
             onChange={this.props.onChange}
           />
         </Col>
         <Col className="pr-5">
-          <ReferenceModal
-            isOpen={this.state.isOpenReferenceModal}
-            toggle={this.toggleReferenceModal}
-            addReference={this.addReference}
-          />
+          {this.state.isOpenReferenceModal && (
+            <ReferenceModal
+              isOpen={this.state.isOpenReferenceModal}
+              toggle={this.toggleReferenceModal}
+              addReference={this.addReference}
+              setErrorAlert={this.props.setErrorAlert}
+              setSuccessAlert={this.props.setSuccessAlert}
+              scrollToTop={this.props.scrollToTop}
+            />
+          )}
+
           <Row>
             <Col>
               <Label className="label" for="reference">
@@ -126,7 +171,10 @@ class MetaData extends Component {
                   <Row>
                     <Col>
                       <Row>
-                        {reference.reference_name}; Page: {reference.page}
+                        {reference.reference_name
+                          ? reference.reference_name
+                          : this.getReferenceInfo(reference)}
+                        ; Page: {reference.page}
                       </Row>
                     </Col>
                     <Col xs="auto">
