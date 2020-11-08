@@ -263,7 +263,7 @@ class DataApprovalDetail extends Component {
       this.props.dataApprovalDetail.intent === this.props.intent
     ) {
       this.setFormData(this.props.dataApprovalDetail);
-      console.log(this.props.dataApprovalDetail);
+      console.log(this.props.dataApprovalDetail); 
     } else {
       this._isMounted && this.setState({ loading: true });
       axiosClient
@@ -306,34 +306,37 @@ class DataApprovalDetail extends Component {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
-        <LoadingSpinner loading={this.state.loading} text="Sending form" />
-        <Form onSubmit={this.submitForm} className="mt-3">
-          <div className="form-item form-item-meta">
-            <div className="mr-3 ml-3">
-              {this.state.successAlert && (
-                <SuccessAlert
-                  successAlert={this.state.successAlert}
-                  text={this.state.alertMessage}
-                  onDismiss={() => this.onDismiss('successAlert')}
-                />
-              )}
-              {this.state.errorAlert && (
-                <ErrorAlert
-                  errorAlert={this.state.errorAlert}
-                  errorList={this.state.errorList}
-                  onDismiss={() => this.onDismiss('errorAlert')}
-                />
-              )}
-            </div>
-            <Row xs="1">
-              <Col>
-                <h5 className="text-center m-3" ref={this.titleRef}>
-                  Edit knowledge data: {this.props.intent}
-                </h5>
-              </Col>
-            </Row>
-            <FormSectionTitle title="Meta data" />
-            {this.state.form.intent && (
+        <LoadingSpinner
+          loading={this.state.loading}
+          text="Loading information"
+        />
+        {!this.state.loading && (
+          <Form onSubmit={this.submitForm} className="mt-3">
+            <div className="form-item form-item-meta">
+              <div className="mr-3 ml-3">
+                {this.state.successAlert && (
+                  <SuccessAlert
+                    successAlert={this.state.successAlert}
+                    text={this.state.alertMessage}
+                    onDismiss={() => this.onDismiss('successAlert')}
+                  />
+                )}
+                {this.state.errorAlert && (
+                  <ErrorAlert
+                    errorAlert={this.state.errorAlert}
+                    errorList={this.state.errorList}
+                    onDismiss={() => this.onDismiss('errorAlert')}
+                  />
+                )}
+              </div>
+              <Row xs="1">
+                <Col>
+                  <h5 className="text-center m-3" ref={this.titleRef}>
+                    Edit knowledge data: {this.props.intent}
+                  </h5>
+                </Col>
+              </Row>
+              <FormSectionTitle title="Meta data" />
               <MetaData
                 intentValue={this.state.form.intent}
                 intentFullNameValue={this.state.form.intentFullName}
@@ -346,69 +349,69 @@ class DataApprovalDetail extends Component {
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
               />
-            )}
-            <FormSectionTitle title="Data analysis" />
-            {this.state.form.rawData && (
-              <RawData
-                rawDataValue={this.state.form.rawData}
+              <FormSectionTitle title="Data analysis" />
+              {this.state.form.rawData && (
+                <RawData
+                  rawDataValue={this.state.form.rawData}
+                  scrollToTop={this.scrollToTop}
+                  setAlertMessage={this.setAlertMessage}
+                  setSuccessAlert={this.setSuccessAlert}
+                  setErrorAlert={this.setErrorAlert}
+                  setErrorList={this.setErrorList}
+                  hover={this.hover}
+                  hoverWord={this.state.hoverWordFromSynonym}
+                  setTokenizeWord={this.setTokenizeWord}
+                  getWordArray={this.getWordArray}
+                  setRawData={this.setRawData}
+                  onChange={this.handleInputForm}
+                />
+              )}
+
+              <CriticalData
+                wordArray={wordArray}
+                setCritical={this.setCriticalData}
+              />
+
+              <Coresponse
+                setCoresponse={this.setCoresponse}
+                wordArray={wordArray}
+              />
+              <Question
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
+                className="mt-3"
+                setQuestions={this.setQuestions}
+                setTokenizeWord={this.setTokenizeWord}
+                setGeneratedSentences={this.setGeneratedSentences}
                 hover={this.hover}
                 hoverWord={this.state.hoverWordFromSynonym}
-                setTokenizeWord={this.setTokenizeWord}
-                getWordArray={this.getWordArray}
-                setRawData={this.setRawData}
-                onChange={this.handleInputForm}
+                synonymsArray={this.state.form.synonyms}
               />
-            )}
 
-            <CriticalData
-              wordArray={wordArray}
-              setCritical={this.setCriticalData}
-            />
+              <BaseResponse onChange={this.handleInputForm} />
 
-            <Coresponse
-              setCoresponse={this.setCoresponse}
-              wordArray={wordArray}
-            />
-            <Question
-              scrollToTop={this.scrollToTop}
-              setAlertMessage={this.setAlertMessage}
-              setSuccessAlert={this.setSuccessAlert}
-              setErrorAlert={this.setErrorAlert}
-              setErrorList={this.setErrorList}
-              className="mt-3"
-              setQuestions={this.setQuestions}
-              setTokenizeWord={this.setTokenizeWord}
-              setGeneratedSentences={this.setGeneratedSentences}
-              hover={this.hover}
-              hoverWord={this.state.hoverWordFromSynonym}
-              synonymsArray={this.state.form.synonyms}
-            />
-
-            <BaseResponse onChange={this.handleInputForm} />
-
-            <Synonyms
-              scrollToTop={this.scrollToTop}
-              setAlertMessage={this.setAlertMessage}
-              setSuccessAlert={this.setSuccessAlert}
-              setErrorAlert={this.setErrorAlert}
-              setErrorList={this.setErrorList}
-              setSynonym={this.setSynonym}
-              wordArray={wordArray}
-              hover={this.hover}
-              hoverWord={this.state.hoverWord}
-            />
-            <Row className="d-flex justify-content-around pt-3 pb-3">
-              <Button type="submit" color="info">
-                Create new data approval
-              </Button>
-            </Row>
-          </div>
-        </Form>
+              <Synonyms
+                scrollToTop={this.scrollToTop}
+                setAlertMessage={this.setAlertMessage}
+                setSuccessAlert={this.setSuccessAlert}
+                setErrorAlert={this.setErrorAlert}
+                setErrorList={this.setErrorList}
+                setSynonym={this.setSynonym}
+                wordArray={wordArray}
+                hover={this.hover}
+                hoverWord={this.state.hoverWord}
+              />
+              <Row className="d-flex justify-content-around pt-3 pb-3">
+                <Button type="submit" color="info">
+                  Create new data approval
+                </Button>
+              </Row>
+            </div>
+          </Form>
+        )}
       </Container>
     );
   }

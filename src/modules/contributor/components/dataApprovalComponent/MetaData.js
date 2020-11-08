@@ -76,6 +76,31 @@ class MetaData extends Component {
     this.props.setReference(referenceList);
   };
 
+  getReferenceInfo = (ref) => {
+    console.log('missing ' + ref.id);
+    if (this.props.documentReferenceList.length === 0) {
+      console.log('calling api');
+      return <p>Calling api{ref.id}</p>;
+    } else {
+      let referenceList = [];
+      this.props.documentReferenceList.forEach((reference) => {
+        if (reference.reference_document_id === ref.id) {
+          console.log(reference);
+          // return ;
+          referenceList.push({
+            extra_info: reference.extra_info,
+            id: reference.reference_document_id,
+            page: ref.page,
+            reference_name: reference.reference_name,
+          });
+          return <p>{reference.reference_name}</p>;
+        }
+      });
+
+      this._isMounted && this.setState({ referenceList: referenceList });
+    }
+  };
+
   render() {
     return (
       <Row className="pb-3">
@@ -146,7 +171,10 @@ class MetaData extends Component {
                   <Row>
                     <Col>
                       <Row>
-                        {reference.reference_name}; Page: {reference.page}
+                        {reference.reference_name
+                          ? reference.reference_name
+                          : this.getReferenceInfo(reference)}
+                        ; Page: {reference.page}
                       </Row>
                     </Col>
                     <Col xs="auto">

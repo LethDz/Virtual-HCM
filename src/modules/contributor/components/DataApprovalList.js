@@ -84,14 +84,7 @@ class DataApprovalList extends Component {
         [name]: false,
       });
   };
-
-  scrollToTop = () => {
-    this.titleRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-    });
-  };
-
+  
   setData = async () => {
     if (this.props.dataApprovalList.length === 0) {
       this._isMounted && this.setState({ loading: true });
@@ -101,13 +94,11 @@ class DataApprovalList extends Component {
           this.props.fetchAllDataApproval(response.data.result_data.knowledges);
           this.setAlertMessage('Load successful');
           this.setSuccessAlert(true);
-          this.scrollToTop();
           this._isMounted && this.setState({ loading: false });
         })
         .catch((error) => {
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
-          this.scrollToTop();
           this._isMounted && this.setState({ loading: false });
         });
     }
@@ -132,7 +123,7 @@ class DataApprovalList extends Component {
         <LoadingSpinner loading={this.state.loading} text="Loading data approval" />
         <Row>
           <Col className="justify-content-center d-flex">
-            <h5 ref={this.titleRef} className="mt-2 mb-2">
+            <h5 className="mt-2 mb-2">
               Data approval
             </h5>
           </Col>
