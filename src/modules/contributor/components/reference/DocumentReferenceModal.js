@@ -293,7 +293,7 @@ class DocumentReferenceModal extends Component {
                       <Label>Link: </Label>
                       <Input
                         name="link"
-                        type="text"
+                        type="url"
                         value={this.state.link}
                         onChange={this.handleInput}
                       />
