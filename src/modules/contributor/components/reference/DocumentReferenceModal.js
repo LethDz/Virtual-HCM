@@ -188,7 +188,6 @@ class DocumentReferenceModal extends Component {
       .then(() => {
         this.props.updateReferenceList(this.props.referenceList);
       }).catch(() => {
-        console.log('hehe');
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
@@ -230,7 +229,7 @@ class DocumentReferenceModal extends Component {
                 {this.state.successAlert && (
                   <SuccessAlert
                     successAlert={this.state.successAlert}
-                    text="Adding reference is successfully"
+                    text="Editing reference is successfully"
                     onDismiss={() => this.onDismiss('successAlert')}
                   />
                 )}
@@ -294,7 +293,7 @@ class DocumentReferenceModal extends Component {
                       <Label>Link: </Label>
                       <Input
                         name="link"
-                        type="text"
+                        type="url"
                         value={this.state.link}
                         onChange={this.handleInput}
                       />

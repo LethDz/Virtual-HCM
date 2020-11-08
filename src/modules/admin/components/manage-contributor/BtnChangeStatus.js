@@ -1,11 +1,12 @@
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import axiosClient from 'src/common/axiosClient';
 import { ADMIN_CHANGE_STATUS_USER } from 'src/constants';
 import { editStatusOfUser } from 'src/modules/admin';
+import 'src/static/stylesheets/btn.change.status.css';
 
 const BtnChangeStatus = (props) => {
   const rowData = props.data;
@@ -23,7 +24,6 @@ const BtnChangeStatus = (props) => {
       .then((response) => {
         if (response.data.status) {
           props.editStatusOfUser(rowData.user_id);
-          context.setContributorsList && context.setContributorsList([]);
           context.setSuccessAlert(true);
           context.setAccountStatus && context.setAccountStatus(!props.value);
         } else {
@@ -32,8 +32,7 @@ const BtnChangeStatus = (props) => {
       })
       .then(() => {
         context.setLoading(false);
-        context.setContributorsList &&
-          context.setContributorsList(context.props.contributors);
+        props.api && props.api.refreshCells();
       })
       .catch(() => {
         context.setSuccessAlert(false);
@@ -43,8 +42,8 @@ const BtnChangeStatus = (props) => {
   };
 
   return (
-    <Fragment>
-      <span className={props.value ? 'text-success' : 'text-danger'}>
+    <div className={props.editPage ? '' : 'align-center-table'}>
+      <span className={`${props.value ? 'text-success' : 'text-danger'} mr-2`}>
         <FontAwesomeIcon
           icon={props.value ? faCheck : faTimes}
           color={props.value ? 'green' : 'red'}
@@ -56,11 +55,12 @@ const BtnChangeStatus = (props) => {
         color={props.value ? 'danger' : 'success'}
         size="sm"
         onClick={changeStatus}
+        className="ml-2"
       >
         <FontAwesomeIcon icon={props.value ? faTimes : faCheck} color="white" />
         &nbsp; {props.value ? 'Disable' : 'Active'}
       </Button>
-    </Fragment>
+    </div>
   );
 };
 

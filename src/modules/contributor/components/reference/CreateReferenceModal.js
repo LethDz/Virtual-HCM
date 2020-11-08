@@ -235,7 +235,7 @@ class CreateReferenceModal extends Component {
                     <FormGroup>
                       <Label>Link</Label>
                       <Input
-                        type="text"
+                        type="url"
                         name="link"
                         placeholder="Link"
                         value={this.state.link}

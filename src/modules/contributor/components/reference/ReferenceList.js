@@ -30,6 +30,9 @@ class ReferenceList extends Component {
       containerWidth: 0,
       loading: false,
       selectedId: '',
+      errorAlert: false,
+      successAlert: false,
+      errorList: [],
     };
 
     this.conRef = React.createRef();
@@ -173,7 +176,7 @@ class ReferenceList extends Component {
       >
         <Row>
           <Col className="justify-content-center d-flex">
-            <h5>Document reference</h5>
+            <h5 className="mt-2 mb-2">Document reference</h5>
           </Col>
         </Row>
         {this.state.successAlert && (
