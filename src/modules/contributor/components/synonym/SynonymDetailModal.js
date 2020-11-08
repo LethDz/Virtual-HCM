@@ -10,9 +10,16 @@ import {
   Container,
   FormGroup,
   ModalFooter,
+  Col,
+  Row,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEdit,
+  faPlusSquare,
+  faTrash,
+  faTrashAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import { SYNONYM, GET_SYNONYM } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
@@ -33,7 +40,8 @@ class SynonymDetailModal extends Component {
     this.state = {
       synonym_id: '',
       meaning: '',
-      words: '',
+      words: [],
+      newWord: '',
       loading: false,
       errorAlert: false,
       successAlert: false,
@@ -118,6 +126,30 @@ class SynonymDetailModal extends Component {
         errorList: list,
       });
   };
+
+  addNewWord = () => {
+    if (!this.checkDuplicateWord(this.state.newWord)) {
+      this.setErrorAlert(false);
+      let listWord = this.state.words;
+      listWord.push(this.state.newWord);
+      this.setState({
+        words: listWord,
+      });
+    } else {
+      this.setErrorAlert(true);
+    }
+  };
+
+  checkDuplicateWord = (newWord) => {
+    let duplicate = false;
+    this.state.words.map((word) => {
+      if (word === newWord) {
+        duplicate = true;
+      }
+    });
+    return duplicate;
+  };
+
   render() {
     return (
       <Container>
@@ -126,9 +158,7 @@ class SynonymDetailModal extends Component {
           toggle={this.props.toggle}
           unmountOnClose={true}
         >
-          <ModalHeader toggle={this.props.toggle}>
-            Document Reference
-          </ModalHeader>
+          <ModalHeader toggle={this.props.toggle}>Synonym</ModalHeader>
           <Form>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -147,11 +177,9 @@ class SynonymDetailModal extends Component {
                     onDismiss={() => this.onDismiss('errorAlert')}
                   />
                 )}
-
                 <Label>
                   <h5>ID: {this.state.synonym_id}</h5>
                 </Label>
-
                 <FormGroup>
                   <Label>Meaning: </Label>
                   <Input
@@ -162,31 +190,66 @@ class SynonymDetailModal extends Component {
                     onChange={this.handleInput}
                   />
                 </FormGroup>
-
-                <FormGroup>
-                  <Label>Words: </Label>
-                  <Input
-                    name="words"
-                    type="textarea"
-                    required
-                    value={this.state.words}
-                    onChange={this.handleInput}
-                  />
-                </FormGroup>
-                
+                <Label>Words: </Label>
+                <Form>
+                  <div className="container justify-content-center">
+                    <div style={{ height: 250, overflow: 'scroll' }}>
+                      {this.state.words.map((word, index) => {
+                        return (
+                          <Row className="mt-2">
+                            <Col className="col-3">Word {index + 1}</Col>
+                            <Col className="col-7">
+                              <Input
+                                type="text"
+                                required
+                                value={word}
+                                onChange={this.handleInput}
+                              />
+                            </Col>
+                            <Col className="col-2">
+                              <Button color="danger">
+                                <FontAwesomeIcon icon={faTrashAlt} />
+                              </Button>
+                            </Col>
+                          </Row>
+                        );
+                      })}
+                    </div>
+                    <Row className="mt-4">
+                      <Col className="col-3">New word</Col>
+                      <Col className="col-7">
+                        <Input
+                          name="newWord"
+                          type="text"
+                          required
+                          value={this.state.newWord}
+                          onChange={this.handleInput}
+                        />
+                      </Col>
+                      <Col className="col-2">
+                        <Button color="success" onClick={this.addNewWord}>
+                          <FontAwesomeIcon icon={faPlusSquare} />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                </Form>
               </Container>
             </ModalBody>
             <ModalFooter>
               <Button
-                color="warning"
+                color="primary"
                 type="submit"
                 disabled={this.state.loading}
               >
                 <FontAwesomeIcon icon={faEdit} color="white" />
                 &nbsp;Edit
               </Button>
-
-              <Button color="danger" disabled={this.state.loading}>
+              <Button
+                color="warning"
+                disabled={this.state.loading}
+                style={{ color: 'white' }}
+              >
                 <FontAwesomeIcon icon={faTrash} color="white" />
                 &nbsp;Delete
               </Button>
