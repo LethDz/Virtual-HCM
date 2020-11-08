@@ -16,7 +16,7 @@ export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
-
+export const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
 export const POSTags = [
   'Np',
   'Nc',
@@ -44,6 +44,9 @@ export const POSTags = [
 
 export const VERB = 'VERB';
 export const CRITICAL = 'CRITICAL';
+
+export const V = 'V';
+export const N = 'N';
 
 export const context = (component) => ({
   componentParent: component,

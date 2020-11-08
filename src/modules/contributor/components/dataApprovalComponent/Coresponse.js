@@ -8,9 +8,11 @@ import {
   ListGroupItem,
   Button,
 } from 'reactstrap';
+import { questionType } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { handleInputChange } from 'src/common/handleInputChange';
 
 class Coresponse extends Component {
   _isMounted = false;
@@ -18,8 +20,12 @@ class Coresponse extends Component {
     super();
     this.state = {
       coresponse: [],
+      currentCoresponse: '',
+      currentCoresponseType: questionType[0],
     };
   }
+
+  handleInput = (event) => handleInputChange(event, this);
 
   componentDidMount() {
     this._isMounted = true;
@@ -30,8 +36,8 @@ class Coresponse extends Component {
   }
 
   addCoresponse = () => {
-    let type = document.getElementById('coresponse-type').value;
-    let word = document.getElementById('coresponse-index').value;
+    let type = this.state.currentCoresponseType;
+    let word = this.state.currentCoresponse;
     if (word.trim() !== '') {
       let temp = this.state.coresponse;
       temp.push({
@@ -66,20 +72,27 @@ class Coresponse extends Component {
   };
 
   render() {
-    const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
     return (
       <Col>
         <Label>Coresponse</Label>
         <Row>
           <Col xs="auto">
-            <Input type="select" id="coresponse-type" placeholder="Type">
+            <Input
+              onChange={this.handleInput}
+              name="currentCoresponseType"
+              ref={this.coresponseRef}
+              type="select"
+            >
               {questionType.map((value, index) => {
                 return <option key={index}>{value}</option>;
               })}
             </Input>
           </Col>
           <Col>
-            <Input id="coresponse-index" />
+            <Input
+              onChange={this.handleInput}
+              name="currentCoresponse"
+            />
           </Col>
           <Col xs="auto">
             <Button color="primary" onClick={this.addCoresponse}>

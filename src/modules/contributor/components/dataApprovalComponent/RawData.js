@@ -7,6 +7,8 @@ import { handleInputChange } from 'src/common/handleInputChange';
 
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
+import { V, N } from 'src/modules/contributor/index';
+
 class RawData extends Component {
   _isMounted = false;
   constructor(props) {
@@ -128,9 +130,9 @@ class RawData extends Component {
                   className += 'hover-word ';
                 }
 
-                if (data.type === 'V') {
+                if (data.type === V) {
                   className += 'verb ';
-                } else if (data.type === 'N') {
+                } else if (data.type === N) {
                   className += 'noun ';
                 } else if (flag) {
                   className += 'name ';
