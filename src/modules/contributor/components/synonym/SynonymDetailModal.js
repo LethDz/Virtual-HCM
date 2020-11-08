@@ -64,9 +64,9 @@ class SynonymDetailModal extends Component {
       this.props.synonymDetail &&
       this.props.synonymDetail.synonym_id === parseInt(this.props.id)
     ) {
-        this.setState({
-          ...this.props.synonymDetail,
-        });
+      this.setState({
+        ...this.props.synonymDetail,
+      });
     } else {
       this.setLoading(true);
       axiosClient
@@ -138,11 +138,11 @@ class SynonymDetailModal extends Component {
       });
   };
 
-  deleteWord = (event) => {
+  deleteWord = (index) => {
     let list = this.state.words;
-    let index = event.target.id;
-    console.log(index);
-    list.splice(index, 1);
+    let pos = Number(index);
+    console.log(pos);
+    list.splice(pos, 1);
     this.setState({
       words: list,
     });
@@ -263,29 +263,30 @@ class SynonymDetailModal extends Component {
                       overflow: 'scroll',
                     }}
                   >
-                    {this._isMounted &&this.state.words.map((word, index) => (
-                      <Row className="mt-2" key={index}>
-                        <Col className="col-3">Word {index + 1}</Col>
-                        <Col className="col-7">
-                          <Input
-                            name={index}
-                            type="text"
-                            required
-                            value={word}
-                            onChange={this.handleItemChange}
-                          />
-                        </Col>
-                        <Col className="col-2">
-                          <Button
-                            color="danger"
-                            id={index}
-                            onClick={this.deleteWord}
-                          >
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </Button>
-                        </Col>
-                      </Row>
-                    ))}
+                    {this._isMounted &&
+                      this.state.words.map((word, index) => (
+                        <Row className="mt-2" key={index}>
+                          <Col className="col-3">Word {index + 1}</Col>
+                          <Col className="col-7">
+                            <Input
+                              name={index}
+                              type="text"
+                              required
+                              value={word}
+                              onChange={this.handleItemChange}
+                            />
+                          </Col>
+                          <Col className="col-2">
+                            <Button
+                              color="danger"
+                              id={index}
+                              onClick={this.deleteWord.bind(this, index)}
+                            >
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </Button>
+                          </Col>
+                        </Row>
+                      ))}
                   </div>
                   <Label className="mt-4">New word:</Label>
                   <Row>
