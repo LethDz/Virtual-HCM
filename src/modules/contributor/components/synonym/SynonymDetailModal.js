@@ -90,6 +90,16 @@ class SynonymDetailModal extends Component {
     }
   };
 
+  handleItemChange = (event) => {
+    let items = this.state.words;
+    let index = event.target.name;
+    let value = event.target.value;
+    items[index] = value;
+    this.setState({
+      words: items,
+    });
+  };
+
   handleInput = (event) => handleInputChange(event, this);
 
   setLoading = (status) => {
@@ -127,13 +137,24 @@ class SynonymDetailModal extends Component {
       });
   };
 
+  deleteWord = (event) => {
+    let list = this.state.words;
+    let index = event.target.id;
+    list.splice(index, 1);
+    this.setState({
+      words: list,
+    });
+  };
+
   addNewWord = () => {
-    if (!this.checkDuplicateWord(this.state.newWord)) {
+    let newWord = this.state.newWord.trim();
+    if (!this.checkDuplicateWord(newWord) && newWord) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
       listWord.push(this.state.newWord);
       this.setState({
         words: listWord,
+        newWord: '',
       });
     } else {
       this.setErrorAlert(true);
@@ -178,7 +199,7 @@ class SynonymDetailModal extends Component {
                   />
                 )}
                 <Label>
-                  <h5>ID: {this.state.synonym_id}</h5>
+                  <h6>ID: {this.state.synonym_id}</h6>
                 </Label>
                 <FormGroup>
                   <Label>Meaning: </Label>
@@ -191,49 +212,59 @@ class SynonymDetailModal extends Component {
                   />
                 </FormGroup>
                 <Label>Words: </Label>
-                <Form>
-                  <div className="container justify-content-center">
-                    <div style={{ height: 250, overflow: 'scroll' }}>
-                      {this.state.words.map((word, index) => {
-                        return (
-                          <Row className="mt-2">
-                            <Col className="col-3">Word {index + 1}</Col>
-                            <Col className="col-7">
-                              <Input
-                                type="text"
-                                required
-                                value={word}
-                                onChange={this.handleInput}
-                              />
-                            </Col>
-                            <Col className="col-2">
-                              <Button color="danger">
-                                <FontAwesomeIcon icon={faTrashAlt} />
-                              </Button>
-                            </Col>
-                          </Row>
-                        );
-                      })}
-                    </div>
-                    <Row className="mt-4">
-                      <Col className="col-3">New word</Col>
-                      <Col className="col-7">
-                        <Input
-                          name="newWord"
-                          type="text"
-                          required
-                          value={this.state.newWord}
-                          onChange={this.handleInput}
-                        />
-                      </Col>
-                      <Col className="col-2">
-                        <Button color="success" onClick={this.addNewWord}>
-                          <FontAwesomeIcon icon={faPlusSquare} />
-                        </Button>
-                      </Col>
-                    </Row>
+
+                <div className="container justify-content-center">
+                  <div
+                    className="border border-info p-3"
+                    style={{
+                      height: 250,
+                      overflow: 'scroll',
+                    }}
+                  >
+                    {this.state.words.map((word, index) => {
+                      return (
+                        <Row className="mt-2">
+                          <Col className="col-3">Word {index + 1}</Col>
+                          <Col className="col-7">
+                            <Input
+                              name={index}
+                              type="text"
+                              required
+                              value={word}
+                              onChange={this.handleItemChange}
+                            />
+                          </Col>
+                          <Col className="col-2">
+                            <Button
+                              color="danger"
+                              id={index}
+                              onClick={this.deleteWord}
+                            >
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </Button>
+                          </Col>
+                        </Row>
+                      );
+                    })}
                   </div>
-                </Form>
+                  <Label className="mt-4">New word:</Label>
+                  <Row>
+                    <Col className="col-10">
+                      <Input
+                        name="newWord"
+                        type="text"
+                        required
+                        value={this.state.newWord}
+                        onChange={this.handleInput}
+                      />
+                    </Col>
+                    <Col className="col-2">
+                      <Button color="success" onClick={this.addNewWord}>
+                        <FontAwesomeIcon icon={faPlusSquare} />
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
               </Container>
             </ModalBody>
             <ModalFooter>

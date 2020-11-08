@@ -11,7 +11,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { connect } from 'react-redux';
 import { getAllSynonyms, fetchAllSynonyms } from 'src/modules/contributor';
-import {SynonymDetailModal} from 'src/modules/contributor'
+import { SynonymDetailModal } from 'src/modules/contributor';
 
 class SynonymList extends Component {
   _isMounted = false;
@@ -75,8 +75,7 @@ class SynonymList extends Component {
 
   onRowDoubleClicked = () => {
     let selectedRows = this.gridApi.getSelectedRows();
-    let id =
-      selectedRows.length === 1 ? selectedRows[0].synonym_id : '';
+    let id = selectedRows.length === 1 ? selectedRows[0].synonym_id : '';
     this._isMounted &&
       this.setState({
         selectedId: id,
@@ -189,6 +188,7 @@ class SynonymList extends Component {
           text="Loading"
         ></LoadingSpinner>
         <div
+          id="synonym-list"
           className="ag-theme-alpine"
           style={{
             height: `${this.state.containerHeight - 200}px`,
@@ -221,8 +221,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchAllSynonyms: (synonymList) =>
-    dispatch(fetchAllSynonyms(synonymList)),
+  fetchAllSynonyms: (synonymList) => dispatch(fetchAllSynonyms(synonymList)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SynonymList);
