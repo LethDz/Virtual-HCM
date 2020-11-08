@@ -77,3 +77,7 @@ export const CSRF_TOKEN = 'csrftoken';
 
 // Base 64 Image generate
 export const imgBase64 = (image) => `data:image/png;base64,${image}`;
+
+// Manage training process page
+export const TRAINING_PROCESS_PAGE = '/trainer';
+export const TRAINING_PROCESS_PAGE_PROCESS_CHECK = `${TRAINING_PROCESS_PAGE}/is-running`;
