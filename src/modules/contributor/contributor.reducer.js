@@ -47,7 +47,7 @@ export const contributorReducer = (state = initialState, action) => {
 
     case EDIT_SYNONYM:
       const synonymDetail = action.payload.synonymDetail;
-      let listSynonym = state.synonymList.map((synonym) => {
+      let listSynonym = state.synonymsList.map((synonym) => {
         if (synonym.synonym_id === synonymDetail.synonym_id) {
           synonym = synonymDetail;
         }
@@ -58,13 +58,13 @@ export const contributorReducer = (state = initialState, action) => {
       return {
         ...state,
         synonymDetail: synonymDetail,
-        synonymList: listSynonym,
+        synonymsList: listSynonym,
       };
 
     case DELETE_SYNONYM:
       const deleteSynonymId = action.payload.synonymId;
       let deletePosition = -1;
-      let newList = state.synonymList.map((synonym, index) => {
+      let newList = state.synonymsList.map((synonym, index) => {
         if (synonym.synonym_id === deleteSynonymId) {
           deletePosition = index;
         }
@@ -74,7 +74,7 @@ export const contributorReducer = (state = initialState, action) => {
       newList.splice(deletePosition, 1);
       return {
         ...state,
-        synonymList: newList,
+        synonymsList: newList,
       };
 
     //cases for document reference

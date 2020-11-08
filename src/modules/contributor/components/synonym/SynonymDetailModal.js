@@ -20,7 +20,7 @@ import {
   faTrash,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { SYNONYM, GET_SYNONYM } from 'src/constants';
+import { SYNONYM, GET_SYNONYM, EDIT } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
@@ -31,6 +31,7 @@ import {
   getAllSynonyms,
   pullSynonymDetail,
   getSynonymDetail,
+  editSynonymDetail,
 } from 'src/modules/contributor';
 
 class SynonymDetailModal extends Component {
@@ -63,9 +64,9 @@ class SynonymDetailModal extends Component {
       this.props.synonymDetail &&
       this.props.synonymDetail.synonym_id === parseInt(this.props.id)
     ) {
-      this.setState({
-        ...this.props.synonymDetail,
-      });
+        this.setState({
+          ...this.props.synonymDetail,
+        });
     } else {
       this.setLoading(true);
       axiosClient
@@ -140,6 +141,7 @@ class SynonymDetailModal extends Component {
   deleteWord = (event) => {
     let list = this.state.words;
     let index = event.target.id;
+    console.log(index);
     list.splice(index, 1);
     this.setState({
       words: list,
@@ -167,8 +169,48 @@ class SynonymDetailModal extends Component {
       if (word === newWord) {
         duplicate = true;
       }
+      return duplicate;
     });
     return duplicate;
+  };
+
+  editSynonym = (event) => {
+    event.preventDefault();
+    let newSynonym = new FormData();
+    newSynonym.append('id', this.state.synonym_id);
+    newSynonym.append('meaning', this.state.meaning);
+    newSynonym.append('words', this.state.words);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    this.setLoading(true);
+    axiosClient
+      .post(SYNONYM + EDIT, newSynonym, config)
+      .then((response) => {
+        if (response.data.status) {
+          const synonym = response.data.result_data;
+          this.props.editSynonymDetail(synonym);
+          // this.setState({
+          //   ...synonym,
+          // });
+          this.props.updateSynonymList([]);
+          this.setSuccessAlert(true);
+        } else {
+          this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.props.updateSynonymList(this.props.synonymsList);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   render() {
@@ -180,7 +222,7 @@ class SynonymDetailModal extends Component {
           unmountOnClose={true}
         >
           <ModalHeader toggle={this.props.toggle}>Synonym</ModalHeader>
-          <Form>
+          <Form onSubmit={this.editSynonym}>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
               <Container>
@@ -221,31 +263,29 @@ class SynonymDetailModal extends Component {
                       overflow: 'scroll',
                     }}
                   >
-                    {this.state.words.map((word, index) => {
-                      return (
-                        <Row className="mt-2">
-                          <Col className="col-3">Word {index + 1}</Col>
-                          <Col className="col-7">
-                            <Input
-                              name={index}
-                              type="text"
-                              required
-                              value={word}
-                              onChange={this.handleItemChange}
-                            />
-                          </Col>
-                          <Col className="col-2">
-                            <Button
-                              color="danger"
-                              id={index}
-                              onClick={this.deleteWord}
-                            >
-                              <FontAwesomeIcon icon={faTrashAlt} />
-                            </Button>
-                          </Col>
-                        </Row>
-                      );
-                    })}
+                    {this._isMounted &&this.state.words.map((word, index) => (
+                      <Row className="mt-2" key={index}>
+                        <Col className="col-3">Word {index + 1}</Col>
+                        <Col className="col-7">
+                          <Input
+                            name={index}
+                            type="text"
+                            required
+                            value={word}
+                            onChange={this.handleItemChange}
+                          />
+                        </Col>
+                        <Col className="col-2">
+                          <Button
+                            color="danger"
+                            id={index}
+                            onClick={this.deleteWord}
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
                   </div>
                   <Label className="mt-4">New word:</Label>
                   <Row>
@@ -253,7 +293,6 @@ class SynonymDetailModal extends Component {
                       <Input
                         name="newWord"
                         type="text"
-                        required
                         value={this.state.newWord}
                         onChange={this.handleInput}
                       />
@@ -294,10 +333,12 @@ class SynonymDetailModal extends Component {
 
 const mapStateToProps = (state) => ({
   synonymDetail: getSynonymDetail(state),
-  synonymList: getAllSynonyms(state),
+  synonymsList: getAllSynonyms(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  editSynonymDetail: (synonymDetail) =>
+    dispatch(editSynonymDetail(synonymDetail)),
   pullSynonymDetail: (synonym) => dispatch(pullSynonymDetail(synonym)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SynonymDetailModal);

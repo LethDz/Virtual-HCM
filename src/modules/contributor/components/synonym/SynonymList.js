@@ -18,7 +18,7 @@ class SynonymList extends Component {
   constructor() {
     super();
     this.state = {
-      synonymList: [],
+      synonymsList: [],
       modalSynonymCreate: false,
       modalSynonymDetail: false,
       containerHeight: 0,
@@ -49,7 +49,7 @@ class SynonymList extends Component {
   };
 
   setRowData = async () => {
-    if (this.props.synonymList.length === 0) {
+    if (this.props.synonymsList.length === 0) {
       this._isMounted && this.setLoading(true);
       axiosClient
         .get(SYNONYM + ALL)
@@ -68,7 +68,7 @@ class SynonymList extends Component {
           this.setSuccessAlert(false);
         });
     } else {
-      await this.setSynonymList(this.props.synonymList);
+      await this.setSynonymList(this.props.synonymsList);
       await this.setStyleForGrid();
     }
   };
@@ -86,7 +86,7 @@ class SynonymList extends Component {
   setSynonymList = (list) => {
     this._isMounted &&
       this.setState({
-        synonymList: list,
+        synonymsList: list,
       });
   };
 
@@ -98,7 +98,7 @@ class SynonymList extends Component {
 
   updateSynonymList = () => {
     this.setState({
-      synonymList: this.props.synonymList,
+      synonymsList: this.props.synonymsList,
     });
   };
 
@@ -188,7 +188,6 @@ class SynonymList extends Component {
           text="Loading"
         ></LoadingSpinner>
         <div
-          id="synonym-list"
           className="ag-theme-alpine"
           style={{
             height: `${this.state.containerHeight - 200}px`,
@@ -197,7 +196,7 @@ class SynonymList extends Component {
         >
           <AgGridReact
             onGridReady={this.onGridReady}
-            rowData={this.state.synonymList}
+            rowData={this.state.synonymsList}
             rowSelection="single"
             columnDefs={columnSynonymFieldDef}
             onRowDoubleClicked={this.onRowDoubleClicked}
@@ -217,11 +216,11 @@ class SynonymList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  synonymList: getAllSynonyms(state),
+  synonymsList: getAllSynonyms(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchAllSynonyms: (synonymList) => dispatch(fetchAllSynonyms(synonymList)),
+  fetchAllSynonyms: (synonymsList) => dispatch(fetchAllSynonyms(synonymsList)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SynonymList);
