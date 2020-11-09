@@ -25,14 +25,25 @@ class MetaData extends Component {
     super();
     this.state = {
       isOpenReferenceModal: false,
-      referenceList: props.referenceValue ? props.referenceValue : [],
+      referenceList: [],
     };
   }
 
   componentDidMount = () => {
-    this._isMounted &&
-      this.setState({ referenceList: this.props.referenceValue });
     this._isMounted = true;
+
+    if (this.props.referenceValue) {
+      let referenceList = [];
+      this.props.referenceValue.forEach((reference) => {
+        referenceList.push({
+          reference_name: reference.name,
+          id: reference.id,
+          page: reference.page,
+          extra_info: reference.extra_info,
+        });
+      });
+      this.setState({ referenceList: referenceList });
+    }
   };
 
   componentWillUnmount = () => {
@@ -74,31 +85,6 @@ class MetaData extends Component {
       });
     });
     this.props.setReference(referenceList);
-  };
-
-  getReferenceInfo = (ref) => {
-    console.log('missing ' + ref.id);
-    if (this.props.documentReferenceList.length === 0) {
-      console.log('calling api');
-      return <p>Calling api{ref.id}</p>;
-    } else {
-      let referenceList = [];
-      this.props.documentReferenceList.forEach((reference) => {
-        if (reference.reference_document_id === ref.id) {
-          console.log(reference);
-          // return ;
-          referenceList.push({
-            extra_info: reference.extra_info,
-            id: reference.reference_document_id,
-            page: ref.page,
-            reference_name: reference.reference_name,
-          });
-          return <p>{reference.reference_name}</p>;
-        }
-      });
-
-      this._isMounted && this.setState({ referenceList: referenceList });
-    }
   };
 
   render() {
@@ -165,32 +151,30 @@ class MetaData extends Component {
             </Col>
           </Row>
           <ListGroup>
-            {this.state.referenceList.map((reference, index) => {
-              return (
-                <ListGroupItem key={index}>
-                  <Row>
-                    <Col>
-                      <Row>
-                        {reference.reference_name
-                          ? reference.reference_name
-                          : this.getReferenceInfo(reference)}
-                        ; Page: {reference.page}
-                      </Row>
-                    </Col>
-                    <Col xs="auto">
-                      <Button
-                        color="danger"
-                        onClick={() => {
-                          this.removeReference(index);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </Button>
-                    </Col>
-                  </Row>
-                </ListGroupItem>
-              );
-            })}
+            {this.state.referenceList &&
+              this.state.referenceList.map((reference, index) => {
+                return (
+                  <ListGroupItem key={index}>
+                    <Row>
+                      <Col>
+                        <Row>
+                          {reference.reference_name}; Page: {reference.page}
+                        </Row>
+                      </Col>
+                      <Col xs="auto">
+                        <Button
+                          color="danger"
+                          onClick={() => {
+                            this.removeReference(index);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </ListGroupItem>
+                );
+              })}
           </ListGroup>
         </Col>
       </Row>

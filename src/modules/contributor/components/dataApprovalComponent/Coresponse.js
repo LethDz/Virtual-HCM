@@ -29,6 +29,9 @@ class Coresponse extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    if (this.props.coresponseValue && this.props.coresponseValue.length) {
+      this.setState({ coresponse: this.props.coresponseValue });
+    }
   }
 
   componentWillUnmount() {
@@ -89,10 +92,7 @@ class Coresponse extends Component {
             </Input>
           </Col>
           <Col>
-            <Input
-              onChange={this.handleInput}
-              name="currentCoresponse"
-            />
+            <Input onChange={this.handleInput} name="currentCoresponse" />
           </Col>
           <Col xs="auto">
             <Button color="primary" onClick={this.addCoresponse}>

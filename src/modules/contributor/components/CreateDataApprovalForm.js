@@ -114,43 +114,46 @@ class CreateDataApprovalForm extends Component {
         );
       }
     }
-    this.setErrorAlert(true);
     this.setErrorList(errorMessage);
     this.scrollToTop();
-    if (this._isMounted)
-      this.setState({
-        loading: false,
-      });
   };
 
   submitForm = (event) => {
-    if (this._isMounted)
+    this._isMounted &&
       this.setState({
         loading: true,
       });
     event.preventDefault();
-    this.setError(() => {
-      if (this.state.errorList.length === 0) {
-        if (this._isMounted) this.setState({ errorAlert: false });
-        axiosClient
-          .post(KNOWLEDGE_DATA + ADD, this.state.form)
-          .then((response) => {
-            if (this._isMounted)
-              this.setState({
-                loading: false,
-              });
+    this.setError();
+    if (this.state.errorList.length === 0) {
+      axiosClient
+        .post(KNOWLEDGE_DATA + ADD, this.state.form)
+        .then((response) => {
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
+          if (response.data.status) {
             history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
-          })
-          .catch((err) => {
+            this.setErrorAlert(false);
+            this.setSuccessAlert(true);
+          } else {
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
-            this.scrollToTop();
-          });
-      } else {
-        if (this._isMounted)
-          this.setState({ errorAlert: true, loading: false });
-      }
-    });
+          }
+        })
+        .catch((err) => {
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+          this.scrollToTop();
+        });
+    } else {
+      this._isMounted && this.setState({ errorAlert: true, loading: false });
+    }
   };
 
   setCoresponse = (coresponse) => {
@@ -167,10 +170,16 @@ class CreateDataApprovalForm extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    form.questions.push({
-      question: questions,
-      generated_questions: [],
+    console.log(questions);
+    let questionArray = [];
+    questions.forEach((question) => {
+      questionArray.push({
+        question: question.question,
+        generated_questions: [],
+        type: question.type,
+      });
     });
+    form.questions = questionArray;
     if (this._isMounted) this.setState({ form: form });
   };
 

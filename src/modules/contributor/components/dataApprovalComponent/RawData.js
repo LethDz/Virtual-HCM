@@ -18,12 +18,17 @@ class RawData extends Component {
       tokenizeData: [],
       ner: [],
       loading: false,
-      rawData: '',
+      rawData: props.rawDataValue ? props.rawDataValue : '',
     };
   }
 
   componentDidMount() {
     this._isMounted = true;
+    if (this.props.detailPage) {
+      this.stateTokenizeRawDate(() => {
+        this.setTokenizedWordArray();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -43,6 +48,7 @@ class RawData extends Component {
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
+        this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
           let fullArray = [];
           response.data.result_data.pos.forEach((array) => {
@@ -74,18 +80,15 @@ class RawData extends Component {
               }
             }
           }
-
           if (this._isMounted)
             this.setState({
               mode: 'TOKENIZE',
               tokenizeData: fullArray,
               ner: modifiedNer,
-              loading: false,
             });
           this.setTokenizedWordArray();
           this.props.setAlertMessage('Tokenize successful');
           this.props.setSuccessAlert(true);
-          this.props.scrollToTop();
         } else {
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);

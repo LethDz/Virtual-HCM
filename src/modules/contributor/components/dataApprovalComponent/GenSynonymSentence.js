@@ -22,6 +22,13 @@ class GenSynonymSentence extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    if (this.props.questionValue) {
+      let questionList = [];
+      this.props.questionValue.generated_questions.forEach((question) => {
+        questionList.push({ sentence: question.question });
+      });
+      this.setState({ selectedSentences: questionList });
+    }
   };
 
   componentWillUnmount = () => {
@@ -72,20 +79,20 @@ class GenSynonymSentence extends Component {
             data.push({ sentence: sentence });
           });
         });
-        if (this._isMounted)
+        this._isMounted &&
           this.setState({
             similaries: data,
             loading: true,
           });
       })
       .catch((err) => {
-        if (this._isMounted)
+        this._isMounted &&
           this.setState({
             loading: false,
           });
         this.props.setErrorAlert(true);
         this.props.setSuccessAlert(false);
-        this.props.scrollToTop();
+        // this.props.scrollToTop();
       });
   };
 

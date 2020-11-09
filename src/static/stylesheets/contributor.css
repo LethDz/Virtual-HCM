@@ -76,3 +76,13 @@
   margin: auto;
   height: 42px;
 }
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.selector {
+  text-decoration: underline;
+}

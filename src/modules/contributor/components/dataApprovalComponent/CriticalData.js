@@ -31,6 +31,13 @@ class CriticalData extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    if (this.props.criticalDataValue && this.props.criticalDataValue.length) {
+      let result = [];
+      this.props.criticalDataValue.forEach((critical, index) => {
+        result.push({ ...critical, index });
+      });
+      this.setState({ criticalData: result });
+    }
   };
 
   componentWillUnmount = () => {
@@ -157,7 +164,7 @@ class CriticalData extends Component {
                 <Row>
                   <Col>
                     <Row>
-                      {criticalData.type}: {criticalData.word}
+                      {criticalData.type}
                     </Row>
                   </Col>
                   <Col xs="auto">

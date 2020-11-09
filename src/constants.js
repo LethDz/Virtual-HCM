@@ -74,6 +74,7 @@ export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
     ? `${CONTRIBUTOR_PAGE}/data-approval/get/${intent}`
     : `${CONTRIBUTOR_PAGE}/data-approval/get/:intent`;
 
+// API Contributor Route Path
 export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>
   `${KNOWLEDGE_DATA}/get?intent=${intent}`;
 

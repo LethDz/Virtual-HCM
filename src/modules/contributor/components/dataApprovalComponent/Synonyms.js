@@ -21,6 +21,10 @@ class Synonyms extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    console.log(this.props.synonymsValue);
+    if (this.props.synonymsValue && this.props.synonymsValue.length) {
+      this.setState({ synonyms: this.props.synonymsValue });
+    }
   };
 
   componentWillUnmount = () => {

@@ -23,10 +23,10 @@ import {
   handleInputFormChange,
   handleInputChange,
 } from 'src/common/handleInputChange';
-// import { history } from 'src/common/history';
+import { history } from 'src/common/history';
 
-// import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
-// import { KNOWLEDGE_DATA, ADD } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
 class DataApprovalDetail extends Component {
   _isMounted = false;
@@ -44,9 +44,10 @@ class DataApprovalDetail extends Component {
         baseResponse: '',
         documentReference: [],
       },
+      documentList: [],
       tokenizedWord: [],
       ner: [],
-      loading: false,
+      loading: true,
       hoverWord: '',
       hoverWordFromSynonym: '',
       alertMessage: '',
@@ -85,6 +86,7 @@ class DataApprovalDetail extends Component {
         ner: nerArray,
       });
   };
+
   setError = () => {
     let errorMessage = [];
     if (this.state.form.questions.length === 0) {
@@ -100,7 +102,6 @@ class DataApprovalDetail extends Component {
         );
       }
     }
-    this.setErrorAlert(true);
     this.setErrorList(errorMessage);
     this.scrollToTop();
     if (this._isMounted)
@@ -110,35 +111,39 @@ class DataApprovalDetail extends Component {
   };
 
   submitForm = (event) => {
-    // if (this._isMounted)
-    //   this.setState({
-    //     loading: true,
-    //   });
-    // event.preventDefault();
-    // this.setError(() => {
-    //   if (this.state.errorList.length === 0) {
-    //     if (this._isMounted) this.setState({ errorAlert: false });
-    //     axiosClient
-    //       .post(KNOWLEDGE_DATA + ADD, this.state.form)
-    //       .then((response) => {
-    //         if (this._isMounted)
-    //           this.setState({
-    //             loading: false,
-    //           });
-    //         history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
-    //       })
-    //       .catch((err) => {
-    //         this.setErrorAlert(true);
-    //         this.setSuccessAlert(false);
-    //         this.scrollToTop();
-    //       });
-    //   } else {
-    //     if (this._isMounted)
-    //       this.setState({ errorAlert: true, loading: false });
-    //   }
-    // });
-    // Edit
+    this._isMounted &&
+      this.setState({
+        loading: true,
+      });
+    event.preventDefault();
+    this.setError();
+    if (this.state.errorList.length === 0) {
+      axiosClient
+        .post(KNOWLEDGE_DATA + EDIT, this.state.form)
+        .then((response) => {
+          if (response.data.status) {
+            if (this._isMounted)
+              this.setState({
+                loading: false,
+              });
+            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+            this.setErrorAlert(false);
+            this.setSuccessAlert(true);
+          } else {
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+          }
+        })
+        .catch((err) => {
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+          this.scrollToTop();
+        });
+    } else {
+      this._isMounted && this.setState({ errorAlert: true, loading: false });
+    }
   };
+
 
   setCoresponse = (coresponse) => {
     let form = this.state.form;
@@ -263,7 +268,6 @@ class DataApprovalDetail extends Component {
       this.props.dataApprovalDetail.intent === this.props.intent
     ) {
       this.setFormData(this.props.dataApprovalDetail);
-      console.log(this.props.dataApprovalDetail); 
     } else {
       this._isMounted && this.setState({ loading: true });
       axiosClient
@@ -352,6 +356,7 @@ class DataApprovalDetail extends Component {
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData
+                  detailPage={true}
                   rawDataValue={this.state.form.rawData}
                   scrollToTop={this.scrollToTop}
                   setAlertMessage={this.setAlertMessage}
@@ -368,15 +373,19 @@ class DataApprovalDetail extends Component {
               )}
 
               <CriticalData
+                criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
                 setCritical={this.setCriticalData}
               />
 
               <Coresponse
+                coresponseValue={this.state.form.coresponse}
                 setCoresponse={this.setCoresponse}
                 wordArray={wordArray}
               />
               <Question
+                detailPage={true}
+                questionValue={this.state.form.questions}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -391,9 +400,13 @@ class DataApprovalDetail extends Component {
                 synonymsArray={this.state.form.synonyms}
               />
 
-              <BaseResponse onChange={this.handleInputForm} />
+              <BaseResponse
+                baseResponseValue={this.state.form.baseResponse}
+                onChange={this.handleInputForm}
+              />
 
               <Synonyms
+                synonymsValue={this.state.form.synonyms}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -406,7 +419,7 @@ class DataApprovalDetail extends Component {
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
                 <Button type="submit" color="info">
-                  Create new data approval
+                  Edit data approval
                 </Button>
               </Row>
             </div>
