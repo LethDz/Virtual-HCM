@@ -26,6 +26,7 @@ import {
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { getAllSynonyms, addSynonymToList } from 'src/modules/contributor';
+import { SYNONYM, ADD } from 'src/constants';
 
 class CreateSynonymModal extends Component {
   _isMounted = false;
@@ -133,6 +134,52 @@ class CreateSynonymModal extends Component {
     return duplicate;
   };
 
+  addSynonym = (event) => {
+    event.preventDefault();
+    this.setLoading(true);
+    this.setErrorAlert(false);
+    this.setSuccessAlert(false);
+    let newSynonym = new FormData();
+    newSynonym.append('meaning', this.state.meaning);
+    newSynonym.append('words', this.state.words);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    axiosClient
+      .post(SYNONYM + ADD, newSynonym, config)
+      .then((response) => {
+        if (response.data.status) {
+          const synonym = response.data.result_data;
+          this.props.addSynonymToList(synonym);
+          this.props.updateSynonymList([]);
+          this.setSuccessAlert(true);
+        } else {
+          this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.props.updateSynonymList(this.props.synonymsList);
+        this.resetSynonym();
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
+
+  resetSynonym = () => {
+    this.setState({
+      meaning: '',
+      words: [],
+      newWord: '',
+    });
+  };
+
   render() {
     return (
       <Container>
@@ -144,7 +191,7 @@ class CreateSynonymModal extends Component {
           <ModalHeader toggle={this.props.toggle}>
             Create New Synonym
           </ModalHeader>
-          <Form>
+          <Form onSubmit={this.addSynonym}>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
               <Container>
