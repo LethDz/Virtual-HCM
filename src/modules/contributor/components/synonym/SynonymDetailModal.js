@@ -20,7 +20,7 @@ import {
   faTrash,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { SYNONYM, GET_SYNONYM, EDIT } from 'src/constants';
+import { SYNONYM, GET_SYNONYM, EDIT, DELETE_SYNONYM } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
@@ -213,6 +213,27 @@ class SynonymDetailModal extends Component {
       });
   };
 
+  deleteSynonym = () => {
+    this.setLoading(true);
+    axiosClient
+      .get(SYNONYM + DELETE_SYNONYM(this.props.id))
+      .then((response) => {
+        if (response.data.status) {
+          this.props.deleteSynonym(this.props.id);
+          this.props.updateSynonymList(this.props.synonymsList);
+          this.props.toggle();
+        } else {
+          this.setErrorAlert(true); 
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      }).catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
+
   render() {
     return (
       <Container>
@@ -320,6 +341,7 @@ class SynonymDetailModal extends Component {
                 color="warning"
                 disabled={this.state.loading}
                 style={{ color: 'white' }}
+                onClick={this.deleteSynonym}
               >
                 <FontAwesomeIcon icon={faTrash} color="white" />
                 &nbsp;Delete
