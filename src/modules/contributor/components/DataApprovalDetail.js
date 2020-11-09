@@ -110,6 +110,20 @@ class DataApprovalDetail extends Component {
       });
   };
 
+  reformatForm = () => {
+    let form = this.state.form;
+    let synonym = [];
+    form.synonyms.forEach((synonyms) => {
+      let synonymIds = [];
+      synonyms.synonyms.forEach((item) => {
+        synonymIds.push(item.id);
+      });
+      synonym.push({ word: synonyms.word, synonyms: synonymIds });
+    });
+    form.synonyms = synonym
+    this._isMounted && this.setState({ form: form });
+  };
+
   submitForm = (event) => {
     this._isMounted &&
       this.setState({
@@ -117,6 +131,7 @@ class DataApprovalDetail extends Component {
       });
     event.preventDefault();
     this.setError();
+    this.reformatForm();
     if (this.state.errorList.length === 0) {
       axiosClient
         .post(KNOWLEDGE_DATA + EDIT, this.state.form)
@@ -143,7 +158,6 @@ class DataApprovalDetail extends Component {
       this._isMounted && this.setState({ errorAlert: true, loading: false });
     }
   };
-
 
   setCoresponse = (coresponse) => {
     let form = this.state.form;
@@ -175,6 +189,13 @@ class DataApprovalDetail extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
+    // form.synonyms.forEach(synonym => {
+    //   form.questions.forEach(question => {
+    //     if (question.question.includes(synonym.word)) {
+    //       question.generated_questions = []
+    //     }
+    //   })
+    // })
     if (this._isMounted) this.setState({ form: form });
   };
 

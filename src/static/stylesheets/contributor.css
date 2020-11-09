@@ -52,15 +52,24 @@
 }
 
 .name {
-  background-color: #DC3545;
+  border: solid;
+  border-width: 2px;
+  border-color: #DC3545;
+  /* background-color: #DC3545; */
 }
 
 .verb {
-  background-color: #28A745;
+  border: solid;
+  border-width: 2px;
+  border-color: #28A745;
+  /* background-color: #28A745; */
 }
 
 .noun {
-  background-color: #FFF3CD;
+  border: solid;
+  border-width: 2px;
+  border-color: #ffd23f;
+  /* background-color: #FFF3CD; */
 }
 
 .word-box {

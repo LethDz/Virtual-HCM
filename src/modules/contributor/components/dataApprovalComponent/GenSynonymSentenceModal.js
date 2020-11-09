@@ -37,6 +37,7 @@ class GenSynonymSentenceModal extends Component {
 
   onSelectionChanged = () => {
     let nodes = this.state.gridApi.getSelectedNodes();
+    // console.log(this.props.similaries)
     let selectedRow = [];
     nodes.forEach((node) => {
       if (typeof node !== 'undefined') {
@@ -70,7 +71,6 @@ class GenSynonymSentenceModal extends Component {
                 <AgGridReact
                   onGridReady={this.onGridReady}
                   rowData={this.props.similaries}
-                  onFirstDataRendered={this.firstDataRendered}
                   rowSelection="multiple"
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
