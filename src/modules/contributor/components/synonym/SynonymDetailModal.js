@@ -32,6 +32,7 @@ import {
   pullSynonymDetail,
   getSynonymDetail,
   editSynonymDetail,
+  deleteSynonym,
 } from 'src/modules/contributor';
 
 class SynonymDetailModal extends Component {
@@ -192,9 +193,9 @@ class SynonymDetailModal extends Component {
         if (response.data.status) {
           const synonym = response.data.result_data;
           this.props.editSynonymDetail(synonym);
-          // this.setState({
-          //   ...synonym,
-          // });
+          this.setState({
+            ...synonym,
+          });
           this.props.updateSynonymList([]);
           this.setSuccessAlert(true);
         } else {
@@ -223,11 +224,12 @@ class SynonymDetailModal extends Component {
           this.props.updateSynonymList(this.props.synonymsList);
           this.props.toggle();
         } else {
-          this.setErrorAlert(true); 
+          this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
-      }).catch(() => {
+      })
+      .catch(() => {
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
@@ -363,5 +365,6 @@ const mapDispatchToProps = (dispatch) => ({
   editSynonymDetail: (synonymDetail) =>
     dispatch(editSynonymDetail(synonymDetail)),
   pullSynonymDetail: (synonym) => dispatch(pullSynonymDetail(synonym)),
+  deleteSynonym: (id) => dispatch(deleteSynonym(id)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SynonymDetailModal);
