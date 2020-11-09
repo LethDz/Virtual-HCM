@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Col, Row } from 'reactstrap';
 import { SYNONYM, ALL } from 'src/constants';
-import { columnSynonymFieldDef } from 'src/modules/contributor';
+import {
+  columnSynonymFieldDef,
+  CreateSynonymModal,
+} from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
@@ -90,9 +93,21 @@ class SynonymList extends Component {
       });
   };
 
+  toggleSynonymCreate = () => {
+    this.setState({
+      modalSynonymCreate: !this.state.modalSynonymCreate,
+    });
+  };
+
   toggleSynonymDetail = () => {
     this.setState({
       modalSynonymDetail: !this.state.modalSynonymDetail,
+    });
+  };
+
+  onSynonymCreateClick = () => {
+    this.setState({
+      modalSynonymCreate: !this.state.modalSynonymCreate,
     });
   };
 
@@ -177,10 +192,17 @@ class SynonymList extends Component {
         )}
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
-            <Button onClick={this.onReferenceCreateClick} color="success">
+            <Button onClick={this.onSynonymCreateClick} color="success">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
+            {this.state.modalSynonymCreate && (
+              <CreateSynonymModal
+                isOpen={this.state.modalSynonymCreate}
+                toggle={this.toggleSynonymCreate}
+                updateSynonymList={this.setSynonymList}
+              />
+            )}
           </Col>
         </Row>
         <LoadingSpinner

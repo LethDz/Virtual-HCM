@@ -20,6 +20,7 @@ import DataApprovalList from 'src/modules/contributor/components/DataApprovalLis
 import CreateDataApprovalForm from 'src/modules/contributor/components/CreateDataApprovalForm';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
 import SynonymDetailModal from 'src/modules/contributor/components/synonym/SynonymDetailModal';
+import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -48,4 +49,5 @@ export {
   CriticalData,
   SynonymList,
   SynonymDetailModal,
+  CreateSynonymModal,
 };
