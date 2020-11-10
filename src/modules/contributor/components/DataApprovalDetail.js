@@ -295,7 +295,18 @@ class DataApprovalDetail extends Component {
     form.baseResponse = dataApproval.baseResponse;
     form.coresponse = dataApproval.coresponse;
     form.criticalData = dataApproval.criticalData;
-    form.documentReference = dataApproval.documentReference;
+
+    let referenceList = [];
+    dataApproval.documentReference.forEach((reference) => {
+      referenceList.push({
+        name: reference.name,
+        extra_info: reference.extra_info,
+        id: reference.id,
+        page: reference.page.toString(),
+      });
+    });
+    form.documentReference = referenceList;
+
     form.intent = dataApproval.intent;
     form.intentFullName = dataApproval.intentFullName;
     form.questions = dataApproval.questions;

@@ -176,7 +176,6 @@ class RawData extends Component {
             <Button
               type="button"
               color="danger"
-              className="mt-2"
               onClick={this.stateCancelTokenize}
             >
               <FontAwesomeIcon icon={faBan} />{' '}Cancel
