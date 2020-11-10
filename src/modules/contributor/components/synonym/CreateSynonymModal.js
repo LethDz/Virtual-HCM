@@ -21,12 +21,13 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCheck,
   faPlus,
   faPlusSquare,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { getAllSynonyms, addSynonymToList } from 'src/modules/contributor';
-import { SYNONYM, ADD } from 'src/constants';
+import { SYNONYM, ADD, NLP, TOKENIZE } from 'src/constants';
 
 class CreateSynonymModal extends Component {
   _isMounted = false;
@@ -40,6 +41,8 @@ class CreateSynonymModal extends Component {
       errorAlert: false,
       successAlert: false,
       errorList: [],
+      paragraph: '',
+      tokenizedWords: [],
     };
   }
 
@@ -113,7 +116,7 @@ class CreateSynonymModal extends Component {
     if (!this.checkDuplicateWord(newWord) && newWord) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
-      listWord.push(this.state.newWord);
+      listWord.push(newWord);
       this.setState({
         words: listWord,
         newWord: '',
@@ -139,14 +142,6 @@ class CreateSynonymModal extends Component {
     this.setLoading(true);
     this.setErrorAlert(false);
     this.setSuccessAlert(false);
-    // let newSynonym = new FormData();
-    // newSynonym.append('meaning', this.state.meaning);
-    // newSynonym.append('words', this.state.words);
-    // const config = {
-    //   headers: {
-    //     'content-type': 'multipart/form-data',
-    //   },
-    // };
     axiosClient
       .post(SYNONYM + ADD, {
         meaning: this.state.meaning,
@@ -181,6 +176,36 @@ class CreateSynonymModal extends Component {
       words: [],
       newWord: '',
     });
+  };
+
+  tokenizeWord = () => {
+    this.setLoading(true);
+    this.setErrorAlert(false);
+    this.setSuccessAlert(false);
+    axiosClient
+      .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
+      .then((response) => {
+        let words = [];
+        response.data.result_data.pos.map((sentence) => {
+          sentence.map((word) => {
+            if (word.type !== 'CH') {
+              words.push(word.value);
+            }
+            return word;
+          });
+          return sentence;
+        });
+
+        this.setState({
+          tokenizedWords: words,
+        });
+        this.setLoading(false);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   render() {
@@ -227,7 +252,7 @@ class CreateSynonymModal extends Component {
                   <div
                     className="border border-info p-3"
                     style={{
-                      height: 250,
+                      height: 200,
                       overflow: 'scroll',
                     }}
                   >
@@ -257,7 +282,33 @@ class CreateSynonymModal extends Component {
                         </Row>
                       ))}
                   </div>
-                  <Label className="mt-4">New word:</Label>
+                  <Label className="mt-2">Check word tokenize:</Label>
+                  <Row>
+                    <Col className="col-10">
+                      <Input
+                        type="textarea"
+                        name="paragraph"
+                        onChange={this.handleInput}
+                        value={this.state.paragraph}
+                      />
+                    </Col>
+                    <Col className="col-2">
+                      <Button color="warning" onClick={this.tokenizeWord}>
+                        <FontAwesomeIcon icon={faCheck} color="white" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Label className="mt-2">Tokenized words: </Label>
+                  <Row>
+                    <Col className="col-10">
+                      <Input
+                        type="textarea"
+                        value={this.state.tokenizedWords}
+                        readOnly
+                      />
+                    </Col>
+                  </Row>
+                  <Label className="mt-2">New word:</Label>
                   <Row>
                     <Col className="col-10">
                       <Input

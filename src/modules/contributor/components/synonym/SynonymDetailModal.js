@@ -15,12 +15,20 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCheck,
   faEdit,
   faPlusSquare,
   faTrash,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { SYNONYM, GET_SYNONYM, EDIT, DELETE_SYNONYM } from 'src/constants';
+import {
+  SYNONYM,
+  GET_SYNONYM,
+  EDIT,
+  DELETE_SYNONYM,
+  NLP,
+  TOKENIZE,
+} from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
@@ -48,6 +56,8 @@ class SynonymDetailModal extends Component {
       errorAlert: false,
       successAlert: false,
       errorList: [],
+      paragraph: '',
+      tokenizedWords: [],
     };
   }
 
@@ -154,7 +164,7 @@ class SynonymDetailModal extends Component {
     if (!this.checkDuplicateWord(newWord) && newWord) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
-      listWord.push(this.state.newWord);
+      listWord.push(newWord);
       this.setState({
         words: listWord,
         newWord: '',
@@ -232,6 +242,36 @@ class SynonymDetailModal extends Component {
       });
   };
 
+  tokenizeWord = () => {
+    this.setLoading(true);
+    this.setErrorAlert(false);
+    this.setSuccessAlert(false);
+    axiosClient
+      .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
+      .then((response) => {
+        let words = [];
+        response.data.result_data.pos.map((sentence) => {
+          sentence.map((word) => {
+            if (word.type !== 'CH') {
+              words.push(word.value);
+            }
+            return word;
+          });
+          return sentence;
+        });
+
+        this.setState({
+          tokenizedWords: words,
+        });
+        this.setLoading(false);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
+
   render() {
     return (
       <Container>
@@ -278,7 +318,7 @@ class SynonymDetailModal extends Component {
                   <div
                     className="border border-info p-3"
                     style={{
-                      height: 250,
+                      height: 200,
                       overflow: 'scroll',
                     }}
                   >
@@ -307,7 +347,33 @@ class SynonymDetailModal extends Component {
                         </Row>
                       ))}
                   </div>
-                  <Label className="mt-4">New word:</Label>
+                  <Label className="mt-2">Check word tokenize:</Label>
+                  <Row>
+                    <Col className="col-10">
+                      <Input
+                        type="textarea"
+                        name="paragraph"
+                        onChange={this.handleInput}
+                        value={this.state.paragraph}
+                      />
+                    </Col>
+                    <Col className="col-2">
+                      <Button color="warning" onClick={this.tokenizeWord}>
+                        <FontAwesomeIcon icon={faCheck} color="white" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Label className="mt-2">Tokenized words: </Label>
+                  <Row>
+                    <Col className="col-10">
+                      <Input
+                        type="textarea"
+                        value={this.state.tokenizedWords}
+                        readOnly
+                      />
+                    </Col>
+                  </Row>
+                  <Label className="mt-2">New word:</Label>
                   <Row>
                     <Col className="col-10">
                       <Input
