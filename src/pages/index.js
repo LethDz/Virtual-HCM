@@ -11,6 +11,7 @@ import CreateDataApprovalFormPage from 'src/pages/contributor/manage-data-approv
 import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/DataApprovalList';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
+import DataApprovalDetailPage from 'src/pages/contributor/manage-data-approval/DataApprovalDetailPage';
 
 export {
   HomePage,
@@ -25,5 +26,6 @@ export {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
-  SynonymListPage
+  SynonymListPage,
+  DataApprovalDetailPage,
 };

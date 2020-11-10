@@ -22,6 +22,7 @@ export const REFERENCE = '/reference-document';
 
 export const ADD = '/add';
 
+export const GENERATE_SIMILARIES = '/generate-similaries';
 export const ALL = '/all';
 
 export const EDIT = '/edit';
@@ -72,6 +73,14 @@ export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LI
 export const REFERENCE_LIST_PAGE = '/references';
 export const SYNONYM_LIST_PAGE = '/synonyms';
 
+export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
+  intent
+    ? `${CONTRIBUTOR_PAGE}/data-approval/get/${intent}`
+    : `${CONTRIBUTOR_PAGE}/data-approval/get/:intent`;
+
+export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>
+  `${KNOWLEDGE_DATA}/get?intent=${intent}`;
+
 // Roles
 export const ROLE_ADMIN = 'Admin';
 export const ROLE_CONTRIBUTOR = 'Contributor';
@@ -81,3 +90,7 @@ export const CSRF_TOKEN = 'csrftoken';
 
 // Base 64 Image generate
 export const imgBase64 = (image) => `data:image/png;base64,${image}`;
+
+// Manage training process page
+export const TRAINING_PROCESS_PAGE = '/trainer';
+export const TRAINING_PROCESS_PAGE_PROCESS_CHECK = `${TRAINING_PROCESS_PAGE}/is-running`;

@@ -14,6 +14,7 @@ import {
   ConfigureSystemPage,
   ReferenceListPage,
   SynonymListPage,
+  DataApprovalDetailPage
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -29,6 +30,7 @@ import {
   ADMIN_CONFIGURE_SYSTEM_PAGE,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
+  GET_KNOWLEDGE_DATA_BY_INTENT,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -89,6 +91,11 @@ const Routes = () => (
         exact
         path={REFERENCE_LIST_PAGE}
         component={ReferenceListPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={GET_KNOWLEDGE_DATA_BY_INTENT()}
+        component={DataApprovalDetailPage}
       />
       <PrivateRouteContributor
         exact

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Modal,
@@ -14,34 +14,43 @@ import {
   ListGroup,
   ListGroupItem,
   Alert,
-} from "reactstrap";
-import { connect } from "react-redux";
+} from 'reactstrap';
+import { connect } from 'react-redux';
 
-import axiosClient from "src/common/axiosClient";
-import { SYNONYM, ADD } from "src/constants";
+import axiosClient from 'src/common/axiosClient';
+import { SYNONYM, ADD } from 'src/constants';
 
-import { addSynonymToList } from "src/modules/contributor/index";
+import { addSynonymToList } from 'src/modules/contributor/index';
 
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { handleInputChange } from "src/common/handleInputChange";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { handleInputChange } from 'src/common/handleInputChange';
 
 class NewSynonymModal extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       modal: false,
-      word: "",
-      meaning: "",
+      word: '',
+      meaning: '',
       words: [],
       errorAlert: false,
-      errorMessage: "",
+      errorMessage: '',
       loading: false,
       addSuccess: null,
     };
   }
+
+  componentDidMount = () => {
+    this._isMounted = true;
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  };
 
   handleInput = (event) => handleInputChange(event, this);
 
@@ -51,13 +60,14 @@ class NewSynonymModal extends Component {
 
   addToList = () => {
     let word = this.state.word;
-    if (word.trim() !== "") {
+    if (word.trim() !== '') {
       let tokenizedWord = this.tokenizeWord(word);
       let words = this.state.words;
       words.push(tokenizedWord);
-      this.setState({
-        words: words,
-      });
+      if (this._isMounted)
+        this.setState({
+          words: words,
+        });
     }
   };
 
@@ -66,27 +76,29 @@ class NewSynonymModal extends Component {
     if (index > -1) {
       words.splice(index, 1);
     }
-    this.setState({
-      words: words,
-    });
+    if (this._isMounted)
+      this.setState({
+        words: words,
+      });
   };
 
   getError = () => {
-    let errorMessage = "";
+    let errorMessage = '';
     if (this.state.words.length === 0) {
       errorMessage = `${errorMessage}Words field required at least one word; `;
     }
-    this.setState({
-      errorMessage: errorMessage,
-    });
+    if (this._isMounted)
+      this.setState({
+        errorMessage: errorMessage,
+      });
     return errorMessage;
   };
 
   sendCreateSynonymRequest = (event) => {
-    this.setState({ loading: true });
+    if (this._isMounted) this.setState({ loading: true });
     event.preventDefault();
-    if (this.getError().trim() === "") {
-      this.setState({ errorAlert: false });
+    if (this.getError().trim() === '') {
+      if (this._isMounted) this.setState({ errorAlert: false });
       let synonym = {
         meaning: this.state.meaning,
         words: this.state.words,
@@ -94,26 +106,36 @@ class NewSynonymModal extends Component {
       axiosClient
         .post(SYNONYM + ADD, synonym)
         .then((response) => {
-          console.log(response)
-          this.setState({ loading: false });
+          if (this._isMounted) this.setState({ loading: false });
           if (response.data.status) {
-            this.setState({
-              addSuccess: true,
-              errorAlert: false,
-              word: "",
-              meaning: "",
-              words: [],
-            });
+            if (this._isMounted)
+              this.setState({
+                addSuccess: true,
+                errorAlert: false,
+                word: '',
+                meaning: '',
+                words: [],
+              });
           }
-          
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         })
         .catch((err) => {
-          this.setState({ loading: false });
-          console.log(err);
+          if (this._isMounted)
+            this.setState({
+              loading: false,
+            });
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         });
-      console.log(synonym);
     } else {
-      this.setState({ errorAlert: true });
+      if (this._isMounted) this.setState({ errorAlert: true });
     }
   };
 
@@ -196,7 +218,7 @@ class NewSynonymModal extends Component {
               </ListGroup>
             </ModalBody>
             <ModalFooter>
-              <Button color="success">Create</Button>
+              <Button color="info">Create</Button>
               <Button type="button" color="danger" onClick={this.props.toggle}>
                 Cancel
               </Button>
@@ -208,8 +230,7 @@ class NewSynonymModal extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({
   addSynonymToList: (synonym) => dispatch(addSynonymToList(synonym)),

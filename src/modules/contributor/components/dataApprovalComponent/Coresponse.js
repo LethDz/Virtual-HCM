@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Col,
   Row,
@@ -7,32 +7,49 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
-} from "reactstrap";
+} from 'reactstrap';
+import { questionType } from 'src/modules/contributor/index';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { handleInputChange } from 'src/common/handleInputChange';
 
 class Coresponse extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       coresponse: [],
+      currentCoresponse: '',
+      currentCoresponseType: questionType[0],
     };
   }
 
+  handleInput = (event) => handleInputChange(event, this);
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   addCoresponse = () => {
-    let type = document.getElementById("coresponse-type").value;
-    let word = document.getElementById("coresponse-index").value;
-    if (word.trim() !== "") {
+    let type = this.state.currentCoresponseType;
+    let word = this.state.currentCoresponse;
+    if (word.trim() !== '') {
       let temp = this.state.coresponse;
       temp.push({
         type: type,
         answer: word,
       });
       let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-      this.setState({
-        coresponse: sortedTemp,
-      });
+      if (this._isMounted) {
+        this.setState({
+          coresponse: sortedTemp,
+        });
+      }
     }
     this.setCoresponse();
   };
@@ -42,9 +59,11 @@ class Coresponse extends Component {
     if (index > -1) {
       coresponse.splice(index, 1);
     }
-    this.setState({
-      coresponse: coresponse,
-    });
+    if (this._isMounted) {
+      this.setState({
+        coresponse: coresponse,
+      });
+    }
     this.setCoresponse();
   };
 
@@ -53,23 +72,30 @@ class Coresponse extends Component {
   };
 
   render() {
-    const questionType = ["WHAT", "WHEN", "WHERE", "WHO", "WHY", "HOW"];
     return (
       <Col>
         <Label>Coresponse</Label>
         <Row>
           <Col xs="auto">
-            <Input type="select" id="coresponse-type" placeholder="Type">
+            <Input
+              onChange={this.handleInput}
+              name="currentCoresponseType"
+              ref={this.coresponseRef}
+              type="select"
+            >
               {questionType.map((value, index) => {
                 return <option key={index}>{value}</option>;
               })}
             </Input>
           </Col>
           <Col>
-            <Input id="coresponse-index" />
+            <Input
+              onChange={this.handleInput}
+              name="currentCoresponse"
+            />
           </Col>
           <Col xs="auto">
-            <Button color="success" onClick={this.addCoresponse}>
+            <Button color="primary" onClick={this.addCoresponse}>
               <FontAwesomeIcon icon={faPlus} /> Coresponse
             </Button>
           </Col>
