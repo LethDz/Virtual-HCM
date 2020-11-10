@@ -56,7 +56,6 @@ class MetaData extends Component {
   };
 
   newRefer = (e) => {
-    console.log('test');
   };
 
   addReference = (reference) => {

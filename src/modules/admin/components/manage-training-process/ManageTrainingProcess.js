@@ -1,14 +1,60 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
+import { handleInputChange } from 'src/common/handleInputChange';
 import 'src/static/stylesheets/training.process.css';
 import Terminal from 'terminal-in-react';
+import {
+  eventEnterSimulator,
+  ControlPanel,
+  classifierTypes,
+  defaultSetting,
+  getCurrentState,
+  getTrainSocket,
+  pullCurrentState,
+  pullTrainSocket,
+} from 'src/modules/admin';
+import { connect } from 'react-redux';
 
 class ManageTrainingProcess extends Component {
-  componentDidMount() {
-    this.onChangeTerminalStyle();
+  constructor() {
+    super();
+    this.state = {
+      data: null,
+      type: 1,
+      sentence_length: 30,
+      batch: 32,
+      epoch: 5,
+      learning_rate: '2e-5', // String or float ok
+      epsilon: '1e-8', // String or float ok
+      activation: 'softmax',
+    };
+    this.trainSocket = null;
+    this.current_state = null;
+    this.commands = {
+      CONNECT: 'connect',
+      START: 'start',
+      STOP: 'stop',
+      CHECK_STATUS: 'check_status',
+    };
   }
 
-  showMsg = () => 'Hello World';
+  onUnload = (e) => {
+    if (this.connected()) {
+      this.trainSocket.close(1000);
+    }
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onUnload);
+    this.props.pullCurrentState(this.current_state);
+    this.props.pullTrainSocket(this.trainSocket);
+  }
+
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.onUnload);
+    this.onChangeTerminalStyle();
+    this.current_state = this.props.currentState;
+  }
 
   onChangeTerminalStyle = () => {
     let terminal = document.getElementsByClassName('terminal-base');
@@ -22,6 +68,158 @@ class ManageTrainingProcess extends Component {
     });
   };
 
+  connected = () => {
+    return this.trainSocket && this.trainSocket.readyState === WebSocket.OPEN;
+  };
+
+  create_websocket_connection = (terminal) => {
+    let _self = this;
+    let ws_url = 'wss://127.0.0.1:8000/ws/train-classifier/';
+    let trainSocket = this.props.trainSocket
+      ? this.props.trainSocket
+      : new WebSocket(ws_url);
+    trainSocket.onopen = function (e) {
+      terminal('[open] Connected to training service');
+    };
+    trainSocket.onmessage = function (e) {
+      let received = JSON.parse(e.data);
+      if (received.type) {
+        switch (received.type) {
+          case 'message':
+            terminal(received.data);
+            break;
+          case 'running_status':
+            let running_status = received.data;
+            switch (_self.current_state) {
+              case _self.commands.START:
+                if (running_status) {
+                  terminal('Training process already started');
+                } else {
+                  _self.start_training(terminal);
+                }
+                break;
+
+              case _self.commands.STOP:
+                if (!running_status) {
+                  terminal('Training process not started');
+                } else {
+                  _self.stop_training(terminal);
+                }
+                break;
+              default:
+                break;
+            }
+            break;
+          case 'stop_status':
+            let stop_status = received.data;
+            if (stop_status) {
+              terminal('TRAINING PROCESS STOPPED SUCCESSFULLY');
+            } else {
+              terminal(
+                '[CRITICAL] TRAINING PROCESS FAILED TO STOP. PLEASE RESTART THE SERVER !'
+              );
+            }
+            break;
+          default:
+            terminal('[Websocket] Received data is unknown');
+            break;
+        }
+      } else {
+        terminal('[Websocket] Received data is unknown');
+      }
+    };
+    trainSocket.onclose = function (e) {
+      if (e.wasClean) {
+        terminal(
+          `[close] Connection closed cleanly, code=${e.code} reason=${e.reason}`
+        );
+      } else {
+        // e.g. server process killed or network down
+        // event.code is usually 1006 in this case
+        terminal('[close] Connection died unexpectedly');
+      }
+    };
+    trainSocket.onerror = function (error) {
+      terminal(`[error] ${error.message}`);
+    };
+    return trainSocket;
+  };
+
+  start_training = (terminal) => {
+    terminal('STARTING TRAIN PROCESS');
+    terminal('------------- Train parameters -------------');
+    terminal(
+      `Train data: ${!this.state.data ? 'None' : this.state.data.filename}`
+    );
+    terminal(`Classifier type: ${classifierTypes[this.state.type]}`);
+    terminal(`Max senquence length: ${this.state.sentence_length}`);
+    terminal(`Batch size: ${this.state.batch}`);
+    terminal(`Number of epoches: ${this.state.epoch}`);
+    terminal(`Learning rate: ${this.state.learning_rate}`);
+    terminal(`Epsilon value: ${this.state.epsilon}`);
+    terminal(`Activation function: ${this.state.activation}`);
+    terminal('--------------------------------------------');
+    this.trainSocket.send(
+      JSON.stringify({
+        command: this.commands.START,
+        // Parameters (read from screen inputs)
+        data: !this.state.data ? -1 : this.state.data.id,
+        type: this.state.type,
+        sentence_length: this.state.sentence_length,
+        batch: this.state.batch,
+        epoch: this.state.epoch,
+        learning_rate: this.state.learning_rate, // String or float ok
+        epsilon: this.state.epsilon, // String or float ok
+        activation: this.state.activation,
+      })
+    );
+  };
+
+  stop_training = (terminal) => {
+    terminal('STOPPING TRAIN PROCESS');
+    this.trainSocket.send(
+      JSON.stringify({
+        command: this.commands.STOP,
+      })
+    );
+  };
+
+  pre_checking = (terminal, current_state) => {
+    if (!this.connected()) {
+      terminal('Connection to train service not established');
+      terminal("Try to 'connect' first");
+    } else {
+      this.current_state = current_state;
+      this.trainSocket.send(
+        JSON.stringify({
+          command: this.commands.CHECK_STATUS,
+        })
+      );
+    }
+  };
+
+  inputChange = (event) => {
+    handleInputChange(event, this);
+  };
+
+  remoteAction = (command) => {
+    let inputTerminal = document.getElementsByClassName('btarSP');
+    inputTerminal[0].value = command;
+    inputTerminal[0].dispatchEvent(eventEnterSimulator);
+  };
+
+  selectTrainableData = (data) => {
+    this.setState({
+      data: data,
+    });
+  };
+
+  setSettingToDefault = () => {
+    this.setState({
+      ...defaultSetting,
+    });
+  };
+
   render() {
     return (
       <Container className="cl-container">
@@ -30,9 +228,16 @@ class ManageTrainingProcess extends Component {
             <h5 className="mt-2 mb-2">Manage Training Process</h5>
           </Col>
         </Row>
+        <ControlPanel
+          state={this.state}
+          inputChange={this.inputChange}
+          remoteAction={this.remoteAction}
+          selectTrainableData={this.selectTrainableData}
+          setSettingToDefault={this.setSettingToDefault}
+        />
         <Row>
           <Col className="d-flex">
-            <h6 className="mt-2 mb-2">Console Command: </h6>
+            <h6 className="mt-2 mb-2 text-primary">Console Command: </h6>
           </Col>
         </Row>
         <Row className="mb-3">
@@ -45,25 +250,34 @@ class ManageTrainingProcess extends Component {
                 fontSize: '1.1em',
               }}
               commands={{
-                'open-google': (arg, print, runCommand) => {
-                  window.open('https://www.google.com/', '_blank');
-                  print('hello');
-                  print('địt mẹ mày');
-                  print('trường FPT ngu lồn');
-                  print('địt cụ mày');
-                  print('cái lồn mẹ mày to');
-                  return 'opened';
+                connect: (arg, print, runCommand) => {
+                  if (this.props.trainSocket && !this.trainSocket) {
+                    this.trainSocket = this.create_websocket_connection(print);
+                    print('Reconnected to service !!!');
+                  } else {
+                    if (this.connected()) {
+                      print('Connection already established');
+                    } else {
+                      this.current_state = this.commands.CONNECT;
+                      this.trainSocket = this.create_websocket_connection(
+                        print
+                      );
+                    }
+                  }
                 },
-                show_msg: this.showMsg,
-                popup: () => alert('Terminal in React'),
+                start: (arg, print, runCommand) => {
+                  this.pre_checking(print, this.commands.START);
+                },
+                stop: (arg, print, runCommand) => {
+                  this.pre_checking(print, this.commands.STOP);
+                },
               }}
               descriptions={{
-                'open-google': 'opens google.com',
-                show_msg: 'shows a message',
-                alert: 'alert',
-                popup: 'alert',
+                start: 'Start training process',
+                stop: 'Stop training process',
+                connect: 'Connect to training service',
               }}
-              msg="You can write anything here. Example - Hello! My name is Foo and I like Bar."
+              msg="Welcome to training process center. Command 'help' for display list of command."
               hideTopBar={true}
               allowTabs={false}
             />
@@ -74,4 +288,17 @@ class ManageTrainingProcess extends Component {
   }
 }
 
-export default ManageTrainingProcess;
+const mapStateToProps = (state) => ({
+  trainSocket: getTrainSocket(state),
+  currentState: getCurrentState(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  pullTrainSocket: (trainSocket) => dispatch(pullTrainSocket(trainSocket)),
+  pullCurrentState: (currentState) => dispatch(pullCurrentState(currentState)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageTrainingProcess);
