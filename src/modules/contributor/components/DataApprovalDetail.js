@@ -270,6 +270,10 @@ class DataApprovalDetail extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    this.getInformation();
+  };
+
+  getInformation = () => {
     if (
       this.props.dataApprovalDetail &&
       this.props.dataApprovalDetail.intent === this.props.intent
@@ -282,7 +286,6 @@ class DataApprovalDetail extends Component {
         .then((response) => {
           this.setFormData(response.data.result_data.knowledge_data);
           this.props.pullDataApproval(response.data.result_data.knowledge_data);
-          this._isMounted && this.setState({ loading: false });
         })
         .catch((err) => {
           this._isMounted && this.setState({ loading: false });
@@ -313,7 +316,7 @@ class DataApprovalDetail extends Component {
     form.rawData = dataApproval.rawData;
     form.synonyms = dataApproval.synonyms;
     form.id = dataApproval.id;
-    this._isMounted && this.setState({ form: form });
+    this._isMounted && this.setState({ form: form, loading: false });
   };
 
   getWordArray = () => {
