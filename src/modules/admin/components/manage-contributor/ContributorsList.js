@@ -2,10 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import 'src/static/stylesheets/contributor.list.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEdit,
+  faWrench,
+  faUserPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import {
   columnFieldDef,
   context,
@@ -182,7 +184,7 @@ class ContributorsList extends Component {
                 className="link-no-underline"
               >
                 <Button color="primary">
-                  <FontAwesomeIcon icon={faPlus} color="white" />
+                  <FontAwesomeIcon icon={faUserPlus} color="white" />
                   &nbsp; Create
                 </Button>
               </Link>

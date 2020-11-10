@@ -5,6 +5,8 @@ import ContributorEdit from 'src/modules/admin/components/manage-contributor/Con
 import BtnChangeStatus from 'src/modules/admin/components/manage-contributor/BtnChangeStatus';
 import ConfigureSystem from 'src/modules/admin/components/configure-system/ConfigureSystem';
 import ManageTrainingProcess from 'src/modules/admin/components/manage-training-process/ManageTrainingProcess';
+import ControlPanel from 'src/modules/admin/components/manage-training-process/ControlPanel';
+import SelectFileModal from 'src/modules/admin/components/manage-training-process/SelectFileModal';
 
 export * from 'src/modules/admin/admin.actions';
 export * from 'src/modules/admin/admin.constants.js';
@@ -19,4 +21,6 @@ export {
   ContributorEdit,
   ConfigureSystem,
   ManageTrainingProcess,
+  ControlPanel,
+  SelectFileModal,
 };

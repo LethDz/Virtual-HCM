@@ -45,7 +45,6 @@ class MetaData extends Component {
   };
 
   newRefer = (e) => {
-    console.log('test');
   };
 
   addReference = (reference) => {
@@ -77,15 +76,12 @@ class MetaData extends Component {
   };
 
   getReferenceInfo = (ref) => {
-    console.log('missing ' + ref.id);
     if (this.props.documentReferenceList.length === 0) {
-      console.log('calling api');
       return <p>Calling api{ref.id}</p>;
     } else {
       let referenceList = [];
       this.props.documentReferenceList.forEach((reference) => {
         if (reference.reference_document_id === ref.id) {
-          console.log(reference);
           // return ;
           referenceList.push({
             extra_info: reference.extra_info,

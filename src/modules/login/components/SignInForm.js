@@ -61,8 +61,19 @@ class SignInForm extends Component {
           this.setState({
             loading: false,
           });
-        error.response && showLoginError(error.response.data, this);
+        error.response
+          ? showLoginError(error.response.data, this, this.props.addToast)
+          : this.showException();
       });
+  };
+
+  showException = () => {
+    this.props.addToast(
+      'There is something wrong with the server! Please contact admin for supporting.',
+      {
+        appearance: 'error',
+      }
+    );
   };
 
   handleInput = (event) => {

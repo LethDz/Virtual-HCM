@@ -262,8 +262,7 @@ class DataApprovalDetail extends Component {
       this.props.dataApprovalDetail &&
       this.props.dataApprovalDetail.intent === this.props.intent
     ) {
-      this.setFormData(this.props.dataApprovalDetail);
-      console.log(this.props.dataApprovalDetail); 
+      this.setFormData(this.props.dataApprovalDetail); 
     } else {
       this._isMounted && this.setState({ loading: true });
       axiosClient

@@ -5,11 +5,17 @@ import {
   GET_CONTRIBUTORS_LIST,
   CHANGE_CONTRIBUTOR_STATUS,
   PULL_CONTRIBUTOR_DETAIL,
+  PULL_TRAINABLE_DATA,
+  PULL_TRAIN_SOCKET,
+  PULL_CURRENT_STATE,
 } from 'src/modules/admin';
 
 const initialState = {
   contributorsList: [],
   contributorDetail: null,
+  trainableData: [],
+  trainSocket: null,
+  currentState: null,
 };
 
 export const adminReducer = (state = initialState, action) => {
@@ -71,6 +77,27 @@ export const adminReducer = (state = initialState, action) => {
         ...state,
         contributorDetail: conDetail,
         contributorsList: conList,
+      };
+
+    case PULL_TRAINABLE_DATA:
+      const data = action.payload.trainableData;
+      return {
+        ...state,
+        trainableData: data,
+      };
+
+    case PULL_TRAIN_SOCKET:
+      const socket = action.payload.trainSocket;
+      return {
+        ...state,
+        trainSocket: socket,
+      };
+
+    case PULL_CURRENT_STATE:
+      const current = action.payload.currentState;
+      return {
+        ...state,
+        currentState: current,
       };
 
     case LOGOUT:

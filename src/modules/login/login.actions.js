@@ -6,7 +6,7 @@ import {
 } from 'src/constants';
 
 // Show the login error message
-export const showLoginError = (data, component) => {
+export const showLoginError = (data, component, addToast) => {
   if (data && !data.status) {
     const resultData = data.result_data;
     if (resultData.error_detail && resultData.status_code === FORBIDDEN) {
@@ -28,6 +28,10 @@ export const showLoginError = (data, component) => {
           passwordInvalid: true,
           usernameInvalid: true,
         });
+    } else {
+      addToast(resultData.error_detail, {
+        appearance: 'error',
+      });
     }
   }
 };
