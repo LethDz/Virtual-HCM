@@ -11,7 +11,7 @@ import {
 import { questionType } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 class Coresponse extends Component {
@@ -96,7 +96,7 @@ class Coresponse extends Component {
           </Col>
           <Col xs="auto">
             <Button color="primary" onClick={this.addCoresponse}>
-              <FontAwesomeIcon icon={faPlus} /> Coresponse
+              <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
             </Button>
           </Col>
         </Row>

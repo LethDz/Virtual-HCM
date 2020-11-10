@@ -170,7 +170,6 @@ class CreateDataApprovalForm extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    console.log(questions);
     let questionArray = [];
     questions.forEach((question) => {
       questionArray.push({
@@ -211,15 +210,8 @@ class CreateDataApprovalForm extends Component {
   };
 
   setGeneratedSentences = (generatedSentences, index) => {
-    let generatedQuestion = [];
-    generatedSentences.forEach((sentence) => {
-      generatedQuestion.push({
-        question: sentence.sentence,
-        accept: 1,
-      });
-    });
     let form = this.state.form;
-    form.questions[index].generated_questions = generatedQuestion;
+    form.questions[index].generated_questions = generatedSentences;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -299,9 +291,9 @@ class CreateDataApprovalForm extends Component {
             </div>
             <Row xs="1">
               <Col>
-                <h5 className="text-center m-3" ref={this.titleRef}>
+                <h4 className="text-center m-3" ref={this.titleRef}>
                   Create new knowledge data
-                </h5>
+                </h4>
               </Col>
             </Row>
             <FormSectionTitle title="Meta data" />
@@ -314,6 +306,7 @@ class CreateDataApprovalForm extends Component {
               setErrorAlert={this.setErrorAlert}
               setErrorList={this.setErrorList}
             />
+            <hr className="mr-3 ml-3 divider"/>
             <FormSectionTitle title="Data analysis" />
             <RawData
               scrollToTop={this.scrollToTop}

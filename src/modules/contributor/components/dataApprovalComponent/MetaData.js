@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import {
   getAllDocumentReference,
@@ -146,7 +146,7 @@ class MetaData extends Component {
                 onClick={this.toggleReferenceModal}
                 color="success"
               >
-                <FontAwesomeIcon icon={faPlus} /> New reference
+                <FontAwesomeIcon icon={faPlusCircle} /> New reference
               </Button>
             </Col>
           </Row>

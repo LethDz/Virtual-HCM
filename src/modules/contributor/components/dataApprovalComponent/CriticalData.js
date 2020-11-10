@@ -16,7 +16,7 @@ import {
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 class CriticalData extends Component {
@@ -153,7 +153,7 @@ class CriticalData extends Component {
 
           <Col xs="auto">
             <Button color="primary" onClick={this.addCriticalData}>
-              <FontAwesomeIcon icon={faPlus} /> Subject
+              <FontAwesomeIcon icon={faPlusCircle} /> Subject
             </Button>
           </Col>
         </Row>

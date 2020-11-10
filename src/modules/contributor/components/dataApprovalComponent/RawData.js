@@ -8,6 +8,8 @@ import { handleInputChange } from 'src/common/handleInputChange';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 import { V, N } from 'src/modules/contributor/index';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan, faHammer } from '@fortawesome/free-solid-svg-icons';
 
 class RawData extends Component {
   _isMounted = false;
@@ -177,7 +179,7 @@ class RawData extends Component {
               className="mt-2"
               onClick={this.stateCancelTokenize}
             >
-              Cancel
+              <FontAwesomeIcon icon={faBan} />{' '}Cancel
             </Button>
           </Col>
         </Row>
@@ -201,7 +203,7 @@ class RawData extends Component {
               color="primary"
               onClick={this.stateTokenizeRawDate}
             >
-              Tokenize
+              <FontAwesomeIcon icon={faHammer} />{' '}Tokenize
             </Button>
           </Col>
         </Row>

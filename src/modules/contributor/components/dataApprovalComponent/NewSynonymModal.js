@@ -123,7 +123,6 @@ class NewSynonymModal extends Component {
             });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
-          // this.props.scrollToTop();
         })
         .catch((err) => {
           if (this._isMounted)
@@ -132,7 +131,6 @@ class NewSynonymModal extends Component {
             });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
-          // this.props.scrollToTop();
         });
     } else {
       if (this._isMounted) this.setState({ errorAlert: true });

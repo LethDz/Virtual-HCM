@@ -120,7 +120,7 @@ class DataApprovalDetail extends Component {
       });
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
-    form.synonyms = synonym
+    form.synonyms = synonym;
     this._isMounted && this.setState({ form: form });
   };
 
@@ -189,13 +189,6 @@ class DataApprovalDetail extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
-    // form.synonyms.forEach(synonym => {
-    //   form.questions.forEach(question => {
-    //     if (question.question.includes(synonym.word)) {
-    //       question.generated_questions = []
-    //     }
-    //   })
-    // })
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -215,15 +208,8 @@ class DataApprovalDetail extends Component {
   };
 
   setGeneratedSentences = (generatedSentences, index) => {
-    let generatedQuestion = [];
-    generatedSentences.forEach((sentence) => {
-      generatedQuestion.push({
-        question: sentence.sentence,
-        accept: 1,
-      });
-    });
     let form = this.state.form;
-    form.questions[index].generated_questions = generatedQuestion;
+    form.questions[index].generated_questions = generatedSentences;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -315,6 +301,7 @@ class DataApprovalDetail extends Component {
     form.questions = dataApproval.questions;
     form.rawData = dataApproval.rawData;
     form.synonyms = dataApproval.synonyms;
+    form.id = dataApproval.id;
     this._isMounted && this.setState({ form: form });
   };
 
@@ -356,9 +343,11 @@ class DataApprovalDetail extends Component {
               </div>
               <Row xs="1">
                 <Col>
-                  <h5 className="text-center m-3" ref={this.titleRef}>
+                  <h4 className="text-center m-3" ref={this.titleRef}>
                     Edit knowledge data: {this.props.intent}
-                  </h5>
+                    <br />
+                    ID: {this.state.form.id}
+                  </h4>
                 </Col>
               </Row>
               <FormSectionTitle title="Meta data" />
@@ -374,6 +363,7 @@ class DataApprovalDetail extends Component {
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
               />
+              <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData

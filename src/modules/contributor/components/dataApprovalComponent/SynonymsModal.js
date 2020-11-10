@@ -100,7 +100,6 @@ class SynonymsModal extends Component {
       <div>
         {this.state.isOpenNewSynonymModal && (
           <NewSynonymModal
-            // scrollToTop={this.props.scrollToTop}
             setAlertMessage={this.props.setAlertMessage}
             setSuccessAlert={this.props.setSuccessAlert}
             setErrorAlert={this.props.setErrorAlert}

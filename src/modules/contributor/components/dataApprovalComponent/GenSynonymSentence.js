@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
-import { Row, Col, Label, Button, ListGroup, ListGroupItem } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import { Row, Col, Button } from 'reactstrap';
 
 import { GenSynonymSentenceModal } from 'src/modules/contributor/index';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { NLP, GENERATE_SIMILARIES } from 'src/constants';
-import axiosClient from 'src/common/axiosClient';
+import { faCogs, faEye } from '@fortawesome/free-solid-svg-icons';
 
 class GenSynonymSentence extends Component {
   _isMounted = false;
@@ -25,9 +23,12 @@ class GenSynonymSentence extends Component {
     if (this.props.questionValue) {
       let questionList = [];
       this.props.questionValue.generated_questions.forEach((question) => {
-        questionList.push({ sentence: question.question });
+        questionList.push({ question: question.question });
       });
-      this.setState({ selectedSentences: questionList });
+      this.setState({
+        selectedSentences: questionList,
+        similaries: this.props.currentRowData,
+      });
     }
   };
 
@@ -38,7 +39,6 @@ class GenSynonymSentence extends Component {
   toggleGenerateModal = () => {
     if (this._isMounted)
       this.setState({ isOpenGenerateModal: !this.state.isOpenGenerateModal });
-    if (!this.state.isOpenGenerateModal) this.generateSentences();
   };
 
   distinct = (value, index, self) => {
@@ -63,110 +63,55 @@ class GenSynonymSentence extends Component {
     return synonymsArray.filter(this.distinct);
   };
 
-  generateSentences = () => {
-    this.setState({ loading: false });
-    let data = { sentences: [] };
-    data.sentences.push({
-      sentence: this.createTokenizeSentence(),
-      synonyms: this.createSynonymArray(),
-    });
-    axiosClient
-      .post(NLP + GENERATE_SIMILARIES, data)
-      .then((response) => {
-        let data = [];
-        response.data.result_data.similaries.forEach((sentences) => {
-          sentences.forEach((sentence) => {
-            data.push({ sentence: sentence });
-          });
-        });
-        this._isMounted &&
-          this.setState({
-            similaries: data,
-            loading: true,
-          });
-      })
-      .catch((err) => {
-        this._isMounted &&
-          this.setState({
-            loading: false,
-          });
-        this.props.setErrorAlert(true);
-        this.props.setSuccessAlert(false);
-        // this.props.scrollToTop();
-      });
-  };
-
   setSelectedSentence = (selectedSentences) => {
+    console.log(selectedSentences);
     if (this._isMounted)
-      this.setState({ selectedSentences: selectedSentences }, () => {
-        this.props.setGeneratedSentences(
-          this.state.selectedSentences,
-          this.props.index
-        );
-      });
-  };
-
-  removeSelectedGenSentence = (index) => {
-    let selectedSentence = this.state.selectedSentences;
-    if (index > -1) {
-      selectedSentence.splice(index, 1);
-    }
-    if (this._isMounted)
-      this.setState({ selectedSentence: selectedSentence }, () => {
-        this.props.setGeneratedSentences(
-          this.state.selectedSentences,
-          this.props.index
-        );
-      });
+      this.setState(
+        { selectedSentences: selectedSentences, similaries: selectedSentences },
+        () => {
+          this.props.setGeneratedSentences(
+            this.state.selectedSentences,
+            this.props.index
+          );
+        }
+      );
   };
 
   render() {
     return (
-      <div className="p-3">
+      <div>
         {this.state.isOpenGenerateModal && (
           <GenSynonymSentenceModal
+            createTokenizeSentence={this.createTokenizeSentence}
+            createSynonymArray={this.createSynonymArray}
+            currentRowData={this.props.currentRowData}
             toggle={this.toggleGenerateModal}
             similaries={this.state.similaries}
-            loading={!this.state.loading}
+            loading={this.state.loading}
             isOpen={this.state.isOpenGenerateModal}
             setSelectedSentence={this.setSelectedSentence}
           />
         )}
         <Row xs="1">
           <Col xs="auto">
-            <Label>Gen synonym sentences:</Label>
-          </Col>
-          <Col xs="auto">
             <Button
               type="button"
               color="success"
               onClick={this.toggleGenerateModal}
             >
-              <FontAwesomeIcon icon={faPlus} /> Generate
+              {this.state.similaries.length !== 0 && (
+                <Fragment>
+                  <FontAwesomeIcon icon={faEye} /> View questions
+                </Fragment>
+              )}
+              {this.state.similaries.length === 0 && (
+                <Fragment>
+                  <FontAwesomeIcon icon={faCogs} /> Generate
+                </Fragment>
+              )}
             </Button>
           </Col>
         </Row>
-        <ListGroup className="mt-3">
-          {this.state.selectedSentences.map((sentence, index) => {
-            return (
-              <ListGroupItem key={index}>
-                <Row>
-                  <Col>{sentence.sentence}</Col>
-                  <Col xs="auto">
-                    <Button
-                      color="danger"
-                      onClick={() => {
-                        this.removeSelectedGenSentence(index);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </Button>
-                  </Col>
-                </Row>
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
       </div>
     );
   }

@@ -13,7 +13,7 @@ import {
 import { GenSynonymSentence } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrashAlt, faTasks } from '@fortawesome/free-solid-svg-icons';
 import { NLP, TOKENIZE } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
@@ -57,7 +57,11 @@ export default class Question extends Component {
     if (this.props.questionValue && this.props.questionValue.length) {
       let questionList = [];
       this.props.questionValue.forEach((question) => {
-        questionList.push({ question: question.question, type: question.type });
+        questionList.push({
+          question: question.question,
+          type: question.type,
+          generated_questions: question.generated_questions,
+        });
       });
       this.setState({ questions: questionList });
     }
@@ -72,6 +76,18 @@ export default class Question extends Component {
   };
 
   addQuestion = (question) => {
+    this._isMounted && this.setState({ tooltipOpen: false });
+    let hasType = false;
+    this.state.type.forEach((type) => {
+      if (type.isChecked === true) hasType = true;
+    });
+    if (!hasType) {
+      this.props.setErrorAlert(true);
+      this.props.setErrorList(['You need to add type for question']);
+      this.props.scrollToTop();
+      return;
+    }
+
     if (this._isMounted) this.setState({ loading: true });
     const paragraph = {
       paragraph: question,
@@ -121,7 +137,11 @@ export default class Question extends Component {
           fullArray.forEach((word) => {
             questionTemp += word.value + ' ';
           });
-          questionsTemp.push({ question: questionTemp, type: questionType });
+          questionsTemp.push({
+            question: questionTemp,
+            type: questionType,
+            generated_questions: [],
+          });
 
           let typeState = [];
           this.state.questionType.forEach((type) => {
@@ -183,6 +203,12 @@ export default class Question extends Component {
     this._isMounted && this.setState({ tooltipOpen: !this.state.tooltipOpen });
   };
 
+  setGeneratedSentences = (generatedSentences, index) => {
+    let questions = this.state.questions;
+    questions[index].generated_questions = generatedSentences;
+    this.props.setGeneratedSentences(generatedSentences, index);
+  };
+
   render() {
     return (
       <div className="p-3">
@@ -205,12 +231,11 @@ export default class Question extends Component {
                     <Col>
                       <Button
                         type="button"
-                        color="info"
+                        color="warning"
                         id="DisabledAutoHide"
-                        className="selector"
                         onClick={this.openToolTip}
                       >
-                        Choose Type
+                        <FontAwesomeIcon icon={faTasks} /> Choose Type
                       </Button>
                       <Tooltip
                         placement="top"
@@ -323,8 +348,11 @@ export default class Question extends Component {
                             (value += ' ')
                           );
                         })}
+                      </Col>
+                      <Col xs="auto">
                         {this.props.detailPage && (
                           <GenSynonymSentence
+                            currentRowData={question.generated_questions}
                             questionValue={this.props.questionValue[index]}
                             setAlertMessage={this.props.setAlertMessage}
                             setSuccessAlert={this.props.setSuccessAlert}
@@ -333,13 +361,12 @@ export default class Question extends Component {
                             index={index}
                             tokenizedWordArray={wordArray}
                             synonymsArray={this.props.synonymsArray}
-                            setGeneratedSentences={
-                              this.props.setGeneratedSentences
-                            }
+                            setGeneratedSentences={this.setGeneratedSentences}
                           />
                         )}
                         {!this.props.detailPage && (
                           <GenSynonymSentence
+                            currentRowData={question.generated_questions}
                             setAlertMessage={this.props.setAlertMessage}
                             setSuccessAlert={this.props.setSuccessAlert}
                             setErrorAlert={this.props.setErrorAlert}
@@ -347,9 +374,7 @@ export default class Question extends Component {
                             index={index}
                             tokenizedWordArray={wordArray}
                             synonymsArray={this.props.synonymsArray}
-                            setGeneratedSentences={
-                              this.props.setGeneratedSentences
-                            }
+                            setGeneratedSentences={this.setGeneratedSentences}
                           />
                         )}
                       </Col>
