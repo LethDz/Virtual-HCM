@@ -121,11 +121,11 @@ class ManageTrainingProcess extends Component {
             }
             break;
           default:
-            console.log('[Websocket] Received data is unknown');
+            terminal('[Websocket] Received data is unknown');
             break;
         }
       } else {
-        console.log('[Websocket] Received data is unknown');
+        terminal('[Websocket] Received data is unknown');
       }
     };
     trainSocket.onclose = function (e) {
