@@ -139,16 +139,19 @@ class CreateSynonymModal extends Component {
     this.setLoading(true);
     this.setErrorAlert(false);
     this.setSuccessAlert(false);
-    let newSynonym = new FormData();
-    newSynonym.append('meaning', this.state.meaning);
-    newSynonym.append('words', this.state.words);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
+    // let newSynonym = new FormData();
+    // newSynonym.append('meaning', this.state.meaning);
+    // newSynonym.append('words', this.state.words);
+    // const config = {
+    //   headers: {
+    //     'content-type': 'multipart/form-data',
+    //   },
+    // };
     axiosClient
-      .post(SYNONYM + ADD, newSynonym, config)
+      .post(SYNONYM + ADD, {
+        meaning: this.state.meaning,
+        words: this.state.words,
+      })
       .then((response) => {
         if (response.data.status) {
           const synonym = response.data.result_data;

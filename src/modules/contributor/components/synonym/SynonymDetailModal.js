@@ -177,19 +177,15 @@ class SynonymDetailModal extends Component {
 
   editSynonym = (event) => {
     event.preventDefault();
-    let newSynonym = new FormData();
-    newSynonym.append('id', this.state.synonym_id);
-    newSynonym.append('meaning', this.state.meaning);
-    newSynonym.append('words', this.state.words);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
     this.setLoading(true);
     axiosClient
-      .post(SYNONYM + EDIT, newSynonym, config)
+      .post(SYNONYM + EDIT, {
+        id: this.state.synonym_id,
+        meaning: this.state.meaning,
+        words: this.state.words,
+      })
       .then((response) => {
+        console.log(response);
         if (response.data.status) {
           const synonym = response.data.result_data;
           this.props.editSynonymDetail(synonym);
