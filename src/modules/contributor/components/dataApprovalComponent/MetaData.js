@@ -55,10 +55,6 @@ class MetaData extends Component {
       this.setState({ isOpenReferenceModal: !this.state.isOpenReferenceModal });
   };
 
-  newRefer = (e) => {
-    console.log('test');
-  };
-
   addReference = (reference) => {
     let referenceList = this.state.referenceList;
     referenceList.push(reference);

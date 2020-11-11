@@ -125,14 +125,14 @@ class DataApprovalDetail extends Component {
   };
 
   submitForm = (event) => {
-    this._isMounted &&
-      this.setState({
-        loading: true,
-      });
     event.preventDefault();
     this.setError();
     this.reformatForm();
     if (this.state.errorList.length === 0) {
+      this._isMounted &&
+        this.setState({
+          loading: true,
+        });
       axiosClient
         .post(KNOWLEDGE_DATA + EDIT, this.state.form)
         .then((response) => {
@@ -298,18 +298,16 @@ class DataApprovalDetail extends Component {
     form.baseResponse = dataApproval.baseResponse;
     form.coresponse = dataApproval.coresponse;
     form.criticalData = dataApproval.criticalData;
-
     let referenceList = [];
     dataApproval.documentReference.forEach((reference) => {
       referenceList.push({
         name: reference.name,
         extra_info: reference.extra_info,
         id: reference.id,
-        page: reference.page.toString(),
+        page: reference.page ? reference.page.toString() : '',
       });
     });
     form.documentReference = referenceList;
-
     form.intent = dataApproval.intent;
     form.intentFullName = dataApproval.intentFullName;
     form.questions = dataApproval.questions;

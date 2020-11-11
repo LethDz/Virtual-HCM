@@ -40,7 +40,6 @@ class GenSynonymSentenceModal extends Component {
       sentence: this.props.createTokenizeSentence(),
       synonyms: this.props.createSynonymArray(),
     });
-    console.log(data);
     axiosClient
       .post(NLP + GENERATE_SIMILARIES, data)
       .then((response) => {

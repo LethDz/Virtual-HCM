@@ -64,7 +64,6 @@ class GenSynonymSentence extends Component {
   };
 
   setSelectedSentence = (selectedSentences) => {
-    console.log(selectedSentences);
     if (this._isMounted)
       this.setState(
         { selectedSentences: selectedSentences, similaries: selectedSentences },
