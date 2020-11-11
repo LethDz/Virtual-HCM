@@ -161,6 +161,7 @@ export const columnRefFieldDef = [
     width: 60,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'reference_name',
@@ -168,6 +169,7 @@ export const columnRefFieldDef = [
     width: 230,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'link',
@@ -175,6 +177,7 @@ export const columnRefFieldDef = [
     width: 300,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'author',
@@ -182,6 +185,7 @@ export const columnRefFieldDef = [
     width: 350,
     sortable: true,
     filter: true,
+    resizable: true,
   },
 ];
 
@@ -190,16 +194,18 @@ export const columnSynonymFieldDef = [
   {
     field: 'synonym_id',
     headerName: 'ID',
-    width: 60,
+    width: 50,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'meaning',
     headerName: 'Meaning',
-    width: 230,
+    width: 200,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'words',
@@ -207,5 +213,6 @@ export const columnSynonymFieldDef = [
     width: 300,
     sortable: true,
     filter: true,
+    resizable: true,
   },
 ];

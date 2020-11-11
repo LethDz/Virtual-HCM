@@ -20,12 +20,7 @@ import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheck,
-  faPlus,
-  faPlusSquare,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { getAllSynonyms, addSynonymToList } from 'src/modules/contributor';
 import { SYNONYM, ADD, NLP, TOKENIZE } from 'src/constants';
 
@@ -111,21 +106,6 @@ class CreateSynonymModal extends Component {
     });
   };
 
-  addNewWord = () => {
-    let newWord = this.state.newWord.trim();
-    if (!this.checkDuplicateWord(newWord) && newWord) {
-      this.setErrorAlert(false);
-      let listWord = this.state.words;
-      listWord.push(newWord);
-      this.setState({
-        words: listWord,
-        newWord: '',
-      });
-    } else {
-      this.setErrorAlert(true);
-    }
-  };
-
   checkDuplicateWord = (newWord) => {
     let duplicate = false;
     this.state.words.map((word) => {
@@ -175,6 +155,8 @@ class CreateSynonymModal extends Component {
       meaning: '',
       words: [],
       newWord: '',
+      paragraph: '',
+      tokenizedWords: [],
     });
   };
 
@@ -208,6 +190,39 @@ class CreateSynonymModal extends Component {
       });
   };
 
+  handleCheckBoxChange = (event) => {
+    let newWord = event.target.name;
+    let isChecked = event.target.checked;
+    if (isChecked) {
+      if (!this.checkDuplicateWord(newWord)) {
+        this.setErrorAlert(false);
+        let listWord = this.state.words;
+        listWord.push(newWord);
+        this.setState({
+          words: listWord,
+          newWord: '',
+        });
+      } else {
+        this.setErrorAlert(true);
+      }
+    } else {
+      let list = this.state.words;
+      let position = -1;
+      list.map((word, index) => {
+        if (word === newWord) {
+          position = index;
+        }
+        return -1;
+      });
+      if (position > -1) {
+        list.splice(position, 1);
+        this._isMounted &&
+          this.setState({
+            words: list,
+          });
+      }
+    }
+  };
   render() {
     return (
       <Container>
@@ -215,6 +230,7 @@ class CreateSynonymModal extends Component {
           isOpen={this.props.isOpen}
           toggle={this.props.toggle}
           unmountOnClose={true}
+          backdrop="static"
         >
           <ModalHeader toggle={this.props.toggle}>
             Create New Synonym
@@ -245,21 +261,23 @@ class CreateSynonymModal extends Component {
                     required
                     value={this.state.meaning}
                     onChange={this.handleInput}
+                    disabled={this.state.loading}
                   />
                 </FormGroup>
                 <Label>Words: </Label>
                 <div className="container justify-content-center">
                   <div
-                    className="border border-info p-3"
+                    className="border border-light p-3"
                     style={{
                       height: 200,
-                      overflow: 'scroll',
+                      overflowY: 'scroll',
+                      backgroundColor: '#EEEEEE',
                     }}
                   >
                     {this._isMounted &&
                       this.state.words &&
                       this.state.words.map((word, index) => (
-                        <Row className="mt-2" key={index}>
+                        <Row className="mt-2" key={'word' + index}>
                           <Col className="col-3">Word {index + 1}</Col>
                           <Col className="col-7">
                             <Input
@@ -268,6 +286,7 @@ class CreateSynonymModal extends Component {
                               required
                               value={word}
                               onChange={this.handleItemChange}
+                              disabled={this.state.loading}
                             />
                           </Col>
                           <Col className="col-2">
@@ -290,40 +309,41 @@ class CreateSynonymModal extends Component {
                         name="paragraph"
                         onChange={this.handleInput}
                         value={this.state.paragraph}
+                        disabled={this.state.loading}
                       />
                     </Col>
                     <Col className="col-2">
-                      <Button color="warning" onClick={this.tokenizeWord}>
+                      <Button
+                        color="warning"
+                        onClick={this.tokenizeWord}
+                        disabled={this.state.loading}
+                      >
                         <FontAwesomeIcon icon={faCheck} color="white" />
                       </Button>
                     </Col>
                   </Row>
                   <Label className="mt-2">Tokenized words: </Label>
-                  <Row>
-                    <Col className="col-10">
-                      <Input
-                        type="textarea"
-                        value={this.state.tokenizedWords}
-                        readOnly
-                      />
-                    </Col>
-                  </Row>
-                  <Label className="mt-2">New word:</Label>
-                  <Row>
-                    <Col className="col-10">
-                      <Input
-                        name="newWord"
-                        type="text"
-                        value={this.state.newWord}
-                        onChange={this.handleInput}
-                      />
-                    </Col>
-                    <Col className="col-2">
-                      <Button color="success" onClick={this.addNewWord}>
-                        <FontAwesomeIcon icon={faPlusSquare} />
-                      </Button>
-                    </Col>
-                  </Row>
+                  <div
+                    className="container border border-light p-3"
+                    style={{
+                      height: 100,
+                      overflowY: 'scroll',
+                      backgroundColor: '#EEEEEE',
+                    }}
+                  >
+                    {this.state.tokenizedWords &&
+                      this.state.tokenizedWords.map((word, index) => (
+                        <label key={'checkbox' + index} className="mr-2">
+                          <input
+                            type="checkbox"
+                            checked={false}
+                            onChange={this.handleCheckBoxChange}
+                            name={word}
+                          />{' '}
+                          {word}
+                        </label>
+                      ))}
+                  </div>
                 </div>
               </Container>
             </ModalBody>

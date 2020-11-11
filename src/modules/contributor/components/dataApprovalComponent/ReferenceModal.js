@@ -14,6 +14,7 @@ import {
   getAllDocumentReference,
   fetchAllDocumentReference,
   columnReferenceListDef,
+  CreateReferenceModal,
 } from 'src/modules/contributor/index';
 import { REFERENCE, ALL } from 'src/constants';
 import { connect } from 'react-redux';
@@ -38,6 +39,8 @@ class ReferenceModal extends Component {
       loading: false,
       page: 0,
       extraInfo: '',
+      isOpenCreateReferenceModal: false,
+      referenceList: [],
     };
   }
 
@@ -53,7 +56,12 @@ class ReferenceModal extends Component {
 
   onGridReady = (params) => {
     this.setState({ loading: true });
+    this.setData();
+    if (this._isMounted)
+      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
+  };
 
+  setData = () => {
     if (this.props.documentReferenceList.length === 0) {
       axiosClient
         .get(REFERENCE + ALL)
@@ -61,7 +69,11 @@ class ReferenceModal extends Component {
           this.props.fetchAllDocumentReference(
             response.data.result_data.references
           );
-          this._isMounted && this.setState({ loading: false });
+          this._isMounted &&
+            this.setState({
+              loading: false,
+              referenceList: response.data.result_data.references,
+            });
         })
         .catch((err) => {
           this._isMounted && this.setState({ loading: false });
@@ -70,11 +82,12 @@ class ReferenceModal extends Component {
           this.props.scrollToTop();
         });
     } else {
-      this._isMounted && this.setState({ loading: false });
+      this._isMounted &&
+        this.setState({
+          loading: false,
+          referenceList: this.props.documentReferenceList,
+        });
     }
-
-    if (this._isMounted)
-      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
 
   onSelectionChanged = () => {
@@ -102,9 +115,31 @@ class ReferenceModal extends Component {
     this.props.toggle();
   };
 
+  toggleNewReferenceModal = () => {
+    this._isMounted &&
+      this.setState({
+        isOpenCreateReferenceModal: !this.state.isOpenCreateReferenceModal,
+      });
+  };
+
+  updateReferenceList = (referenceList) => {
+    this._isMounted &&
+      this.setState({
+        referenceList: referenceList,
+      });
+  };
+
   render() {
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+        {this.state.isOpenCreateReferenceModal && (
+          <CreateReferenceModal
+            updateReferenceList={this.updateReferenceList}
+            isOpen={this.state.isOpenCreateReferenceModal}
+            toggle={this.toggleNewReferenceModal}
+          />
+        )}
+
         <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
         <ModalBody>
           <LoadingSpinner loading={this.state.loading} text="Loading reference">
@@ -114,7 +149,7 @@ class ReferenceModal extends Component {
             >
               <AgGridReact
                 onGridReady={this.onGridReady}
-                rowData={this.props.documentReferenceList}
+                rowData={this.state.referenceList}
                 rowSelection="single"
                 rowMultiSelectWithClick
                 onSelectionChanged={this.onSelectionChanged.bind(this)}
@@ -142,8 +177,9 @@ class ReferenceModal extends Component {
           </LoadingSpinner>
         </ModalBody>
         <ModalFooter>
-          <Button color="warning">
-            <FontAwesomeIcon icon={faPlus} /> New reference
+          <Button color="warning" onClick={this.toggleNewReferenceModal}>
+            <FontAwesomeIcon icon={faPlus} />
+            New reference
           </Button>
           <Button color="success" onClick={this.addReference}>
             <FontAwesomeIcon icon={faPlus} /> Add

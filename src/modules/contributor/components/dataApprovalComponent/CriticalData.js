@@ -16,7 +16,7 @@ import {
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 class CriticalData extends Component {
@@ -31,6 +31,13 @@ class CriticalData extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    if (this.props.criticalDataValue && this.props.criticalDataValue.length) {
+      let result = [];
+      this.props.criticalDataValue.forEach((critical, index) => {
+        result.push({ ...critical, index });
+      });
+      this.setState({ criticalData: result });
+    }
   };
 
   componentWillUnmount = () => {
@@ -146,7 +153,7 @@ class CriticalData extends Component {
 
           <Col xs="auto">
             <Button color="primary" onClick={this.addCriticalData}>
-              <FontAwesomeIcon icon={faPlus} /> Subject
+              <FontAwesomeIcon icon={faPlusCircle} /> Subject
             </Button>
           </Col>
         </Row>
@@ -157,7 +164,7 @@ class CriticalData extends Component {
                 <Row>
                   <Col>
                     <Row>
-                      {criticalData.type}: {criticalData.word}
+                      {criticalData.type}
                     </Row>
                   </Col>
                   <Col xs="auto">

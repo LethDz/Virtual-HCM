@@ -94,25 +94,25 @@ class SynonymList extends Component {
   };
 
   toggleSynonymCreate = () => {
-    this.setState({
+    this._isMounted && this.setState({
       modalSynonymCreate: !this.state.modalSynonymCreate,
     });
   };
 
   toggleSynonymDetail = () => {
-    this.setState({
+    this._isMounted && this.setState({
       modalSynonymDetail: !this.state.modalSynonymDetail,
     });
   };
 
   onSynonymCreateClick = () => {
-    this.setState({
+    this._isMounted && this.setState({
       modalSynonymCreate: !this.state.modalSynonymCreate,
     });
   };
 
   updateSynonymList = () => {
-    this.setState({
+    this._isMounted && this.setState({
       synonymsList: this.props.synonymsList,
     });
   };

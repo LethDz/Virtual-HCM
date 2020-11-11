@@ -5,7 +5,7 @@ import { handleInputChange } from 'src/common/handleInputChange';
 import { SynonymsModal } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 class Synonyms extends Component {
   _isMounted = false;
@@ -21,6 +21,9 @@ class Synonyms extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    if (this.props.synonymsValue && this.props.synonymsValue.length) {
+      this.setState({ synonyms: this.props.synonymsValue });
+    }
   };
 
   componentWillUnmount = () => {
@@ -208,7 +211,7 @@ class Synonyms extends Component {
                               this.toggleSynonymModal(index);
                             }}
                           >
-                            <FontAwesomeIcon icon={faPlus} /> Synonym
+                            <FontAwesomeIcon icon={faPlusCircle} /> Synonym
                           </Button>
                         </Col>
                         <Col xs="auto">
@@ -229,7 +232,7 @@ class Synonyms extends Component {
             </Col>
             <Col xs="auto">
               <Button color="success" onClick={this.setSynonym}>
-                <FontAwesomeIcon icon={faPlus} /> Add
+                <FontAwesomeIcon icon={faPlusCircle} /> Add
               </Button>
             </Col>
           </Row>

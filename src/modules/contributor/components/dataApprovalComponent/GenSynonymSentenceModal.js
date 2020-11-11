@@ -10,6 +10,8 @@ import {
 import { AgGridReact } from 'ag-grid-react';
 import { columnGenSentenceDef } from 'src/modules/contributor/index';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { NLP, GENERATE_SIMILARIES } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
 
 class GenSynonymSentenceModal extends Component {
   _isMounted = false;
@@ -19,6 +21,8 @@ class GenSynonymSentenceModal extends Component {
       gridApi: '',
       gridColumnApi: '',
       selectedSentence: [],
+      rowData: props.similaries,
+      loading: false,
     };
   }
 
@@ -30,8 +34,64 @@ class GenSynonymSentenceModal extends Component {
     this._isMounted = false;
   };
 
+  generate = () => {
+    let data = { sentences: [] };
+    data.sentences.push({
+      sentence: this.props.createTokenizeSentence(),
+      synonyms: this.props.createSynonymArray(),
+    });
+    axiosClient
+      .post(NLP + GENERATE_SIMILARIES, data)
+      .then((response) => {
+        let data = [];
+        response.data.result_data.similaries.forEach((sentences) => {
+          sentences.forEach((sentence) => {
+            data.push({ sentence: sentence });
+          });
+        });
+        this._isMounted &&
+          this.setState({
+            rowData: data,
+            loading: false,
+          });
+      })
+      .catch((err) => {
+        this._isMounted &&
+          this.setState({
+            loading: false,
+          });
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+      });
+  };
+
+  generateSentences = async () => {
+    this.setState({ loading: true });
+    await this.generate();
+  };
+
   onGridReady = (params) => {
-    if (this._isMounted)
+    if (this.props.currentRowData.length !== 0) {
+      let data = [];
+      this.props.currentRowData.forEach((question) => {
+        data.push({ sentence: question.question });
+      });
+      this._isMounted && this.setState({ rowData: data });
+
+      params.api.forEachNode((node) => {
+        this.props.currentRowData.forEach((question) => {
+          if (
+            node.data.sentence === question.question &&
+            question.accept === 1
+          ) {
+            node.setSelected(true);
+          }
+        });
+      });
+    } else {
+      this.generateSentences();
+    }
+    this._isMounted &&
       this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
   };
 
@@ -43,7 +103,21 @@ class GenSynonymSentenceModal extends Component {
         selectedRow.push(node.data);
       }
     });
-    if (this._isMounted) this.setState({ selectedSentence: selectedRow });
+    let results = [];
+    this.state.rowData.forEach((sentence) => {
+      let isSelected = false;
+      selectedRow.forEach((row) => {
+        if (sentence.sentence === row.sentence) {
+          isSelected = true;
+        }
+      });
+      if (isSelected) {
+        results.push({ question: sentence.sentence, accept: 1 });
+      } else {
+        results.push({ question: sentence.sentence, accept: 0 });
+      }
+    });
+    if (this._isMounted) this.setState({ selectedSentence: results });
   };
 
   setSelectedSentence = () => {
@@ -55,7 +129,7 @@ class GenSynonymSentenceModal extends Component {
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
         <LoadingSpinner
-          loading={this.props.loading}
+          loading={this.state.loading}
           text="Generating sentences"
         >
           <Form>
@@ -69,8 +143,7 @@ class GenSynonymSentenceModal extends Component {
               >
                 <AgGridReact
                   onGridReady={this.onGridReady}
-                  rowData={this.props.similaries}
-                  onFirstDataRendered={this.firstDataRendered}
+                  rowData={this.state.rowData}
                   rowSelection="multiple"
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}

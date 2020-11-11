@@ -17,6 +17,7 @@ import {
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
+  KNOWLEDGE_DATA_LIST_PAGE
 } from 'src/constants';
 
 const SideBarContributorContent = () => {
@@ -43,7 +44,7 @@ const SideBarContributorContent = () => {
       <SideBarItem
         name="Knowledge Data"
         icon={<FontAwesomeIcon icon={faBook} />}
-        link="knowledge-data"
+        link={KNOWLEDGE_DATA_LIST_PAGE}
       />
       <SideBarItem
         name="Document Reference"
