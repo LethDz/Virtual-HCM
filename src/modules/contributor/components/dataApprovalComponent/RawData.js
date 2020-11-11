@@ -178,7 +178,7 @@ class RawData extends Component {
               color="danger"
               onClick={this.stateCancelTokenize}
             >
-              <FontAwesomeIcon icon={faBan} />{' '}Cancel
+              <FontAwesomeIcon icon={faBan} />{' '} Cancel
             </Button>
           </Col>
         </Row>
@@ -202,7 +202,7 @@ class RawData extends Component {
               color="primary"
               onClick={this.stateTokenizeRawDate}
             >
-              <FontAwesomeIcon icon={faHammer} />{' '}Tokenize
+              <FontAwesomeIcon icon={faHammer} />{' '} Tokenize
             </Button>
           </Col>
         </Row>
