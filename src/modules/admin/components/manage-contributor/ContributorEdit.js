@@ -1,4 +1,4 @@
-import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faSync, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, Fragment } from 'react';
 import {
@@ -511,6 +511,8 @@ class ContributorEdit extends Component {
                 <Row className="justify-content-center">
                   <div className="upload-btn-wrapper">
                     <Button color="primary" className="btn-upload-custom">
+                      <FontAwesomeIcon icon={faUpload} />
+                      &nbsp;
                       Upload avatar
                     </Button>
                     <Input
@@ -529,16 +531,16 @@ class ContributorEdit extends Component {
               <Col>
                 <Row className="justify-content-end mr-1">
                   <Button onClick={this.onReset}>
-                    <FontAwesomeIcon icon={faTimes} />
-                    &nbsp; Cancel
+                    <FontAwesomeIcon icon={faSync} />
+                    &nbsp; Reset
                   </Button>
                 </Row>
               </Col>
               <Col>
                 <Row className="justify-content-start mr-1">
                   <Button color="info" type="submit">
-                    <FontAwesomeIcon icon={faPlus} />
-                    &nbsp; Edit
+                    <FontAwesomeIcon icon={faSave} />
+                    &nbsp; Save
                   </Button>
                 </Row>
               </Col>
