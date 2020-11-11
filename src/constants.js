@@ -34,6 +34,7 @@ export const ADMIN_GET_USER = (id) => `/user/get?id=${id}`;
 export const ADMIN_ADD_USER = '/user/add';
 export const ADMIN_EDIT_USER = '/user/edit';
 export const ADMIN_CHANGE_STATUS_USER = (id) => `/user/change-status?id=${id}`;
+export const ADMIN_GET_ALL_TRAINABLE_DATA = `/train-data/all-trainable`;
 
 // API status code:
 export const FORBIDDEN = 403;
