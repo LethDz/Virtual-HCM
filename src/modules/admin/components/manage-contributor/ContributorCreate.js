@@ -1,4 +1,8 @@
-import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSync,
+  faUpload,
+  faUserPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, Fragment } from 'react';
 import {
@@ -419,7 +423,8 @@ class ContributorCreate extends Component {
                 <Row className="justify-content-center">
                   <div className="upload-btn-wrapper">
                     <Button color="primary" className="btn-upload-custom">
-                      Upload avatar
+                      <FontAwesomeIcon icon={faUpload} />
+                      &nbsp; Upload avatar
                     </Button>
                     <Input
                       className="h-100 upload-hidden"
@@ -437,15 +442,15 @@ class ContributorCreate extends Component {
               <Col>
                 <Row className="justify-content-end mr-1">
                   <Button type="reset">
-                    <FontAwesomeIcon icon={faTimes} />
-                    &nbsp; Cancel
+                    <FontAwesomeIcon icon={faSync} />
+                    &nbsp; Reset
                   </Button>
                 </Row>
               </Col>
               <Col>
                 <Row className="justify-content-start mr-1">
                   <Button color="info" type="submit">
-                    <FontAwesomeIcon icon={faPlus} />
+                    <FontAwesomeIcon icon={faUserPlus} />
                     &nbsp; Create
                   </Button>
                 </Row>

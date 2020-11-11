@@ -7,7 +7,7 @@ import {
   CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
   ALL,
   KNOWLEDGE_DATA,
-  GET_KNOWLEDGE_DATA_BY_INTENT
+  GET_KNOWLEDGE_DATA_BY_INTENT,
 } from 'src/constants';
 import {
   columnFieldDef,
@@ -84,24 +84,22 @@ class DataApprovalList extends Component {
         [name]: false,
       });
   };
-  
+
   setData = async () => {
-    if (this.props.dataApprovalList.length === 0) {
-      this._isMounted && this.setState({ loading: true });
-      axiosClient
-        .get(KNOWLEDGE_DATA + ALL)
-        .then((response) => {
-          this.props.fetchAllDataApproval(response.data.result_data.knowledges);
-          this.setAlertMessage('Load successful');
-          this.setSuccessAlert(true);
-          this._isMounted && this.setState({ loading: false });
-        })
-        .catch((error) => {
-          this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-          this._isMounted && this.setState({ loading: false });
-        });
-    }
+    this._isMounted && this.setState({ loading: true });
+    axiosClient
+      .get(KNOWLEDGE_DATA + ALL)
+      .then((response) => {
+        this.props.fetchAllDataApproval(response.data.result_data.knowledges);
+        this.setAlertMessage('Load successful');
+        this.setSuccessAlert(true);
+        this._isMounted && this.setState({ loading: false });
+      })
+      .catch((error) => {
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+        this._isMounted && this.setState({ loading: false });
+      });
   };
 
   onGridReady = async (params) => {
@@ -114,18 +112,19 @@ class DataApprovalList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let intent = selectedRows.length === 1 ? selectedRows[0].intent : '';
-    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(intent))
+    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(intent));
   };
 
   render() {
     return (
       <Container id="cl-container" className="cl-container vh-100">
-        <LoadingSpinner loading={this.state.loading} text="Loading data approval" />
+        <LoadingSpinner
+          loading={this.state.loading}
+          text="Loading data approval"
+        />
         <Row>
           <Col className="justify-content-center d-flex">
-            <h5 className="mt-2 mb-2">
-              Data approval
-            </h5>
+            <h5 className="mt-2 mb-2">Data approval</h5>
           </Col>
         </Row>
         {this.state.successAlert && (

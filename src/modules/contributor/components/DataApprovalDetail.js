@@ -54,6 +54,7 @@ class DataApprovalDetail extends Component {
       successAlert: false,
       errorAlert: false,
       errorList: [],
+      sendLoading: false,
     };
     this.titleRef = React.createRef();
   }
@@ -131,7 +132,7 @@ class DataApprovalDetail extends Component {
     if (this.state.errorList.length === 0) {
       this._isMounted &&
         this.setState({
-          loading: true,
+          sendLoading: true,
         });
       axiosClient
         .post(KNOWLEDGE_DATA + EDIT, this.state.form)
@@ -139,7 +140,7 @@ class DataApprovalDetail extends Component {
           if (response.data.status) {
             if (this._isMounted)
               this.setState({
-                loading: false,
+                sendLoading: false,
               });
             history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
             this.setErrorAlert(false);
@@ -155,7 +156,7 @@ class DataApprovalDetail extends Component {
           this.scrollToTop();
         });
     } else {
-      this._isMounted && this.setState({ errorAlert: true, loading: false });
+      this._isMounted && this.setState({ errorAlert: true, sendLoading: false });
     }
   };
 
@@ -334,6 +335,7 @@ class DataApprovalDetail extends Component {
           loading={this.state.loading}
           text="Loading information"
         />
+        <LoadingSpinner loading={this.state.sendLoading} text="Sending form" />
         {!this.state.loading && (
           <Form onSubmit={this.submitForm} className="mt-3">
             <div className="form-item form-item-meta">
