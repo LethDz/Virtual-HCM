@@ -15,7 +15,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 const SelectFileModal = (props) => {
   const [loading, setLoading] = useState(true);
   const [errorAlert, setErrorAlert] = useState(false);
-  const [dataFile, setDataFile] = useState(null);
+  const [dataFile, setDataFile] = useState('');
   const [gridApi, setGridApi] = useState(null);
 
   const onSelect = () => {
@@ -24,7 +24,7 @@ const SelectFileModal = (props) => {
   };
 
   const toggle = () => {
-    props.setOpenModal(false);
+    !loading && props.setOpenModal(false);
   };
 
   const onGridReady = async (params) => {
@@ -95,7 +95,7 @@ const SelectFileModal = (props) => {
         </ModalBody>
       </LoadingSpinner>
       <ModalFooter>
-        <Button color="info" onClick={onSelect} disabled={dataFile === null}>
+        <Button color="info" onClick={onSelect} disabled={dataFile === ''}>
           Select
         </Button>{' '}
         <Button color="secondary" onClick={toggle}>
