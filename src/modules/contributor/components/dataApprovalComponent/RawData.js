@@ -8,6 +8,8 @@ import { handleInputChange } from 'src/common/handleInputChange';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 import { V, N } from 'src/modules/contributor/index';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan, faHammer } from '@fortawesome/free-solid-svg-icons';
 
 class RawData extends Component {
   _isMounted = false;
@@ -18,12 +20,17 @@ class RawData extends Component {
       tokenizeData: [],
       ner: [],
       loading: false,
-      rawData: '',
+      rawData: props.rawDataValue ? props.rawDataValue : '',
     };
   }
 
   componentDidMount() {
     this._isMounted = true;
+    if (this.props.detailPage) {
+      this.stateTokenizeRawDate(() => {
+        this.setTokenizedWordArray();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -43,6 +50,7 @@ class RawData extends Component {
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
+        this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
           let fullArray = [];
           response.data.result_data.pos.forEach((array) => {
@@ -74,18 +82,15 @@ class RawData extends Component {
               }
             }
           }
-
           if (this._isMounted)
             this.setState({
               mode: 'TOKENIZE',
               tokenizeData: fullArray,
               ner: modifiedNer,
-              loading: false,
             });
           this.setTokenizedWordArray();
           this.props.setAlertMessage('Tokenize successful');
           this.props.setSuccessAlert(true);
-          this.props.scrollToTop();
         } else {
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);
@@ -171,10 +176,9 @@ class RawData extends Component {
             <Button
               type="button"
               color="danger"
-              className="mt-2"
               onClick={this.stateCancelTokenize}
             >
-              Cancel
+              <FontAwesomeIcon icon={faBan} />{' '}Cancel
             </Button>
           </Col>
         </Row>
@@ -198,7 +202,7 @@ class RawData extends Component {
               color="primary"
               onClick={this.stateTokenizeRawDate}
             >
-              Tokenize
+              <FontAwesomeIcon icon={faHammer} />{' '}Tokenize
             </Button>
           </Col>
         </Row>

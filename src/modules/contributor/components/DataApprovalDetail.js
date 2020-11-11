@@ -23,10 +23,10 @@ import {
   handleInputFormChange,
   handleInputChange,
 } from 'src/common/handleInputChange';
-// import { history } from 'src/common/history';
+import { history } from 'src/common/history';
 
-// import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
-// import { KNOWLEDGE_DATA, ADD } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
 class DataApprovalDetail extends Component {
   _isMounted = false;
@@ -44,9 +44,10 @@ class DataApprovalDetail extends Component {
         baseResponse: '',
         documentReference: [],
       },
+      documentList: [],
       tokenizedWord: [],
       ner: [],
-      loading: false,
+      loading: true,
       hoverWord: '',
       hoverWordFromSynonym: '',
       alertMessage: '',
@@ -85,6 +86,7 @@ class DataApprovalDetail extends Component {
         ner: nerArray,
       });
   };
+
   setError = () => {
     let errorMessage = [];
     if (this.state.form.questions.length === 0) {
@@ -100,7 +102,6 @@ class DataApprovalDetail extends Component {
         );
       }
     }
-    this.setErrorAlert(true);
     this.setErrorList(errorMessage);
     this.scrollToTop();
     if (this._isMounted)
@@ -109,35 +110,53 @@ class DataApprovalDetail extends Component {
       });
   };
 
+  reformatForm = () => {
+    let form = this.state.form;
+    let synonym = [];
+    form.synonyms.forEach((synonyms) => {
+      let synonymIds = [];
+      synonyms.synonyms.forEach((item) => {
+        synonymIds.push(item.id);
+      });
+      synonym.push({ word: synonyms.word, synonyms: synonymIds });
+    });
+    form.synonyms = synonym;
+    this._isMounted && this.setState({ form: form });
+  };
+
   submitForm = (event) => {
-    // if (this._isMounted)
-    //   this.setState({
-    //     loading: true,
-    //   });
-    // event.preventDefault();
-    // this.setError(() => {
-    //   if (this.state.errorList.length === 0) {
-    //     if (this._isMounted) this.setState({ errorAlert: false });
-    //     axiosClient
-    //       .post(KNOWLEDGE_DATA + ADD, this.state.form)
-    //       .then((response) => {
-    //         if (this._isMounted)
-    //           this.setState({
-    //             loading: false,
-    //           });
-    //         history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
-    //       })
-    //       .catch((err) => {
-    //         this.setErrorAlert(true);
-    //         this.setSuccessAlert(false);
-    //         this.scrollToTop();
-    //       });
-    //   } else {
-    //     if (this._isMounted)
-    //       this.setState({ errorAlert: true, loading: false });
-    //   }
-    // });
-    // Edit
+    event.preventDefault();
+    this.setError();
+    this.reformatForm();
+    if (this.state.errorList.length === 0) {
+      this._isMounted &&
+        this.setState({
+          loading: true,
+        });
+      axiosClient
+        .post(KNOWLEDGE_DATA + EDIT, this.state.form)
+        .then((response) => {
+          if (response.data.status) {
+            if (this._isMounted)
+              this.setState({
+                loading: false,
+              });
+            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+            this.setErrorAlert(false);
+            this.setSuccessAlert(true);
+          } else {
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+          }
+        })
+        .catch((err) => {
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+          this.scrollToTop();
+        });
+    } else {
+      this._isMounted && this.setState({ errorAlert: true, loading: false });
+    }
   };
 
   setCoresponse = (coresponse) => {
@@ -189,15 +208,8 @@ class DataApprovalDetail extends Component {
   };
 
   setGeneratedSentences = (generatedSentences, index) => {
-    let generatedQuestion = [];
-    generatedSentences.forEach((sentence) => {
-      generatedQuestion.push({
-        question: sentence.sentence,
-        accept: 1,
-      });
-    });
     let form = this.state.form;
-    form.questions[index].generated_questions = generatedQuestion;
+    form.questions[index].generated_questions = generatedSentences;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -258,11 +270,15 @@ class DataApprovalDetail extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    this.getInformation();
+  };
+
+  getInformation = () => {
     if (
       this.props.dataApprovalDetail &&
       this.props.dataApprovalDetail.intent === this.props.intent
     ) {
-      this.setFormData(this.props.dataApprovalDetail); 
+      this.setFormData(this.props.dataApprovalDetail);
     } else {
       this._isMounted && this.setState({ loading: true });
       axiosClient
@@ -270,7 +286,6 @@ class DataApprovalDetail extends Component {
         .then((response) => {
           this.setFormData(response.data.result_data.knowledge_data);
           this.props.pullDataApproval(response.data.result_data.knowledge_data);
-          this._isMounted && this.setState({ loading: false });
         })
         .catch((err) => {
           this._isMounted && this.setState({ loading: false });
@@ -283,13 +298,23 @@ class DataApprovalDetail extends Component {
     form.baseResponse = dataApproval.baseResponse;
     form.coresponse = dataApproval.coresponse;
     form.criticalData = dataApproval.criticalData;
-    form.documentReference = dataApproval.documentReference;
+    let referenceList = [];
+    dataApproval.documentReference.forEach((reference) => {
+      referenceList.push({
+        name: reference.name,
+        extra_info: reference.extra_info,
+        id: reference.id,
+        page: reference.page ? reference.page.toString() : '',
+      });
+    });
+    form.documentReference = referenceList;
     form.intent = dataApproval.intent;
     form.intentFullName = dataApproval.intentFullName;
     form.questions = dataApproval.questions;
     form.rawData = dataApproval.rawData;
     form.synonyms = dataApproval.synonyms;
-    this._isMounted && this.setState({ form: form });
+    form.id = dataApproval.id;
+    this._isMounted && this.setState({ form: form, loading: false });
   };
 
   getWordArray = () => {
@@ -330,9 +355,11 @@ class DataApprovalDetail extends Component {
               </div>
               <Row xs="1">
                 <Col>
-                  <h5 className="text-center m-3" ref={this.titleRef}>
+                  <h4 className="text-center m-3" ref={this.titleRef}>
                     Edit knowledge data: {this.props.intent}
-                  </h5>
+                    <br />
+                    ID: {this.state.form.id}
+                  </h4>
                 </Col>
               </Row>
               <FormSectionTitle title="Meta data" />
@@ -348,9 +375,11 @@ class DataApprovalDetail extends Component {
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
               />
+              <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData
+                  detailPage={true}
                   rawDataValue={this.state.form.rawData}
                   scrollToTop={this.scrollToTop}
                   setAlertMessage={this.setAlertMessage}
@@ -367,15 +396,19 @@ class DataApprovalDetail extends Component {
               )}
 
               <CriticalData
+                criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
                 setCritical={this.setCriticalData}
               />
 
               <Coresponse
+                coresponseValue={this.state.form.coresponse}
                 setCoresponse={this.setCoresponse}
                 wordArray={wordArray}
               />
               <Question
+                detailPage={true}
+                questionValue={this.state.form.questions}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -390,9 +423,13 @@ class DataApprovalDetail extends Component {
                 synonymsArray={this.state.form.synonyms}
               />
 
-              <BaseResponse onChange={this.handleInputForm} />
+              <BaseResponse
+                baseResponseValue={this.state.form.baseResponse}
+                onChange={this.handleInputForm}
+              />
 
               <Synonyms
+                synonymsValue={this.state.form.synonyms}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -405,7 +442,7 @@ class DataApprovalDetail extends Component {
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
                 <Button type="submit" color="info">
-                  Create new data approval
+                  Edit data approval
                 </Button>
               </Row>
             </div>

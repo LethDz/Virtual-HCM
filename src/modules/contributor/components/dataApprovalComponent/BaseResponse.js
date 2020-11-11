@@ -11,6 +11,7 @@ class BaseResponse extends Component {
             required
             type="textarea"
             name="baseResponse"
+            value={this.props.baseResponseValue}
             onChange={this.props.onChange}
           />
         </Col>

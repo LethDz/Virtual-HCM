@@ -52,15 +52,21 @@
 }
 
 .name {
-  background-color: #DC3545;
+  border: solid;
+  border-width: 2px;
+  border-color: #DC3545;
 }
 
 .verb {
-  background-color: #28A745;
+  border: solid;
+  border-width: 2px;
+  border-color: #28A745;
 }
 
 .noun {
-  background-color: #FFF3CD;
+  border: solid;
+  border-width: 2px;
+  border-color: #ffd23f;
 }
 
 .word-box {
@@ -75,4 +81,18 @@
 .progress-bar-list {
   margin: auto;
   height: 42px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.selector {
+  text-decoration: underline;
+}
+
+.divider {
+  border-top: 1px dashed #007BFF;
 }

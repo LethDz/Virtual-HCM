@@ -68,13 +68,15 @@ export const ADMIN_CONFIGURE_SYSTEM_PAGE = `${ADMIN_PAGE}/configure-system`;
 export const CONTRIBUTOR_PAGE = '/contributor';
 export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-approval`;
 export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
-export const REFERENCE_LIST_PAGE = '/references';
+export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
+export const KNOWLEDGE_DATA_LIST_PAGE = `${CONTRIBUTOR_PAGE}/knowledge-data`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
   intent
     ? `${CONTRIBUTOR_PAGE}/data-approval/get/${intent}`
     : `${CONTRIBUTOR_PAGE}/data-approval/get/:intent`;
 
+// API Contributor Route Path
 export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>
   `${KNOWLEDGE_DATA}/get?intent=${intent}`;
 

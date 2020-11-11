@@ -11,7 +11,7 @@ import {
 import { questionType } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 class Coresponse extends Component {
@@ -29,6 +29,9 @@ class Coresponse extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    if (this.props.coresponseValue && this.props.coresponseValue.length) {
+      this.setState({ coresponse: this.props.coresponseValue });
+    }
   }
 
   componentWillUnmount() {
@@ -89,14 +92,11 @@ class Coresponse extends Component {
             </Input>
           </Col>
           <Col>
-            <Input
-              onChange={this.handleInput}
-              name="currentCoresponse"
-            />
+            <Input onChange={this.handleInput} name="currentCoresponse" />
           </Col>
           <Col xs="auto">
             <Button color="primary" onClick={this.addCoresponse}>
-              <FontAwesomeIcon icon={faPlus} /> Coresponse
+              <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
             </Button>
           </Col>
         </Row>
