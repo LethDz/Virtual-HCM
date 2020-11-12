@@ -28,7 +28,7 @@ import {
   NLP,
   TOKENIZE,
 } from 'src/constants';
-import { handleInputChange } from 'src/common/handleInputChange';
+import { handleInputChange, handleItemInWordsChange } from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -102,18 +102,8 @@ class SynonymDetailModal extends Component {
     }
   };
 
-  handleItemChange = (event) => {
-    let items = this.state.words;
-    let index = event.target.name;
-    let value = event.target.value;
-    items[index] = value;
-    this._isMounted &&
-      this.setState({
-        words: items,
-      });
-  };
-
   handleInput = (event) => handleInputChange(event, this);
+  handleItemChange = (event) => handleItemInWordsChange(event, this);
 
   setLoading = (status) => {
     this._isMounted &&
@@ -181,7 +171,6 @@ class SynonymDetailModal extends Component {
         words: this.state.words,
       })
       .then((response) => {
-        console.log(response);
         if (response.data.status) {
           const synonym = response.data.result_data;
           this.props.editSynonymDetail(synonym);
@@ -236,21 +225,26 @@ class SynonymDetailModal extends Component {
       axiosClient
         .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
         .then((response) => {
-          let words = [];
-          response.data.result_data.pos.map((sentence) => {
-            sentence.map((word) => {
-              if (word.type !== 'CH') {
-                words.push(word.value);
-              }
-              return word;
+          if (response.data.status) {
+            let words = [];
+            response.data.result_data.pos.map((sentence) => {
+              sentence.map((word) => {
+                if (word.type !== 'CH') {
+                  words.push(word.value);
+                }
+                return word;
+              });
+              return sentence;
             });
-            return sentence;
-          });
 
-          this.setState({
-            tokenizedWords: words,
-          });
-          this.setLoading(false);
+            this.setState({
+              tokenizedWords: words,
+            });
+            this.setLoading(false);
+          } else {
+            this.setErrorAlert(true);
+            this.setErrorList(response.data.messages);
+          }
         })
         .catch(() => {
           this.setLoading(false);
@@ -261,8 +255,8 @@ class SynonymDetailModal extends Component {
   };
 
   handleCheckBoxChange = (event) => {
-    let newWord = event.target.name;
-    let isChecked = event.target.checked;
+    const newWord = event.target.name;
+    const isChecked = event.target.checked;
     if (isChecked) {
       if (!this.checkDuplicateWord(newWord)) {
         this.setErrorAlert(false);
@@ -296,136 +290,130 @@ class SynonymDetailModal extends Component {
 
   render() {
     return (
-      <Container>
-        <Modal
-          isOpen={this.props.isOpen}
-          toggle={this.props.toggle}
-          unmountOnClose={true}
-          backdrop="static"
-        >
-          <ModalHeader toggle={this.props.toggle}>Synonym</ModalHeader>
-          <Form onSubmit={this.editSynonym}>
-            <ModalBody>
-              <LoadingSpinner loading={this.state.loading} text={'Loading'} />
-              <Container>
-                {this.state.successAlert && (
-                  <SuccessAlert
-                    successAlert={this.state.successAlert}
-                    text="Editing synonym is successfully"
-                    onDismiss={() => this.onDismiss('successAlert')}
-                  />
-                )}
-                {this.state.errorAlert && (
-                  <ErrorAlert
-                    errorAlert={this.state.errorAlert}
-                    errorList={this.state.errorList}
-                    onDismiss={() => this.onDismiss('errorAlert')}
-                  />
-                )}
-                <Label>
-                  <h6>ID: {this.state.synonym_id}</h6>
-                </Label>
-                <FormGroup>
-                  <Label>Meaning: </Label>
-                  <Input
-                    name="meaning"
-                    type="text"
-                    required
-                    value={this.state.meaning}
-                    onChange={this.handleInput}
-                    disabled={this.state.loading}
-                  />
-                </FormGroup>
-                <Label>Words: </Label>
+      <Modal
+        isOpen={this.props.isOpen}
+        toggle={this.props.toggle}
+        unmountOnClose={true}
+        backdrop="static"
+      >
+        <ModalHeader toggle={this.props.toggle}>Synonym</ModalHeader>
+        <Form onSubmit={this.editSynonym}>
+          <ModalBody>
+            <LoadingSpinner loading={this.state.loading} text={'Loading'} />
+            <Container>
+              {this.state.successAlert && (
+                <SuccessAlert
+                  successAlert={this.state.successAlert}
+                  text="Editing synonym is successfully"
+                  onDismiss={() => this.onDismiss('successAlert')}
+                />
+              )}
+              {this.state.errorAlert && (
+                <ErrorAlert
+                  errorAlert={this.state.errorAlert}
+                  errorList={this.state.errorList}
+                  onDismiss={() => this.onDismiss('errorAlert')}
+                />
+              )}
+              <Label>
+                <h6>ID: {this.state.synonym_id}</h6>
+              </Label>
+              <FormGroup>
+                <Label>Meaning: </Label>
+                <Input
+                  name="meaning"
+                  type="text"
+                  required
+                  value={this.state.meaning}
+                  onChange={this.handleInput}
+                  disabled={this.state.loading}
+                />
+              </FormGroup>
+              <Label>Words: </Label>
 
-                <div className="container justify-content-center">
-                  <div className="border border-light p-3 list-word">
-                    {this._isMounted &&
-                      this.state.words.map((word, index) => (
-                        <Row className="mt-2" key={index}>
-                          <Col className="col-3">Word {index + 1}</Col>
-                          <Col className="col-7">
-                            <Input
-                              name={index}
-                              type="text"
-                              required
-                              value={word}
-                              onChange={this.handleItemChange}
-                              disabled={this.state.loading}
-                            />
-                          </Col>
-                          <Col className="col-2">
-                            <Button
-                              color="danger"
-                              id={index}
-                              onClick={this.deleteWord.bind(this, index)}
-                            >
-                              <FontAwesomeIcon icon={faTrashAlt} />
-                            </Button>
-                          </Col>
-                        </Row>
-                      ))}
-                  </div>
-                  <Label className="mt-2">Check word tokenize:</Label>
-                  <Row>
-                    <Col className="col-10">
-                      <Input
-                        type="textarea"
-                        name="paragraph"
-                        onChange={this.handleInput}
-                        value={this.state.paragraph}
-                        disabled={this.state.loading}
-                      />
-                    </Col>
-                    <Col className="col-2">
-                      <Button
-                        color="success"
-                        onClick={this.tokenizeWord}
-                        disabled={this.state.loading}
-                      >
-                        <FontAwesomeIcon icon={faCheck} color="white" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Label className="mt-2">Tokenized words: </Label>
-                  <div className="container border border-light p-3 tokenize-word">
-                    {this.state.tokenizedWords &&
-                      this.state.tokenizedWords.map((word, index) => (
-                        <label key={'checkbox' + index} className="mr-2">
-                          <input
-                            type="checkbox"
-                            onChange={this.handleCheckBoxChange}
-                            name={word}
-                          />{' '}
-                          {word}
-                        </label>
-                      ))}
-                  </div>
+              <div className="container justify-content-center">
+                <div className="border border-light p-3 list-word">
+                  {this._isMounted &&
+                    this.state.words.map((word, index) => (
+                      <Row className="mt-2" key={index}>
+                        <Col className="col-3">Word {index + 1}</Col>
+                        <Col className="col-7">
+                          <Input
+                            name={index}
+                            type="text"
+                            required
+                            value={word}
+                            onChange={this.handleItemChange}
+                            disabled={this.state.loading}
+                          />
+                        </Col>
+                        <Col className="col-2">
+                          <Button
+                            color="danger"
+                            id={index}
+                            onClick={this.deleteWord.bind(this, index)}
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
                 </div>
-              </Container>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                type="submit"
-                disabled={this.state.loading}
-              >
-                <FontAwesomeIcon icon={faSave} color="white" />
-                &nbsp;Save
-              </Button>
-              <Button
-                color="warning"
-                disabled={this.state.loading}
-                style={{ color: 'white' }}
-                onClick={this.deleteSynonym}
-              >
-                <FontAwesomeIcon icon={faTrash} color="white" />
-                &nbsp;Delete
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
-      </Container>
+                <Label className="mt-2">Check word tokenize:</Label>
+                <Row>
+                  <Col className="col-10">
+                    <Input
+                      type="textarea"
+                      name="paragraph"
+                      onChange={this.handleInput}
+                      value={this.state.paragraph}
+                      disabled={this.state.loading}
+                    />
+                  </Col>
+                  <Col className="col-2">
+                    <Button
+                      color="success"
+                      onClick={this.tokenizeWord}
+                      disabled={this.state.loading}
+                    >
+                      <FontAwesomeIcon icon={faCheck} color="white" />
+                    </Button>
+                  </Col>
+                </Row>
+                <Label className="mt-2">Tokenized words: </Label>
+                <div className="container border border-light p-3 tokenize-word">
+                  {this.state.tokenizedWords &&
+                    this.state.tokenizedWords.map((word, index) => (
+                      <label key={'checkbox' + index} className="mr-2">
+                        <input
+                          type="checkbox"
+                          onChange={this.handleCheckBoxChange}
+                          name={word}
+                        />{' '}
+                        {word}
+                      </label>
+                    ))}
+                </div>
+              </div>
+            </Container>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" type="submit" disabled={this.state.loading}>
+              <FontAwesomeIcon icon={faSave} color="white" />
+              &nbsp;Save
+            </Button>
+            <Button
+              color="warning"
+              disabled={this.state.loading}
+              style={{ color: 'white' }}
+              onClick={this.deleteSynonym}
+            >
+              <FontAwesomeIcon icon={faTrash} color="white" />
+              &nbsp;Delete
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     );
   }
 }
