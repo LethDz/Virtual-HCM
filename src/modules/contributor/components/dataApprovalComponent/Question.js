@@ -390,7 +390,7 @@ export default class Question extends Component {
                           switch (value) {
                             case 1:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="primary" className="mt-1">
                                     {questionType[0]}
                                   </Badge>
@@ -399,7 +399,7 @@ export default class Question extends Component {
                               );
                             case 2:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="secondary" className="mt-1">
                                     {questionType[1]}
                                   </Badge>
@@ -408,7 +408,7 @@ export default class Question extends Component {
                               );
                             case 3:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="success" className="mt-1">
                                     {questionType[2]}
                                   </Badge>
@@ -417,7 +417,7 @@ export default class Question extends Component {
                               );
                             case 4:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="danger" className="mt-1">
                                     {questionType[3]}
                                   </Badge>
@@ -426,7 +426,7 @@ export default class Question extends Component {
                               );
                             case 5:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="warning" className="mt-1">
                                     {questionType[4]}
                                   </Badge>
@@ -435,7 +435,7 @@ export default class Question extends Component {
                               );
                             case 6:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="info" className="mt-1">
                                     {questionType[5]}
                                   </Badge>
@@ -444,7 +444,7 @@ export default class Question extends Component {
                               );
                             case 7:
                               return (
-                                <Fragment>
+                                <Fragment key={index}>
                                   <Badge color="dark" className="mt-1">
                                     {questionType[6]}
                                   </Badge>
