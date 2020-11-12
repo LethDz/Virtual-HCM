@@ -13,7 +13,10 @@ import {
   Col,
   Row,
 } from 'reactstrap';
-import { handleInputChange } from 'src/common/handleInputChange';
+import {
+  handleInputChange,
+  handleItemInWordsChange,
+} from 'src/common/handleInputChange';
 import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -87,20 +90,11 @@ class CreateSynonymModal extends Component {
       });
   };
 
-  handleItemChange = (event) => {
-    let items = this.state.words;
-    let index = event.target.name;
-    let value = event.target.value;
-    items[index] = value;
-    this.setState({
-      words: items,
-    });
-  };
+  handleItemChange = (event) => handleItemInWordsChange(event, this);
 
   deleteWord = (index) => {
     let list = this.state.words;
     let pos = Number(index);
-    console.log(pos);
     list.splice(pos, 1);
     this.setState({
       words: list,
@@ -194,8 +188,8 @@ class CreateSynonymModal extends Component {
   };
 
   handleCheckBoxChange = (event) => {
-    let newWord = event.target.name;
-    let isChecked = event.target.checked;
+    const newWord = event.target.name;
+    const isChecked = event.target.checked;
     if (isChecked) {
       if (!this.checkDuplicateWord(newWord)) {
         this.setErrorAlert(false);
@@ -228,127 +222,118 @@ class CreateSynonymModal extends Component {
   };
   render() {
     return (
-      <Container>
-        <Modal
-          isOpen={this.props.isOpen}
-          toggle={this.props.toggle}
-          unmountOnClose={true}
-          backdrop="static"
-        >
-          <ModalHeader toggle={this.props.toggle}>
-            Create New Synonym
-          </ModalHeader>
-          <Form onSubmit={this.addSynonym}>
-            <ModalBody>
-              <LoadingSpinner loading={this.state.loading} text={'Loading'} />
-              <Container>
-                {this.state.successAlert && (
-                  <SuccessAlert
-                    successAlert={this.state.successAlert}
-                    text="Adding synonym is successfully"
-                    onDismiss={() => this.onDismiss('successAlert')}
-                  />
-                )}
-                {this.state.errorAlert && (
-                  <ErrorAlert
-                    errorAlert={this.state.errorAlert}
-                    errorList={this.state.errorList}
-                    onDismiss={() => this.onDismiss('errorAlert')}
-                  />
-                )}
-                <FormGroup>
-                  <Label>Meaning: </Label>
-                  <Input
-                    name="meaning"
-                    type="text"
-                    required
-                    value={this.state.meaning}
-                    onChange={this.handleInput}
-                    disabled={this.state.loading}
-                  />
-                </FormGroup>
-                <Label>Words: </Label>
-                <div className="container justify-content-center">
-                  <div className="border border-light p-3 list-word">
-                    {this._isMounted &&
-                      this.state.words &&
-                      this.state.words.map((word, index) => (
-                        <Row className="mt-2" key={'word' + index}>
-                          <Col className="col-3">Word {index + 1}</Col>
-                          <Col className="col-7">
-                            <Input
-                              name={index}
-                              type="text"
-                              required
-                              value={word}
-                              onChange={this.handleItemChange}
-                              disabled={this.state.loading}
-                            />
-                          </Col>
-                          <Col className="col-2">
-                            <Button
-                              color="danger"
-                              id={index}
-                              onClick={this.deleteWord.bind(this, index)}
-                            >
-                              <FontAwesomeIcon icon={faTrashAlt} />
-                            </Button>
-                          </Col>
-                        </Row>
-                      ))}
-                  </div>
-                  <Label className="mt-2">Check word tokenize:</Label>
-                  <Row>
-                    <Col className="col-10">
-                      <Input
-                        type="textarea"
-                        name="paragraph"
-                        onChange={this.handleInput}
-                        value={this.state.paragraph}
-                        disabled={this.state.loading}
-                      />
-                    </Col>
-                    <Col className="col-2">
-                      <Button
-                        color="success"
-                        onClick={this.tokenizeWord}
-                        disabled={this.state.loading}
-                      >
-                        <FontAwesomeIcon icon={faCheck} color="white" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Label className="mt-2">Tokenized words: </Label>
-                  <div className="container border border-light p-3 tokenize-word">
-                    {this.state.tokenizedWords &&
-                      this.state.tokenizedWords.map((word, index) => (
-                        <label key={'checkbox' + index} className="mr-2">
-                          <input
-                            type="checkbox"
-                            checked={false}
-                            onChange={this.handleCheckBoxChange}
-                            name={word}
-                          />{' '}
-                          {word}
-                        </label>
-                      ))}
-                  </div>
+      <Modal
+        isOpen={this.props.isOpen}
+        toggle={this.props.toggle}
+        unmountOnClose={true}
+        backdrop="static"
+      >
+        <ModalHeader toggle={this.props.toggle}>Create New Synonym</ModalHeader>
+        <Form onSubmit={this.addSynonym}>
+          <ModalBody>
+            <LoadingSpinner loading={this.state.loading} text={'Loading'} />
+            <Container>
+              {this.state.successAlert && (
+                <SuccessAlert
+                  successAlert={this.state.successAlert}
+                  text="Adding synonym is successfully"
+                  onDismiss={() => this.onDismiss('successAlert')}
+                />
+              )}
+              {this.state.errorAlert && (
+                <ErrorAlert
+                  errorAlert={this.state.errorAlert}
+                  errorList={this.state.errorList}
+                  onDismiss={() => this.onDismiss('errorAlert')}
+                />
+              )}
+              <FormGroup>
+                <Label>Meaning: </Label>
+                <Input
+                  name="meaning"
+                  type="text"
+                  required
+                  value={this.state.meaning}
+                  onChange={this.handleInput}
+                  disabled={this.state.loading}
+                />
+              </FormGroup>
+              <Label>Words: </Label>
+              <div className="container justify-content-center">
+                <div className="border border-light p-3 list-word">
+                  {this._isMounted &&
+                    this.state.words &&
+                    this.state.words.map((word, index) => (
+                      <Row className="mt-2" key={'word' + index}>
+                        <Col className="col-3">Word {index + 1}</Col>
+                        <Col className="col-7">
+                          <Input
+                            name={index}
+                            type="text"
+                            required
+                            value={word}
+                            onChange={this.handleItemChange}
+                            disabled={this.state.loading}
+                          />
+                        </Col>
+                        <Col className="col-2">
+                          <Button
+                            color="danger"
+                            id={index}
+                            onClick={this.deleteWord.bind(this, index)}
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
                 </div>
-              </Container>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                type="submit"
-                disabled={this.state.loading}
-              >
-                <FontAwesomeIcon icon={faPlus} color="white" />
-                &nbsp;Create
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
-      </Container>
+                <Label className="mt-2">Check word tokenize:</Label>
+                <Row>
+                  <Col className="col-10">
+                    <Input
+                      type="textarea"
+                      name="paragraph"
+                      onChange={this.handleInput}
+                      value={this.state.paragraph}
+                      disabled={this.state.loading}
+                    />
+                  </Col>
+                  <Col className="col-2">
+                    <Button
+                      color="success"
+                      onClick={this.tokenizeWord}
+                      disabled={this.state.loading}
+                    >
+                      <FontAwesomeIcon icon={faCheck} color="white" />
+                    </Button>
+                  </Col>
+                </Row>
+                <Label className="mt-2">Tokenized words: </Label>
+                <div className="container border border-light p-3 tokenize-word">
+                  {this.state.tokenizedWords &&
+                    this.state.tokenizedWords.map((word, index) => (
+                      <label key={'checkbox' + index} className="mr-2">
+                        <input
+                          type="checkbox"
+                          onChange={this.handleCheckBoxChange}
+                          name={word}
+                        />{' '}
+                        {word}
+                      </label>
+                    ))}
+                </div>
+              </div>
+            </Container>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" type="submit" disabled={this.state.loading}>
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp;Create
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     );
   }
 }
