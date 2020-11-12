@@ -33,7 +33,9 @@ class DataApprovalList extends Component {
     this.state = {
       containerHeight: 0,
       alertMessage: '',
+      errorList: [],
       loading: false,
+      errorAlert: false,
     };
     this.titleRef = React.createRef();
   }
@@ -94,6 +96,7 @@ class DataApprovalList extends Component {
         this.setAlertMessage('Load successful');
         this.setSuccessAlert(true);
         this._isMounted && this.setState({ loading: false });
+        // catch
       })
       .catch((error) => {
         this.setErrorAlert(true);

@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Row, Col, Button, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import {
+  Row,
+  Col,
+  Button,
+  Input,
+  ListGroup,
+  ListGroupItem,
+  Label,
+} from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 import { SynonymsModal } from 'src/modules/contributor/index';
@@ -107,7 +115,7 @@ class Synonyms extends Component {
 
   render() {
     return (
-      <Row className="p-3" xs="1">
+      <Row xs="1">
         {this.state.isOpenSynonymModal && (
           <SynonymsModal
             scrollToTop={this.scrollToTop}
@@ -117,13 +125,13 @@ class Synonyms extends Component {
             setErrorList={this.props.setErrorList}
             index={this.state.index}
             isOpenSynonymModal={this.state.isOpenSynonymModal}
-            toggleSynonymModal={this.toggleSynonymModal}
+            toggle={this.toggleSynonymModal}
             addSynonym={this.addSynonym}
           />
         )}
 
         <Col>
-          Synonyms:
+          <Label className="label">Synonyms:</Label>
           <Row>
             <Col>
               <Input
@@ -143,7 +151,7 @@ class Synonyms extends Component {
               <ListGroup>
                 {this.state.synonyms.map((word, index) => {
                   return (
-                    <ListGroupItem key={index} className="mt-1">
+                    <ListGroupItem key={index} className="mt-1 bound-group">
                       <Row>
                         <Col>
                           {word.word}

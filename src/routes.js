@@ -13,7 +13,7 @@ import {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
-  DataApprovalDetailPage
+  DataApprovalDetailPage,
 } from 'src/pages';
 import {
   HOME_PAGE,

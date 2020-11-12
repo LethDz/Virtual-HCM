@@ -129,9 +129,13 @@ class ReferenceModal extends Component {
       });
   };
 
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
         {this.state.isOpenCreateReferenceModal && (
           <CreateReferenceModal
             updateReferenceList={this.updateReferenceList}
@@ -140,9 +144,9 @@ class ReferenceModal extends Component {
           />
         )}
 
-        <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
+        <ModalHeader toggle={this.toggleThisModal}>Reference</ModalHeader>
         <ModalBody>
-          <LoadingSpinner loading={this.state.loading} text="Loading reference">
+          <LoadingSpinner type="MODAL" loading={this.state.loading} text="Loading reference">
             <div
               className="ag-theme-alpine"
               style={{ height: 400, width: 465 }}

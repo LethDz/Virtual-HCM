@@ -125,15 +125,20 @@ class GenSynonymSentenceModal extends Component {
     this.props.toggle();
   };
 
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
         <LoadingSpinner
+          type="MODAL"
           loading={this.state.loading}
           text="Generating sentences"
         >
           <Form>
-            <ModalHeader toggle={this.props.toggle}>
+            <ModalHeader toggle={this.toggleThisModal}>
               Generate sentence
             </ModalHeader>
             <ModalBody>
