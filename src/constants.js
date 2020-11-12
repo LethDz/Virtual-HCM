@@ -69,7 +69,6 @@ export const CONTRIBUTOR_PAGE = '/contributor';
 export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-approval`;
 export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
 export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
-export const KNOWLEDGE_DATA_LIST_PAGE = `${CONTRIBUTOR_PAGE}/knowledge-data`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
   intent

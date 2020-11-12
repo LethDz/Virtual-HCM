@@ -137,16 +137,20 @@ class NewSynonymModal extends Component {
     }
   };
 
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        toggle={this.props.toggle}
+        toggle={this.toggleThisModal}
         onSubmit={this.sendCreateSynonymRequest}
       >
-        <LoadingSpinner loading={this.state.loading} text="Adding new synonym">
+        <LoadingSpinner type="MODAL" loading={this.state.loading} text="Adding new synonym">
           <Form>
-            <ModalHeader toggle={this.props.toggle}>New synonym</ModalHeader>
+            <ModalHeader toggle={this.toggleThisModal}>New synonym</ModalHeader>
             <ModalBody>
               <Alert isOpen={this.state.addSuccess} color="success">
                 Add successful

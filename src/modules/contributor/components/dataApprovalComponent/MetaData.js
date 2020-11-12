@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Row,
   Col,
@@ -16,6 +16,7 @@ import {
   getAllDocumentReference,
   fetchAllDocumentReference,
   ReferenceModal,
+  FormSectionTitle,
 } from 'src/modules/contributor/index';
 import { connect } from 'react-redux';
 
@@ -85,67 +86,70 @@ class MetaData extends Component {
 
   render() {
     return (
-      <Row className="pb-3">
-        <Col className="pr-0" xs="auto">
-          <Col>
-            <Label className="label" for="intent">
-              Intent:
-            </Label>
-          </Col>
-          <Col>
-            <Label className="label" for="intentFullName">
-              Intent full name:
-            </Label>
-          </Col>
-        </Col>
-        <Col xs="auto" className="m-1 pl-0 ml-0">
-          <Input
-            required
-            className="m-1"
-            type="text"
-            name="intent"
-            id="intent"
-            value={this.props.intentValue}
-            onChange={this.props.onChange}
+      <Fragment>
+        {this.state.isOpenReferenceModal && (
+          <ReferenceModal
+            isOpen={this.state.isOpenReferenceModal}
+            toggle={this.toggleReferenceModal}
+            addReference={this.addReference}
+            setErrorAlert={this.props.setErrorAlert}
+            setSuccessAlert={this.props.setSuccessAlert}
+            scrollToTop={this.props.scrollToTop}
           />
-          <Input
-            required
-            className="m-1"
-            type="text"
-            name="intentFullName"
-            id="intentFullName"
-            value={this.props.intentFullNameValue}
-            onChange={this.props.onChange}
-          />
-        </Col>
-        <Col className="pr-5">
-          {this.state.isOpenReferenceModal && (
-            <ReferenceModal
-              isOpen={this.state.isOpenReferenceModal}
-              toggle={this.toggleReferenceModal}
-              addReference={this.addReference}
-              setErrorAlert={this.props.setErrorAlert}
-              setSuccessAlert={this.props.setSuccessAlert}
-              scrollToTop={this.props.scrollToTop}
-            />
-          )}
-
-          <Row>
-            <Col>
-              <Label className="label" for="reference">
-                Document reference:
+        )}
+        <Row className="col">
+          <Col xs="auto" className="mr-2">
+            <Row>
+              <Label className="label small-title" for="intent">
+                Intent:
               </Label>
-            </Col>
-            <Col xs="auto" className="m-1">
-              <Button
-                type="button"
-                onClick={this.toggleReferenceModal}
-                color="success"
-              >
-                <FontAwesomeIcon icon={faPlusCircle} /> New reference
-              </Button>
-            </Col>
-          </Row>
+            </Row>
+            <Row>
+              <Label className="label small-title" for="intentFullName">
+                Intent full name:
+              </Label>
+            </Row>
+          </Col>
+          <Col xs="6">
+            <Row className="mb-1">
+              <Input
+                placeholder="Enter intent here"
+                required
+                type="text"
+                name="intent"
+                id="intent"
+                value={this.props.intentValue}
+                onChange={this.props.onChange}
+              />
+            </Row>
+            <Row className="mb-1">
+              <Input
+                placeholder="Enter intent fullname here"
+                required
+                type="text"
+                name="intentFullName"
+                id="intentFullName"
+                value={this.props.intentFullNameValue}
+                onChange={this.props.onChange}
+              />
+            </Row>
+          </Col>
+        </Row>
+
+        <hr className="mr-3 ml-3 divider" />
+        <Row className="col">
+          <FormSectionTitle title="Reference" />
+          <Col xs="auto" className="m-1">
+            <Button
+              type="button"
+              onClick={this.toggleReferenceModal}
+              color="success"
+            >
+              <FontAwesomeIcon icon={faPlusCircle} /> New reference
+            </Button>
+          </Col>
+        </Row>
+        <Row className="col">
           <ListGroup>
             {this.state.referenceList &&
               this.state.referenceList.map((reference, index) => {
@@ -172,8 +176,8 @@ class MetaData extends Component {
                 );
               })}
           </ListGroup>
-        </Col>
-      </Row>
+        </Row>
+      </Fragment>
     );
   }
 }

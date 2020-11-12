@@ -135,132 +135,136 @@ class CriticalData extends Component {
 
   render() {
     return (
-      <Col>
-        <Label>Subject</Label>
-        <Row>
-          <Col xs="auto">
-            <Input
-              type="select"
-              name="type"
-              value={this.state.type}
-              onChange={this.handleInput}
-            >
-              {criticalType.map((value, index) => {
-                return <option key={index}>{value}</option>;
-              })}
-            </Input>
-          </Col>
+      <Row>
+        <Col>
+          <Label className="label">Subject:</Label>
+          <Row>
+            <Col xs="auto">
+              <Input
+                type="select"
+                name="type"
+                value={this.state.type}
+                onChange={this.handleInput}
+              >
+                {criticalType.map((value, index) => {
+                  return <option key={index}>{value}</option>;
+                })}
+              </Input>
+            </Col>
 
-          <Col xs="auto">
-            <Button color="primary" onClick={this.addCriticalData}>
-              <FontAwesomeIcon icon={faPlusCircle} /> Subject
-            </Button>
-          </Col>
-        </Row>
-        <ListGroup className="mt-1">
-          {this.state.criticalData.map((criticalData, index) => {
-            return (
-              <ListGroupItem key={index}>
-                <Row>
-                  <Col>
-                    <Row>
-                      {criticalData.type}
-                    </Row>
-                  </Col>
-                  <Col xs="auto">
-                    <Button
-                      color="danger"
-                      onClick={() => {
-                        this.removeCritical(index);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </Button>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col className="border-right-solid">
-                    <Label>Subject component: </Label>
-                    <CriticalDataItem
-                      type={CRITICAL}
-                      index={index}
-                      wordArray={this.props.wordArray}
-                      setCriticalData={this.setCriticalData}
-                    />
-                    <ListGroup>
-                      {this.state.criticalData[index].word.map(
-                        (word, index) => {
-                          return (
-                            <ListGroupItem className="mt-1" key={index}>
-                              <Row>
-                                <Col>
-                                  {word.type}: {word.word}
-                                </Col>
-                                <Col xs="auto">
-                                  <Button
-                                    color="danger"
-                                    onClick={() => {
-                                      this.removeComponent(
-                                        CRITICAL,
-                                        criticalData.index,
-                                        index
-                                      );
-                                    }}
-                                  >
-                                    <FontAwesomeIcon icon={faTrashAlt} />
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </ListGroupItem>
-                          );
-                        }
-                      )}
-                    </ListGroup>
-                  </Col>
-                  <Col>
-                    <Label>Verb: </Label>
-                    <CriticalDataItem
-                      type={VERB}
-                      index={index}
-                      wordArray={this.props.wordArray}
-                      setVerb={this.setVerb}
-                    />
-                    <ListGroup>
-                      {this.state.criticalData[index].verb.map(
-                        (verb, index) => {
-                          return (
-                            <ListGroupItem className="mt-1" key={index}>
-                              <Row>
-                                <Col>
-                                  {verb.type}: {verb.word}
-                                </Col>
-                                <Col xs="auto">
-                                  <Button
-                                    color="danger"
-                                    onClick={() => {
-                                      this.removeComponent(
-                                        VERB,
-                                        criticalData.index,
-                                        index
-                                      );
-                                    }}
-                                  >
-                                    <FontAwesomeIcon icon={faTrashAlt} />
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </ListGroupItem>
-                          );
-                        }
-                      )}
-                    </ListGroup>
-                  </Col>
-                </Row>
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
-      </Col>
+            <Col xs="auto">
+              <Button color="primary" onClick={this.addCriticalData}>
+                <FontAwesomeIcon icon={faPlusCircle} /> Subject
+              </Button>
+            </Col>
+          </Row>
+          <ListGroup className="mt-1">
+            {this.state.criticalData.map((criticalData, index) => {
+              return (
+                <ListGroupItem className="bound-group" key={index}>
+                  <Row>
+                    <Col>
+                      <Row>
+                        <span className="ml-2">
+                          Subject type: {criticalData.type}
+                        </span>
+                      </Row>
+                    </Col>
+                    <Col xs="auto">
+                      <Button
+                        color="danger"
+                        onClick={() => {
+                          this.removeCritical(index);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="border-right-solid">
+                      <Label>Subject component: </Label>
+                      <CriticalDataItem
+                        type={CRITICAL}
+                        index={index}
+                        wordArray={this.props.wordArray}
+                        setCriticalData={this.setCriticalData}
+                      />
+                      <ListGroup>
+                        {this.state.criticalData[index].word.map(
+                          (word, index) => {
+                            return (
+                              <ListGroupItem className="mt-1" key={index}>
+                                <Row>
+                                  <Col>
+                                    {word.type}: {word.word}
+                                  </Col>
+                                  <Col xs="auto">
+                                    <Button
+                                      color="danger"
+                                      onClick={() => {
+                                        this.removeComponent(
+                                          CRITICAL,
+                                          criticalData.index,
+                                          index
+                                        );
+                                      }}
+                                    >
+                                      <FontAwesomeIcon icon={faTrashAlt} />
+                                    </Button>
+                                  </Col>
+                                </Row>
+                              </ListGroupItem>
+                            );
+                          }
+                        )}
+                      </ListGroup>
+                    </Col>
+                    <Col>
+                      <Label>Verb: </Label>
+                      <CriticalDataItem
+                        type={VERB}
+                        index={index}
+                        wordArray={this.props.wordArray}
+                        setVerb={this.setVerb}
+                      />
+                      <ListGroup>
+                        {this.state.criticalData[index].verb.map(
+                          (verb, index) => {
+                            return (
+                              <ListGroupItem className="mt-1" key={index}>
+                                <Row>
+                                  <Col>
+                                    {verb.type}: {verb.word}
+                                  </Col>
+                                  <Col xs="auto">
+                                    <Button
+                                      color="danger"
+                                      onClick={() => {
+                                        this.removeComponent(
+                                          VERB,
+                                          criticalData.index,
+                                          index
+                                        );
+                                      }}
+                                    >
+                                      <FontAwesomeIcon icon={faTrashAlt} />
+                                    </Button>
+                                  </Col>
+                                </Row>
+                              </ListGroupItem>
+                            );
+                          }
+                        )}
+                      </ListGroup>
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
+        </Col>
+      </Row>
     );
   }
 }

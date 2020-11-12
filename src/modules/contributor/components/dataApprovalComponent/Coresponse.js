@@ -7,6 +7,7 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
+  Badge,
 } from 'reactstrap';
 import { questionType } from 'src/modules/contributor/index';
 
@@ -39,21 +40,20 @@ class Coresponse extends Component {
   }
 
   addCoresponse = () => {
+    let coresponse = this.state.coresponse;
     let type = this.state.currentCoresponseType;
     let word = this.state.currentCoresponse;
     if (word.trim() !== '') {
-      let temp = this.state.coresponse;
-      temp.push({
+      coresponse.push({
         type: type,
         answer: word,
       });
-      let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
-      if (this._isMounted) {
-        this.setState({
-          coresponse: sortedTemp,
-        });
-      }
     }
+    this._isMounted &&
+      this.setState({
+        coresponse: coresponse,
+      });
+
     this.setCoresponse();
   };
 
@@ -76,54 +76,85 @@ class Coresponse extends Component {
 
   render() {
     return (
-      <Col>
-        <Label>Coresponse</Label>
-        <Row>
-          <Col xs="auto">
-            <Input
-              onChange={this.handleInput}
-              name="currentCoresponseType"
-              ref={this.coresponseRef}
-              type="select"
-            >
-              {questionType.map((value, index) => {
-                return <option key={index}>{value}</option>;
-              })}
-            </Input>
-          </Col>
-          <Col>
-            <Input onChange={this.handleInput} name="currentCoresponse" />
-          </Col>
-          <Col xs="auto">
-            <Button color="primary" onClick={this.addCoresponse}>
-              <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
-            </Button>
-          </Col>
-        </Row>
-        <ListGroup className="mt-1">
-          {this.state.coresponse.map((coresponse, index) => {
-            return (
-              <ListGroupItem key={index}>
-                <Row>
-                  <Col>
-                    {coresponse.type}: {coresponse.answer}
-                  </Col>
-                  <Col xs="auto">
-                    <Button
-                      color="danger"
-                      onClick={() => {
-                        this.removeCoresponse(index);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </Button>
-                  </Col>
-                </Row>
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
-      </Col>
+      <Row>
+        <Col>
+          <Label className="label">Coresponse:</Label>
+          <Row>
+            <Col xs="auto">
+              <Input
+                onChange={this.handleInput}
+                name="currentCoresponseType"
+                ref={this.coresponseRef}
+                type="select"
+              >
+                {questionType.map((value, index) => {
+                  return <option key={index}>{value}</option>;
+                })}
+              </Input>
+            </Col>
+            <Col>
+              <Input
+                placeholder="Enter coresponse here then press the add button on the right side"
+                onChange={this.handleInput}
+                name="currentCoresponse"
+              />
+            </Col>
+            <Col xs="auto">
+              <Button color="primary" onClick={this.addCoresponse}>
+                <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
+              </Button>
+            </Col>
+          </Row>
+          <ListGroup className="mt-1">
+            {this.state.coresponse.map((coresponse, index) => {
+              let type;
+              switch (coresponse.type) {
+                case questionType[0]:
+                  type = <Badge color="primary">{coresponse.type}</Badge>;
+                  break;
+                case questionType[1]:
+                  type = <Badge color="secondary">{coresponse.type}</Badge>;
+                  break;
+                case questionType[2]:
+                  type = <Badge color="success">{coresponse.type}</Badge>;
+                  break;
+                case questionType[3]:
+                  type = <Badge color="danger">{coresponse.type}</Badge>;
+                  break;
+                case questionType[4]:
+                  type = <Badge color="warning">{coresponse.type}</Badge>;
+                  break;
+                case questionType[5]:
+                  type = <Badge color="info">{coresponse.type}</Badge>;
+                  break;
+                case questionType[6]:
+                  type = <Badge color="dark">{coresponse.type}</Badge>;
+                  break;
+                default:
+              }
+              return (
+                <ListGroupItem key={index}>
+                  <Row>
+                    <Col>
+                      {type} {coresponse.answer}
+                    </Col>
+                    <Col xs="auto">
+                      <Button
+                        color="danger"
+                        onClick={() => {
+                          this.removeCoresponse(index);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </Button>
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
+        </Col>
+      </Row>
     );
   }
 }

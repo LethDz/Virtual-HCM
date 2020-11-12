@@ -178,7 +178,7 @@ class RawData extends Component {
               color="danger"
               onClick={this.stateCancelTokenize}
             >
-              <FontAwesomeIcon icon={faBan} />{' '} Cancel
+              <FontAwesomeIcon icon={faBan} /> Cancel
             </Button>
           </Col>
         </Row>
@@ -188,6 +188,7 @@ class RawData extends Component {
         <Row>
           <Col>
             <Input
+              placeholder="Enter raw data here and remember to tokenize it :3"
               required
               type="textarea"
               name="rawData"
@@ -202,7 +203,7 @@ class RawData extends Component {
               color="primary"
               onClick={this.stateTokenizeRawDate}
             >
-              <FontAwesomeIcon icon={faHammer} />{' '} Tokenize
+              <FontAwesomeIcon icon={faHammer} /> Tokenize
             </Button>
           </Col>
         </Row>
@@ -211,9 +212,9 @@ class RawData extends Component {
   };
   render() {
     return (
-      <Row className="p-3" xs="1">
+      <Row xs="1">
         <Col>
-          <Label for="rawData">Raw data:</Label>
+          <Label className="label" for="rawData">Raw data:</Label>
         </Col>
         <Col>
           <LoadingSpinner loading={this.state.loading} text="Tokenizing">

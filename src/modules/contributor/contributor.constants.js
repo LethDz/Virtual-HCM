@@ -16,7 +16,15 @@ export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
-export const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
+export const questionType = [
+  'WHAT',
+  'WHEN',
+  'WHERE',
+  'WHO',
+  'WHY',
+  'HOW',
+  'YES/NO',
+];
 export const POSTags = [
   'Np',
   'Nc',
