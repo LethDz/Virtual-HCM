@@ -16,7 +16,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
-  faEdit,
+  faSave,
   faTrash,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
@@ -41,6 +41,7 @@ import {
   editSynonymDetail,
   deleteSynonym,
 } from 'src/modules/contributor';
+import 'src/static/stylesheets/synonym.css';
 
 class SynonymDetailModal extends Component {
   _isMounted = false;
@@ -228,33 +229,35 @@ class SynonymDetailModal extends Component {
   };
 
   tokenizeWord = () => {
-    this.setLoading(true);
-    this.setErrorAlert(false);
-    this.setSuccessAlert(false);
-    axiosClient
-      .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
-      .then((response) => {
-        let words = [];
-        response.data.result_data.pos.map((sentence) => {
-          sentence.map((word) => {
-            if (word.type !== 'CH') {
-              words.push(word.value);
-            }
-            return word;
+    if (this.state.paragraph) {
+      this.setLoading(true);
+      this.setErrorAlert(false);
+      this.setSuccessAlert(false);
+      axiosClient
+        .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
+        .then((response) => {
+          let words = [];
+          response.data.result_data.pos.map((sentence) => {
+            sentence.map((word) => {
+              if (word.type !== 'CH') {
+                words.push(word.value);
+              }
+              return word;
+            });
+            return sentence;
           });
-          return sentence;
-        });
 
-        this.setState({
-          tokenizedWords: words,
+          this.setState({
+            tokenizedWords: words,
+          });
+          this.setLoading(false);
+        })
+        .catch(() => {
+          this.setLoading(false);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
         });
-        this.setLoading(false);
-      })
-      .catch(() => {
-        this.setLoading(false);
-        this.setErrorAlert(true);
-        this.setSuccessAlert(false);
-      });
+    }
   };
 
   handleCheckBoxChange = (event) => {
@@ -336,14 +339,7 @@ class SynonymDetailModal extends Component {
                 <Label>Words: </Label>
 
                 <div className="container justify-content-center">
-                  <div
-                    className="border border-light p-3"
-                    style={{
-                      height: 200,
-                      overflowY: 'scroll',
-                      backgroundColor: '#EEEEEE',
-                    }}
-                  >
+                  <div className="border border-light p-3 list-word">
                     {this._isMounted &&
                       this.state.words.map((word, index) => (
                         <Row className="mt-2" key={index}>
@@ -383,7 +379,7 @@ class SynonymDetailModal extends Component {
                     </Col>
                     <Col className="col-2">
                       <Button
-                        color="warning"
+                        color="success"
                         onClick={this.tokenizeWord}
                         disabled={this.state.loading}
                       >
@@ -392,14 +388,7 @@ class SynonymDetailModal extends Component {
                     </Col>
                   </Row>
                   <Label className="mt-2">Tokenized words: </Label>
-                  <div
-                    className="container border border-light p-3"
-                    style={{
-                      height: 100,
-                      overflowY: 'scroll',
-                      backgroundColor: '#EEEEEE',
-                    }}
-                  >
+                  <div className="container border border-light p-3 tokenize-word">
                     {this.state.tokenizedWords &&
                       this.state.tokenizedWords.map((word, index) => (
                         <label key={'checkbox' + index} className="mr-2">
@@ -421,8 +410,8 @@ class SynonymDetailModal extends Component {
                 type="submit"
                 disabled={this.state.loading}
               >
-                <FontAwesomeIcon icon={faEdit} color="white" />
-                &nbsp;Edit
+                <FontAwesomeIcon icon={faSave} color="white" />
+                &nbsp;Save
               </Button>
               <Button
                 color="warning"

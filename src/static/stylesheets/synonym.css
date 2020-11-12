@@ -1,0 +1,11 @@
+.list-word{
+  height: 200px;
+  background-color: #EEEEEE;
+  overflow-y: scroll;
+}
+
+.tokenize-word{
+  height: 100px;
+  background-color: #EEEEEE;
+  overflow-y: scroll;
+}
