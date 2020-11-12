@@ -62,16 +62,24 @@ const ControlPanel = (props) => {
           selectTrainableData={props.selectTrainableData}
         />
       )}
-      <Form className="control-panel w-50 p-3" onSubmit={onConnect}>
+      <Form className="control-panel p-3" onSubmit={onConnect}>
         <FormGroup row>
           <Col>
             <Label for="data" className="text-sm">
               Data File:
             </Label>
-            <Button color="info" size="sm" onClick={() => setOpenModal(true)}>
+            <br />
+            <Button
+              id="data"
+              color="info"
+              size="sm"
+              onClick={() => setOpenModal(true)}
+              className="mr-2"
+            >
               <FontAwesomeIcon icon={faFileCode} />
               &nbsp; Select Data File
             </Button>
+            <br />
             {props.state.data && (
               <Fragment>
                 <Badge color="success" pill className="mt-2">
