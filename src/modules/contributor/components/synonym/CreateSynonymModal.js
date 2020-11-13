@@ -162,21 +162,26 @@ class CreateSynonymModal extends Component {
       axiosClient
         .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
         .then((response) => {
-          let words = [];
-          response.data.result_data.pos.map((sentence) => {
-            sentence.map((word) => {
-              if (word.type !== 'CH') {
-                words.push(word.value);
-              }
-              return word;
+          if (response.data.status) {
+            let words = [];
+            response.data.result_data.pos.map((sentence) => {
+              sentence.map((word) => {
+                if (word.type !== 'CH') {
+                  words.push(word.value);
+                }
+                return word;
+              });
+              return sentence;
             });
-            return sentence;
-          });
 
-          this.setState({
-            tokenizedWords: words,
-          });
-          this.setLoading(false);
+            this.setState({
+              tokenizedWords: words,
+            });
+            this.setLoading(false);
+          } else {
+            this.setErrorAlert(true);
+            this.setErrorList(response.data.messages);
+          }
         })
         .catch(() => {
           this.setLoading(false);
@@ -185,6 +190,7 @@ class CreateSynonymModal extends Component {
         });
     }
   };
+
 
   handleCheckBoxChange = (event) => {
     const newWord = event.target.name;
