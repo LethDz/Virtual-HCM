@@ -66,14 +66,21 @@ class ReferenceModal extends Component {
       axiosClient
         .get(REFERENCE + ALL)
         .then((response) => {
-          this.props.fetchAllDocumentReference(
-            response.data.result_data.references
-          );
-          this._isMounted &&
-            this.setState({
-              loading: false,
-              referenceList: response.data.result_data.references,
-            });
+          if (response.data.status) {
+            this.props.fetchAllDocumentReference(
+              response.data.result_data.references
+            );
+            this._isMounted &&
+              this.setState({
+                loading: false,
+                referenceList: response.data.result_data.references,
+              });
+            this.props.setErrorAlert(false);
+            this.props.setSuccessAlert(true);
+          } else {
+            this.props.setErrorAlert(true);
+            this.props.setSuccessAlert(false);
+          }
         })
         .catch((err) => {
           this._isMounted && this.setState({ loading: false });
@@ -146,7 +153,11 @@ class ReferenceModal extends Component {
 
         <ModalHeader toggle={this.toggleThisModal}>Reference</ModalHeader>
         <ModalBody>
-          <LoadingSpinner type="MODAL" loading={this.state.loading} text="Loading reference">
+          <LoadingSpinner
+            type="MODAL"
+            loading={this.state.loading}
+            text="Loading reference"
+          >
             <div
               className="ag-theme-alpine"
               style={{ height: 400, width: 465 }}

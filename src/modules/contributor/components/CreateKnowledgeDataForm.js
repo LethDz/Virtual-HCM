@@ -21,10 +21,10 @@ import {
 import axiosClient from 'src/common/axiosClient';
 import { history } from 'src/common/history';
 
-import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, ADD } from 'src/constants';
 
-class CreateDataApprovalForm extends Component {
+class CreateKnowledgeDataForm extends Component {
   _isMounted = false;
   constructor() {
     super();
@@ -134,7 +134,7 @@ class CreateDataApprovalForm extends Component {
               loading: false,
             });
           if (response.data.status) {
-            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
@@ -355,4 +355,4 @@ class CreateDataApprovalForm extends Component {
   }
 }
 
-export default CreateDataApprovalForm;
+export default CreateKnowledgeDataForm;

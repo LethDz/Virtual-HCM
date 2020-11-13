@@ -25,10 +25,10 @@ import {
 } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
 
-import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
-class DataApprovalDetail extends Component {
+class KnowledgeDataDetail extends Component {
   _isMounted = false;
   constructor(props) {
     super();
@@ -143,7 +143,7 @@ class DataApprovalDetail extends Component {
               sendLoading: false,
             });
           if (response.data.status) {
-            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
@@ -481,4 +481,4 @@ const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataApprovalDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeDataDetail);

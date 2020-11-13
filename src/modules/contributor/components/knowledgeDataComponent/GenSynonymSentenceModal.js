@@ -43,17 +43,24 @@ class GenSynonymSentenceModal extends Component {
     axiosClient
       .post(NLP + GENERATE_SIMILARIES, data)
       .then((response) => {
-        let data = [];
-        response.data.result_data.similaries.forEach((sentences) => {
-          sentences.forEach((sentence) => {
-            data.push({ sentence: sentence });
+        if (response.data.status) {
+          let data = [];
+          response.data.result_data.similaries.forEach((sentences) => {
+            sentences.forEach((sentence) => {
+              data.push({ sentence: sentence });
+            });
           });
-        });
-        this._isMounted &&
-          this.setState({
-            rowData: data,
-            loading: false,
-          });
+          this._isMounted &&
+            this.setState({
+              rowData: data,
+              loading: false,
+            });
+          this.props.setErrorAlert(false);
+          this.props.setSuccessAlert(true);
+        } else {
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+        }
       })
       .catch((err) => {
         this._isMounted &&

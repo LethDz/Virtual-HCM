@@ -12,7 +12,7 @@ import {
 
 import {
   CONTRIBUTOR_PAGE,
-  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+  CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
 } from 'src/constants';
 
@@ -29,8 +29,8 @@ const SideBarContributorContent = () => {
       <SideBarItem
         name="Knowledge Data"
         icon={<FontAwesomeIcon icon={faClipboardList} />}
-        link={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
-        active={location.includes(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL)}
+        link={CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}
+        active={location.includes(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA)}
       />
       <SideBarItem
         name="Chat Log"
