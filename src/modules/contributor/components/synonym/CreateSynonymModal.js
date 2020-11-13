@@ -7,7 +7,6 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  Container,
   FormGroup,
   ModalFooter,
   Col,
@@ -232,7 +231,6 @@ class CreateSynonymModal extends Component {
         <Form onSubmit={this.addSynonym}>
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
-            <Container>
               {this.state.successAlert && (
                 <SuccessAlert
                   successAlert={this.state.successAlert}
@@ -324,7 +322,6 @@ class CreateSynonymModal extends Component {
                     ))}
                 </div>
               </div>
-            </Container>
           </ModalBody>
           <ModalFooter>
             <Button color="primary" type="submit" disabled={this.state.loading}>
