@@ -10,6 +10,7 @@ import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/M
 import CreateDataApprovalFormPage from 'src/pages/contributor/manage-data-approval/DataApprovalCreateForm';
 import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/DataApprovalList';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
+import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import DataApprovalDetailPage from 'src/pages/contributor/manage-data-approval/DataApprovalDetailPage';
 
 export {
@@ -25,5 +26,6 @@ export {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
+  SynonymListPage,
   DataApprovalDetailPage,
 };

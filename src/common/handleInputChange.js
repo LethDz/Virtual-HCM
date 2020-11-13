@@ -19,3 +19,14 @@ export const handleInputFormChange = (event, component) => {
     }
   });
 };
+
+export const handleItemInWordsChange = (event, component) => {
+  const items = component.state.words;
+  const index = event.target.name;
+  const value = event.target.value;
+  items[index] = value;
+  component.setState({
+    words: items,
+  });
+};
+

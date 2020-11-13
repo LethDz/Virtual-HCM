@@ -1,6 +1,9 @@
 import {
   ADD_SYNONYM,
   GET_ALL_SYNONYMS,
+  EDIT_SYNONYM,
+  GET_SYNONYM_DETAIL,
+  DELETE_SYNONYM,
   GET_ALL_REFERENCE,
   EDIT_REFERENCE,
   ADD_REFERENCE_TO_LIST,
@@ -10,6 +13,7 @@ import {
   GET_DATA_APPROVAL
 } from 'src/modules/contributor/index';
 
+//Synonym
 export const fetchAllDataApproval = (dataApprovalList) => ({
   type: GET_ALL_DATA_APPROVAL,
   payload: {
@@ -39,6 +43,28 @@ export const fetchAllSynonyms = (synonymsList) => ({
   },
 });
 
+export const pullSynonymDetail = (synonym) => ({
+  type: GET_SYNONYM_DETAIL,
+  payload: {
+    synonym,
+  },
+});
+
+export const editSynonymDetail = (synonymDetail) => ({
+  type: EDIT_SYNONYM,
+  payload: {
+    synonymDetail,
+  },
+});
+
+export const deleteSynonym = (synonymId) => ({
+  type: DELETE_SYNONYM,
+  payload: {
+    synonymId,
+  },
+});
+
+//Document Reference
 export const fetchAllDocumentReference = (documentReferenceList) => ({
   type: GET_ALL_REFERENCE,
   payload: {

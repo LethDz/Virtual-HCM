@@ -9,12 +9,14 @@ import {
   faClipboardList,
   faComments,
   faTachometerAlt,
+  faBookOpen,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
   CONTRIBUTOR_PAGE,
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
   REFERENCE_LIST_PAGE,
+  SYNONYM_LIST_PAGE,
   KNOWLEDGE_DATA_LIST_PAGE
 } from 'src/constants';
 
@@ -49,6 +51,12 @@ const SideBarContributorContent = () => {
         icon={<FontAwesomeIcon icon={faFileAlt} />}
         link={REFERENCE_LIST_PAGE}
         active={location.includes(REFERENCE_LIST_PAGE)}
+      />
+      <SideBarItem
+        name="Synonym"
+        icon={<FontAwesomeIcon icon={faBookOpen} />}
+        link={SYNONYM_LIST_PAGE}
+        active={location.includes(SYNONYM_LIST_PAGE)}
       />
       <SideBarItem
         name="Reports"

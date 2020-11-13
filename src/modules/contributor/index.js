@@ -19,6 +19,9 @@ import CriticalData from 'src/modules/contributor/components/dataApprovalCompone
 import DataApprovalList from 'src/modules/contributor/components/DataApprovalList';
 import GenSynonymSentence from 'src/modules/contributor/components/dataApprovalComponent/GenSynonymSentence';
 import CreateDataApprovalForm from 'src/modules/contributor/components/CreateDataApprovalForm';
+import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
+import SynonymDetailModal from 'src/modules/contributor/components/synonym/SynonymDetailModal';
+import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 import DataApprovalDetail from 'src/modules/contributor/components/DataApprovalDetail';
 
 export * from 'src/modules/contributor/contributor.actions';
@@ -48,4 +51,7 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
+  SynonymList,
+  SynonymDetailModal,
+  CreateSynonymModal,
 };

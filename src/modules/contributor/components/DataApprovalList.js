@@ -14,7 +14,7 @@ import {
   // context,
   // frameworkComponents,
   getAllDataApproval,
-  fetchAllDataApproval,
+  fetchAllDataApproval
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
