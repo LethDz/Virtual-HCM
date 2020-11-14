@@ -10,6 +10,7 @@ import {
   faComments,
   faTachometerAlt,
   faBookOpen,
+  faHistory,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -17,7 +18,8 @@ import {
   CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
-  KNOWLEDGE_DATA_LIST_PAGE
+  KNOWLEDGE_DATA_LIST_PAGE,
+  CHAT_HISTORY_LIST_PAGE,
 } from 'src/constants';
 
 const SideBarContributorContent = () => {
@@ -62,6 +64,12 @@ const SideBarContributorContent = () => {
         name="Reports"
         icon={<FontAwesomeIcon icon={faNewspaper} />}
         link="reports"
+      />
+      <SideBarItem
+        name="Chat History"
+        icon={<FontAwesomeIcon icon={faHistory} />}
+        link={CHAT_HISTORY_LIST_PAGE}
+        active={location.includes(CHAT_HISTORY_LIST_PAGE)}
       />
     </ListGroup>
   );

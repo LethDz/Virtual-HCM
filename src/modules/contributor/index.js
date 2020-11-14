@@ -23,6 +23,8 @@ import SynonymList from 'src/modules/contributor/components/synonym/SynonymList'
 import SynonymDetailModal from 'src/modules/contributor/components/synonym/SynonymDetailModal';
 import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 import DataApprovalDetail from 'src/modules/contributor/components/DataApprovalDetail';
+import ChatHistoryList from 'src/modules/contributor/components/chatHistory/ChatHistoryList';
+import ChatHistoryDetailModal from 'src/modules/contributor/components/chatHistory/ChatHistoryDetailModal';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -54,4 +56,6 @@ export {
   SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,
+  ChatHistoryList,
+  ChatHistoryDetailModal,
 };

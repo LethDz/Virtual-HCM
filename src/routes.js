@@ -14,7 +14,8 @@ import {
   ConfigureSystemPage,
   ReferenceListPage,
   SynonymListPage,
-  DataApprovalDetailPage
+  DataApprovalDetailPage,
+  ChatHistoryListPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -31,6 +32,7 @@ import {
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
   GET_KNOWLEDGE_DATA_BY_INTENT,
+  CHAT_HISTORY_LIST_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -101,6 +103,11 @@ const Routes = () => (
         exact
         path={SYNONYM_LIST_PAGE}
         component={SynonymListPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={CHAT_HISTORY_LIST_PAGE}
+        component={ChatHistoryListPage}
       />
     </Switch>
   </Fragment>

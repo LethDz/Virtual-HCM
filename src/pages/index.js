@@ -12,6 +12,7 @@ import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/Dat
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import DataApprovalDetailPage from 'src/pages/contributor/manage-data-approval/DataApprovalDetailPage';
+import ChatHistoryListPage from 'src/pages/contributor/chat-history/ChatHistoryListPage';
 
 export {
   HomePage,
@@ -28,4 +29,5 @@ export {
   ReferenceListPage,
   SynonymListPage,
   DataApprovalDetailPage,
+  ChatHistoryListPage,
 };

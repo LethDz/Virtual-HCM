@@ -74,6 +74,7 @@ export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LI
 export const SYNONYM_LIST_PAGE = `${CONTRIBUTOR_PAGE}/synonyms`;
 export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
 export const KNOWLEDGE_DATA_LIST_PAGE = `${CONTRIBUTOR_PAGE}/knowledge-data`;
+export const CHAT_HISTORY_LIST_PAGE = `${CONTRIBUTOR_PAGE}/chat-history`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
   intent
