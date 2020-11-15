@@ -61,6 +61,7 @@ class SynonymDetailModal extends Component {
       paragraph: '',
       tokenizedWords: [],
     };
+    this.conRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -220,10 +221,15 @@ class SynonymDetailModal extends Component {
   };
 
   tokenizeWord = () => {
-    if (this.state.paragraph) {
+    const paragraph = this.state.paragraph;
+    if (paragraph && paragraph !== this.state.oldParagraph) {
       this.setLoading(true);
       this.setErrorAlert(false);
       this.setSuccessAlert(false);
+      this.setState({
+        oldParagraph: paragraph,
+        tokenizedWords: [],
+      });
       axiosClient
         .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
         .then((response) => {
@@ -288,6 +294,11 @@ class SynonymDetailModal extends Component {
           });
       }
     }
+    this.scrollToBottom();
+  };
+
+  scrollToBottom = () => {
+    this.conRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   render() {
@@ -331,7 +342,6 @@ class SynonymDetailModal extends Component {
               />
             </FormGroup>
             <Label>Words: </Label>
-
             <div className="container justify-content-center">
               <div className="border border-light p-3 list-word">
                 {this._isMounted &&
@@ -359,6 +369,7 @@ class SynonymDetailModal extends Component {
                       </Col>
                     </Row>
                   ))}
+                <div ref={this.conRef}></div>
               </div>
               <Label className="mt-2">Check word tokenize:</Label>
               <Row>
@@ -385,13 +396,18 @@ class SynonymDetailModal extends Component {
               <div className="container border border-light p-3 tokenize-word">
                 {this.state.tokenizedWords &&
                   this.state.tokenizedWords.map((word, index) => (
-                    <label key={'checkbox' + index} className="mr-2">
+                    <label
+                      key={'checkbox' + index}
+                      className="mr-2 btn btn-info"
+                    >
+                      {word}
                       <input
                         type="checkbox"
+                        className="badge-box"
                         onChange={this.handleCheckBoxChange}
                         name={word}
-                      />{' '}
-                      {word}
+                      />
+                      <span className="badge">&#10003;</span>
                     </label>
                   ))}
               </div>

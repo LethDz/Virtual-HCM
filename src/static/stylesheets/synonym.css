@@ -1,11 +1,28 @@
-.list-word{
+.list-word {
   height: 200px;
-  background-color: #EEEEEE;
+  background-color: #F5F5F5;
   overflow-y: scroll;
 }
 
-.tokenize-word{
+.tokenize-word {
   height: 100px;
-  background-color: #EEEEEE;
+  background-color: #F5F5F5;
   overflow-y: scroll;
+}
+
+.badge-box {
+  opacity: 0;
+}
+
+.badge-box + .badge {
+  text-indent: -999999px;
+  width: 27px;
+}
+
+.badge-box:focus + .badge {
+  box-shadow: inset 0px 0px 5px;
+}
+
+.badge-box:checked + .badge {
+  text-indent: 0;
 }
