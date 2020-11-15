@@ -4,7 +4,7 @@ import { Container, Button, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { history } from 'src/common/history';
 import {
-  CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
+  CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
   ALL,
   KNOWLEDGE_DATA,
   GET_KNOWLEDGE_DATA_BY_INTENT,
@@ -26,14 +26,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
-class DataApprovalList extends Component {
+class KnowledgeDataList extends Component {
   _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       containerHeight: 0,
       alertMessage: '',
+      errorList: [],
       loading: false,
+      errorAlert: false,
     };
     this.titleRef = React.createRef();
   }
@@ -94,6 +96,7 @@ class DataApprovalList extends Component {
         this.setAlertMessage('Load successful');
         this.setSuccessAlert(true);
         this._isMounted && this.setState({ loading: false });
+        // catch
       })
       .catch((error) => {
         this.setErrorAlert(true);
@@ -124,7 +127,7 @@ class DataApprovalList extends Component {
         />
         <Row>
           <Col className="justify-content-center d-flex">
-            <h5 className="mt-2 mb-2">Data approval</h5>
+            <h5 className="mt-2 mb-2">Knowledge data</h5>
           </Col>
         </Row>
         {this.state.successAlert && (
@@ -144,7 +147,7 @@ class DataApprovalList extends Component {
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
             <Link
-              to={CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM}
+              to={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
               className="link-no-underline"
             >
               <Button color="primary">
@@ -187,4 +190,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataApprovalList);
+export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeDataList);

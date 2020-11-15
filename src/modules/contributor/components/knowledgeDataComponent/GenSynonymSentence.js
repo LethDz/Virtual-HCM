@@ -89,6 +89,8 @@ class GenSynonymSentence extends Component {
             loading={this.state.loading}
             isOpen={this.state.isOpenGenerateModal}
             setSelectedSentence={this.setSelectedSentence}
+            setErrorAlert={this.props.setErrorAlert}
+            setSuccessAlert={this.props.setSuccessAlert}
           />
         )}
         <Row xs="1">

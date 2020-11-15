@@ -106,7 +106,7 @@ class NewSynonymModal extends Component {
       axiosClient
         .post(SYNONYM + ADD, synonym)
         .then((response) => {
-          if (this._isMounted) this.setState({ loading: false });
+          this._isMounted && this.setState({ loading: false });
           if (response.data.status) {
             if (this._isMounted)
               this.setState({
@@ -116,16 +116,15 @@ class NewSynonymModal extends Component {
                 meaning: '',
                 words: [],
               });
+            this.props.setErrorAlert(true);
+            this.props.setSuccessAlert(false);
+          } else {
+            this.props.setErrorAlert(true);
+            this.props.setSuccessAlert(false);
           }
-          this._isMounted &&
-            this.setState({
-              loading: false,
-            });
-          this.props.setErrorAlert(true);
-          this.props.setSuccessAlert(false);
         })
         .catch((err) => {
-          if (this._isMounted)
+          this._isMounted &&
             this.setState({
               loading: false,
             });
@@ -137,16 +136,24 @@ class NewSynonymModal extends Component {
     }
   };
 
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        toggle={this.props.toggle}
+        toggle={this.toggleThisModal}
         onSubmit={this.sendCreateSynonymRequest}
       >
-        <LoadingSpinner loading={this.state.loading} text="Adding new synonym">
+        <LoadingSpinner
+          type="MODAL"
+          loading={this.state.loading}
+          text="Adding new synonym"
+        >
           <Form>
-            <ModalHeader toggle={this.props.toggle}>New synonym</ModalHeader>
+            <ModalHeader toggle={this.toggleThisModal}>New synonym</ModalHeader>
             <ModalBody>
               <Alert isOpen={this.state.addSuccess} color="success">
                 Add successful
@@ -216,7 +223,13 @@ class NewSynonymModal extends Component {
               </ListGroup>
             </ModalBody>
             <ModalFooter>
-              <Button type="button" color="info" onClick={this.sendCreateSynonymRequest}>Create</Button>
+              <Button
+                type="button"
+                color="info"
+                onClick={this.sendCreateSynonymRequest}
+              >
+                Create
+              </Button>
               <Button type="button" color="danger" onClick={this.props.toggle}>
                 Cancel
               </Button>

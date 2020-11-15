@@ -85,7 +85,7 @@ class SynonymsModal extends Component {
 
   addSynonyms = () => {
     this.props.addSynonym(this.state.selectedSynonyms, this.props.index);
-    this.props.toggleSynonymModal(this.props.index);
+    this.props.toggle(this.props.index);
   };
 
   toggleNewSynonymModal = () => {
@@ -93,6 +93,10 @@ class SynonymsModal extends Component {
       this.setState({
         isOpenNewSynonymModal: !this.state.isOpenNewSynonymModal,
       });
+  };
+
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
   };
 
   render() {
@@ -110,10 +114,10 @@ class SynonymsModal extends Component {
         )}
         <Modal
           isOpen={this.props.isOpenSynonymModal}
-          toggle={this.props.toggleSynonymModal}
+          toggle={this.toggleThisModal}
         >
-          <LoadingSpinner loading={this.state.loading} text="Loading synonyms">
-            <ModalHeader toggle={this.props.toggleSynonymModal}>
+          <LoadingSpinner type="MODAL" loading={this.state.loading} text="Loading synonyms">
+            <ModalHeader toggle={this.toggleThisModal}>
               Synonyms
             </ModalHeader>
             <ModalBody>

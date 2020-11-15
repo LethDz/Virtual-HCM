@@ -3,7 +3,6 @@ import { ListGroup } from 'reactstrap';
 import SideBarItem from 'src/layouts/SideBarItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBook,
   faFileAlt,
   faNewspaper,
   faClipboardList,
@@ -14,10 +13,9 @@ import {
 
 import {
   CONTRIBUTOR_PAGE,
-  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+  CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
-  KNOWLEDGE_DATA_LIST_PAGE
 } from 'src/constants';
 
 const SideBarContributorContent = () => {
@@ -31,20 +29,15 @@ const SideBarContributorContent = () => {
         active={location === CONTRIBUTOR_PAGE}
       />
       <SideBarItem
-        name="Data Approval"
+        name="Knowledge Data"
         icon={<FontAwesomeIcon icon={faClipboardList} />}
-        link={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
-        active={location.includes(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL)}
+        link={CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}
+        active={location.includes(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA)}
       />
       <SideBarItem
         name="Chat Log"
         icon={<FontAwesomeIcon icon={faComments} />}
         link="chat-log"
-      />
-      <SideBarItem
-        name="Knowledge Data"
-        icon={<FontAwesomeIcon icon={faBook} />}
-        link={KNOWLEDGE_DATA_LIST_PAGE}
       />
       <SideBarItem
         name="Document Reference"

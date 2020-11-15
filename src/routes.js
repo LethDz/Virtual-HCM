@@ -8,13 +8,13 @@ import {
   ContributorsListPage,
   ContributorCreatePage,
   ContributorEditPage,
-  CreateDataApprovalFormPage,
-  DataApprovalListPage,
+  KnowledgeDataCreateFormPage,
+  KnowledgeDataListPage,
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
   SynonymListPage,
-  DataApprovalDetailPage
+  KnowledgeDataDetailPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -24,8 +24,8 @@ import {
   ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_CONTRIBUTOR_CREATE_PAGE,
   ADMIN_CONTRIBUTOR_EDIT_PAGE,
-  CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
-  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+  CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
+  CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
   ADMIN_CONFIGURE_SYSTEM_PAGE,
   REFERENCE_LIST_PAGE,
@@ -79,13 +79,13 @@ const Routes = () => (
       />
       <PrivateRouteContributor
         exact
-        path={CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM}
-        component={CreateDataApprovalFormPage}
+        path={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
+        component={KnowledgeDataCreateFormPage}
       />
       <PrivateRouteContributor
         exact
-        path={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
-        component={DataApprovalListPage}
+        path={CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}
+        component={KnowledgeDataListPage}
       />
       <PrivateRouteContributor
         exact
@@ -95,7 +95,7 @@ const Routes = () => (
       <PrivateRouteContributor
         exact
         path={GET_KNOWLEDGE_DATA_BY_INTENT()}
-        component={DataApprovalDetailPage}
+        component={KnowledgeDataDetailPage}
       />
       <PrivateRouteContributor
         exact

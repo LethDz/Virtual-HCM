@@ -1,4 +1,5 @@
-import StatusBar from 'src/modules/contributor/components/dataApprovalListComponent/StatusBar';
+import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
+
 export const SET_INTENT = 'SET_INTENT';
 export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
 
@@ -15,10 +16,17 @@ export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
-
+export const questionType = [
+  'WHAT',
+  'WHEN',
+  'WHERE',
+  'WHO',
+  'WHY',
+  'HOW',
+  'YES/NO',
+];
 export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
 export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
-export const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
 export const POSTags = [
   'Np',
   'Nc',

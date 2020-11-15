@@ -21,10 +21,10 @@ import {
 import axiosClient from 'src/common/axiosClient';
 import { history } from 'src/common/history';
 
-import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, ADD } from 'src/constants';
 
-class CreateDataApprovalForm extends Component {
+class CreateKnowledgeDataForm extends Component {
   _isMounted = false;
   constructor() {
     super();
@@ -134,7 +134,7 @@ class CreateDataApprovalForm extends Component {
               loading: false,
             });
           if (response.data.status) {
-            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
@@ -170,15 +170,7 @@ class CreateDataApprovalForm extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    let questionArray = [];
-    questions.forEach((question) => {
-      questionArray.push({
-        question: question.question,
-        generated_questions: [],
-        type: question.type,
-      });
-    });
-    form.questions = questionArray;
+    form.questions = questions
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -207,12 +199,6 @@ class CreateDataApprovalForm extends Component {
       this.setState({
         form: form,
       });
-  };
-
-  setGeneratedSentences = (generatedSentences, index) => {
-    let form = this.state.form;
-    form.questions[index].generated_questions = generatedSentences;
-    if (this._isMounted) this.setState({ form: form });
   };
 
   hover = (word, from) => {
@@ -272,7 +258,7 @@ class CreateDataApprovalForm extends Component {
       <Container fluid={true}>
         <LoadingSpinner loading={this.state.loading} text="Sending form" />
         <Form onSubmit={this.submitForm} className="mt-3">
-          <div className="form-item form-item-meta">
+          <div className="form-item form-item-meta pr-3 pl-3">
             <div className="mr-3 ml-3">
               {this.state.successAlert && (
                 <SuccessAlert
@@ -306,7 +292,7 @@ class CreateDataApprovalForm extends Component {
               setErrorAlert={this.setErrorAlert}
               setErrorList={this.setErrorList}
             />
-            <hr className="mr-3 ml-3 divider"/>
+            <hr className="mr-3 ml-3 divider" />
             <FormSectionTitle title="Data analysis" />
             <RawData
               scrollToTop={this.scrollToTop}
@@ -339,7 +325,6 @@ class CreateDataApprovalForm extends Component {
               className="mt-3"
               setQuestions={this.setQuestions}
               setTokenizeWord={this.setTokenizeWord}
-              setGeneratedSentences={this.setGeneratedSentences}
               hover={this.hover}
               hoverWord={this.state.hoverWordFromSynonym}
               synonymsArray={this.state.form.synonyms}
@@ -370,4 +355,4 @@ class CreateDataApprovalForm extends Component {
   }
 }
 
-export default CreateDataApprovalForm;
+export default CreateKnowledgeDataForm;
