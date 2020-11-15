@@ -173,7 +173,6 @@ class KnowledgeDataDetail extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
-    console.log("set synonym")
     this.resetGeneratedQuestion();
     if (this._isMounted) this.setState({ form: form });
   };
@@ -332,7 +331,6 @@ class KnowledgeDataDetail extends Component {
   };
 
   resetGeneratedQuestion = () => {
-    console.log("in detail")
     this.questionRef.current.resetGeneratedQuestion();
   };
 

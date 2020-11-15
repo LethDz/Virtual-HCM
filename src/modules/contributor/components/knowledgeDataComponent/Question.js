@@ -214,7 +214,6 @@ export default class Question extends Component {
   };
 
   resetGeneratedQuestion = () => {
-    console.log("in questions")
     let questions = this.state.questions;
     let questionList = [];
     questions.forEach((question) => {
