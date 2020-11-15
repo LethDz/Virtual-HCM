@@ -23,15 +23,14 @@ class ChatHistoryDetailModal extends Component {
         <ModalBody>
           <Container className="content">
             <Row>
-              <Col className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <Col>
                 <Card>
                   <CardHeader>Chat</CardHeader>
-                  <CardBody className="height3">
+                  <CardBody>
                     <ul className="chat-list">
                       <li className="in">
                         <div className="chat-body">
                           <div className="chat-message">
-                            <h5>Hoa</h5>
                             <p>Raw denim heard of them tofu master cleanse</p>
                           </div>
                         </div>
@@ -39,7 +38,48 @@ class ChatHistoryDetailModal extends Component {
                       <li className="out">
                         <div className="chat-body">
                           <div className="chat-message">
-                            <h5>Serena</h5>
+                            <p>Next level</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="in">
+                        <div className="chat-body">
+                          <div className="chat-message">
+                            <p>Raw denim heard of them tofu master cleanse Raw denim heard of them tofu master cleanseRaw denim heard of them tofu master cleanse</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="out">
+                        <div className="chat-body">
+                          <div className="chat-message">
+                            <p>Next level</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="in">
+                        <div className="chat-body">
+                          <div className="chat-message">
+                            <p>Raw denim heard of them tofu master cleanse</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="out">
+                        <div className="chat-body">
+                          <div className="chat-message">
+                            <p>Next level</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="in">
+                        <div className="chat-body">
+                          <div className="chat-message">
+                            <p>Raw denim heard of them tofu master cleanse</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="out">
+                        <div className="chat-body">
+                          <div className="chat-message">
                             <p>Next level</p>
                           </div>
                         </div>
