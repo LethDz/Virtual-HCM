@@ -20,6 +20,9 @@ import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataL
 import GenSynonymSentence from 'src/modules/contributor/components/knowledgeDataComponent/GenSynonymSentence';
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
 import KnowledgeDataDetail from 'src/modules/contributor/components/KnowledgeDataDetail';
+import SynonymDetailModal from 'src/modules/contributor/components/synonym/SynonymDetailModal';
+import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
+import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -48,4 +51,7 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
+  SynonymList,
+  SynonymDetailModal,
+  CreateSynonymModal,
 };

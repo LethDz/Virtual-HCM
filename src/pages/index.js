@@ -10,6 +10,7 @@ import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/M
 import KnowledgeDataCreateFormPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataCreateFormPage';
 import KnowledgeDataListPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataListPage';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
+import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
 
 export {
@@ -25,5 +26,6 @@ export {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
+  SynonymListPage,
   KnowledgeDataDetailPage,
 };

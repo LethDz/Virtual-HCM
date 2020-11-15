@@ -13,6 +13,7 @@ import {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
+  SynonymListPage,
   KnowledgeDataDetailPage,
 } from 'src/pages';
 import {
@@ -28,6 +29,7 @@ import {
   ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
   ADMIN_CONFIGURE_SYSTEM_PAGE,
   REFERENCE_LIST_PAGE,
+  SYNONYM_LIST_PAGE,
   GET_KNOWLEDGE_DATA_BY_INTENT,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
@@ -94,6 +96,11 @@ const Routes = () => (
         exact
         path={GET_KNOWLEDGE_DATA_BY_INTENT()}
         component={KnowledgeDataDetailPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={SYNONYM_LIST_PAGE}
+        component={SynonymListPage}
       />
     </Switch>
   </Fragment>

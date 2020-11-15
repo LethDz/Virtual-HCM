@@ -15,6 +15,9 @@ export const NLP = '/nlp';
 export const TOKENIZE = '/tokenize';
 
 export const SYNONYM = '/synonym';
+export const GET_SYNONYM = (id) => `/get?id=${id}`;
+export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
+
 export const REFERENCE = '/reference-document';
 
 export const ADD = '/add';
@@ -68,6 +71,7 @@ export const ADMIN_CONFIGURE_SYSTEM_PAGE = `${ADMIN_PAGE}/configure-system`;
 export const CONTRIBUTOR_PAGE = '/contributor';
 export const CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA = `${CONTRIBUTOR_PAGE}${KNOWLEDGE_DATA}`;
 export const CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM = `${CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}/create`;
+export const SYNONYM_LIST_PAGE = `${CONTRIBUTOR_PAGE}/synonyms`;
 export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
