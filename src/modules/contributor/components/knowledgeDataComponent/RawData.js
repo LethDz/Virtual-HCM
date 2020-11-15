@@ -114,7 +114,8 @@ class RawData extends Component {
   };
 
   stateCancelTokenize = () => {
-    if (this._isMounted) this.setState({ mode: 'NORMAL' });
+    this._isMounted && this.setState({ mode: 'NORMAL' });
+    this.props.cancelCriticalData();
   };
 
   genData = () => {};
@@ -214,7 +215,9 @@ class RawData extends Component {
     return (
       <Row xs="1">
         <Col>
-          <Label className="label" for="rawData">Raw data:</Label>
+          <Label className="label" for="rawData">
+            Raw data:
+          </Label>
         </Col>
         <Col>
           <LoadingSpinner loading={this.state.loading} text="Tokenizing">

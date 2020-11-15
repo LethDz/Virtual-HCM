@@ -15,7 +15,7 @@ import {
   fetchAllDocumentReference,
   columnReferenceListDef,
   CreateReferenceModal,
-} from 'src/modules/contributor/index';
+} from 'src/modules/contributor';
 import { REFERENCE, ALL } from 'src/constants';
 import { connect } from 'react-redux';
 

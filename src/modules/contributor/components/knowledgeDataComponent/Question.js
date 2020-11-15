@@ -213,6 +213,37 @@ export default class Question extends Component {
     this.props.setQuestions(this.state.questions);
   };
 
+  resetGeneratedQuestion = () => {
+    console.log("in questions")
+    let questions = this.state.questions;
+    let questionList = [];
+    questions.forEach((question) => {
+      questionList.push({
+        ...question,
+        generated_questions: [],
+      });
+    });
+    this.props.setQuestions(questionList);
+    this._isMounted && this.setState({ questions: questionList });
+  };
+
+  renderSynonymsQuestions = (question, index, wordArray) => {
+    return (
+      <GenSynonymSentence
+        currentRowData={question.generated_questions}
+        questionValue={this.props.questionValue[index]}
+        setAlertMessage={this.props.setAlertMessage}
+        setSuccessAlert={this.props.setSuccessAlert}
+        setErrorAlert={this.props.setErrorAlert}
+        setErrorList={this.props.setErrorList}
+        index={index}
+        tokenizedWordArray={wordArray}
+        synonymsArray={this.props.synonymIds}
+        setGeneratedSentences={this.setGeneratedSentences}
+      />
+    );
+  };
+
   render() {
     return (
       <Fragment>
@@ -357,32 +388,10 @@ export default class Question extends Component {
                         })}
                       </Col>
                       <Col xs="auto">
-                        {this.props.detailPage && (
-                          <GenSynonymSentence
-                            currentRowData={question.generated_questions}
-                            questionValue={this.props.questionValue[index]}
-                            setAlertMessage={this.props.setAlertMessage}
-                            setSuccessAlert={this.props.setSuccessAlert}
-                            setErrorAlert={this.props.setErrorAlert}
-                            setErrorList={this.props.setErrorList}
-                            index={index}
-                            tokenizedWordArray={wordArray}
-                            synonymsArray={this.props.synonymIds}
-                            setGeneratedSentences={this.setGeneratedSentences}
-                          />
-                        )}
-                        {!this.props.detailPage && (
-                          <GenSynonymSentence
-                            currentRowData={question.generated_questions}
-                            setAlertMessage={this.props.setAlertMessage}
-                            setSuccessAlert={this.props.setSuccessAlert}
-                            setErrorAlert={this.props.setErrorAlert}
-                            setErrorList={this.props.setErrorList}
-                            index={index}
-                            tokenizedWordArray={wordArray}
-                            synonymsArray={this.props.synonymsArray}
-                            setGeneratedSentences={this.setGeneratedSentences}
-                          />
+                        {this.renderSynonymsQuestions(
+                          question,
+                          index,
+                          wordArray
                         )}
                       </Col>
                       <Col xs="auto">

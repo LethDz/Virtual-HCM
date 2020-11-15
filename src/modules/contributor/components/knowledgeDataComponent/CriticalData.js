@@ -133,6 +133,10 @@ class CriticalData extends Component {
     return criticalTemp;
   };
 
+  resetCriticalData = () => {
+    this._isMounted && this.setState({ criticalData: [] });
+  };
+
   render() {
     return (
       <Row>
