@@ -52,6 +52,7 @@ class Coresponse extends Component {
     this._isMounted &&
       this.setState({
         coresponse: coresponse,
+        currentCoresponse: '',
       });
 
     this.setCoresponse();
@@ -97,6 +98,7 @@ class Coresponse extends Component {
                 placeholder="Enter coresponse here then press the add button on the right side"
                 onChange={this.handleInput}
                 name="currentCoresponse"
+                value={this.state.currentCoresponse}
               />
             </Col>
             <Col xs="auto">

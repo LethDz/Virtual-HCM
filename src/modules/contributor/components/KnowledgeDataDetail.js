@@ -58,6 +58,8 @@ class KnowledgeDataDetail extends Component {
       synonymIdList: [],
     };
     this.titleRef = React.createRef();
+    this.criticalDataRef = React.createRef();
+    this.questionRef = React.createRef();
   }
 
   handleInputForm = (event) => handleInputFormChange(event, this);
@@ -89,29 +91,6 @@ class KnowledgeDataDetail extends Component {
       });
   };
 
-  setError = () => {
-    let errorMessage = [];
-    if (this.state.form.questions.length === 0) {
-      errorMessage.push(`Question field required at least one question`);
-    }
-    if (this.state.form.criticalData.length === 0) {
-      errorMessage.push(`Subject field required at least one subject`);
-    }
-    for (let i in this.state.form.criticalData) {
-      if (this.state.form.criticalData[i].word.length === 0) {
-        errorMessage.push(
-          `Subject at index ${i} required at least one component`
-        );
-      }
-    }
-    this.setErrorList(errorMessage);
-    this.scrollToTop();
-    if (this._isMounted)
-      this.setState({
-        loading: false,
-      });
-  };
-
   reformatForm = () => {
     let form = this.state.form;
     let synonym = [];
@@ -128,7 +107,6 @@ class KnowledgeDataDetail extends Component {
 
   submitForm = (event) => {
     event.preventDefault();
-    this.setError();
     this.reformatForm();
     if (this.state.errorList.length === 0) {
       this._isMounted &&
@@ -147,8 +125,10 @@ class KnowledgeDataDetail extends Component {
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
+            this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
+            this.scrollToTop();
           }
         })
         .catch((err) => {
@@ -180,7 +160,7 @@ class KnowledgeDataDetail extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    form.questions = questions
+    form.questions = questions;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -193,6 +173,7 @@ class KnowledgeDataDetail extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
+    this.resetGeneratedQuestion();
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -210,7 +191,7 @@ class KnowledgeDataDetail extends Component {
         form: form,
       });
   };
-  
+
   hover = (word, from) => {
     if (from === 'SYNONYM')
       if (this._isMounted)
@@ -345,6 +326,14 @@ class KnowledgeDataDetail extends Component {
     return wordArray;
   };
 
+  cancelCriticalData = () => {
+    this.criticalDataRef.current.resetCriticalData();
+  };
+
+  resetGeneratedQuestion = () => {
+    this.questionRef.current.resetGeneratedQuestion();
+  };
+
   render() {
     const wordArray = this.getWordArray();
     return (
@@ -355,7 +344,7 @@ class KnowledgeDataDetail extends Component {
         />
         <LoadingSpinner loading={this.state.sendLoading} text="Sending form" />
         {!this.state.loading && (
-          <Form onSubmit={this.submitForm} className="mt-3">
+          <Form className="mt-3">
             <div className="form-item form-item-meta pr-3 pl-3">
               <div className="mr-3 ml-3">
                 {this.state.successAlert && (
@@ -411,11 +400,13 @@ class KnowledgeDataDetail extends Component {
                   setTokenizeWord={this.setTokenizeWord}
                   getWordArray={this.getWordArray}
                   setRawData={this.setRawData}
+                  cancelCriticalData={this.cancelCriticalData}
                   onChange={this.handleInputForm}
                 />
               )}
 
               <CriticalData
+                ref={this.criticalDataRef}
                 criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
                 setCritical={this.setCriticalData}
@@ -427,6 +418,7 @@ class KnowledgeDataDetail extends Component {
                 wordArray={wordArray}
               />
               <Question
+                ref={this.questionRef}
                 detailPage={true}
                 questionValue={this.state.form.questions}
                 scrollToTop={this.scrollToTop}
@@ -434,13 +426,13 @@ class KnowledgeDataDetail extends Component {
                 setSuccessAlert={this.setSuccessAlert}
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
-                className="mt-3"
                 setQuestions={this.setQuestions}
                 setTokenizeWord={this.setTokenizeWord}
                 hover={this.hover}
                 hoverWord={this.state.hoverWordFromSynonym}
                 synonymsArray={this.state.form.synonyms}
                 synonymIds={this.state.synonymIdList}
+                className="mt-3"
               />
 
               <BaseResponse
@@ -449,7 +441,6 @@ class KnowledgeDataDetail extends Component {
               />
 
               <Synonyms
-                synonymsValue={this.state.form.synonyms}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -459,9 +450,11 @@ class KnowledgeDataDetail extends Component {
                 wordArray={wordArray}
                 hover={this.hover}
                 hoverWord={this.state.hoverWord}
+                resetGeneratedQuestion={this.resetGeneratedQuestion}
+                synonymsValue={this.state.form.synonyms}
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
-                <Button type="submit" color="info">
+                <Button type="submit" color="info" onClick={this.submitForm}>
                   Edit data approval
                 </Button>
               </Row>
@@ -481,4 +474,7 @@ const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeDataDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KnowledgeDataDetail);

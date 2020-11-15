@@ -39,22 +39,21 @@ class Synonyms extends Component {
   };
 
   setSynonymToForm = () => {
-    if (this.state.synonymWord !== '' && this.state.synonymWord !== null) {
-      let synonyms = this.state.synonyms;
-      let synonymTemp = [];
-      synonyms.forEach((synonym) => {
-        let synonymId = [];
-        synonym.synonyms.forEach((sy) => {
-          synonymId.push(sy.synonym_id);
-        });
-        let synonymObject = {
-          word: synonym.word,
-          synonyms: synonymId,
-        };
-        synonymTemp.push(synonymObject);
+    let synonyms = this.state.synonyms;
+    let synonymTemp = [];
+    synonyms.forEach((synonym) => {
+      let synonymId = [];
+      synonym.synonyms.forEach((sy) => {
+        synonymId.push(sy.synonym_id);
       });
-      this.props.setSynonym(synonymTemp);
-    }
+      let synonymObject = {
+        word: synonym.word,
+        synonyms: synonymId,
+      };
+      synonymTemp.push(synonymObject);
+    });
+    this.props.resetGeneratedQuestion();
+    this.props.setSynonym(synonymTemp);
   };
 
   handleInput = (event) => {

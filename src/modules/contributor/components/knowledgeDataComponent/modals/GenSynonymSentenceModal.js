@@ -8,7 +8,7 @@ import {
   Form,
 } from 'reactstrap';
 import { AgGridReact } from 'ag-grid-react';
-import { columnGenSentenceDef } from 'src/modules/contributor/index';
+import { columnGenSentenceDef } from 'src/modules/contributor';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { NLP, GENERATE_SIMILARIES } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';

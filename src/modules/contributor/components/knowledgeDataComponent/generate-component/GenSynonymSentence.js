@@ -55,11 +55,12 @@ class GenSynonymSentence extends Component {
 
   createSynonymArray = () => {
     let synonymsArray = [];
-    this.props.synonymsArray.forEach((synonym) => {
-      synonym.synonyms.forEach((id) => {
-        synonymsArray.push(id);
+    this.props.synonymsArray &&
+      this.props.synonymsArray.forEach((synonym) => {
+        synonym.synonyms.forEach((id) => {
+          synonymsArray.push(id);
+        });
       });
-    });
     return synonymsArray.filter(this.distinct);
   };
 
@@ -74,6 +75,25 @@ class GenSynonymSentence extends Component {
           );
         }
       );
+  };
+
+  toggleGenerateQuestionMode = () => {
+    if (
+      this.props.questionValue &&
+      this.props.questionValue.generated_questions.length !== 0
+    ) {
+      return (
+        <Fragment>
+          <FontAwesomeIcon icon={faEye} /> View questions
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          <FontAwesomeIcon icon={faCogs} /> Generate
+        </Fragment>
+      );
+    }
   };
 
   render() {
@@ -100,16 +120,7 @@ class GenSynonymSentence extends Component {
               color="success"
               onClick={this.toggleGenerateModal}
             >
-              {this.state.similaries.length !== 0 && (
-                <Fragment>
-                  <FontAwesomeIcon icon={faEye} /> View questions
-                </Fragment>
-              )}
-              {this.state.similaries.length === 0 && (
-                <Fragment>
-                  <FontAwesomeIcon icon={faCogs} /> Generate
-                </Fragment>
-              )}
+              {this.toggleGenerateQuestionMode()}
             </Button>
           </Col>
         </Row>

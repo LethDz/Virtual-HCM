@@ -51,6 +51,8 @@ class CreateKnowledgeDataForm extends Component {
       errorList: [],
     };
     this.titleRef = React.createRef();
+    this.criticalDataRef = React.createRef();
+    this.questionRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -99,32 +101,12 @@ class CreateKnowledgeDataForm extends Component {
     return wordArray;
   };
 
-  setError = () => {
-    let errorMessage = [];
-    if (this.state.form.questions.length === 0) {
-      errorMessage.push(`Question field required at least one question`);
-    }
-    if (this.state.form.criticalData.length === 0) {
-      errorMessage.push(`Subject field required at least one subject`);
-    }
-    for (let i in this.state.form.criticalData) {
-      if (this.state.form.criticalData[i].word.length === 0) {
-        errorMessage.push(
-          `Subject at index ${i} required at least one component`
-        );
-      }
-    }
-    this.setErrorList(errorMessage);
-    this.scrollToTop();
-  };
-
   submitForm = (event) => {
     this._isMounted &&
       this.setState({
         loading: true,
       });
     event.preventDefault();
-    this.setError();
     if (this.state.errorList.length === 0) {
       axiosClient
         .post(KNOWLEDGE_DATA + ADD, this.state.form)
@@ -138,12 +120,14 @@ class CreateKnowledgeDataForm extends Component {
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
+            this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
+            this.scrollToTop();
           }
         })
         .catch((err) => {
-          if (this._isMounted)
+          this._isMounted &&
             this.setState({
               loading: false,
             });
@@ -170,7 +154,7 @@ class CreateKnowledgeDataForm extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    form.questions = questions
+    form.questions = questions;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -183,6 +167,8 @@ class CreateKnowledgeDataForm extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
+    this.resetGeneratedQuestion();
+    this.setSynonymId();
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -199,6 +185,20 @@ class CreateKnowledgeDataForm extends Component {
       this.setState({
         form: form,
       });
+  };
+
+  setSynonymId = () => {
+    let form = this.state.form;
+    let synonym = [];
+    form.synonyms.forEach((synonyms) => {
+      let synonymIds = [];
+      synonyms.synonyms.forEach((id) => {
+        synonymIds.push(id);
+      });
+      synonym.push({ word: synonyms.word, synonyms: synonymIds });
+    });
+
+    this._isMounted && this.setState({ synonymIdList: synonym });
   };
 
   hover = (word, from) => {
@@ -252,12 +252,20 @@ class CreateKnowledgeDataForm extends Component {
     });
   };
 
+  cancelCriticalData = () => {
+    this.criticalDataRef.current.resetCriticalData();
+  };
+
+  resetGeneratedQuestion = () => {
+    this.questionRef.current.resetGeneratedQuestion();
+  };
+
   render() {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
         <LoadingSpinner loading={this.state.loading} text="Sending form" />
-        <Form onSubmit={this.submitForm} className="mt-3">
+        <Form className="mt-3">
           <div className="form-item form-item-meta pr-3 pl-3">
             <div className="mr-3 ml-3">
               {this.state.successAlert && (
@@ -305,9 +313,11 @@ class CreateKnowledgeDataForm extends Component {
               setTokenizeWord={this.setTokenizeWord}
               getWordArray={this.getWordArray}
               setRawData={this.setRawData}
+              cancelCriticalData={this.cancelCriticalData}
               onChange={this.handleInputForm}
             />
             <CriticalData
+              ref={this.criticalDataRef}
               wordArray={wordArray}
               setCritical={this.setCriticalData}
             />
@@ -317,17 +327,20 @@ class CreateKnowledgeDataForm extends Component {
               wordArray={wordArray}
             />
             <Question
+              ref={this.questionRef}
+              questionValue={this.state.form.questions}
               scrollToTop={this.scrollToTop}
               setAlertMessage={this.setAlertMessage}
               setSuccessAlert={this.setSuccessAlert}
               setErrorAlert={this.setErrorAlert}
               setErrorList={this.setErrorList}
-              className="mt-3"
               setQuestions={this.setQuestions}
               setTokenizeWord={this.setTokenizeWord}
               hover={this.hover}
               hoverWord={this.state.hoverWordFromSynonym}
               synonymsArray={this.state.form.synonyms}
+              synonymIds={this.state.synonymIdList}
+              className="mt-3"
             />
 
             <BaseResponse onChange={this.handleInputForm} />
@@ -342,9 +355,10 @@ class CreateKnowledgeDataForm extends Component {
               wordArray={wordArray}
               hover={this.hover}
               hoverWord={this.state.hoverWord}
+              resetGeneratedQuestion={this.resetGeneratedQuestion}
             />
             <Row className="d-flex justify-content-around pt-3 pb-3">
-              <Button type="submit" color="info">
+              <Button type="submit" color="info" onClick={this.submitForm}>
                 Create new data approval
               </Button>
             </Row>
