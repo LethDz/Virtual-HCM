@@ -154,14 +154,18 @@ class CreateReferenceModal extends Component {
     });
   };
 
+  toggle = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        toggle={this.props.toggle}
+        toggle={this.toggle}
         unmountOnClose={true}
       >
-        <ModalHeader toggle={this.props.toggle}>
+        <ModalHeader toggle={this.toggle}>
           Create New Document Reference
         </ModalHeader>
         <Form onSubmit={this.addReference} className="m-0">

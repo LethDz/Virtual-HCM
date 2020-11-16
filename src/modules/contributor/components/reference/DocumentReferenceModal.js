@@ -215,11 +215,15 @@ class DocumentReferenceModal extends Component {
       });
   };
 
+  toggle = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <Container>
-        <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} unmountOnClose={true}>
-          <ModalHeader toggle={this.props.toggle}>
+        <Modal isOpen={this.props.isOpen} toggle={this.toggle} unmountOnClose={true}>
+          <ModalHeader toggle={this.toggle}>
             Document Reference
           </ModalHeader>
           <Form onSubmit={this.editReference}>
@@ -314,7 +318,7 @@ class DocumentReferenceModal extends Component {
               </Container>
             </ModalBody>
             <ModalFooter>
-              <Button className="r-button" type="submit" disabled={this.state.loading}>
+              <Button color="primary" type="submit" disabled={this.state.loading}>
                 <FontAwesomeIcon icon={faEdit} color="white" />
                 &nbsp;Edit
               </Button>

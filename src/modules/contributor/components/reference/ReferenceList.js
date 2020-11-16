@@ -11,7 +11,7 @@ import {
 import { REFERENCE, ALL } from 'src/constants';
 import { columnRefFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import 'src/static/stylesheets/reference.css';
@@ -85,14 +85,24 @@ class ReferenceList extends Component {
     await this.gridApi.sizeColumnsToFit();
   };
 
-  onRowDoubleClicked = () => {
+  // onRowDoubleClicked = () => {
+  //   let selectedRows = this.gridApi.getSelectedRows();
+  //   let id =
+  //     selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
+  //   this._isMounted &&
+  //     this.setState({
+  //       selectedId: id,
+  //       modalReferenceDetail: !this.state.modalReferenceDetail,
+  //     });
+  // };
+
+  onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let id =
       selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
     this._isMounted &&
       this.setState({
         selectedId: id,
-        modalReferenceDetail: !this.state.modalReferenceDetail,
       });
   };
 
@@ -195,7 +205,7 @@ class ReferenceList extends Component {
         )}
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
-            <Button onClick={this.onReferenceCreateClick} className="r-button">
+            <Button onClick={this.onReferenceCreateClick} color="primary">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
@@ -206,6 +216,24 @@ class ReferenceList extends Component {
                 updateReferenceList={this.setReferenceList}
               />
             )}
+          </Col>
+          <Col xs="auto">
+            <Button
+              color="success"
+              disabled={this.state.selectedId === ''}
+              onClick={this.toggleReferenceDetail}
+            >
+              <FontAwesomeIcon icon={faEdit} color="white" />
+              &nbsp; Edit
+            </Button>
+            {this.state.modalReferenceDetail && (
+            <DocumentReferenceModal
+              isOpen={this.state.modalReferenceDetail}
+              id={this.state.selectedId}
+              toggle={this.toggleReferenceDetail}
+              updateReferenceList={this.setReferenceList}
+            />
+          )}
           </Col>
         </Row>
         <LoadingSpinner
@@ -223,17 +251,10 @@ class ReferenceList extends Component {
             onGridReady={this.onGridReady}
             rowData={this.state.referenceList}
             rowSelection="single"
-            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+            onSelectionChanged={this.onRowSelected.bind(this)}
             columnDefs={columnRefFieldDef}
           ></AgGridReact>
-          {this.state.modalReferenceDetail && (
-            <DocumentReferenceModal
-              isOpen={this.state.modalReferenceDetail}
-              id={this.state.selectedId}
-              toggle={this.toggleReferenceDetail}
-              updateReferenceList={this.setReferenceList}
-            />
-          )}
+          
         </div>
       </div>
     );
