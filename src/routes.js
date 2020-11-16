@@ -13,7 +13,8 @@ import {
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
-  DataApprovalDetailPage
+  DataApprovalDetailPage,
+  TrainDataPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -29,6 +30,7 @@ import {
   ADMIN_CONFIGURE_SYSTEM_PAGE,
   REFERENCE_LIST_PAGE,
   GET_KNOWLEDGE_DATA_BY_INTENT,
+  ADMIN_TRAIN_DATA_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -69,6 +71,11 @@ const Routes = () => (
         exact
         path={ADMIN_CONFIGURE_SYSTEM_PAGE}
         component={ConfigureSystemPage}
+      />
+      <PrivateRouteAdmin
+        exact
+        path={ADMIN_TRAIN_DATA_PAGE}
+        component={TrainDataPage}
       />
       <PrivateRouteContributor
         exact

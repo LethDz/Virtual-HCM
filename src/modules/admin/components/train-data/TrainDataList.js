@@ -1,32 +1,24 @@
-import React, { Component, Fragment } from 'react';
-import { Button, Col, Row } from 'reactstrap';
-import 'src/static/stylesheets/contributor.list.css';
+import { faEdit, faPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faWrench,
-  faUserPlus,
-  faUserEdit,
-} from '@fortawesome/free-solid-svg-icons';
-import { AgGridReact } from 'ag-grid-react';
-import {
-  columnFieldDef,
-  context,
-  frameworkComponents,
-} from 'src/modules/admin';
-import { Link } from 'react-router-dom';
-import {
-  ADMIN_CONTRIBUTOR_CREATE_PAGE,
-  ADMIN_CONTRIBUTOR_EDIT_PAGE,
-  ADMIN_GET_USER_ALL,
-} from 'src/constants';
-import axiosClient from 'src/common/axiosClient';
+import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { getContributorsList, pullContributorsList } from 'src/modules/admin';
-import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import { Button, Col, Row } from 'reactstrap';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { ADMIN_GET_ALL_TRAIN_DATA } from 'src/constants';
+import {
+  context,
+  trainDataCol,
+  pullTrainDataList,
+  getTrainDataList,
+  frameworkComponentsData,
+  TrainDataCreate,
+} from 'src/modules/admin';
 
-class ContributorsList extends Component {
+class TrainDataList extends Component {
   _isMounted = false;
   constructor() {
     super();
@@ -34,11 +26,12 @@ class ContributorsList extends Component {
       loading: true,
       id: '',
       containerHeight: 0,
-      containerWidth: 0,
       errorAlert: false,
       successAlert: false,
-      contributorsList: [],
+      trainDataList: [],
       errorList: [],
+      openCreateModal: false,
+      openEditModal: false,
     };
     this.conRef = React.createRef('');
   }
@@ -55,14 +48,15 @@ class ContributorsList extends Component {
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    if (this.props.contributors.length === 0) {
+
+    if (this.props.trainDataList.length === 0) {
       axiosClient
-        .get(ADMIN_GET_USER_ALL)
+        .get(ADMIN_GET_ALL_TRAIN_DATA)
         .then((response) => {
           if (response.data.status) {
-            const users = response.data.result_data.users;
-            this.props.pullContributorsList(users);
-            this.setContributorsList(users);
+            const data = response.data.result_data;
+            this.props.pullTrainDataList(data);
+            this.setTrainDataList(data);
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
@@ -79,31 +73,29 @@ class ContributorsList extends Component {
       this.setLoading(false);
       this.setErrorAlert(false);
       this.setSuccessAlert(false);
-      this.setContributorsList(this.props.contributors);
+      this.setTrainDataList(this.props.trainDataList);
     }
   };
 
-  setContributorsList = (list) => {
+  setTrainDataList = (list) => {
     this._isMounted &&
       this.setState({
-        contributorsList: list,
+        trainDataList: list,
       });
   };
 
   setStyleForGrid = () => {
     const containerHeight =
       this.conRef.current && this.conRef.current.clientHeight;
-    const containerWidth =
-      this.conRef.current && this.conRef.current.clientWidth;
     this._isMounted &&
       this.setState({
         containerHeight,
-        containerWidth,
       });
   };
 
   onFirstDataRendered = () => {
-    this.gridApi.sizeColumnsToFit();
+    this.setStyleForGrid();
+    this.sizeToFit();
   };
 
   onRowSelected = () => {
@@ -146,10 +138,30 @@ class ContributorsList extends Component {
     this.gridApi.sizeColumnsToFit();
   };
 
+  setOpenCreateModal = (status) => {
+    this._isMounted &&
+      this.setState({
+        openCreateModal: status,
+      });
+  };
+
+  setOpenEditModal = (status) => {
+    this._isMounted &&
+      this.setState({
+        openEditModal: status,
+      });
+  };
+
   render() {
     return (
       <Fragment>
         <LoadingSpinner loading={this.state.loading} text="Loading" />
+        {this.state.openCreateModal && (
+          <TrainDataCreate
+            openCreateModal={this.setOpenEditModal}
+            setOpenCreateModal={this.setOpenCreateModal}
+          />
+        )}
         <div
           id="cl-container"
           className="cl-container container min-vh-100"
@@ -171,38 +183,24 @@ class ContributorsList extends Component {
           )}
           <Row>
             <Col className="justify-content-center d-flex">
-              <h5 className="mt-2 mb-2">Account List</h5>
+              <h5 className="mt-2 mb-2">Train Data List</h5>
             </Col>
           </Row>
           <Row className="d-flex flex-row-reverse">
             <Col xs="auto">
-              <Link
-                to={ADMIN_CONTRIBUTOR_CREATE_PAGE}
-                className="link-no-underline"
+              <Button
+                color="primary"
+                onClick={() => this.setOpenCreateModal(true)}
               >
-                <Button color="primary">
-                  <FontAwesomeIcon icon={faUserPlus} color="white" />
-                  &nbsp; Create
-                </Button>
-              </Link>
+                <FontAwesomeIcon icon={faPlus} color="white" />
+                &nbsp; Create
+              </Button>
             </Col>
             <Col xs="auto">
-              {this.state.id !== '' ? (
-                <Link
-                  to={ADMIN_CONTRIBUTOR_EDIT_PAGE(this.state.id)}
-                  className="link-no-underline"
-                >
-                  <Button color="success">
-                    <FontAwesomeIcon icon={faUserEdit} color="white" />
-                    &nbsp; Edit
-                  </Button>
-                </Link>
-              ) : (
-                <Button color="success" disabled={this.state.id === ''}>
-                  <FontAwesomeIcon icon={faUserEdit} color="white" />
-                  &nbsp; Edit
-                </Button>
-              )}
+              <Button color="success" disabled={this.state.id === ''}>
+                <FontAwesomeIcon icon={faEdit} color="white" />
+                &nbsp; Edit
+              </Button>
             </Col>
             <Col xs="auto" className="mr-auto">
               <Button color="info" onClick={this.sizeToFit}>
@@ -220,14 +218,15 @@ class ContributorsList extends Component {
           >
             <AgGridReact
               onFirstDataRendered={this.onFirstDataRendered}
-              rowData={this.state.contributorsList}
+              rowData={this.state.trainDataList}
               rowSelection="single"
               animateRows={true}
               onGridReady={this.onGridReady}
               onSelectionChanged={this.onRowSelected.bind(this)}
-              columnDefs={columnFieldDef(this.state.containerWidth)}
-              frameworkComponents={frameworkComponents}
+              columnDefs={trainDataCol}
               context={context(this)}
+              frameworkComponents={frameworkComponentsData}
+              pagination={true}
             ></AgGridReact>
           </div>
         </div>
@@ -237,12 +236,12 @@ class ContributorsList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  contributors: getContributorsList(state),
+  trainDataList: getTrainDataList(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  pullContributorsList: (contributorsList) =>
-    dispatch(pullContributorsList(contributorsList)),
+  pullTrainDataList: (trainDataList) =>
+    dispatch(pullTrainDataList(trainDataList)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributorsList);
+export default connect(mapStateToProps, mapDispatchToProps)(TrainDataList);

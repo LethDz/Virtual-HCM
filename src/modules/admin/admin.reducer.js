@@ -8,6 +8,9 @@ import {
   PULL_TRAINABLE_DATA,
   PULL_TRAIN_SOCKET,
   PULL_CURRENT_STATE,
+  PULL_TRAIN_DATA,
+  ADD_NEW_TO_TRAIN_DATA,
+  CHANGE_TRAIN_DATA_STATUS,
 } from 'src/modules/admin';
 
 const initialState = {
@@ -16,6 +19,8 @@ const initialState = {
   trainableData: [],
   trainSocket: null,
   currentState: null,
+  trainDataList: [],
+  trainDataDetail: null,
 };
 
 export const adminReducer = (state = initialState, action) => {
@@ -98,6 +103,42 @@ export const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         currentState: current,
+      };
+
+    case PULL_TRAIN_DATA:
+      const tData = action.payload.trainDataList;
+      return {
+        ...state,
+        trainDataList: tData,
+      };
+
+    case ADD_NEW_TO_TRAIN_DATA:
+      const newData = action.payload.newData;
+      let trainData = state.trainDataList;
+      trainData.push(newData);
+      return {
+        ...state,
+        trainDataList: trainData,
+      };
+
+    case CHANGE_TRAIN_DATA_STATUS:
+      const idTrainData = action.payload.id;
+      let dataDetail = state.trainDataDetail;
+      let dataList = state.trainDataList.map((data) => {
+        if (data.id === idTrainData) {
+          data.type = data.type === 1 ? 2 : 1;
+        }
+        return data;
+      });
+
+      if (state.trainDataDetail && state.trainDataDetail.user_id === id) {
+        dataDetail.type = dataDetail.type === 1 ? 2 : 1;
+      }
+
+      return {
+        ...state,
+        trainDataDetail: dataDetail,
+        trainDataList: dataList,
       };
 
     case LOGOUT:

@@ -7,6 +7,9 @@ import ConfigureSystem from 'src/modules/admin/components/configure-system/Confi
 import ManageTrainingProcess from 'src/modules/admin/components/manage-training-process/ManageTrainingProcess';
 import ControlPanel from 'src/modules/admin/components/manage-training-process/ControlPanel';
 import SelectFileModal from 'src/modules/admin/components/manage-training-process/SelectFileModal';
+import TrainDataList from 'src/modules/admin/components/train-data/TrainDataList';
+import TrainDataType from 'src/modules/admin/components/train-data/TrainDataType';
+import TrainDataCreate from 'src/modules/admin/components/train-data/TrainDataCreate';
 
 export * from 'src/modules/admin/admin.actions';
 export * from 'src/modules/admin/admin.constants.js';
@@ -23,4 +26,7 @@ export {
   ManageTrainingProcess,
   ControlPanel,
   SelectFileModal,
+  TrainDataList,
+  TrainDataType,
+  TrainDataCreate,
 };

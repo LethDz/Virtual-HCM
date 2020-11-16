@@ -7,6 +7,7 @@ import ContributorCreatePage from 'src/pages/admin/manage-contributor/Contributo
 import ContributorEditPage from 'src/pages/admin/manage-contributor/ContributorEditPage';
 import ConfigureSystemPage from 'src/pages/admin/configure-system/ConfigureSystemPage';
 import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/ManageTrainingProcessPage';
+import TrainDataPage from 'src/pages/admin/train-data/TrainDataPage';
 import CreateDataApprovalFormPage from 'src/pages/contributor/manage-data-approval/DataApprovalCreateForm';
 import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/DataApprovalList';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
@@ -26,4 +27,5 @@ export {
   ConfigureSystemPage,
   ReferenceListPage,
   DataApprovalDetailPage,
+  TrainDataPage,
 };

@@ -7,12 +7,14 @@ import {
   faServer,
   faCogs,
   faTachometerAlt,
+  faFileCode,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   ADMIN_CONFIGURE_SYSTEM_PAGE,
   ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
   ADMIN_PAGE,
+  ADMIN_TRAIN_DATA_PAGE,
 } from 'src/constants';
 
 const SideBarAdminContent = () => {
@@ -30,6 +32,12 @@ const SideBarAdminContent = () => {
         icon={<FontAwesomeIcon icon={faUserCircle} />}
         link={ADMIN_CONTRIBUTOR_LIST_PAGE}
         active={location.includes(ADMIN_CONTRIBUTOR_LIST_PAGE)}
+      />
+      <SideBarItem
+        name="Train Data"
+        icon={<FontAwesomeIcon icon={faFileCode} />}
+        link={ADMIN_TRAIN_DATA_PAGE}
+        active={location.includes(ADMIN_TRAIN_DATA_PAGE)}
       />
       <SideBarItem
         name="Manage Training Process"

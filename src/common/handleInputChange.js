@@ -16,6 +16,13 @@ export const handleInputFormChange = (event, component) => {
     form: {
       ...component.state.form,
       [name]: value,
-    }
+    },
   });
+};
+
+export const handleInputHook = (event, setState) => {
+  const target = event.target;
+  const value = target.type === 'checkbox' ? target.checked : target.value;
+
+  setState(value);
 };
