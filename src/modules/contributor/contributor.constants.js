@@ -68,6 +68,12 @@ export const frameworkComponents = {
 
 export const columnFieldDef = [
   {
+    field: 'id',
+    headerName: "ID",
+    sortable: true,
+    filter: true
+  },
+  {
     field: 'intent',
     headerName: 'Intent',
     sortable: true,

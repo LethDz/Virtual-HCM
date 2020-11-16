@@ -13,13 +13,13 @@ import {
   Label,
 } from 'reactstrap';
 import {
-  GenSynonymSentence,
   questionType,
+  GenSynonymSentenceModal
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt, faTasks } from '@fortawesome/free-solid-svg-icons';
-import { NLP, TOKENIZE } from 'src/constants';
+import { NLP, TOKENIZE, GENERATE_SIMILARIES } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -45,6 +45,8 @@ export default class Question extends Component {
         { id: 7, value: 7, isChecked: false },
       ],
       tooltipOpen: false,
+      isOpenGenerateModal: false,
+      generated_sentences: []
     };
   }
 
@@ -223,29 +225,128 @@ export default class Question extends Component {
       });
     });
     this.props.setQuestions(questionList);
-    this._isMounted && this.setState({ questions: questionList });
+    this._isMounted && this.setState({ questions: questionList, generated_sentences: [] });
   };
 
-  renderSynonymsQuestions = (question, index, wordArray) => {
-    return (
-      <GenSynonymSentence
-        currentRowData={question.generated_questions}
-        questionValue={this.props.questionValue[index]}
-        setAlertMessage={this.props.setAlertMessage}
-        setSuccessAlert={this.props.setSuccessAlert}
-        setErrorAlert={this.props.setErrorAlert}
-        setErrorList={this.props.setErrorList}
-        index={index}
-        tokenizedWordArray={wordArray}
-        synonymsArray={this.props.synonymIds}
-        setGeneratedSentences={this.setGeneratedSentences}
-      />
-    );
+  onMouseOver = (event, value) => {
+    this.props.hover(value, 'QUESTION');
+    event.target.className = 'hover-word';
+  }
+
+  onMouseLeave = (event) => {
+    this.props.hover('', 'QUESTION');
+    event.target.className = '';
+  }
+
+  distinct = (value, index, self) => {
+    return self.indexOf(value) === index;
   };
+
+  createSynonymArray = () => {
+    let synonymsArray = [];
+    this.props.synonymIds &&
+      this.props.synonymIds.forEach((synonym) => {
+        synonym.synonyms.forEach((id) => {
+          synonymsArray.push(id);
+        });
+      });
+    return synonymsArray.filter(this.distinct);
+  };
+
+  prepareGenerateData = () => {
+    let preSynonymList = this.createSynonymArray()
+    let preDataList = []
+    for (let i in this.state.questions) {
+      preDataList.push({
+        sentence: this.createTokenizeSentence(i),
+        synonyms: preSynonymList
+      })
+    }
+    return { sentences: preDataList }
+  }
+
+  generatedSentences = () => {
+    let data = this.prepareGenerateData()
+    this._isMounted &&
+      this.setState({
+        loading: true,
+      });
+    axiosClient
+      .post(NLP + GENERATE_SIMILARIES, data)
+      .then((response) => {
+        if (response.data.status) {
+          let data = [];
+          response.data.result_data.similaries.forEach((sentences) => {
+            sentences.forEach((sentence) => {
+              data.push({ accept: 0, sentence: sentence });
+            });
+          });
+          this._isMounted &&
+            this.setState({
+              loading: false,
+              generated_sentences: data
+            });
+
+          this.toggleGenerateModal()
+          this.props.setErrorAlert(false);
+          this.props.setSuccessAlert(true);
+        } else {
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+        }
+      })
+      .catch((err) => {
+        this._isMounted &&
+          this.setState({
+            loading: false,
+          });
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+      });
+  }
+
+  viewGeneratedSentences = () => {
+    this.toggleGenerateModal()
+  }
+
+  createTokenizeSentence = (index) => {
+    let tokenizedWordArray = [];
+    tokenizedWordArray = this.state.questions[index].question.split(" ")
+    return tokenizedWordArray.join(' ');
+  };
+
+  toggleGenerateModal = () => {
+    this._isMounted &&
+      this.setState({ isOpenGenerateModal: !this.state.isOpenGenerateModal });
+  };
+
+  setSelectedSentence = (sentences) => {
+    this._isMounted && this.setState({ generated_sentences: sentences })
+  }
+
+  renderGenerateButton = () => {
+    if (this.state.questions.length !== 0) {
+      if (this.state.generated_sentences.length === 0) {
+        return <div className="d-flex justify-content-end">
+        <Button onClick={this.generatedSentences}>Generate</Button>
+      </div>
+      }
+      else {
+        return <div className="d-flex justify-content-end">
+        <Button onClick={this.viewGeneratedSentences}>View</Button>
+      </div>
+      }
+    }
+    return null
+  }
 
   render() {
     return (
       <Fragment>
+        {this.state.isOpenGenerateModal && (
+          <GenSynonymSentenceModal toggle={this.toggleGenerateModal} rowData={this.state.generated_sentences} isOpen={this.state.isOpenGenerateModal} setSelectedSentence={this.setSelectedSentence} />
+        )}
+
         <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
           <Row xs="1">
             <Col>
@@ -367,32 +468,16 @@ export default class Question extends Component {
                           if (this.props.hoverWord === value) {
                             className += 'hover-word';
                           }
-
-                          return React.createElement(
-                            'span',
-                            {
-                              key: index,
-                              className: className,
-                              onMouseOver: (event) => {
-                                this.props.hover(value, 'QUESTION');
-                                event.target.className = 'hover-word';
-                              },
-                              onMouseLeave: (event) => {
-                                this.props.hover('', 'QUESTION');
-                                event.target.className = '';
-                              },
-                            },
-                            (value += ' ')
-                          );
+                          return <span key={index} className={className} onMouseOver={(event) => this.onMouseOver(event, value)} onMouseLeave={this.onMouseLeave}>{value} </span>
                         })}
                       </Col>
-                      <Col xs="auto">
+                      {/* <Col xs="auto">
                         {this.renderSynonymsQuestions(
                           question,
                           index,
                           wordArray
                         )}
-                      </Col>
+                      </Col> */}
                       <Col xs="auto">
                         {question.type.map((value, index) => {
                           switch (value) {
@@ -481,6 +566,7 @@ export default class Question extends Component {
               })}
             </ListGroup>
           </div>
+          {this.renderGenerateButton()}
         </LoadingSpinner>
       </Fragment>
     );

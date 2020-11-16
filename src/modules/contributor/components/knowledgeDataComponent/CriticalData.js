@@ -47,10 +47,8 @@ class CriticalData extends Component {
   handleInput = (event) => handleInputChange(event, this);
 
   addCriticalData = () => {
-    let type = this.state.type;
     let temp = this.state.criticalData;
     temp.push({
-      type: type,
       word: [],
       verb: [],
       index: temp.length,
@@ -142,26 +140,6 @@ class CriticalData extends Component {
       <Row>
         <Col>
           <Label className="label">Subject:</Label>
-          <Row>
-            <Col xs="auto">
-              <Input
-                type="select"
-                name="type"
-                value={this.state.type}
-                onChange={this.handleInput}
-              >
-                {criticalType.map((value, index) => {
-                  return <option key={index}>{value}</option>;
-                })}
-              </Input>
-            </Col>
-
-            <Col xs="auto">
-              <Button color="primary" onClick={this.addCriticalData}>
-                <FontAwesomeIcon icon={faPlusCircle} /> Subject
-              </Button>
-            </Col>
-          </Row>
           <ListGroup className="mt-1">
             {this.state.criticalData.map((criticalData, index) => {
               return (
@@ -267,6 +245,11 @@ class CriticalData extends Component {
               );
             })}
           </ListGroup>
+          <div className="d-flex justify-content-end mt-2">
+            <Button color="primary" onClick={this.addCriticalData}>
+              <FontAwesomeIcon icon={faPlusCircle} /> Subject
+              </Button>
+          </div>
         </Col>
       </Row>
     );

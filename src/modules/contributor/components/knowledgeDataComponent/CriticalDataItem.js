@@ -3,12 +3,13 @@ import { Row, Col, Input, Button } from 'reactstrap';
 
 import { handleInputChange } from 'src/common/handleInputChange';
 
-import { VERB, CRITICAL, POSTags } from 'src/modules/contributor/index';
+import { VERB, CRITICAL } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 class CriticalDataItem extends Component {
+  _isMounted = false;
   constructor(props) {
     super();
     this.state = {
@@ -17,7 +18,16 @@ class CriticalDataItem extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this._isMounted = true
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false
+  }
+
   handleInput = (event) => {
+    this._isMounted && this.setState({ verbType: event.target.value })
     handleInputChange(event, this);
   };
 
@@ -45,19 +55,7 @@ class CriticalDataItem extends Component {
     return (
       <Row>
         <Col xs="auto">
-          <Input
-            defaultValue={''}
-            type="select"
-            name="verbType"
-            onChange={this.handleInput}
-          >
-            <option value="" disabled>
-              None
-            </option>
-            {POSTags.map((value, index) => {
-              return <option key={index}>{value}</option>;
-            })}
-          </Input>
+          <h1>{this.state.verbType}</h1>
         </Col>
         <Col xs="auto">
           <Input
@@ -70,7 +68,7 @@ class CriticalDataItem extends Component {
               None
             </option>
             {this.props.wordArray.map((data, index) => {
-              return <option key={index}>{data.value}</option>;
+              return <option key={index} value={data.type}>{data.value}</option>;
             })}
           </Input>
         </Col>

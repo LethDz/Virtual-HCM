@@ -92,6 +92,7 @@ class RawData extends Component {
           this.props.setAlertMessage('Tokenize successful');
           this.props.setSuccessAlert(true);
         } else {
+          this.props.setSuccessAlert(false);
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);
           this.props.scrollToTop();
@@ -118,7 +119,24 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  genData = () => {};
+  onMouseOver = (event, data) => {
+    this.props.hover(data.value, 'RAW_DATA');
+    let currentClassName = event.target.className;
+    if (!currentClassName.includes('hover-word')) {
+      currentClassName += 'hover-word';
+    }
+    event.target.className = currentClassName;
+  };
+
+  onMouseLeave = (event) => {
+    this.props.hover('', 'RAW_DATA');
+    let currentClassName = event.target.className;
+    let newClassName = currentClassName.replace(
+      'hover-word',
+      ''
+    );
+    event.target.className = newClassName;
+  }
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -143,34 +161,10 @@ class RawData extends Component {
                 } else if (flag) {
                   className += 'name ';
                 }
+                return <span title={data.type} key={index} className={className} onMouseOver={(event) => this.onMouseOver(event, data)} onMouseLeave={this.onMouseLeave}>{data.value}</span>
 
-                let reactNode = React.createElement(
-                  'span',
-                  {
-                    className: className,
-                    key: index,
-                    onMouseOver: (event) => {
-                      this.props.hover(data.value, 'RAW_DATA');
-                      let currentClassName = event.target.className;
-                      if (!currentClassName.includes('hover-word')) {
-                        currentClassName += 'hover-word';
-                      }
-                      event.target.className = currentClassName;
-                    },
-                    onMouseLeave: (event) => {
-                      this.props.hover('', 'RAW_DATA');
-                      let currentClassName = event.target.className;
-                      let newClassName = currentClassName.replace(
-                        'hover-word',
-                        ''
-                      );
-                      event.target.className = newClassName;
-                    },
-                  },
-                  data.value
-                );
-                return reactNode;
               })}
+
             </div>
           </Col>
           <Col xs="auto">
