@@ -9,7 +9,7 @@ class ChatWidget extends Component {
     this.state = {
       messageList: [],
       newMessagesCount: 0,
-      isOpen: false
+      isOpen: false,
     };
     this.chatSocket = null;
     this.current_command = null;
@@ -18,40 +18,42 @@ class ChatWidget extends Component {
       REQUEST_LAST_SESSION_DATA: 'getlastsession',
       CHAT: 'chat',
       REPORT: 'report',
-      END_SESSION: 'endsession'
+      END_SESSION: 'endsession',
     };
     this.response_types = {
       LAST_SESSION_MESSAGES: 'last_session_messages',
       FORCE_NEW_SESSION: 'force_new_session',
       CHAT_RESPONSE: 'chat_response',
       START_NEW_SESSION_FAILED: 'new_session_failed',
-      END_SESSION_STATUS: 'end_session_status'
+      END_SESSION_STATUS: 'end_session_status',
     };
   }
 
   _onMessageWasSent = (message) => {
     let _self = this;
     let text = message.data.text;
-    if (text){
-      if(text.startsWith('!')){
+    if (text) {
+      if (text.startsWith('!')) {
         // Command handle
         let command = text.substring(1);
-        switch(command){
+        switch (command) {
           case _self.commands.START_NEW_SESSION:
             _self.current_command = _self.commands.START_NEW_SESSION;
-            _self.send_websocket_command(_self.commands.END_SESSION, null)
+            _self.send_websocket_command(_self.commands.END_SESSION, null);
             break;
           case _self.commands.REPORT:
             break;
           case _self.commands.END_SESSION:
-            _self.send_websocket_command(_self.commands.END_SESSION, null)
+            _self.send_websocket_command(_self.commands.END_SESSION, null);
             break;
           default:
-            console.log('What is meaning of default block missing warning when it doesnt do anything');
+            console.log(
+              'What is meaning of default block missing warning when it doesnt do anything'
+            );
         }
       } else {
         // Chat handle
-        this.send_websocket_command(this.commands.CHAT, text)
+        this.send_websocket_command(this.commands.CHAT, text);
       }
       this.setState({
         messageList: [...this.state.messageList, message],
@@ -62,33 +64,36 @@ class ChatWidget extends Component {
   _handleClick = () => {
     this.setState({
       isOpen: !this.state.isOpen,
-      newMessagesCount: 0
+      newMessagesCount: 0,
     });
-  }
+  };
 
   _sendMessage = (text) => {
     if (text && text.length > 0) {
-      const newMessagesCount = this.state.isOpen ? this.state.newMessagesCount : this.state.newMessagesCount + 1;
+      const newMessagesCount = this.state.isOpen
+        ? this.state.newMessagesCount
+        : this.state.newMessagesCount + 1;
       this.setState({
         newMessagesCount: newMessagesCount,
-        messageList: [...this.state.messageList, {
-          author: 'them',
-          type: 'text',
-          data: { text }
-        }]
+        messageList: [
+          ...this.state.messageList,
+          {
+            author: 'them',
+            type: 'text',
+            data: { text },
+          },
+        ],
       });
     }
-  }
+  };
 
   create_websocket_connection = () => {
     let _self = this;
     let ws_url = 'wss://127.0.0.1:8000/ws/chat/';
     let chatSocket;
     try {
-      chatSocket = this.props.chatSocket
-      ? this.props.chatSocket
-      : new WebSocket(ws_url);
-    } catch(err) {
+      chatSocket = new WebSocket(ws_url);
+    } catch (err) {
       return null;
     }
     chatSocket.onopen = function (e) {
@@ -102,40 +107,57 @@ class ChatWidget extends Component {
             _self._sendMessage(received.data);
             break;
           case _self.response_types.FORCE_NEW_SESSION:
-            _self._sendMessage('Hệ thống đã có sự thay đổi dữ liệu, phiên trò chuyện của bạn đã kết thúc');
+            _self._sendMessage(
+              'Hệ thống đã có sự thay đổi dữ liệu, phiên trò chuyện của bạn đã kết thúc'
+            );
             _self._sendMessage('Bắt đầu phiên trò chuyện mới');
-            _self.send_websocket_command(_self.commands.START_NEW_SESSION, null)
+            _self.send_websocket_command(
+              _self.commands.START_NEW_SESSION,
+              null
+            );
             break;
           case _self.response_types.LAST_SESSION_MESSAGES:
-            if (received.data && received.data > 0){
+            if (received.data && received.data > 0) {
               _self.setChatboxMessages(received.data);
             } else {
-              _self.send_websocket_command(_self.commands.START_NEW_SESSION, null)
+              _self.send_websocket_command(
+                _self.commands.START_NEW_SESSION,
+                null
+              );
             }
             break;
           case _self.response_types.END_SESSION_STATUS:
-            if (received.data){
+            if (received.data) {
               _self._sendMessage('Phiên trò chuyện của bạn đã kết thúc');
-              if (_self.current_command === _self.commands.START_NEW_SESSION){
+              if (_self.current_command === _self.commands.START_NEW_SESSION) {
                 _self._sendMessage('Chatbox sẽ được làm mới trong 5s');
                 _self.setState({
                   messageList: [],
                 });
-                _self.send_websocket_command(_self.commands.START_NEW_SESSION, null);
+                _self.send_websocket_command(
+                  _self.commands.START_NEW_SESSION,
+                  null
+                );
                 _self.current_command = null;
               }
             } else {
-              _self._sendMessage('Đã có sự cố khi kết thúc phiên trò chuyện, hãy liên lạc với admin');
+              _self._sendMessage(
+                'Đã có sự cố khi kết thúc phiên trò chuyện, hãy liên lạc với admin'
+              );
             }
             break;
           default:
-            console.log('What is meaning of default block missing warning when it doesnt do anything');
+            console.log(
+              'What is meaning of default block missing warning when it doesnt do anything'
+            );
         }
       }
     };
     chatSocket.onclose = function (e) {
       if (e.wasClean) {
-        console.log(`[chat_close] Connection closed cleanly, code=${e.code} reason=${e.reason}`)
+        console.log(
+          `[chat_close] Connection closed cleanly, code=${e.code} reason=${e.reason}`
+        );
       } else {
         // e.g. server process killed or network down
         // event.code is usually 1006 in this case
@@ -149,11 +171,11 @@ class ChatWidget extends Component {
   };
 
   send_websocket_command = (type, data) => {
-    if (this.connected()){
+    if (this.connected()) {
       this.chatSocket.send(
         JSON.stringify({
           command: type,
-          data: data
+          data: data,
         })
       );
     }
@@ -164,15 +186,15 @@ class ChatWidget extends Component {
   };
 
   setChatboxMessages = (data) => {
-    if (data){
+    if (data) {
       let messages = [];
-      for(let message in data) {
+      for (let message in data) {
         messages.push({
-          type: 'text', 
+          type: 'text',
           author: message.sent === 1 ? 'me' : 'them',
-          data: { 
-            text: message.text
-          } 
+          data: {
+            text: message.text,
+          },
         });
       }
       this.setState({
@@ -185,16 +207,23 @@ class ChatWidget extends Component {
     let _self = this;
     this._isMounted = true;
     this.chatSocket = this.create_websocket_connection();
-    let wait_connecting = setInterval(function() {
+    let wait_connecting = setInterval(function () {
       if (_self.chatSocket.readyState !== WebSocket.CONNECTING) {
         clearInterval(wait_connecting);
-        if(_self.connected()){
-          _self.send_websocket_command(_self.commands.REQUEST_LAST_SESSION_DATA, null);
+        if (_self.connected()) {
+          _self.send_websocket_command(
+            _self.commands.REQUEST_LAST_SESSION_DATA,
+            null
+          );
         } else {
           // TODO: Disable chatbox input and send button
         }
       }
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    this.chatSocket.close(1000);
   }
 
   render() {
