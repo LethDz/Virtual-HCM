@@ -301,15 +301,18 @@ class SynonymDetailModal extends Component {
     this.conRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
+  toggle = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        toggle={this.props.toggle}
+        toggle={this.toggle}
         unmountOnClose={true}
-        backdrop="static"
       >
-        <ModalHeader toggle={this.props.toggle}>Synonym</ModalHeader>
+        <ModalHeader toggle={this.toggle}>Synonym</ModalHeader>
         <Form onSubmit={this.editSynonym}>
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -360,11 +363,11 @@ class SynonymDetailModal extends Component {
                       </Col>
                       <Col className="col-2">
                         <Button
-                          color="danger"
+                          color="warning"
                           id={index}
                           onClick={this.deleteWord.bind(this, index)}
                         >
-                          <FontAwesomeIcon icon={faTrashAlt} />
+                          <FontAwesomeIcon icon={faTrashAlt} color="white"/>
                         </Button>
                       </Col>
                     </Row>
@@ -419,7 +422,7 @@ class SynonymDetailModal extends Component {
               &nbsp;Save
             </Button>
             <Button
-              color="warning"
+              color="danger"
               disabled={this.state.loading}
               style={{ color: 'white' }}
               onClick={this.deleteSynonym}
