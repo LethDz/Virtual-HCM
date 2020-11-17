@@ -102,7 +102,7 @@
   background-color: aliceblue;
 }
 
-.list-group .bound-group:hover {
+.list-group .synonym:hover {
   background-color: rgb(175, 233, 68) !important;
 }
 

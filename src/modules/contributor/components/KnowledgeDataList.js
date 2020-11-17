@@ -120,7 +120,6 @@ class KnowledgeDataList extends Component {
 
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
-    console.log(selectedRows)
     let intent = selectedRows.length === 1 ? selectedRows[0].intent : '';
     this._isMounted && this.setState({
       intent,

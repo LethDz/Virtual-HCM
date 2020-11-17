@@ -48,7 +48,7 @@ class Synonyms extends Component {
     synonyms.forEach((synonym) => {
       let synonymId = [];
       synonym.synonyms.forEach((sy) => {
-        synonymId.push(sy.synonym_id);
+        sy.synonym_id ? synonymId.push(sy.synonym_id) : synonymId.push(sy.id)
       });
       let synonymObject = {
         word: synonym.word,
@@ -71,7 +71,7 @@ class Synonyms extends Component {
         word: this.state.synonymWord.trim(),
         synonyms: [],
       });
-      if (this._isMounted) this.setState({ synonyms: synonyms });
+      if (this._isMounted) this.setState({ synonyms: synonyms, synonymWord: '' });
     }
   };
 
@@ -147,7 +147,7 @@ class Synonyms extends Component {
               <Input
                 id="coresponse-index"
                 name="synonymWord"
-                defaultValue={''}
+                value={this.state.synonymWord}
                 onChange={this.handleInput}
               ></Input>
               <ListGroup>
@@ -155,7 +155,7 @@ class Synonyms extends Component {
                   return (
                     <ListGroupItem
                       key={index}
-                      className="mt-1 bound-group"
+                      className="mt-1 bound-group synonym"
                       onMouseOver={() => this.onMouseOver(word.word)}
                       onMouseLeave={this.onMouseLeave}
                     >

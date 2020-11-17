@@ -11,7 +11,8 @@ import {
   GET_REFERENCE_DETAIL,
   DELETE_REFERENCE,
   GET_ALL_DATA_APPROVAL,
-  GET_DATA_APPROVAL,
+  GET_DATA_APPROVAL, 
+  RESET_DATA_APPROVAL_DETAIL,
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -25,6 +26,11 @@ const initialState = {
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case RESET_DATA_APPROVAL_DETAIL:
+      return {
+        ...state,
+        dataApprovalDetail: null
+      }
     //cases for synonym
     case GET_ALL_DATA_APPROVAL:
       const dataApprovalList = action.payload.dataApprovalList;

@@ -6,7 +6,8 @@ import { GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS } from 'src/constants';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   getDataApprovalDetail,
-  pullDataApproval,
+  pullDataApproval, 
+  resetDataApprovalDetail,
   Question,
   FormSectionTitle,
   MetaData,
@@ -57,6 +58,7 @@ class KnowledgeDataDetail extends Component {
       errorList: [],
       sendLoading: false,
       synonymIdList: [],
+      hoverWord: '',
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -96,10 +98,9 @@ class KnowledgeDataDetail extends Component {
     let form = this.state.form;
     let synonym = [];
     form.synonyms.forEach((synonyms) => {
-      console.log(synonyms)
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
-        synonymIds.push(item.id);
+        synonymIds.push(item.id ? item.id : item);
       });
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
@@ -107,38 +108,62 @@ class KnowledgeDataDetail extends Component {
     this._isMounted && this.setState({ form: form });
   };
 
+  checkFormSubmit = () => {
+    let form = this.state.form
+    let errorFlag = false
+    if (form.baseResponse.trim() === '') errorFlag = true
+    if (form.intent.trim() === '') errorFlag = true
+    if (form.intentFullName.trim() === '') errorFlag = true
+    if (form.rawData.trim() === '') errorFlag = true
+    if (form.documentReference.length === 0) errorFlag = true
+    if (form.coresponse.length === 0) errorFlag = true
+    if (form.criticalData.length === 0) errorFlag = true
+    form.criticalData.forEach(data => {
+      if (data.word.length === 0) errorFlag = true
+    })
+    return errorFlag
+  }
+
   submitForm = (event) => {
     event.preventDefault();
-    this.reformatForm();
-    this._isMounted &&
-      this.setState({
-        sendLoading: true,
-      });
-    axiosClient
-      .post(KNOWLEDGE_DATA + EDIT, this.state.form)
-      .then((response) => {
-        this._isMounted &&
-          this.setState({
-            sendLoading: false,
-          });
-        if (response.data.status) {
-          history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
-        } else {
-          this.setErrorList(response.data.messages);
+    if (!this.checkFormSubmit()) {
+      this.reformatForm();
+      this._isMounted &&
+        this.setState({
+          sendLoading: true,
+        });
+      axiosClient
+        .post(KNOWLEDGE_DATA + EDIT, this.state.form)
+        .then((response) => {
+          this._isMounted &&
+            this.setState({
+              sendLoading: false,
+            });
+          if (response.data.status) {
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
+            this.props.resetDataApprovalDetail()
+          } else {
+            this.setErrorList(response.data.messages);
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+            this.scrollToTop();
+          }
+        })
+        .catch((err) => {
+          this._isMounted &&
+            this.setState({
+              sendLoading: false,
+            });
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
           this.scrollToTop();
-        }
-      })
-      .catch((err) => {
-        this._isMounted &&
-          this.setState({
-            sendLoading: false,
-          });
-        this.setErrorAlert(true);
-        this.setSuccessAlert(false);
-        this.scrollToTop();
-      });
+        });
+    }
+    else {
+      this.setErrorAlert(true);
+      this.setSuccessAlert(false);
+      this.scrollToTop();
+    }
   };
 
   setCoresponse = (coresponse) => {
@@ -229,6 +254,12 @@ class KnowledgeDataDetail extends Component {
     });
   };
 
+  setHoverWord = (word, from) => {
+    if (from === 'SYNONYM' && this._isMounted) {
+      this.setState({ hoverWord: word });
+    }
+  };
+
   componentWillUnmount = () => {
     this._isMounted = false;
   };
@@ -295,7 +326,7 @@ class KnowledgeDataDetail extends Component {
     form.synonyms.forEach((synonyms) => {
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
-        synonymIds.push(item.id);
+        synonymIds.push(item.id ? item.id : item.synonym_id);
       });
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
@@ -370,6 +401,7 @@ class KnowledgeDataDetail extends Component {
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData
+                  hoverWord={this.state.hoverWord}
                   detailPage={true}
                   rawDataValue={this.state.form.rawData}
                   scrollToTop={this.scrollToTop}
@@ -427,6 +459,7 @@ class KnowledgeDataDetail extends Component {
                 wordArray={wordArray}
                 resetGeneratedQuestion={this.resetGeneratedQuestion}
                 synonymsValue={this.state.form.synonyms}
+                setHoverWord={this.setHoverWord}
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
                 <Button type="submit" color="info" onClick={this.submitForm}>
@@ -447,6 +480,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
+  resetDataApprovalDetail: () => dispatch(resetDataApprovalDetail())
 });
 
 export default connect(

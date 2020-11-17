@@ -117,9 +117,9 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  onMouseOver = (event, data) => {};
+  onMouseOver = (event, data) => { };
 
-  onMouseLeave = (event) => {};
+  onMouseLeave = (event) => { };
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -134,9 +134,23 @@ class RawData extends Component {
                 });
                 let className = 'mr-1 word-box ';
 
-                if (this.props.hoverWord === data.value) {
-                  className += 'hover-word ';
-                }
+                let hoverWordList = this.props.hoverWord.split(" ")
+
+                // if (hoverWordList[0] === data.value) {
+                //   if (hoverWordList.length === 1) {
+                //     className += 'hover-word ';
+                //   }
+                //   else {
+                //     if (hoverWordList[0] === this.state.tokenizeData[index].value && hoverWordList[1] === this.state.tokenizeData[index + 1].value) {
+                //       className += 'hover-word '
+                //     }
+                //   }
+                // }
+                hoverWordList.forEach(word => {
+                  if (word === data.value) {
+                    className += 'hover-word '
+                  }
+                })
 
                 if (data.type === V) {
                   className += 'verb ';

@@ -103,37 +103,65 @@ class CreateKnowledgeDataForm extends Component {
     return wordArray;
   };
 
+  checkFormSubmit = () => {
+    let form = this.state.form
+    let errorFlag = false
+    if (form.baseResponse.trim() === '') errorFlag = true
+    if (form.intent.trim() === '') errorFlag = true
+    if (form.intentFullName.trim() === '') errorFlag = true
+    if (form.rawData.trim() === '') errorFlag = true
+    if (form.documentReference.length === 0) errorFlag = true
+    if (form.coresponse.length === 0) errorFlag = true
+    if (form.criticalData.length === 0) errorFlag = true
+    form.criticalData.forEach(data => {
+      if (data.word.length === 0) errorFlag = true
+    })
+    return errorFlag
+  }
+
   submitForm = (event) => {
     this._isMounted &&
       this.setState({
         loading: true,
       });
     event.preventDefault();
-    axiosClient
-      .post(KNOWLEDGE_DATA + ADD, this.state.form)
-      .then((response) => {
-        this._isMounted &&
-          this.setState({
-            loading: false,
-          });
-        if (response.data.status) {
-          history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
-        } else {
-          this.setErrorList(response.data.messages);
+    if (!this.checkFormSubmit()) {
+      axiosClient
+        .post(KNOWLEDGE_DATA + ADD, this.state.form)
+        .then((response) => {
+          this._isMounted &&
+            this.setState({
+              loading: false,
+            });
+          if (response.data.status) {
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
+          } else {
+            this.setErrorList(response.data.messages);
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+            this.scrollToTop();
+          }
+        })
+        .catch((err) => {
+          this._isMounted &&
+            this.setState({
+              loading: false,
+            });
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
           this.scrollToTop();
-        }
-      })
-      .catch((err) => {
-        this._isMounted &&
-          this.setState({
-            loading: false,
-          });
-        this.setErrorAlert(true);
-        this.setSuccessAlert(false);
-        this.scrollToTop();
-      });
+        });
+    }
+    else {
+      this._isMounted &&
+        this.setState({
+          loading: false,
+        });
+      this.setErrorAlert(true);
+      this.setSuccessAlert(false);
+      this.scrollToTop();
+    }
+
   };
 
   setCoresponse = (coresponse) => {
