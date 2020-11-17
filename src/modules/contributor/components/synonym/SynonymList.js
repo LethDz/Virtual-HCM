@@ -52,28 +52,23 @@ class SynonymList extends Component {
   };
 
   setRowData = async () => {
-    if (this.props.synonymsList.length === 0) {
-      this._isMounted && this.setLoading(true);
-      axiosClient
-        .get(SYNONYM + ALL)
-        .then((response) => {
-          const synonyms = response.data.result_data.synonym_dicts;
-          this.props.fetchAllSynonyms(synonyms);
-          this.setSynonymList(synonyms);
-          this.setLoading(false);
-        })
-        .then(() => {
-          this.setStyleForGrid();
-        })
-        .catch((error) => {
-          this.setLoading(false);
-          this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    } else {
-      await this.setSynonymList(this.props.synonymsList);
-      await this.setStyleForGrid();
-    }
+    this._isMounted && this.setLoading(true);
+    axiosClient
+      .get(SYNONYM + ALL)
+      .then((response) => {
+        const synonyms = response.data.result_data.synonym_dicts;
+        this.props.fetchAllSynonyms(synonyms);
+        this.setSynonymList(synonyms);
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.setStyleForGrid();
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   onRowSelected = () => {
