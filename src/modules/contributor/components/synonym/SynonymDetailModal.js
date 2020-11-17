@@ -236,10 +236,13 @@ class SynonymDetailModal extends Component {
       });
   };
 
-  addNewWord = () => {
-    this.setErrorList([]);
+  addNewWord = async() => {
+    await this.setErrorList([]);
     let newWord = this.state.newWord.trim();
-    if (!this.checkDuplicateWord(newWord) && newWord) {
+    if (
+      !this.checkDuplicateWord(newWord) &&
+      this.checkInputEmpty(newWord, 'Input cannot be empty')
+    ) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
       listWord.push(newWord);
@@ -253,57 +256,63 @@ class SynonymDetailModal extends Component {
     }
   };
 
-  tokenizeWord = () => {
+  tokenizeWord = async () => {
+    await this.setErrorList([]);
     const paragraph = this.state.paragraph;
-    if (paragraph && paragraph !== this.state.oldParagraph) {
-      this.setLoading(true);
-      this.setErrorAlert(false);
-      this.setSuccessAlert(false);
-      this.setState({
-        oldParagraph: paragraph,
-        tokenizedWords: [],
-      });
-      axiosClient
-        .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
-        .then((response) => {
-          if (response.data.status) {
-            let words = [];
-            response.data.result_data.pos.map((sentence) => {
-              sentence.map((word) => {
-                if (word.type !== 'CH') {
-                  words.push(word.value);
-                }
-                return word;
-              });
-              return sentence;
-            });
-
-            this.setState({
-              tokenizedWords: words,
-            });
-            this.setLoading(false);
-          } else {
-            this.setErrorAlert(true);
-            this.setErrorList(response.data.messages);
-          }
-        })
-        .catch(() => {
-          this.setLoading(false);
-          this.setErrorAlert(true);
-          this.setSuccessAlert(false);
+    if (this.checkInputEmpty(paragraph, 'Nothing to check!')) {
+      if (paragraph !== this.state.oldParagraph) {
+        this.setLoading(true);
+        this.setErrorAlert(false);
+        this.setSuccessAlert(false);
+        this.setState({
+          oldParagraph: paragraph,
+          tokenizedWords: [],
         });
+        axiosClient
+          .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
+          .then((response) => {
+            if (response.data.status) {
+              let words = [];
+              response.data.result_data.pos.map((sentence) => {
+                sentence.map((word) => {
+                  if (word.type !== 'CH') {
+                    words.push(word.value);
+                  }
+                  return word;
+                });
+                return sentence;
+              });
+
+              this.setState({
+                tokenizedWords: words,
+              });
+              this.setLoading(false);
+            } else {
+              this.setErrorAlert(true);
+              this.setErrorList(response.data.messages);
+            }
+          })
+          .catch(() => {
+            this.setLoading(false);
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+          });
+      }
+    } else {
+      this.setErrorAlert(true);
     }
   };
 
-  checkInputEmpty = (word) => {
+  checkInputEmpty = (word, message) => {
     if (!word) {
       let error = this.state.errorList;
-      error.push('Input can be empty!');
+      error.push(message);
       this.setErrorList(error);
       return false;
     }
     return true;
   };
+
 
   scrollToBottom = () => {
     this.conRef.current.scrollIntoView({ behavior: 'smooth' });
