@@ -39,27 +39,22 @@ class ReferenceList extends Component {
   }
 
   setRowData = async () => {
-    if (this.props.referenceList.length === 0) {
-      this._isMounted && this.setState({ loading: true });
-      axiosClient
-        .get(REFERENCE + ALL)
-        .then((response) => {
-          const references = response.data.result_data.references;
-          this.props.fetchAllDocumentReference(references);
-          this.setState({ loading: false, referenceList: references });
-        })
-        .then(() => {
-          this.setStyleForGrid();
-        })
-        .catch((error) => {
-          this.setLoading(false);
-          this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    } else {
-      await this.setReferenceList(this.props.referenceList);
-      await this.setStyleForGrid();
-    }
+    this._isMounted && this.setState({ loading: true });
+    axiosClient
+      .get(REFERENCE + ALL)
+      .then((response) => {
+        const references = response.data.result_data.references;
+        this.props.fetchAllDocumentReference(references);
+        this.setState({ loading: false, referenceList: references });
+      })
+      .then(() => {
+        this.setStyleForGrid();
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   setReferenceList = (list) => {
@@ -84,17 +79,6 @@ class ReferenceList extends Component {
     await this.setRowData();
     await this.gridApi.sizeColumnsToFit();
   };
-
-  // onRowDoubleClicked = () => {
-  //   let selectedRows = this.gridApi.getSelectedRows();
-  //   let id =
-  //     selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
-  //   this._isMounted &&
-  //     this.setState({
-  //       selectedId: id,
-  //       modalReferenceDetail: !this.state.modalReferenceDetail,
-  //     });
-  // };
 
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
@@ -227,13 +211,13 @@ class ReferenceList extends Component {
               &nbsp; Edit
             </Button>
             {this.state.modalReferenceDetail && (
-            <DocumentReferenceModal
-              isOpen={this.state.modalReferenceDetail}
-              id={this.state.selectedId}
-              toggle={this.toggleReferenceDetail}
-              updateReferenceList={this.setReferenceList}
-            />
-          )}
+              <DocumentReferenceModal
+                isOpen={this.state.modalReferenceDetail}
+                id={this.state.selectedId}
+                toggle={this.toggleReferenceDetail}
+                updateReferenceList={this.setReferenceList}
+              />
+            )}
           </Col>
         </Row>
         <LoadingSpinner
@@ -254,7 +238,6 @@ class ReferenceList extends Component {
             onSelectionChanged={this.onRowSelected.bind(this)}
             columnDefs={columnRefFieldDef}
           ></AgGridReact>
-          
         </div>
       </div>
     );
