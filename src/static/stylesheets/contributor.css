@@ -29,7 +29,7 @@
 }
 
 .form-item-meta {
-  border-top-color: #dd4b39;    
+  border-top-color: #dd4b39;
 }
 
 .form-item-data {
@@ -49,19 +49,19 @@
 .border-right-solid {
   border-right: solid;
   border-width: 2px;
-  border-color: #6C757D;
+  border-color: #6c757d;
 }
 
 .name {
   border: solid;
   border-width: 2px;
-  border-color: #DC3545;
+  border-color: #dc3545;
 }
 
 .verb {
   border: solid;
   border-width: 2px;
-  border-color: #28A745;
+  border-color: #28a745;
 }
 
 .noun {
@@ -73,10 +73,6 @@
 .word-box {
   padding: 2px 2px 2px 2px;
   border-radius: 10%;
-}
-
-.hover-word {
-  background-color: rgb(175, 233, 68) !important;
 }
 
 .progress-bar-list {
@@ -95,37 +91,21 @@
 }
 
 .divider {
-  border-top: 1px dashed #007BFF;
+  border-top: 1px dashed #007bff;
 }
 
 .list-group .bound-group {
-  background-color: lightyellow !important
+  background-color: lightyellow !important;
 }
 
 .list-group li {
   background-color: aliceblue;
 }
 
-/* .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-} */
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
+.list-group .bound-group:hover {
+  background-color: rgb(175, 233, 68) !important;
 }
 
-.tooltip:hover .tooltiptext {
-  visibility: visible;
+.hover-word {
+  background-color: rgb(175, 233, 68) !important;
 }

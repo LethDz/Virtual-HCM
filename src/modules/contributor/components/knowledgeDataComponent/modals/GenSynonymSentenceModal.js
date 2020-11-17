@@ -11,6 +11,9 @@ import { AgGridReact } from 'ag-grid-react';
 import { columnGenSentenceDef } from 'src/modules/contributor';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+
 class GenSynonymSentenceModal extends Component {
   _isMounted = false;
   constructor(props) {
@@ -26,12 +29,12 @@ class GenSynonymSentenceModal extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
-    let rowData = []
-    console.log(this.props.rowData)
-    this.props.rowData.forEach(data => {
-      rowData.push({ sentence: data.sentence })
-    })
-    this.setState({ rowData: rowData })
+    let rowData = [];
+    console.log(this.props.rowData);
+    this.props.rowData.forEach((data) => {
+      rowData.push({ sentence: data.sentence });
+    });
+    this.setState({ rowData: rowData });
   };
 
   componentWillUnmount = () => {
@@ -41,18 +44,15 @@ class GenSynonymSentenceModal extends Component {
   onGridReady = (params) => {
     params.api.forEachNode((node) => {
       this.props.rowData.forEach((sentence) => {
-        console.log(sentence)
-        console.log(node)
-        if (
-          node.data.sentence === sentence.sentence &&
-          sentence.accept === 1
-        ) {
+        console.log(sentence);
+        console.log(node);
+        if (node.data.sentence === sentence.sentence && sentence.accept === 1) {
           node.setSelected(true);
         }
       });
     });
-    this.gridApi = params.api
-    this.gridColumnApi = params.columnApi
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
   };
 
   onSelectionChanged = () => {
@@ -118,7 +118,7 @@ class GenSynonymSentenceModal extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="success" onClick={this.setSelectedSentence}>
-                Create
+                <FontAwesomeIcon icon={faSave} /> Save
               </Button>
             </ModalFooter>
           </Form>

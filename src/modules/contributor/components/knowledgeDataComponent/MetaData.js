@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import {
   getAllDocumentReference,
@@ -92,9 +92,6 @@ class MetaData extends Component {
             isOpen={this.state.isOpenReferenceModal}
             toggle={this.toggleReferenceModal}
             addReference={this.addReference}
-            setErrorAlert={this.props.setErrorAlert}
-            setSuccessAlert={this.props.setSuccessAlert}
-            scrollToTop={this.props.scrollToTop}
           />
         )}
         <Row className="col">
@@ -145,7 +142,7 @@ class MetaData extends Component {
               onClick={this.toggleReferenceModal}
               color="success"
             >
-              <FontAwesomeIcon icon={faPlusCircle} /> New reference
+              <FontAwesomeIcon icon={faBookOpen} />{' '}Add reference
             </Button>
           </Col>
         </Row>

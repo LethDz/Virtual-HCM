@@ -27,7 +27,7 @@ class RawData extends Component {
   componentDidMount() {
     this._isMounted = true;
     if (this.props.detailPage) {
-      this.stateTokenizeRawDate(() => {
+      this.stateTokenizeRawData(() => {
         this.setTokenizedWordArray();
       });
     }
@@ -42,7 +42,7 @@ class RawData extends Component {
     this.props.onChange(event, this);
   };
 
-  stateTokenizeRawDate = () => {
+  stateTokenizeRawData = () => {
     if (this._isMounted) this.setState({ loading: true });
     const paragraph = {
       paragraph: this.state.rawData,
@@ -89,8 +89,6 @@ class RawData extends Component {
               ner: modifiedNer,
             });
           this.setTokenizedWordArray();
-          this.props.setAlertMessage('Tokenize successful');
-          this.props.setSuccessAlert(true);
         } else {
           this.props.setSuccessAlert(false);
           this.props.setErrorAlert(true);
@@ -119,24 +117,9 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  onMouseOver = (event, data) => {
-    this.props.hover(data.value, 'RAW_DATA');
-    let currentClassName = event.target.className;
-    if (!currentClassName.includes('hover-word')) {
-      currentClassName += 'hover-word';
-    }
-    event.target.className = currentClassName;
-  };
+  onMouseOver = (event, data) => {};
 
-  onMouseLeave = (event) => {
-    this.props.hover('', 'RAW_DATA');
-    let currentClassName = event.target.className;
-    let newClassName = currentClassName.replace(
-      'hover-word',
-      ''
-    );
-    event.target.className = newClassName;
-  }
+  onMouseLeave = (event) => {};
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -150,6 +133,7 @@ class RawData extends Component {
                   if (ner.index === index) flag = true;
                 });
                 let className = 'mr-1 word-box ';
+
                 if (this.props.hoverWord === data.value) {
                   className += 'hover-word ';
                 }
@@ -161,10 +145,18 @@ class RawData extends Component {
                 } else if (flag) {
                   className += 'name ';
                 }
-                return <span title={data.type} key={index} className={className} onMouseOver={(event) => this.onMouseOver(event, data)} onMouseLeave={this.onMouseLeave}>{data.value}</span>
-
+                return (
+                  <span
+                    title={data.type}
+                    key={index}
+                    className={className}
+                    onMouseOver={(event) => this.onMouseOver(event, data)}
+                    onMouseLeave={this.onMouseLeave}
+                  >
+                    {data.value}
+                  </span>
+                );
               })}
-
             </div>
           </Col>
           <Col xs="auto">
@@ -196,7 +188,7 @@ class RawData extends Component {
             <Button
               type="button"
               color="primary"
-              onClick={this.stateTokenizeRawDate}
+              onClick={this.stateTokenizeRawData}
             >
               <FontAwesomeIcon icon={faHammer} /> Tokenize
             </Button>

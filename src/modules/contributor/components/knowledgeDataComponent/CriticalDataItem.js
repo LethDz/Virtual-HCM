@@ -19,16 +19,23 @@ class CriticalDataItem extends Component {
   }
 
   componentDidMount = () => {
-    this._isMounted = true
-  }
+    this._isMounted = true;
+  };
 
   componentWillUnmount = () => {
-    this._isMounted = false
-  }
+    this._isMounted = false;
+  };
 
   handleInput = (event) => {
-    this._isMounted && this.setState({ verbType: event.target.value })
     handleInputChange(event, this);
+    this.props.wordArray.forEach((word) => {
+      if (word.value === event.target.value) {
+        this._isMounted && this.setState({ verbType: word.type });
+      }
+    });
+    this.props.type === CRITICAL &&
+      this.props.checkSubjectType &&
+      this.props.checkSubjectType(event.target.value, this.props.index);
   };
 
   setVerb = () => {
@@ -55,7 +62,7 @@ class CriticalDataItem extends Component {
     return (
       <Row>
         <Col xs="auto">
-          <h1>{this.state.verbType}</h1>
+          <h2>{this.state.verbType}</h2>
         </Col>
         <Col xs="auto">
           <Input
@@ -68,7 +75,7 @@ class CriticalDataItem extends Component {
               None
             </option>
             {this.props.wordArray.map((data, index) => {
-              return <option key={index} value={data.type}>{data.value}</option>;
+              return <option key={index}>{data.value}</option>;
             })}
           </Input>
         </Col>

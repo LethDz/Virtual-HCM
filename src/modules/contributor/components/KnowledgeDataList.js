@@ -136,7 +136,7 @@ class KnowledgeDataList extends Component {
       <Container id="cl-container" className="cl-container vh-100">
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading data approval"
+          text="Loading knowledge data"
         />
         <Row>
           <Col className="justify-content-center d-flex">

@@ -170,9 +170,8 @@ export default class Question extends Component {
             });
 
           this.props.setQuestions(this.state.questions);
-          this.props.setAlertMessage('Tokenize question successful');
-          this.props.setSuccessAlert(true);
         } else {
+          this.props.setSuccessAlert(false);
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);
           this.props.scrollToTop();
@@ -229,13 +228,9 @@ export default class Question extends Component {
   };
 
   onMouseOver = (event, value) => {
-    this.props.hover(value, 'QUESTION');
-    event.target.className = 'hover-word';
   }
 
   onMouseLeave = (event) => {
-    this.props.hover('', 'QUESTION');
-    event.target.className = '';
   }
 
   distinct = (value, index, self) => {
@@ -464,20 +459,9 @@ export default class Question extends Component {
                     <Row>
                       <Col>
                         {wordArray.map((value, index) => {
-                          let className = '';
-                          if (this.props.hoverWord === value) {
-                            className += 'hover-word';
-                          }
-                          return <span key={index} className={className} onMouseOver={(event) => this.onMouseOver(event, value)} onMouseLeave={this.onMouseLeave}>{value} </span>
+                          return <span key={index} onMouseOver={(event) => this.onMouseOver(event, value)} onMouseLeave={this.onMouseLeave}>{value} </span>
                         })}
                       </Col>
-                      {/* <Col xs="auto">
-                        {this.renderSynonymsQuestions(
-                          question,
-                          index,
-                          wordArray
-                        )}
-                      </Col> */}
                       <Col xs="auto">
                         {question.type.map((value, index) => {
                           switch (value) {
