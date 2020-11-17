@@ -8,7 +8,7 @@ import {
   Form,
 } from 'reactstrap';
 import { AgGridReact } from 'ag-grid-react';
-import { columnGenSentenceDef } from 'src/modules/contributor/index';
+import { columnGenSentenceDef } from 'src/modules/contributor';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { NLP, GENERATE_SIMILARIES } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
@@ -43,17 +43,24 @@ class GenSynonymSentenceModal extends Component {
     axiosClient
       .post(NLP + GENERATE_SIMILARIES, data)
       .then((response) => {
-        let data = [];
-        response.data.result_data.similaries.forEach((sentences) => {
-          sentences.forEach((sentence) => {
-            data.push({ sentence: sentence });
+        if (response.data.status) {
+          let data = [];
+          response.data.result_data.similaries.forEach((sentences) => {
+            sentences.forEach((sentence) => {
+              data.push({ sentence: sentence });
+            });
           });
-        });
-        this._isMounted &&
-          this.setState({
-            rowData: data,
-            loading: false,
-          });
+          this._isMounted &&
+            this.setState({
+              rowData: data,
+              loading: false,
+            });
+          this.props.setErrorAlert(false);
+          this.props.setSuccessAlert(true);
+        } else {
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+        }
       })
       .catch((err) => {
         this._isMounted &&
@@ -125,15 +132,20 @@ class GenSynonymSentenceModal extends Component {
     this.props.toggle();
   };
 
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
         <LoadingSpinner
+          type="MODAL"
           loading={this.state.loading}
           text="Generating sentences"
         >
           <Form>
-            <ModalHeader toggle={this.props.toggle}>
+            <ModalHeader toggle={this.toggleThisModal}>
               Generate sentence
             </ModalHeader>
             <ModalBody>

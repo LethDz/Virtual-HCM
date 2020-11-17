@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { AgGridReact } from 'ag-grid-react';
 import {
-  NewSynonymModal,
+  CreateSynonymModal,
+  SynonymDetailModal,
   getAllSynonyms,
   fetchAllSynonyms,
   columnSynonymListRef,
-} from 'src/modules/contributor/index';
+} from 'src/modules/contributor';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { SYNONYM, ALL } from 'src/constants';
 import { connect } from 'react-redux';
@@ -21,11 +22,14 @@ class SynonymsModal extends Component {
     super();
     this.state = {
       selectedSynonyms: [],
+      selectedId: '',
+      synonymsList: [],
       gridApi: '',
       gridColumnApi: '',
       index: '',
       loading: false,
       isOpenNewSynonymModal: false,
+      isOpenSynonymDetailModal: false,
     };
   }
 
@@ -37,7 +41,13 @@ class SynonymsModal extends Component {
     this._isMounted = false;
   };
 
-  onGridReady = (params) => {
+  onGridReady = async (params) => {
+    await this.setData();
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+  };
+
+  setData = () => {
     if (this.props.synonymsList.length === 0) {
       if (this._isMounted) this.setState({ loading: true });
       axiosClient
@@ -47,6 +57,7 @@ class SynonymsModal extends Component {
             this.props.fetchAllSynonyms(
               response.data.result_data.synonym_dicts
             );
+            this.setSynonymList(response.data.result_data.synonym_dicts);
             this.setState({ loading: false });
             this.props.setAlertMessage('Load synonym successful');
             this.props.setSuccessAlert(true);
@@ -65,13 +76,20 @@ class SynonymsModal extends Component {
           this.props.setSuccessAlert(false);
           this.props.scrollToTop();
         });
+    } else {
+      this.setSynonymList(this.props.synonymsList);
     }
-    if (this._isMounted)
-      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
+  };
+
+  setSynonymList = (list) => {
+    this._isMounted &&
+      this.setState({
+        synonymsList: list,
+      });
   };
 
   onSelectionChanged = () => {
-    let nodes = this.state.gridApi.getSelectedNodes();
+    let nodes = this.gridApi.getSelectedNodes();
     let selectedRow = [];
     nodes.forEach((node) => {
       if (typeof node !== 'undefined') {
@@ -83,9 +101,18 @@ class SynonymsModal extends Component {
     if (this._isMounted) this.setState(currentState);
   };
 
+  onRowDoubleClicked = (selectedRow) => {
+    let id = selectedRow.data.synonym_id;
+    this._isMounted &&
+      this.setState({
+        selectedId: id,
+        isOpenSynonymDetailModal: !this.state.isOpenSynonymDetailModal,
+      });
+  };
+
   addSynonyms = () => {
     this.props.addSynonym(this.state.selectedSynonyms, this.props.index);
-    this.props.toggleSynonymModal(this.props.index);
+    this.props.toggle(this.props.index);
   };
 
   toggleNewSynonymModal = () => {
@@ -95,27 +122,45 @@ class SynonymsModal extends Component {
       });
   };
 
+  toggleSynonymDetail = () => {
+    this._isMounted &&
+      this.setState({
+        isOpenSynonymDetailModal: !this.state.isOpenSynonymDetailModal,
+      });
+  };
+
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <div>
         {this.state.isOpenNewSynonymModal && (
-          <NewSynonymModal
-            setAlertMessage={this.props.setAlertMessage}
-            setSuccessAlert={this.props.setSuccessAlert}
-            setErrorAlert={this.props.setErrorAlert}
-            setErrorList={this.props.setErrorList}
+          <CreateSynonymModal
             isOpen={this.state.isOpenNewSynonymModal}
             toggle={this.toggleNewSynonymModal}
+            updateSynonymList={this.setSynonymList}
+          />
+        )}
+        {this.state.isOpenSynonymDetailModal && (
+          <SynonymDetailModal
+            isOpen={this.state.isOpenSynonymDetailModal}
+            id={this.state.selectedId}
+            toggle={this.toggleSynonymDetail}
+            updateSynonymList={this.setSynonymList}
           />
         )}
         <Modal
           isOpen={this.props.isOpenSynonymModal}
-          toggle={this.props.toggleSynonymModal}
+          toggle={this.toggleThisModal}
         >
-          <LoadingSpinner loading={this.state.loading} text="Loading synonyms">
-            <ModalHeader toggle={this.props.toggleSynonymModal}>
-              Synonyms
-            </ModalHeader>
+          <LoadingSpinner
+            type="MODAL"
+            loading={this.state.loading}
+            text="Loading synonyms"
+          >
+            <ModalHeader toggle={this.toggleThisModal}>Synonyms</ModalHeader>
             <ModalBody>
               <div
                 className="ag-theme-alpine"
@@ -123,7 +168,8 @@ class SynonymsModal extends Component {
               >
                 <AgGridReact
                   onGridReady={this.onGridReady}
-                  rowData={this.props.synonymsList}
+                  onRowDoubleClicked={this.onRowDoubleClicked}
+                  rowData={this.state.synonymsList}
                   rowSelection="multiple"
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}

@@ -16,6 +16,9 @@ export const NLP = '/nlp';
 export const TOKENIZE = '/tokenize';
 
 export const SYNONYM = '/synonym';
+export const GET_SYNONYM = (id) => `/get?id=${id}`;
+export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
+
 export const REFERENCE = '/reference-document';
 
 export const ADD = '/add';
@@ -77,15 +80,15 @@ export const ADMIN_TRAIN_DATA_PAGE = `${ADMIN_PAGE}/train-data`;
 
 // Contributor Page
 export const CONTRIBUTOR_PAGE = '/contributor';
-export const CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL = `${CONTRIBUTOR_PAGE}/data-approval`;
-export const CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM = `${CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}/create`;
+export const CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA = `${CONTRIBUTOR_PAGE}${KNOWLEDGE_DATA}`;
+export const CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM = `${CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}/create`;
+export const SYNONYM_LIST_PAGE = `${CONTRIBUTOR_PAGE}/synonyms`;
 export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
-export const KNOWLEDGE_DATA_LIST_PAGE = `${CONTRIBUTOR_PAGE}/knowledge-data`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
   intent
-    ? `${CONTRIBUTOR_PAGE}/data-approval/get/${intent}`
-    : `${CONTRIBUTOR_PAGE}/data-approval/get/:intent`;
+    ? `${CONTRIBUTOR_PAGE}${KNOWLEDGE_DATA}/get/${intent}`
+    : `${CONTRIBUTOR_PAGE}${KNOWLEDGE_DATA}/get/:intent`;
 
 // API Contributor Route Path
 export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>

@@ -4,10 +4,11 @@ import { Row, Col, Label, Input } from 'reactstrap';
 class BaseResponse extends Component {
   render() {
     return (
-      <Row className="p-3" xs="1">
+      <Row xs="1">
         <Col>
-          <Label for="baseResponse">Base response</Label>
+          <Label className="label" for="baseResponse">Base response:</Label>
           <Input
+            placeholder="Enter base response here"
             required
             type="textarea"
             name="baseResponse"

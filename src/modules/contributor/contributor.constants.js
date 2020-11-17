@@ -1,13 +1,13 @@
-import StatusBar from 'src/modules/contributor/components/dataApprovalListComponent/StatusBar';
+import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
 export const SET_INTENT = 'SET_INTENT';
 export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
 
 export const GET_ALL_SYNONYMS = 'GET_ALL_SYNONYMS';
 export const ADD_SYNONYM = 'ADD_SYNONYM';
-
-export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
-export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
+export const EDIT_SYNONYM = 'EDIT_SYNONYM';
+export const GET_SYNONYM_DETAIL = 'GET_SYNONYM_DETAIL';
+export const DELETE_SYNONYM = 'DELETE_SYNONYM';
 
 export const GET_ALL_REFERENCE = 'GET_ALL_REFERENCE';
 export const EDIT_REFERENCE = 'EDIT_REFERENCE';
@@ -16,7 +16,17 @@ export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
-export const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
+export const questionType = [
+  'WHAT',
+  'WHEN',
+  'WHERE',
+  'WHO',
+  'WHY',
+  'HOW',
+  'YES/NO',
+];
+export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
+export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
 export const POSTags = [
   'Np',
   'Nc',
@@ -159,6 +169,7 @@ export const columnRefFieldDef = [
     width: 60,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'reference_name',
@@ -166,6 +177,7 @@ export const columnRefFieldDef = [
     width: 230,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'link',
@@ -173,6 +185,7 @@ export const columnRefFieldDef = [
     width: 300,
     sortable: true,
     filter: true,
+    resizable: true,
   },
   {
     field: 'author',
@@ -180,5 +193,34 @@ export const columnRefFieldDef = [
     width: 350,
     sortable: true,
     filter: true,
+    resizable: true,
+  },
+];
+
+// Column Synonym Field Definition
+export const columnSynonymFieldDef = [
+  {
+    field: 'synonym_id',
+    headerName: 'ID',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'meaning',
+    headerName: 'Meaning',
+    width: 200,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'words',
+    headerName: 'Words',
+    width: 300,
+    sortable: true,
+    filter: true,
+    resizable: true,
   },
 ];

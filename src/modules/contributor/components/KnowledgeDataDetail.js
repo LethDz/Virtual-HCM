@@ -25,10 +25,10 @@ import {
 } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
 
-import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
-class DataApprovalDetail extends Component {
+class KnowledgeDataDetail extends Component {
   _isMounted = false;
   constructor(props) {
     super();
@@ -55,8 +55,11 @@ class DataApprovalDetail extends Component {
       errorAlert: false,
       errorList: [],
       sendLoading: false,
+      synonymIdList: [],
     };
     this.titleRef = React.createRef();
+    this.criticalDataRef = React.createRef();
+    this.questionRef = React.createRef();
   }
 
   handleInputForm = (event) => handleInputFormChange(event, this);
@@ -88,29 +91,6 @@ class DataApprovalDetail extends Component {
       });
   };
 
-  setError = () => {
-    let errorMessage = [];
-    if (this.state.form.questions.length === 0) {
-      errorMessage.push(`Question field required at least one question`);
-    }
-    if (this.state.form.criticalData.length === 0) {
-      errorMessage.push(`Subject field required at least one subject`);
-    }
-    for (let i in this.state.form.criticalData) {
-      if (this.state.form.criticalData[i].word.length === 0) {
-        errorMessage.push(
-          `Subject at index ${i} required at least one component`
-        );
-      }
-    }
-    this.setErrorList(errorMessage);
-    this.scrollToTop();
-    if (this._isMounted)
-      this.setState({
-        loading: false,
-      });
-  };
-
   reformatForm = () => {
     let form = this.state.form;
     let synonym = [];
@@ -127,7 +107,6 @@ class DataApprovalDetail extends Component {
 
   submitForm = (event) => {
     event.preventDefault();
-    this.setError();
     this.reformatForm();
     if (this.state.errorList.length === 0) {
       this._isMounted &&
@@ -137,26 +116,33 @@ class DataApprovalDetail extends Component {
       axiosClient
         .post(KNOWLEDGE_DATA + EDIT, this.state.form)
         .then((response) => {
+          this._isMounted &&
+            this.setState({
+              sendLoading: false,
+            });
           if (response.data.status) {
-            if (this._isMounted)
-              this.setState({
-                sendLoading: false,
-              });
-            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
             this.setErrorAlert(false);
             this.setSuccessAlert(true);
           } else {
+            this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
+            this.scrollToTop();
           }
         })
         .catch((err) => {
+          this._isMounted &&
+            this.setState({
+              sendLoading: false,
+            });
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
           this.scrollToTop();
         });
     } else {
-      this._isMounted && this.setState({ errorAlert: true, sendLoading: false });
+      this._isMounted &&
+        this.setState({ errorAlert: true, sendLoading: false });
     }
   };
 
@@ -174,10 +160,7 @@ class DataApprovalDetail extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    form.questions.push({
-      question: questions,
-      generated_questions: [],
-    });
+    form.questions = questions;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -190,6 +173,7 @@ class DataApprovalDetail extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
+    this.resetGeneratedQuestion();
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -206,12 +190,6 @@ class DataApprovalDetail extends Component {
       this.setState({
         form: form,
       });
-  };
-
-  setGeneratedSentences = (generatedSentences, index) => {
-    let form = this.state.form;
-    form.questions[index].generated_questions = generatedSentences;
-    if (this._isMounted) this.setState({ form: form });
   };
 
   hover = (word, from) => {
@@ -285,10 +263,20 @@ class DataApprovalDetail extends Component {
       axiosClient
         .get(GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.props.intent))
         .then((response) => {
-          this.setFormData(response.data.result_data.knowledge_data);
-          this.props.pullDataApproval(response.data.result_data.knowledge_data);
+          if (response.data.status) {
+            this.setFormData(response.data.result_data.knowledge_data);
+            this.props.pullDataApproval(
+              response.data.result_data.knowledge_data
+            );
+            this.setErrorAlert(false);
+            this.setSuccessAlert(true);
+          } else {
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+          }
         })
         .catch((err) => {
+          this.setErrorAlert(true);
           this._isMounted && this.setState({ loading: false });
         });
     }
@@ -315,7 +303,18 @@ class DataApprovalDetail extends Component {
     form.rawData = dataApproval.rawData;
     form.synonyms = dataApproval.synonyms;
     form.id = dataApproval.id;
-    this._isMounted && this.setState({ form: form, loading: false });
+
+    let synonym = [];
+    form.synonyms.forEach((synonyms) => {
+      let synonymIds = [];
+      synonyms.synonyms.forEach((item) => {
+        synonymIds.push(item.id);
+      });
+      synonym.push({ word: synonyms.word, synonyms: synonymIds });
+    });
+
+    this._isMounted &&
+      this.setState({ form: form, loading: false, synonymIdList: synonym });
   };
 
   getWordArray = () => {
@@ -325,6 +324,14 @@ class DataApprovalDetail extends Component {
       wordArray.push(rawData[index]);
     }
     return wordArray;
+  };
+
+  cancelCriticalData = () => {
+    this.criticalDataRef.current.resetCriticalData();
+  };
+
+  resetGeneratedQuestion = () => {
+    this.questionRef.current.resetGeneratedQuestion();
   };
 
   render() {
@@ -337,8 +344,8 @@ class DataApprovalDetail extends Component {
         />
         <LoadingSpinner loading={this.state.sendLoading} text="Sending form" />
         {!this.state.loading && (
-          <Form onSubmit={this.submitForm} className="mt-3">
-            <div className="form-item form-item-meta">
+          <Form className="mt-3">
+            <div className="form-item form-item-meta pr-3 pl-3">
               <div className="mr-3 ml-3">
                 {this.state.successAlert && (
                   <SuccessAlert
@@ -393,11 +400,13 @@ class DataApprovalDetail extends Component {
                   setTokenizeWord={this.setTokenizeWord}
                   getWordArray={this.getWordArray}
                   setRawData={this.setRawData}
+                  cancelCriticalData={this.cancelCriticalData}
                   onChange={this.handleInputForm}
                 />
               )}
 
               <CriticalData
+                ref={this.criticalDataRef}
                 criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
                 setCritical={this.setCriticalData}
@@ -409,6 +418,7 @@ class DataApprovalDetail extends Component {
                 wordArray={wordArray}
               />
               <Question
+                ref={this.questionRef}
                 detailPage={true}
                 questionValue={this.state.form.questions}
                 scrollToTop={this.scrollToTop}
@@ -416,13 +426,13 @@ class DataApprovalDetail extends Component {
                 setSuccessAlert={this.setSuccessAlert}
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
-                className="mt-3"
                 setQuestions={this.setQuestions}
                 setTokenizeWord={this.setTokenizeWord}
-                setGeneratedSentences={this.setGeneratedSentences}
                 hover={this.hover}
                 hoverWord={this.state.hoverWordFromSynonym}
                 synonymsArray={this.state.form.synonyms}
+                synonymIds={this.state.synonymIdList}
+                className="mt-3"
               />
 
               <BaseResponse
@@ -431,7 +441,6 @@ class DataApprovalDetail extends Component {
               />
 
               <Synonyms
-                synonymsValue={this.state.form.synonyms}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -441,9 +450,11 @@ class DataApprovalDetail extends Component {
                 wordArray={wordArray}
                 hover={this.hover}
                 hoverWord={this.state.hoverWord}
+                resetGeneratedQuestion={this.resetGeneratedQuestion}
+                synonymsValue={this.state.form.synonyms}
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
-                <Button type="submit" color="info">
+                <Button type="submit" color="info" onClick={this.submitForm}>
                   Edit data approval
                 </Button>
               </Row>
@@ -463,4 +474,7 @@ const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataApprovalDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KnowledgeDataDetail);

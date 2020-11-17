@@ -15,7 +15,7 @@ import {
   fetchAllDocumentReference,
   columnReferenceListDef,
   CreateReferenceModal,
-} from 'src/modules/contributor/index';
+} from 'src/modules/contributor';
 import { REFERENCE, ALL } from 'src/constants';
 import { connect } from 'react-redux';
 
@@ -66,14 +66,21 @@ class ReferenceModal extends Component {
       axiosClient
         .get(REFERENCE + ALL)
         .then((response) => {
-          this.props.fetchAllDocumentReference(
-            response.data.result_data.references
-          );
-          this._isMounted &&
-            this.setState({
-              loading: false,
-              referenceList: response.data.result_data.references,
-            });
+          if (response.data.status) {
+            this.props.fetchAllDocumentReference(
+              response.data.result_data.references
+            );
+            this._isMounted &&
+              this.setState({
+                loading: false,
+                referenceList: response.data.result_data.references,
+              });
+            this.props.setErrorAlert(false);
+            this.props.setSuccessAlert(true);
+          } else {
+            this.props.setErrorAlert(true);
+            this.props.setSuccessAlert(false);
+          }
         })
         .catch((err) => {
           this._isMounted && this.setState({ loading: false });
@@ -129,9 +136,13 @@ class ReferenceModal extends Component {
       });
   };
 
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
         {this.state.isOpenCreateReferenceModal && (
           <CreateReferenceModal
             updateReferenceList={this.updateReferenceList}
@@ -140,9 +151,13 @@ class ReferenceModal extends Component {
           />
         )}
 
-        <ModalHeader toggle={this.props.toggle}>Reference</ModalHeader>
+        <ModalHeader toggle={this.toggleThisModal}>Reference</ModalHeader>
         <ModalBody>
-          <LoadingSpinner loading={this.state.loading} text="Loading reference">
+          <LoadingSpinner
+            type="MODAL"
+            loading={this.state.loading}
+            text="Loading reference"
+          >
             <div
               className="ag-theme-alpine"
               style={{ height: 400, width: 465 }}

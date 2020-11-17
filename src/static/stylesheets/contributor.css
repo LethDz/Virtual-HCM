@@ -43,6 +43,7 @@
 
 .label {
   margin-top: 0.5em;
+  font-weight: bold;
 }
 
 .border-right-solid {
@@ -95,4 +96,12 @@
 
 .divider {
   border-top: 1px dashed #007BFF;
+}
+
+.list-group .bound-group {
+  background-color: lightyellow !important
+}
+
+.list-group li {
+  background-color: aliceblue;
 }

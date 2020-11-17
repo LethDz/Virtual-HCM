@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Input,
   Button,
@@ -9,8 +9,13 @@ import {
   FormGroup,
   CustomInput,
   Tooltip,
+  Badge,
+  Label,
 } from 'reactstrap';
-import { GenSynonymSentence } from 'src/modules/contributor/index';
+import {
+  GenSynonymSentence,
+  questionType,
+} from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt, faTasks } from '@fortawesome/free-solid-svg-icons';
@@ -83,7 +88,6 @@ export default class Question extends Component {
     });
     if (!hasType) {
       this.props.setErrorAlert(true);
-      this.props.setErrorList(['You need to add type for question']);
       this.props.scrollToTop();
       return;
     }
@@ -206,19 +210,52 @@ export default class Question extends Component {
   setGeneratedSentences = (generatedSentences, index) => {
     let questions = this.state.questions;
     questions[index].generated_questions = generatedSentences;
-    this.props.setGeneratedSentences(generatedSentences, index);
+    this.props.setQuestions(this.state.questions);
+  };
+
+  resetGeneratedQuestion = () => {
+    let questions = this.state.questions;
+    let questionList = [];
+    questions.forEach((question) => {
+      questionList.push({
+        ...question,
+        generated_questions: [],
+      });
+    });
+    this.props.setQuestions(questionList);
+    this._isMounted && this.setState({ questions: questionList });
+  };
+
+  renderSynonymsQuestions = (question, index, wordArray) => {
+    return (
+      <GenSynonymSentence
+        currentRowData={question.generated_questions}
+        questionValue={this.props.questionValue[index]}
+        setAlertMessage={this.props.setAlertMessage}
+        setSuccessAlert={this.props.setSuccessAlert}
+        setErrorAlert={this.props.setErrorAlert}
+        setErrorList={this.props.setErrorList}
+        index={index}
+        tokenizedWordArray={wordArray}
+        synonymsArray={this.props.synonymIds}
+        setGeneratedSentences={this.setGeneratedSentences}
+      />
+    );
   };
 
   render() {
     return (
-      <div className="p-3">
+      <Fragment>
         <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
           <Row xs="1">
-            <Col>Question</Col>
+            <Col>
+              <Label className="label">Question:</Label>
+            </Col>
             <Col>
               <Row>
                 <Col>
                   <Input
+                    placeholder="Enter question then choose type then press the add button :3"
                     type="text"
                     name="question"
                     id="question"
@@ -350,51 +387,78 @@ export default class Question extends Component {
                         })}
                       </Col>
                       <Col xs="auto">
-                        {this.props.detailPage && (
-                          <GenSynonymSentence
-                            currentRowData={question.generated_questions}
-                            questionValue={this.props.questionValue[index]}
-                            setAlertMessage={this.props.setAlertMessage}
-                            setSuccessAlert={this.props.setSuccessAlert}
-                            setErrorAlert={this.props.setErrorAlert}
-                            setErrorList={this.props.setErrorList}
-                            index={index}
-                            tokenizedWordArray={wordArray}
-                            synonymsArray={this.props.synonymsArray}
-                            setGeneratedSentences={this.setGeneratedSentences}
-                          />
-                        )}
-                        {!this.props.detailPage && (
-                          <GenSynonymSentence
-                            currentRowData={question.generated_questions}
-                            setAlertMessage={this.props.setAlertMessage}
-                            setSuccessAlert={this.props.setSuccessAlert}
-                            setErrorAlert={this.props.setErrorAlert}
-                            setErrorList={this.props.setErrorList}
-                            index={index}
-                            tokenizedWordArray={wordArray}
-                            synonymsArray={this.props.synonymsArray}
-                            setGeneratedSentences={this.setGeneratedSentences}
-                          />
+                        {this.renderSynonymsQuestions(
+                          question,
+                          index,
+                          wordArray
                         )}
                       </Col>
                       <Col xs="auto">
                         {question.type.map((value, index) => {
                           switch (value) {
                             case 1:
-                              return <p key={index}>What</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="primary" className="mt-1">
+                                    {questionType[0]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             case 2:
-                              return <p key={index}>When</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="secondary" className="mt-1">
+                                    {questionType[1]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             case 3:
-                              return <p key={index}>Where</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="success" className="mt-1">
+                                    {questionType[2]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             case 4:
-                              return <p key={index}>Who</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="danger" className="mt-1">
+                                    {questionType[3]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             case 5:
-                              return <p key={index}>Why</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="warning" className="mt-1">
+                                    {questionType[4]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             case 6:
-                              return <p key={index}>How</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="info" className="mt-1">
+                                    {questionType[5]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             case 7:
-                              return <p key={index}>Yes/No</p>;
+                              return (
+                                <Fragment key={index}>
+                                  <Badge color="dark" className="mt-1">
+                                    {questionType[6]}
+                                  </Badge>
+                                  <br />
+                                </Fragment>
+                              );
                             default:
                               return <p key={index}></p>;
                           }
@@ -418,7 +482,7 @@ export default class Question extends Component {
             </ListGroup>
           </div>
         </LoadingSpinner>
-      </div>
+      </Fragment>
     );
   }
 }

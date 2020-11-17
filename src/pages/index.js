@@ -7,11 +7,12 @@ import ContributorCreatePage from 'src/pages/admin/manage-contributor/Contributo
 import ContributorEditPage from 'src/pages/admin/manage-contributor/ContributorEditPage';
 import ConfigureSystemPage from 'src/pages/admin/configure-system/ConfigureSystemPage';
 import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/ManageTrainingProcessPage';
+import KnowledgeDataCreateFormPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataCreateFormPage';
+import KnowledgeDataListPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataListPage';
 import TrainDataPage from 'src/pages/admin/train-data/TrainDataPage';
-import CreateDataApprovalFormPage from 'src/pages/contributor/manage-data-approval/DataApprovalCreateForm';
-import DataApprovalListPage from 'src/pages/contributor/manage-data-approval/DataApprovalList';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
-import DataApprovalDetailPage from 'src/pages/contributor/manage-data-approval/DataApprovalDetailPage';
+import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
+import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
 
 export {
   HomePage,
@@ -20,12 +21,13 @@ export {
   ContributorPage,
   ContributorsListPage,
   ContributorCreatePage,
-  CreateDataApprovalFormPage,
-  DataApprovalListPage,
+  KnowledgeDataCreateFormPage,
+  KnowledgeDataListPage,
   ContributorEditPage,
   ManageTrainingProcessPage,
   ConfigureSystemPage,
   ReferenceListPage,
-  DataApprovalDetailPage,
+  SynonymListPage,
+  KnowledgeDataDetailPage,
   TrainDataPage,
 };
