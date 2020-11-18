@@ -84,6 +84,14 @@ class SynonymList extends Component {
     });
   };
 
+  onRowDoubleClicked = (row) =>{
+    let id = row.data.synonym_id;
+    this.setState({
+      selectedId: id,
+      modalSynonymDetail: !this.state.modalSynonymDetail,
+    });
+  }
+
   setSynonymList = (list) => {
     this._isMounted &&
       this.setState({
@@ -242,6 +250,7 @@ class SynonymList extends Component {
             rowSelection="single"
             columnDefs={columnSynonymFieldDef}
             onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
           ></AgGridReact>
         </div>
       </div>
