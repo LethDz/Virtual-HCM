@@ -2,8 +2,8 @@ body {
   background: #eee;
 }
 
-.modal{
-width: 70%;
+.modal {
+  width: 70%;
 }
 
 .chat-list {
@@ -84,7 +84,7 @@ width: 70%;
   border-radius: 0.3rem 0.3rem 0 0;
 }
 .card .card-header {
-  background: #17202b;
+  background: #1e282c;
   border: 0;
   font-size: 1rem;
   padding: 0.65rem 1rem;
@@ -102,4 +102,17 @@ width: 70%;
   display: block;
   font-size: 10px;
   margin: 0 5px 5px 5px;
+}
+
+.list-details {
+  font-weight: 600;
+  color: #223035;
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.list-details small {
+  font-size: 12px;
+  font-weight: 400;
+  color: #808080;
 }

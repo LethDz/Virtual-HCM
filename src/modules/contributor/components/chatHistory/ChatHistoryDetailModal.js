@@ -10,6 +10,7 @@ import {
   ModalHeader,
   Row,
   Col,
+  CardFooter,
 } from 'reactstrap';
 import 'src/static/stylesheets/chat.history.css';
 
@@ -21,8 +22,8 @@ class ChatHistoryDetailModal extends Component {
       data: {
         id: '1',
         contributor: 'Hoa',
-        start: '9:00 14-11-2020',
-        end: '12:00 14-11-2020',
+        start: '9:00 14/11/2020',
+        end: '12:00 14/11/2020',
         system: [
           {
             message:
@@ -67,30 +68,20 @@ class ChatHistoryDetailModal extends Component {
             <Row>
               <Col className="col-4">
                 <Card>
+                  <CardHeader>{this.state.data.contributor}</CardHeader>
                   <CardBody>
-                    {/* <Row>
-                      <Col className="col-4 text-muted">ID:</Col>
-                      <Col className="col-8">{this.state.data.id}</Col>
+                    <Row className="list-details">
+                      <span>{this.state.data.start}</span>
+                      <small>Start</small>
                     </Row>
-                    <Row>
-                      <Col className="col-4 text-muted">Contributor:</Col>
-                      <Col className="col-8">{this.state.data.contributor}</Col>
+                    <Row className="list-details mt-2">
+                      <span>{this.state.data.end}</span>
+                      <small>End</small>
                     </Row>
-                    <Row>
-                      <Col className="col-4 text-muted">Start:</Col>
-                      <Col className="col-8">{this.state.data.start}</Col>
-                    </Row>
-                    <Row>
-                      <Col className="col-4 text-muted">End:</Col>
-                      <Col className="col-8">{this.state.data.end}</Col>
-                    </Row> */}
-                    <Row className="text-bold">{this.state.data.contributor}</Row>
-                    <Row>{this.state.data.start}</Row>
-                    <Row>{this.state.data.end}</Row>
                   </CardBody>
                 </Card>
               </Col>
-              <Col className="chat-container col-8 ">
+              <Col className="chat-container col-8">
                 <Card>
                   <CardHeader>Chat</CardHeader>
                   <CardBody>
