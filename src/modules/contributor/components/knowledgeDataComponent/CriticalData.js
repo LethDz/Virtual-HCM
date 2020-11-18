@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Col,
-  Label,
-  Row,
-  Input,
-  ListGroup,
-  ListGroupItem,
-  Button,
-} from 'reactstrap';
+import { Col, Label, Row, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import {
   CriticalDataItem,
-  criticalType,
   CRITICAL,
   VERB,
 } from 'src/modules/contributor/index';
@@ -25,7 +16,7 @@ class CriticalData extends Component {
     super();
     this.state = {
       criticalData: [],
-      type: criticalType[0],
+      type: '',
     };
   }
 
@@ -47,13 +38,12 @@ class CriticalData extends Component {
   handleInput = (event) => handleInputChange(event, this);
 
   addCriticalData = () => {
-    let type = this.state.type;
     let temp = this.state.criticalData;
     temp.push({
-      type: type,
       word: [],
       verb: [],
       index: temp.length,
+      type: '',
     });
     let sortedTemp = temp.sort((a, b) => (a.index > b.index ? 1 : -1));
     if (this._isMounted) this.setState({ criticalData: sortedTemp });
@@ -67,6 +57,11 @@ class CriticalData extends Component {
     };
     let criticalData = this.state.criticalData;
     criticalData[index].word.push(critical);
+
+    if (criticalData[index].word.length !== 1) {
+      criticalData[index].type = 'MISC';
+    }
+
     if (this._isMounted) this.setState({ criticalData: criticalData });
     this.setCritical();
   };
@@ -80,6 +75,7 @@ class CriticalData extends Component {
       this.setState({
         criticalData: criticalData,
       });
+
     this.setCritical();
   };
 
@@ -109,6 +105,17 @@ class CriticalData extends Component {
       if (listCritical[i] !== null && listCritical[i] !== '')
         list.push(listCritical[i]);
     }
+
+    if (criticalData[criticalIndex].word.length === 1) {
+      let type = 'MISC';
+      this.props.ner.forEach((ner) => {
+        if (ner.word === criticalData[criticalIndex].word[0].word) {
+          type = ner.type;
+        }
+      });
+      criticalData[criticalIndex].type = type;
+    }
+
     if (this._isMounted)
       this.setState({
         criticalData: criticalData,
@@ -137,31 +144,26 @@ class CriticalData extends Component {
     this._isMounted && this.setState({ criticalData: [] });
   };
 
+  checkSubjectType = (word, index) => {
+    let criticalData = this.state.criticalData;
+    if (criticalData[index].word.length === 0) {
+      let type;
+      this.props.ner.forEach((ner) => {
+        if (ner.word === word) {
+          type = ner.type;
+        }
+      });
+      criticalData[index].type = type ? type : 'MISC';
+    }
+
+    this.setState(criticalData);
+  };
+
   render() {
     return (
       <Row>
         <Col>
           <Label className="label">Subject:</Label>
-          <Row>
-            <Col xs="auto">
-              <Input
-                type="select"
-                name="type"
-                value={this.state.type}
-                onChange={this.handleInput}
-              >
-                {criticalType.map((value, index) => {
-                  return <option key={index}>{value}</option>;
-                })}
-              </Input>
-            </Col>
-
-            <Col xs="auto">
-              <Button color="primary" onClick={this.addCriticalData}>
-                <FontAwesomeIcon icon={faPlusCircle} /> Subject
-              </Button>
-            </Col>
-          </Row>
           <ListGroup className="mt-1">
             {this.state.criticalData.map((criticalData, index) => {
               return (
@@ -189,6 +191,10 @@ class CriticalData extends Component {
                     <Col className="border-right-solid">
                       <Label>Subject component: </Label>
                       <CriticalDataItem
+                        checkSubjectType={
+                          this.state.criticalData[index].word.length === 0 &&
+                          this.checkSubjectType
+                        }
                         type={CRITICAL}
                         index={index}
                         wordArray={this.props.wordArray}
@@ -227,6 +233,7 @@ class CriticalData extends Component {
                     <Col>
                       <Label>Verb: </Label>
                       <CriticalDataItem
+                        checkSubjectType={this.checkSubjectType}
                         type={VERB}
                         index={index}
                         wordArray={this.props.wordArray}
@@ -267,6 +274,11 @@ class CriticalData extends Component {
               );
             })}
           </ListGroup>
+          <div className="d-flex justify-content-end mt-2">
+            <Button color="primary" onClick={this.addCriticalData}>
+              <FontAwesomeIcon icon={faPlusCircle} /> Subject
+            </Button>
+          </div>
         </Col>
       </Row>
     );

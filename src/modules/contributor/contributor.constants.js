@@ -1,5 +1,7 @@
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
+export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL'
+
 export const SET_INTENT = 'SET_INTENT';
 export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
 
@@ -67,6 +69,12 @@ export const frameworkComponents = {
 };
 
 export const columnFieldDef = [
+  {
+    field: 'id',
+    headerName: "ID",
+    sortable: true,
+    filter: true
+  },
   {
     field: 'intent',
     headerName: 'Intent',
