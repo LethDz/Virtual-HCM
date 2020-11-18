@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Launcher } from 'react-chat-window';
-import { agentProfile } from 'src/modules/chat';
+import { connect } from 'react-redux';
+import { agentProfile, updateStatusOfChatSocket } from 'src/modules/chat';
 import 'src/static/stylesheets/chat.css';
 
 class ChatWidget extends Component {
@@ -98,6 +99,7 @@ class ChatWidget extends Component {
     }
     chatSocket.onopen = function (e) {
       console.log('[chat_open] Connected to training service');
+      _self.props.updateStatusOfChatSocket(true);
     };
     chatSocket.onmessage = function (e) {
       let received = JSON.parse(e.data);
@@ -163,6 +165,8 @@ class ChatWidget extends Component {
         // event.code is usually 1006 in this case
         console.log('[chat_close] Connection died unexpectedly');
       }
+
+      _self.props.updateStatusOfChatSocket(false);
     };
     chatSocket.onerror = function (error) {
       console.log(`[chat_error] ${error.message}`);
@@ -241,4 +245,9 @@ class ChatWidget extends Component {
   }
 }
 
-export default ChatWidget;
+const mapDispatchToProps = (dispatch) => ({
+  updateStatusOfChatSocket: (status) =>
+    dispatch(updateStatusOfChatSocket(status)),
+});
+
+export default connect(null, mapDispatchToProps)(ChatWidget);

@@ -14,6 +14,7 @@ import {
   pullTrainSocket,
 } from 'src/modules/admin';
 import { connect } from 'react-redux';
+import { getStatusOfChatSocket } from 'src/modules/chat';
 
 class ManageTrainingProcess extends Component {
   constructor() {
@@ -48,12 +49,22 @@ class ManageTrainingProcess extends Component {
     window.removeEventListener('beforeunload', this.onUnload);
     this.props.pullCurrentState(this.current_state);
     this.props.pullTrainSocket(this.trainSocket);
+    // Is our timer running?
+    if (this.connectTimeOut) {
+      clearTimeout(this.connectTimeOut);
+      this.connectTimeOut = 0;
+    }
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onUnload);
     this.onChangeTerminalStyle();
     this.current_state = this.props.currentState;
+    this.establishConnection();
+  }
+
+  componentDidUpdate() {
+    this.establishConnection();
   }
 
   onChangeTerminalStyle = () => {
@@ -220,6 +231,15 @@ class ManageTrainingProcess extends Component {
     });
   };
 
+  establishConnection = () => {
+    !this.connected() &&
+      this.props.statusOfChatSocket &&
+      (this.connectTimeOut = setTimeout(
+        () => this.remoteAction('connect'),
+        2000
+      ));
+  };
+
   render() {
     return (
       <Container className="cl-container">
@@ -228,20 +248,16 @@ class ManageTrainingProcess extends Component {
             <h5 className="mt-2 mb-2">Manage Training Process</h5>
           </Col>
         </Row>
-        <ControlPanel
-          state={this.state}
-          inputChange={this.inputChange}
-          remoteAction={this.remoteAction}
-          selectTrainableData={this.selectTrainableData}
-          setSettingToDefault={this.setSettingToDefault}
-        />
         <Row>
-          <Col className="d-flex">
+          <Col className="d-flex" xs="8">
             <h6 className="mt-2 mb-2 text-primary">Console Command: </h6>
+          </Col>
+          <Col className="d-flex">
+            <h6 className="mt-2 mb-2 text-primary">Control Panel: </h6>
           </Col>
         </Row>
         <Row className="mb-3">
-          <Col>
+          <Col xs="8">
             <Terminal
               color="black"
               backgroundColor="white"
@@ -282,6 +298,15 @@ class ManageTrainingProcess extends Component {
               allowTabs={false}
             />
           </Col>
+          <Col>
+            <ControlPanel
+              state={this.state}
+              inputChange={this.inputChange}
+              remoteAction={this.remoteAction}
+              selectTrainableData={this.selectTrainableData}
+              setSettingToDefault={this.setSettingToDefault}
+            />
+          </Col>
         </Row>
       </Container>
     );
@@ -291,6 +316,7 @@ class ManageTrainingProcess extends Component {
 const mapStateToProps = (state) => ({
   trainSocket: getTrainSocket(state),
   currentState: getCurrentState(state),
+  statusOfChatSocket: getStatusOfChatSocket(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -38,13 +38,13 @@ export const getTheCurrentUserRole = () => {
 };
 
 export const getUserData = () => {
-  return !sessionStorage.getItem('user')
+  return !localStorage.getItem('user')
     ? null
-    : JSON.parse(sessionStorage.getItem('user'));
+    : JSON.parse(localStorage.getItem('user'));
 };
 
 export const signOut = () => {
-  sessionStorage.removeItem('user');
+  localStorage.removeItem('user');
   axiosClient.get(LOGOUT);
   store.dispatch(resetAllRedux());
   history.push(LOGIN_PAGE);

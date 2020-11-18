@@ -52,7 +52,7 @@ class SignInForm extends Component {
             loading: false,
           });
         const user = response.data.result_data.user;
-        sessionStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
         const pageToRedirect = user.admin ? ADMIN_PAGE : CONTRIBUTOR_PAGE;
         history.push(pageToRedirect);
       })

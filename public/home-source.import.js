@@ -21,31 +21,31 @@ const importStyleSheet = (textLink) => {
 const importJavaScriptLink = (textSrc) => {
   let source = document.createElement('script');
   source.src = textSrc;
-  source.async = true; 
+  source.async = true;
   document.body.appendChild(source);
 };
 
 const importMainSource = () => {
   let mainSource = document.createElement('script');
   mainSource.src = './portfolio/js/main.js';
-  mainSource.defer = true;
+  mainSource.async = true;
   document.body.appendChild(mainSource);
 };
 
 async function importModule(pathname, callback) {
   if (window.location.pathname === pathname) {
-    await styleSheetLink.map((element) => {
-      importStyleSheet(element);
+    await javaScriptLink.map(async (element, index) => {
+      await importJavaScriptLink(element);
+      if (index === javaScriptLink.length - 1) {
+        await setTimeout(() => callback(), 250);
+      }
       return null;
     });
-
-    await javaScriptLink.map((element) => {
-      importJavaScriptLink(element);
-      return null;
-    });
-
-    await callback();
   }
 }
 
 importModule('/', importMainSource);
+styleSheetLink.map(async (element) => {
+  importStyleSheet(element);
+  return null;
+});
