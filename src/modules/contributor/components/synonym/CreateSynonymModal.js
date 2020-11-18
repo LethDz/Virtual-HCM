@@ -23,7 +23,11 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { getAllSynonyms, addSynonymToList } from 'src/modules/contributor';
+import {
+  getAllSynonyms,
+  addSynonymToList,
+  POSTags,
+} from 'src/modules/contributor';
 import { SYNONYM, ADD, NLP, TOKENIZE } from 'src/constants';
 import 'src/static/stylesheets/synonym.css';
 
@@ -171,7 +175,7 @@ class CreateSynonymModal extends Component {
               let words = [];
               response.data.result_data.pos.map((sentence) => {
                 sentence.map((word) => {
-                  if (word.type !== 'CH') {
+                  if (word.type !== POSTags[POSTags.length - 1]) {
                     words.push(word.value);
                   }
                   return word;
