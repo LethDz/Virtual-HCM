@@ -96,6 +96,14 @@ class ReferenceList extends Component {
       });
   };
 
+  onRowDoubleClicked = (row) =>{
+    let id = row.data.reference_document_id;
+    this.setState({
+      selectedId: id,
+      modalReferenceDetail: !this.state.modalReferenceDetail,
+    });
+  }
+
   toggleReferenceDetail = () => {
     this.setState({
       modalReferenceDetail: !this.state.modalReferenceDetail,
@@ -242,6 +250,7 @@ class ReferenceList extends Component {
             rowData={this.state.referenceList}
             rowSelection="single"
             onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
           ></AgGridReact>
         </div>
