@@ -24,6 +24,7 @@ import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { history } from 'src/common/history';
 
 class KnowledgeDataList extends Component {
   _isMounted = false;
@@ -127,6 +128,10 @@ class KnowledgeDataList extends Component {
     });
   };
 
+  onRowDoubleClicked = (row) => {
+    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(row.data.intent));
+  }
+
   sizeToFit = () => {
     this.gridApi.sizeColumnsToFit();
   };
@@ -212,6 +217,7 @@ class KnowledgeDataList extends Component {
             animateRows={true}
             onGridReady={this.onGridReady}
             onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnFieldDef}
             // frameworkComponents={frameworkComponents}
             // context={context(this)}
