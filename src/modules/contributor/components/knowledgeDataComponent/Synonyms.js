@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Row,
   Col,
@@ -145,13 +145,14 @@ class Synonyms extends Component {
           <Label className="label">Synonyms:</Label>
           <Row>
             <Col>
-              <Input
-                disabled={this.props.disable}
-                id="coresponse-index"
-                name="synonymWord"
-                value={this.state.synonymWord}
-                onChange={this.handleInput}
-              ></Input>
+              {!this.props.disable &&
+                <Input
+                  disabled={this.props.disable}
+                  name="synonymWord"
+                  value={this.state.synonymWord}
+                  onChange={this.handleInput}
+                ></Input>
+              }
               <ListGroup>
                 {this.state.synonyms.map((word, index) => {
                   return (
@@ -178,20 +179,22 @@ class Synonyms extends Component {
                                           );
                                         })}
                                       </Col>
-                                      <Col xs="auto">
-                                        <Button
-                                          disabled={this.props.disable}
-                                          color="danger"
-                                          onClick={() => {
-                                            this.removeSynonymInWord(
-                                              index,
-                                              indexs
-                                            );
-                                          }}
-                                        >
-                                          <FontAwesomeIcon icon={faTrashAlt} />
-                                        </Button>
-                                      </Col>
+                                      {!this.props.disable &&
+                                        <Col xs="auto">
+                                          <Button
+                                            disabled={this.props.disable}
+                                            color="danger"
+                                            onClick={() => {
+                                              this.removeSynonymInWord(
+                                                index,
+                                                indexs
+                                              );
+                                            }}
+                                          >
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                          </Button>
+                                        </Col>
+                                      }
                                     </Row>
                                   </ListGroupItem>
                                 );
@@ -199,44 +202,51 @@ class Synonyms extends Component {
                             )}
                           </ListGroup>
                         </Col>
-                        <Col xs="auto">
-                          <Button
-                            disabled={this.props.disable}
-                            color="success"
-                            onClick={() => {
-                              this.toggleSynonymModal(index);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTasks} /> Apply synonym
+                        {!this.props.disable && (
+                          <Fragment>
+                            <Col xs="auto">
+                              <Button
+                                disabled={this.props.disable}
+                                color="success"
+                                onClick={() => {
+                                  this.toggleSynonymModal(index);
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faTasks} /> Apply synonym
                             sets
                           </Button>
-                        </Col>
-                        <Col xs="auto">
-                          <Button
-                            disabled={this.props.disable}
-                            color="danger"
-                            onClick={() => {
-                              this.removeSynonym(index);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </Button>
-                        </Col>
+                            </Col>
+                            <Col xs="auto">
+                              <Button
+                                disabled={this.props.disable}
+                                color="danger"
+                                onClick={() => {
+                                  this.removeSynonym(index);
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faTrashAlt} />
+                              </Button>
+                            </Col>
+                          </Fragment>
+                        )}
+
                       </Row>
                     </ListGroupItem>
                   );
                 })}
               </ListGroup>
             </Col>
-            <Col xs="auto">
-              <Button
-                disabled={this.props.disable}
-                color="success"
-                onClick={this.setSynonym}
-              >
-                <FontAwesomeIcon icon={faPlusCircle} /> Add
-              </Button>
-            </Col>
+            {!this.props.disable &&
+              <Col xs="auto">
+                <Button
+                  disabled={this.props.disable}
+                  color="success"
+                  onClick={this.setSynonym}
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} /> Add
+                </Button>
+              </Col>
+            }
           </Row>
         </Col>
       </Row>

@@ -225,6 +225,8 @@ class ReferenceList extends Component {
             rowSelection="single"
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
           {this.state.modalReferenceDetail && (
             <DocumentReferenceModal

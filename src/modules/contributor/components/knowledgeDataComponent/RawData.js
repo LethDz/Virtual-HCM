@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Row, Col, Label, Button, Input } from 'reactstrap';
 
 import axiosClient from 'src/common/axiosClient';
@@ -117,9 +117,9 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  onMouseOver = (event, data) => {};
+  onMouseOver = (event, data) => { };
 
-  onMouseLeave = (event) => {};
+  onMouseLeave = (event) => { };
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -163,42 +163,48 @@ class RawData extends Component {
             </div>
           </Col>
           <Col xs="auto">
-            <Button
-              disabled={this.props.disable}
-              type="button"
-              color="danger"
-              onClick={this.stateCancelTokenize}
-            >
-              <FontAwesomeIcon icon={faBan} /> Cancel
-            </Button>
+            {!this.props.disable &&
+              <Button
+                disabled={this.props.disable}
+                type="button"
+                color="danger"
+                onClick={this.stateCancelTokenize}
+              >
+                <FontAwesomeIcon icon={faBan} /> Cancel
+            </Button>}
+
           </Col>
         </Row>
       );
     } else {
       return (
         <Row>
-          <Col>
-            <Input
-              disabled={this.props.disable}
-              placeholder="Enter raw data here and remember to tokenize it :3"
-              required
-              type="textarea"
-              name="rawData"
-              id="rawData"
-              value={this.state.rawData}
-              onChange={this.handleInput}
-            />
-          </Col>
-          <Col xs="auto">
-            <Button
-              disabled={this.props.disable}
-              type="button"
-              color="primary"
-              onClick={this.stateTokenizeRawData}
-            >
-              <FontAwesomeIcon icon={faHammer} /> Tokenize
-            </Button>
-          </Col>
+          {!this.props.disable && (
+            <Fragment>
+              <Col>
+                <Input
+                  disabled={this.props.disable}
+                  placeholder="Enter raw data here and remember to tokenize it :3"
+                  required
+                  type="textarea"
+                  name="rawData"
+                  id="rawData"
+                  value={this.state.rawData}
+                  onChange={this.handleInput}
+                />
+              </Col>
+              <Col xs="auto">
+                <Button
+                  disabled={this.props.disable}
+                  type="button"
+                  color="primary"
+                  onClick={this.stateTokenizeRawData}
+                >
+                  <FontAwesomeIcon icon={faHammer} /> Tokenize
+              </Button>
+              </Col>
+            </Fragment>
+          )}
         </Row>
       );
     }

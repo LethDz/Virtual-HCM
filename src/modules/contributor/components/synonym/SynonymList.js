@@ -222,6 +222,8 @@ class SynonymList extends Component {
             rowSelection="single"
             columnDefs={columnSynonymFieldDef}
             onRowDoubleClicked={this.onRowDoubleClicked}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
           {this.state.modalSynonymDetail && (
             <SynonymDetailModal

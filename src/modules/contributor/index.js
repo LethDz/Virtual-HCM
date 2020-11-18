@@ -27,8 +27,6 @@ import ReferenceList from 'src/modules/contributor/components/reference/Referenc
 import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataList';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
 
-import KnowledgeDataDetailProcessingMode from 'src/modules/contributor/components/KnowledgeDataDetailProcessingMode';
-
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
 export * from 'src/modules/contributor/contributor.reducer.js';
@@ -45,7 +43,6 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
-  KnowledgeDataDetailProcessingMode,
   Contributor,
   ReferenceList,
   KnowledgeDataDetail,

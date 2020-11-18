@@ -231,6 +231,8 @@ class ContributorsList extends Component {
               columnDefs={columnFieldDef(this.state.containerWidth)}
               frameworkComponents={frameworkComponents}
               context={context(this)}
+              pagination={true}
+              paginationAutoPageSize={true}
             ></AgGridReact>
           </div>
         </div>

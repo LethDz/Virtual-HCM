@@ -80,63 +80,65 @@ class Coresponse extends Component {
       <Row>
         <Col>
           <Label className="label">Coresponse answer:</Label>
-          <Row>
-            <Col xs="auto">
-              <Input
-                disabled={this.props.disable}
-                onChange={this.handleInput}
-                name="currentCoresponseType"
-                ref={this.coresponseRef}
-                type="select"
-              >
-                {questionType.map((value, index) => {
-                  return <option key={index}>{value}</option>;
-                })}
-              </Input>
-            </Col>
-            <Col>
-              <Input
-                disabled={this.props.disable}
-                placeholder="Enter coresponse here then press the add button on the right side"
-                onChange={this.handleInput}
-                name="currentCoresponse"
-                value={this.state.currentCoresponse}
-              />
-            </Col>
-            <Col xs="auto">
-              <Button
-                disabled={this.props.disable}
-                color="primary"
-                onClick={this.addCoresponse}
-              >
-                <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
-              </Button>
-            </Col>
-          </Row>
+          {!this.props.disable &&
+            <Row>
+              <Col xs="auto">
+                <Input
+                  disabled={this.props.disable}
+                  onChange={this.handleInput}
+                  name="currentCoresponseType"
+                  ref={this.coresponseRef}
+                  type="select"
+                >
+                  {questionType.map((value, index) => {
+                    return <option key={index}>{value}</option>;
+                  })}
+                </Input>
+              </Col>
+              <Col>
+                <Input
+                  disabled={this.props.disable}
+                  placeholder="Enter coresponse here then press the add button on the right side"
+                  onChange={this.handleInput}
+                  name="currentCoresponse"
+                  value={this.state.currentCoresponse}
+                />
+              </Col>
+              <Col xs="auto">
+                <Button
+                  disabled={this.props.disable}
+                  color="primary"
+                  onClick={this.addCoresponse}
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
+            </Button>
+              </Col>
+            </Row>
+          }
           <ListGroup className="mt-1">
             {this.state.coresponse.map((coresponse, index) => {
               let type;
-              switch (coresponse.type) {
+              switch (coresponse.type.toUpperCase()) {
                 case questionType[0]:
-                  type = <Badge color="primary">{coresponse.type}</Badge>;
+                  type = <Badge color="primary">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 case questionType[1]:
-                  type = <Badge color="secondary">{coresponse.type}</Badge>;
+                  type = <Badge color="secondary">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 case questionType[2]:
-                  type = <Badge color="success">{coresponse.type}</Badge>;
+                  type = <Badge color="success">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 case questionType[3]:
-                  type = <Badge color="danger">{coresponse.type}</Badge>;
+                  type = <Badge color="danger">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 case questionType[4]:
-                  type = <Badge color="warning">{coresponse.type}</Badge>;
+                  type = <Badge color="warning">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 case questionType[5]:
-                  type = <Badge color="info">{coresponse.type}</Badge>;
+                  type = <Badge color="info">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 case questionType[6]:
-                  type = <Badge color="dark">{coresponse.type}</Badge>;
+                  type = <Badge color="dark">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 default:
               }
@@ -144,19 +146,23 @@ class Coresponse extends Component {
                 <ListGroupItem key={index}>
                   <Row>
                     <Col>
-                      {type} {coresponse.answer}
+                      {coresponse.answer}
                     </Col>
-                    <Col xs="auto">
-                      <Button
-                        disabled={this.props.disable}
-                        color="danger"
-                        onClick={() => {
-                          this.removeCoresponse(index);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </Button>
-                    </Col>
+                    <Col xs='auto'>{type}</Col>
+                    {!this.props.disable &&
+                      <Col xs="auto">
+                        <Button
+                          disabled={this.props.disable}
+                          color="danger"
+                          onClick={() => {
+                            this.removeCoresponse(index);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </Button>
+                      </Col>
+                    }
+
                   </Row>
                 </ListGroupItem>
               );

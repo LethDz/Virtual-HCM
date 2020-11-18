@@ -92,6 +92,7 @@ class KnowledgeDataList extends Component {
     axiosClient
       .get(KNOWLEDGE_DATA + ALL)
       .then((response) => {
+        this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
           this.props.fetchAllDataApproval(response.data.result_data.knowledges);
@@ -129,6 +130,10 @@ class KnowledgeDataList extends Component {
   sizeToFit = () => {
     this.gridApi.sizeColumnsToFit();
   };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  }
 
   render() {
     return (
@@ -201,14 +206,17 @@ class KnowledgeDataList extends Component {
           }}
         >
           <AgGridReact
+            onFirstDataRendered={this.onFirstDataRendered}
             rowData={this.props.dataApprovalList}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}
             onSelectionChanged={this.onRowSelected.bind(this)}
             columnDefs={columnFieldDef}
-          // frameworkComponents={frameworkComponents}
-          // context={context(this)}
+            // frameworkComponents={frameworkComponents}
+            // context={context(this)}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
         </div>
       </Container>

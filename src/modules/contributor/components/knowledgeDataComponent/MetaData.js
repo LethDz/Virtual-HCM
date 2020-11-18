@@ -109,7 +109,7 @@ class MetaData extends Component {
           </Col>
           <Col xs="6">
             <Row className="mb-1">
-              <Input
+              {this.props.disable ? (<h5 className="mt-1">{this.props.intentValue}</h5>) : (<Input
                 disabled={this.props.disable}
                 placeholder="Enter intent here"
                 required
@@ -118,10 +118,11 @@ class MetaData extends Component {
                 id="intent"
                 value={this.props.intentValue}
                 onChange={this.props.onChange}
-              />
+              />)}
+
             </Row>
             <Row className="mb-1">
-              <Input
+              {this.props.disable ? (<h5 className="mt-1">{this.props.intentFullNameValue}</h5>) : (<Input
                 disabled={this.props.disable}
                 placeholder="Enter intent fullname here"
                 required
@@ -130,7 +131,8 @@ class MetaData extends Component {
                 id="intentFullName"
                 value={this.props.intentFullNameValue}
                 onChange={this.props.onChange}
-              />
+              />)}
+
             </Row>
           </Col>
         </Row>
@@ -139,14 +141,16 @@ class MetaData extends Component {
         <Row className="col">
           <FormSectionTitle title="Reference" />
           <Col xs="auto" className="m-1">
-            <Button
-              disabled={this.props.disable}
-              type="button"
-              onClick={this.toggleReferenceModal}
-              color="success"
-            >
-              <FontAwesomeIcon icon={faBookOpen} /> Add reference
-            </Button>
+            {!this.props.disable &&
+              <Button
+                disabled={this.props.disable}
+                type="button"
+                onClick={this.toggleReferenceModal}
+                color="success"
+              >
+                <FontAwesomeIcon icon={faBookOpen} /> Add reference
+            </Button>}
+
           </Col>
         </Row>
         <Row className="col">
@@ -162,15 +166,16 @@ class MetaData extends Component {
                         </Row>
                       </Col>
                       <Col xs="auto">
-                        <Button
-                          disabled={this.props.disable}
-                          color="danger"
-                          onClick={() => {
-                            this.removeReference(index);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </Button>
+                        {!this.props.disable &&
+                          <Button
+                            disabled={this.props.disable}
+                            color="danger"
+                            onClick={() => {
+                              this.removeReference(index);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </Button>}
                       </Col>
                     </Row>
                   </ListGroupItem>

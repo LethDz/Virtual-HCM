@@ -90,6 +90,7 @@ const SelectFileModal = (props) => {
               onSelectionChanged={onRowSelected}
               columnDefs={trainableDataCol}
               pagination={true}
+              paginationAutoPageSize={true}
             ></AgGridReact>
           </div>
         </ModalBody>

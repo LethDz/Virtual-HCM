@@ -230,6 +230,8 @@ class ReferenceModal extends Component {
                 rowMultiSelectWithClick
                 onSelectionChanged={this.onSelectionChanged.bind(this)}
                 columnDefs={columnReferenceListDef}
+                pagination={true}
+                paginationAutoPageSize={true}
               ></AgGridReact>
             </div>
             <FormGroup>
