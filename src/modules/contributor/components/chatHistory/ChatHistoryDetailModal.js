@@ -65,7 +65,7 @@ class ChatHistoryDetailModal extends Component {
         <ModalBody>
           <Container>
             <Row>
-              <Col>
+              <Col className="information">
                 <Card>
                   <CardBody>
                     <Row>
@@ -77,27 +77,24 @@ class ChatHistoryDetailModal extends Component {
                       <Col className="col-8">{this.state.data.contributor}</Col>
                     </Row>
                     <Row>
-                      <Col className="col-4 text-muted">Session start:</Col>
+                      <Col className="col-4 text-muted">Start:</Col>
                       <Col className="col-8">{this.state.data.start}</Col>
                     </Row>
                     <Row>
-                      <Col className="col-4 text-muted">Session end:</Col>
+                      <Col className="col-4 text-muted">End:</Col>
                       <Col className="col-8">{this.state.data.end}</Col>
                     </Row>
                   </CardBody>
                 </Card>
               </Col>
-            </Row>
-
-            <Row className="chat-container">
-              <Col>
+              <Col className="chat-container">
                 <Card>
                   <CardHeader>Chat</CardHeader>
                   <CardBody>
                     <ul className="chat-list">
                       <li className="in">
                         <div className="chat-body">
-                        <span className="time_date">11:01 AM</span>
+                          <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
                             <p>Raw denim heard of them tofu master cleanse</p>
                           </div>
@@ -105,7 +102,7 @@ class ChatHistoryDetailModal extends Component {
                       </li>
                       <li className="out">
                         <div className="chat-body">
-                        <span className="time_date">11:01 AM</span>
+                          <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
                             <p>Next level</p>
                           </div>
@@ -127,15 +124,17 @@ class ChatHistoryDetailModal extends Component {
                         <div className="chat-body">
                           <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
-                            <p>Next level Raw denim heard of them tofu master cleanse Raw
-                              denim heard of them tofu master cleanseRaw denim
-                              heard of them tofu master cleanse</p>
+                            <p>
+                              Next level Raw denim heard of them tofu master
+                              cleanse Raw denim heard of them tofu master
+                              cleanseRaw denim heard of them tofu master cleanse
+                            </p>
                           </div>
                         </div>
                       </li>
                       <li className="in">
                         <div className="chat-body">
-                        <span className="time_date">11:01 AM</span>
+                          <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
                             <p>Raw denim heard of them tofu master cleanse</p>
                           </div>
@@ -143,7 +142,7 @@ class ChatHistoryDetailModal extends Component {
                       </li>
                       <li className="out">
                         <div className="chat-body">
-                        <span className="time_date">11:01 AM</span>
+                          <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
                             <p>Next level</p>
                           </div>
@@ -151,7 +150,7 @@ class ChatHistoryDetailModal extends Component {
                       </li>
                       <li className="in">
                         <div className="chat-body">
-                        <span className="time_date">11:01 AM</span>
+                          <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
                             <p>Raw denim heard of them tofu master cleanse</p>
                           </div>
@@ -159,7 +158,7 @@ class ChatHistoryDetailModal extends Component {
                       </li>
                       <li className="out">
                         <div className="chat-body">
-                        <span className="time_date">11:01 AM</span>
+                          <span className="time_date">11:01 AM</span>
                           <div className="chat-message">
                             <p>Next level</p>
                           </div>

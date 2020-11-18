@@ -1,6 +1,11 @@
 body {
   background: #eee;
 }
+
+.modal{
+width: 70%;
+}
+
 .chat-list {
   padding: 0;
   font-size: 0.8rem;
@@ -13,8 +18,8 @@ body {
 }
 
 .chat-list {
-  -ms-overflow-style: none;  
-  scrollbar-width: none;  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .chat-list li {
@@ -49,7 +54,7 @@ body {
 .chat-list .chat-body {
   /* margin-left: 5px; */
   float: left;
-  width: 70%;
+  width: 80%;
 }
 
 .chat-list .in .chat-message:before {
@@ -90,7 +95,7 @@ body {
 }
 
 .chat-container {
-  margin-top: 20px;
+  width: 70%;
 }
 
 .time_date {
@@ -98,4 +103,8 @@ body {
   display: block;
   font-size: 10px;
   margin: 0 5px 5px 5px;
+}
+
+.information {
+  width: 20%;
 }
