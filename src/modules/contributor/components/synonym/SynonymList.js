@@ -56,9 +56,14 @@ class SynonymList extends Component {
     axiosClient
       .get(SYNONYM + ALL)
       .then((response) => {
-        const synonyms = response.data.result_data.synonym_dicts;
-        this.props.fetchAllSynonyms(synonyms);
-        this.setSynonymList(synonyms);
+        if (response.data.status) {
+          const synonyms = response.data.result_data.synonym_dicts;
+          this.props.fetchAllSynonyms(synonyms);
+          this.setSynonymList(synonyms);
+        } else {
+          this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
+        }
         this.setLoading(false);
       })
       .then(() => {

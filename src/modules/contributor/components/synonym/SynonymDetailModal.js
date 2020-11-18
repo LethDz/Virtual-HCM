@@ -43,6 +43,7 @@ import {
   getSynonymDetail,
   editSynonymDetail,
   deleteSynonym,
+  POSTags,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/synonym.css';
 
@@ -236,7 +237,7 @@ class SynonymDetailModal extends Component {
       });
   };
 
-  addNewWord = async() => {
+  addNewWord = async () => {
     await this.setErrorList([]);
     let newWord = this.state.newWord.trim();
     if (
@@ -275,7 +276,7 @@ class SynonymDetailModal extends Component {
               let words = [];
               response.data.result_data.pos.map((sentence) => {
                 sentence.map((word) => {
-                  if (word.type !== 'CH') {
+                  if (word.type !== POSTags[POSTags.length - 1]) {
                     words.push(word.value);
                   }
                   return word;
@@ -286,11 +287,11 @@ class SynonymDetailModal extends Component {
               this.setState({
                 tokenizedWords: words,
               });
-              this.setLoading(false);
             } else {
               this.setErrorAlert(true);
               this.setErrorList(response.data.messages);
             }
+            this.setLoading(false);
           })
           .catch(() => {
             this.setLoading(false);
@@ -312,7 +313,6 @@ class SynonymDetailModal extends Component {
     }
     return true;
   };
-
 
   scrollToBottom = () => {
     this.conRef.current.scrollIntoView({ behavior: 'smooth' });
