@@ -65,10 +65,10 @@ class ChatHistoryDetailModal extends Component {
         <ModalBody>
           <Container>
             <Row>
-              <Col className="information">
+              <Col className="col-4">
                 <Card>
                   <CardBody>
-                    <Row>
+                    {/* <Row>
                       <Col className="col-4 text-muted">ID:</Col>
                       <Col className="col-8">{this.state.data.id}</Col>
                     </Row>
@@ -83,11 +83,14 @@ class ChatHistoryDetailModal extends Component {
                     <Row>
                       <Col className="col-4 text-muted">End:</Col>
                       <Col className="col-8">{this.state.data.end}</Col>
-                    </Row>
+                    </Row> */}
+                    <Row className="text-bold">{this.state.data.contributor}</Row>
+                    <Row>{this.state.data.start}</Row>
+                    <Row>{this.state.data.end}</Row>
                   </CardBody>
                 </Card>
               </Col>
-              <Col className="chat-container">
+              <Col className="chat-container col-8 ">
                 <Card>
                   <CardHeader>Chat</CardHeader>
                   <CardBody>

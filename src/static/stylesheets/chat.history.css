@@ -54,7 +54,6 @@ width: 70%;
 .chat-list .chat-body {
   /* margin-left: 5px; */
   float: left;
-  width: 80%;
 }
 
 .chat-list .in .chat-message:before {
@@ -103,8 +102,4 @@ width: 70%;
   display: block;
   font-size: 10px;
   margin: 0 5px 5px 5px;
-}
-
-.information {
-  width: 20%;
 }
