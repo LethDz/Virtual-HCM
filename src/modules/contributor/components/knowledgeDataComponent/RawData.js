@@ -135,17 +135,6 @@ class RawData extends Component {
                 let className = 'mr-1 word-box ';
 
                 let hoverWordList = this.props.hoverWord.split(" ")
-
-                // if (hoverWordList[0] === data.value) {
-                //   if (hoverWordList.length === 1) {
-                //     className += 'hover-word ';
-                //   }
-                //   else {
-                //     if (hoverWordList[0] === this.state.tokenizeData[index].value && hoverWordList[1] === this.state.tokenizeData[index + 1].value) {
-                //       className += 'hover-word '
-                //     }
-                //   }
-                // }
                 hoverWordList.forEach(word => {
                   if (word === data.value) {
                     className += 'hover-word '
