@@ -43,9 +43,15 @@ class ReferenceList extends Component {
     axiosClient
       .get(REFERENCE + ALL)
       .then((response) => {
-        const references = response.data.result_data.references;
-        this.props.fetchAllDocumentReference(references);
-        this.setState({ loading: false, referenceList: references });
+        if (response.data.status) {
+          const references = response.data.result_data.references;
+          this.props.fetchAllDocumentReference(references);
+          this.setState({ referenceList: references });
+        } else {
+          this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
       })
       .then(() => {
         this.setStyleForGrid();

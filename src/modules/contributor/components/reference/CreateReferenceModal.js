@@ -10,7 +10,6 @@ import {
   Label,
   ModalFooter,
   Row,
-  Container,
   Col,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -171,7 +170,6 @@ class CreateReferenceModal extends Component {
         <Form onSubmit={this.addReference} className="m-0">
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'}>
-              <Container>
                 {this.state.successAlert && (
                   <SuccessAlert
                     successAlert={this.state.successAlert}
@@ -223,7 +221,6 @@ class CreateReferenceModal extends Component {
                         onChange={this.handleInput}
                       />
                     </FormGroup>
-
                     <FormGroup>
                       <Label>Author</Label>
                       <Input
@@ -235,7 +232,6 @@ class CreateReferenceModal extends Component {
                         onChange={this.handleInput}
                       />
                     </FormGroup>
-
                     <FormGroup>
                       <Label>Link</Label>
                       <Input
@@ -248,7 +244,6 @@ class CreateReferenceModal extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
-              </Container>
             </LoadingSpinner>
           </ModalBody>
           <ModalFooter>

@@ -25,7 +25,7 @@ import {
   editReferenceDetail,
   pullReferenceDetail,
   deleteReference,
-  getAllDocumentReference
+  getAllDocumentReference,
 } from 'src/modules/contributor';
 import {
   imgBase64,
@@ -61,7 +61,8 @@ class DocumentReferenceModal extends Component {
 
   onUploadImage = (event) => {
     if (!event.target.files || event.target.files.length === 0) {
-      this._isMounted && this.setState({ avatar: this.props.referenceDetail.cover });
+      this._isMounted &&
+        this.setState({ avatar: this.props.referenceDetail.cover });
       return;
     }
     const src = event.target.files[0];
@@ -105,6 +106,7 @@ class DocumentReferenceModal extends Component {
             });
           } else {
             this.setErrorAlert(true);
+            this.setErrorList(response.data.messages);
           }
           this.setLoading(false);
         })
@@ -180,14 +182,15 @@ class DocumentReferenceModal extends Component {
           this.props.updateReferenceList([]);
           this.setSuccessAlert(true);
         } else {
-          this.setErrorAlert(true); 
+          this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
       })
       .then(() => {
         this.props.updateReferenceList(this.props.referenceList);
-      }).catch(() => {
+      })
+      .catch(() => {
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
@@ -204,11 +207,12 @@ class DocumentReferenceModal extends Component {
           this.props.updateReferenceList(this.props.referenceList);
           this.props.toggle();
         } else {
-          this.setErrorAlert(true); 
+          this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
-      }).catch(() => {
+      })
+      .catch(() => {
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
@@ -222,108 +226,112 @@ class DocumentReferenceModal extends Component {
   render() {
     return (
       <Container>
-        <Modal isOpen={this.props.isOpen} toggle={this.toggle} unmountOnClose={true}>
-          <ModalHeader toggle={this.toggle}>
-            Document Reference
-          </ModalHeader>
+        <Modal
+          isOpen={this.props.isOpen}
+          toggle={this.toggle}
+          unmountOnClose={true}
+        >
+          <ModalHeader toggle={this.toggle}>Document Reference</ModalHeader>
           <Form onSubmit={this.editReference}>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
-              <Container>
-                {this.state.successAlert && (
-                  <SuccessAlert
-                    successAlert={this.state.successAlert}
-                    text="Editing reference is successfully"
-                    onDismiss={() => this.onDismiss('successAlert')}
-                  />
-                )}
-                {this.state.errorAlert && (
-                  <ErrorAlert
-                    errorAlert={this.state.errorAlert}
-                    errorList={this.state.errorList}
-                    onDismiss={() => this.onDismiss('errorAlert')}
-                  />
-                )}
-                <Row>
-                  <Col className="col-3">
-                    <Row className="justify-content-center mb-3">
-                      <img
-                        type="image"
-                        name="cover"
-                        id="coverImage"
-                        alt="cover"
-                        className="cover-image"
-                        src={
-                          this.state.cover
-                            ? this.state.cover ===
-                              this.props.referenceDetail.cover
-                              ? imgBase64(this.state.cover)
-                              : this.state.cover
-                            : cover
-                        }
-                      ></img>
-                    </Row>
-                    <Row className="justify-content-center upload-btn-wrapper">
-                      <Button color="warning">
-                        <FontAwesomeIcon icon={faFolderOpen} color="white" />
-                      </Button>
-                      <Input
-                        className="h-100 upload-hidden"
-                        type="file"
-                        name="avatar"
-                        id="avatar"
-                        accept="image/*"
-                        onChange={this.onUploadImage}
-                      />
-                    </Row>
-                  </Col>
-                  <Col className="col-9">
-                    <Label>
-                      <h5>ID: {this.state.reference_document_id}</h5>
-                    </Label>
-
-                    <FormGroup>
-                      <Label>Reference name: </Label>
-                      <Input
-                        name="reference_name"
-                        type="text"
-                        required
-                        value={this.state.reference_name}
-                        onChange={this.handleInput}
-                      />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <Label>Link: </Label>
-                      <Input
-                        name="link"
-                        type="url"
-                        value={this.state.link}
-                        onChange={this.handleInput}
-                      />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <Label>Author: </Label>
-                      <Input
-                        name="author"
-                        required
-                        type="text"
-                        value={this.state.author}
-                        onChange={this.handleInput}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-              </Container>
+              {this.state.successAlert && (
+                <SuccessAlert
+                  successAlert={this.state.successAlert}
+                  text="Editing reference is successfully"
+                  onDismiss={() => this.onDismiss('successAlert')}
+                />
+              )}
+              {this.state.errorAlert && (
+                <ErrorAlert
+                  errorAlert={this.state.errorAlert}
+                  errorList={this.state.errorList}
+                  onDismiss={() => this.onDismiss('errorAlert')}
+                />
+              )}
+              <Row>
+                <Col className="col-3">
+                  <Row className="justify-content-center mb-3">
+                    <img
+                      type="image"
+                      name="cover"
+                      id="coverImage"
+                      alt="cover"
+                      className="cover-image"
+                      src={
+                        this.state.cover
+                          ? this.state.cover ===
+                            this.props.referenceDetail.cover
+                            ? imgBase64(this.state.cover)
+                            : this.state.cover
+                          : cover
+                      }
+                    ></img>
+                  </Row>
+                  <Row className="justify-content-center upload-btn-wrapper">
+                    <Button color="warning">
+                      <FontAwesomeIcon icon={faFolderOpen} color="white" />
+                    </Button>
+                    <Input
+                      className="h-100 upload-hidden"
+                      type="file"
+                      name="avatar"
+                      id="avatar"
+                      accept="image/*"
+                      onChange={this.onUploadImage}
+                    />
+                  </Row>
+                </Col>
+                <Col className="col-9">
+                  <Label>
+                    <h5>ID: {this.state.reference_document_id}</h5>
+                  </Label>
+                  <FormGroup>
+                    <Label>Reference name: </Label>
+                    <Input
+                      name="reference_name"
+                      type="text"
+                      required
+                      value={this.state.reference_name}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Link: </Label>
+                    <Input
+                      name="link"
+                      type="url"
+                      value={this.state.link}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Author: </Label>
+                    <Input
+                      name="author"
+                      required
+                      type="text"
+                      value={this.state.author}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" type="submit" disabled={this.state.loading}>
+              <Button
+                color="primary"
+                type="submit"
+                disabled={this.state.loading}
+              >
                 <FontAwesomeIcon icon={faEdit} color="white" />
                 &nbsp;Edit
               </Button>
-
-              <Button color="danger" onClick={this.deleteReference} disabled={this.state.loading}>
+              <Button
+                color="danger"
+                onClick={this.deleteReference}
+                disabled={this.state.loading}
+              >
                 <FontAwesomeIcon icon={faTrash} color="white" />
                 &nbsp;Delete
               </Button>
