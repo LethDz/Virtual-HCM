@@ -83,6 +83,7 @@ class Coresponse extends Component {
           <Row>
             <Col xs="auto">
               <Input
+                disabled={this.props.disable}
                 onChange={this.handleInput}
                 name="currentCoresponseType"
                 ref={this.coresponseRef}
@@ -95,6 +96,7 @@ class Coresponse extends Component {
             </Col>
             <Col>
               <Input
+                disabled={this.props.disable}
                 placeholder="Enter coresponse here then press the add button on the right side"
                 onChange={this.handleInput}
                 name="currentCoresponse"
@@ -102,7 +104,11 @@ class Coresponse extends Component {
               />
             </Col>
             <Col xs="auto">
-              <Button color="primary" onClick={this.addCoresponse}>
+              <Button
+                disabled={this.props.disable}
+                color="primary"
+                onClick={this.addCoresponse}
+              >
                 <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
               </Button>
             </Col>
@@ -142,6 +148,7 @@ class Coresponse extends Component {
                     </Col>
                     <Col xs="auto">
                       <Button
+                        disabled={this.props.disable}
                         color="danger"
                         onClick={() => {
                           this.removeCoresponse(index);

@@ -1,6 +1,6 @@
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
-export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL'
+export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
 
 export const SET_INTENT = 'SET_INTENT';
 export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
@@ -16,6 +16,11 @@ export const EDIT_REFERENCE = 'EDIT_REFERENCE';
 export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
 export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
+
+export const PROCESSING = 'PROCESSING';
+export const DONE = 'DONE';
+export const AVAILABLE = 'AVAILABLE';
+export const DISABLE = 'DISABLE';
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 export const questionType = [
@@ -71,9 +76,9 @@ export const frameworkComponents = {
 export const columnFieldDef = [
   {
     field: 'id',
-    headerName: "ID",
+    headerName: 'ID',
     sortable: true,
-    filter: true
+    filter: true,
   },
   {
     field: 'intent',

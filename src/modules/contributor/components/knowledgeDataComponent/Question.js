@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import {
   questionType,
-  GenSynonymSentenceModal
+  GenSynonymSentenceModal,
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,7 +46,7 @@ export default class Question extends Component {
       ],
       tooltipOpen: false,
       isOpenGenerateModal: false,
-      generated_sentences: []
+      generated_sentences: [],
     };
   }
 
@@ -224,14 +224,13 @@ export default class Question extends Component {
       });
     });
     this.props.setQuestions(questionList);
-    this._isMounted && this.setState({ questions: questionList, generated_sentences: [] });
+    this._isMounted &&
+      this.setState({ questions: questionList, generated_sentences: [] });
   };
 
-  onMouseOver = (event, value) => {
-  }
+  onMouseOver = (event, value) => {};
 
-  onMouseLeave = (event) => {
-  }
+  onMouseLeave = (event) => {};
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index;
@@ -249,19 +248,19 @@ export default class Question extends Component {
   };
 
   prepareGenerateData = () => {
-    let preSynonymList = this.createSynonymArray()
-    let preDataList = []
+    let preSynonymList = this.createSynonymArray();
+    let preDataList = [];
     for (let i in this.state.questions) {
       preDataList.push({
         sentence: this.createTokenizeSentence(i),
-        synonyms: preSynonymList
-      })
+        synonyms: preSynonymList,
+      });
     }
-    return { sentences: preDataList }
-  }
+    return { sentences: preDataList };
+  };
 
   generatedSentences = () => {
-    let data = this.prepareGenerateData()
+    let data = this.prepareGenerateData();
     this._isMounted &&
       this.setState({
         loading: true,
@@ -279,10 +278,10 @@ export default class Question extends Component {
           this._isMounted &&
             this.setState({
               loading: false,
-              generated_sentences: data
+              generated_sentences: data,
             });
 
-          this.toggleGenerateModal()
+          this.toggleGenerateModal();
           this.props.setErrorAlert(false);
           this.props.setSuccessAlert(true);
         } else {
@@ -298,15 +297,15 @@ export default class Question extends Component {
         this.props.setErrorAlert(true);
         this.props.setSuccessAlert(false);
       });
-  }
+  };
 
   viewGeneratedSentences = () => {
-    this.toggleGenerateModal()
-  }
+    this.toggleGenerateModal();
+  };
 
   createTokenizeSentence = (index) => {
     let tokenizedWordArray = [];
-    tokenizedWordArray = this.state.questions[index].question.split(" ")
+    tokenizedWordArray = this.state.questions[index].question.split(' ');
     return tokenizedWordArray.join(' ');
   };
 
@@ -316,30 +315,48 @@ export default class Question extends Component {
   };
 
   setSelectedSentence = (sentences) => {
-    this._isMounted && this.setState({ generated_sentences: sentences })
-  }
+    this._isMounted && this.setState({ generated_sentences: sentences });
+  };
 
   renderGenerateButton = () => {
     if (this.state.questions.length !== 0) {
       if (this.state.generated_sentences.length === 0) {
-        return <div className="d-flex justify-content-end">
-        <Button onClick={this.generatedSentences}>Generate</Button>
-      </div>
-      }
-      else {
-        return <div className="d-flex justify-content-end">
-        <Button onClick={this.viewGeneratedSentences}>View</Button>
-      </div>
+        return (
+          <div className="d-flex justify-content-end">
+            <Button
+              disabled={this.props.disable}
+              onClick={this.generatedSentences}
+            >
+              Generate
+            </Button>
+          </div>
+        );
+      } else {
+        return (
+          <div className="d-flex justify-content-end">
+            <Button
+              disabled={this.props.disable}
+              onClick={this.viewGeneratedSentences}
+            >
+              View
+            </Button>
+          </div>
+        );
       }
     }
-    return null
-  }
+    return null;
+  };
 
   render() {
     return (
       <Fragment>
         {this.state.isOpenGenerateModal && (
-          <GenSynonymSentenceModal toggle={this.toggleGenerateModal} rowData={this.state.generated_sentences} isOpen={this.state.isOpenGenerateModal} setSelectedSentence={this.setSelectedSentence} />
+          <GenSynonymSentenceModal
+            toggle={this.toggleGenerateModal}
+            rowData={this.state.generated_sentences}
+            isOpen={this.state.isOpenGenerateModal}
+            setSelectedSentence={this.setSelectedSentence}
+          />
         )}
 
         <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
@@ -351,6 +368,7 @@ export default class Question extends Component {
               <Row>
                 <Col>
                   <Input
+                    disabled={this.props.disable}
                     placeholder="Enter question then choose type then press the add button :3"
                     type="text"
                     name="question"
@@ -363,6 +381,7 @@ export default class Question extends Component {
                   <Row>
                     <Col>
                       <Button
+                        disabled={this.props.disable}
                         type="button"
                         color="warning"
                         id="DisabledAutoHide"
@@ -437,6 +456,7 @@ export default class Question extends Component {
                 </FormGroup>
                 <Col xs="auto">
                   <Button
+                    disabled={this.props.disable}
                     color="success"
                     onClick={() => {
                       if (this.getQuestion().trim() !== '') {
@@ -459,7 +479,17 @@ export default class Question extends Component {
                     <Row>
                       <Col>
                         {wordArray.map((value, index) => {
-                          return <span key={index} onMouseOver={(event) => this.onMouseOver(event, value)} onMouseLeave={this.onMouseLeave}>{value} </span>
+                          return (
+                            <span
+                              key={index}
+                              onMouseOver={(event) =>
+                                this.onMouseOver(event, value)
+                              }
+                              onMouseLeave={this.onMouseLeave}
+                            >
+                              {value}{' '}
+                            </span>
+                          );
                         })}
                       </Col>
                       <Col xs="auto">
@@ -535,6 +565,7 @@ export default class Question extends Component {
                       </Col>
                       <Col xs="auto">
                         <Button
+                          disabled={this.props.disable}
                           color="danger"
                           onClick={() => {
                             this.removeQuestion(question);

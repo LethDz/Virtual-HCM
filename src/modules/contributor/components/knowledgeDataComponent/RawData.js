@@ -117,9 +117,9 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  onMouseOver = (event, data) => { };
+  onMouseOver = (event, data) => {};
 
-  onMouseLeave = (event) => { };
+  onMouseLeave = (event) => {};
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -134,12 +134,12 @@ class RawData extends Component {
                 });
                 let className = 'mr-1 word-box ';
 
-                let hoverWordList = this.props.hoverWord.split(" ")
-                hoverWordList.forEach(word => {
+                let hoverWordList = this.props.hoverWord.split(' ');
+                hoverWordList.forEach((word) => {
                   if (word === data.value) {
-                    className += 'hover-word '
+                    className += 'hover-word ';
                   }
-                })
+                });
 
                 if (data.type === V) {
                   className += 'verb ';
@@ -164,6 +164,7 @@ class RawData extends Component {
           </Col>
           <Col xs="auto">
             <Button
+              disabled={this.props.disable}
               type="button"
               color="danger"
               onClick={this.stateCancelTokenize}
@@ -178,6 +179,7 @@ class RawData extends Component {
         <Row>
           <Col>
             <Input
+              disabled={this.props.disable}
               placeholder="Enter raw data here and remember to tokenize it :3"
               required
               type="textarea"
@@ -189,6 +191,7 @@ class RawData extends Component {
           </Col>
           <Col xs="auto">
             <Button
+              disabled={this.props.disable}
               type="button"
               color="primary"
               onClick={this.stateTokenizeRawData}

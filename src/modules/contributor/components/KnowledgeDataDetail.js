@@ -16,6 +16,10 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  PROCESSING,
+  DONE,
+  DISABLE,
+  AVAILABLE,
 } from 'src/modules/contributor/index';
 import 'src/static/stylesheets/contributor.css';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
@@ -59,6 +63,8 @@ class KnowledgeDataDetail extends Component {
       sendLoading: false,
       synonymIdList: [],
       hoverWord: '',
+      mode: '',
+      disable: true,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -284,6 +290,17 @@ class KnowledgeDataDetail extends Component {
             this.props.pullDataApproval(
               response.data.result_data.knowledge_data
             );
+
+            let user = JSON.parse(sessionStorage.getItem('user'));
+            console.log(user.user_id);
+            console.log(user.username);
+            console.log(this.props.dataApprovalDetail);
+
+            this._isMounted && this.setState({ mode: AVAILABLE });
+            this._isMounted && this.setState({ mode: PROCESSING });
+            this._isMounted && this.setState({ mode: DONE });
+            this._isMounted && this.setState({ mode: DISABLE });
+
             this.setErrorAlert(false);
             this.setAlertMessage('Load successful');
             this.setSuccessAlert(true);
@@ -390,6 +407,7 @@ class KnowledgeDataDetail extends Component {
               </Row>
               <FormSectionTitle title="Meta data" />
               <MetaData
+                disable={this.state.disable}
                 intentValue={this.state.form.intent}
                 intentFullNameValue={this.state.form.intentFullName}
                 referenceValue={this.state.form.documentReference}
@@ -400,6 +418,7 @@ class KnowledgeDataDetail extends Component {
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData
+                  disable={this.state.disable}
                   hoverWord={this.state.hoverWord}
                   detailPage={true}
                   rawDataValue={this.state.form.rawData}
@@ -416,6 +435,7 @@ class KnowledgeDataDetail extends Component {
               )}
 
               <CriticalData
+                disable={this.state.disable}
                 ref={this.criticalDataRef}
                 criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
@@ -424,11 +444,13 @@ class KnowledgeDataDetail extends Component {
               />
 
               <Coresponse
+                disable={this.state.disable}
                 coresponseValue={this.state.form.coresponse}
                 setCoresponse={this.setCoresponse}
                 wordArray={wordArray}
               />
               <Question
+                disable={this.state.disable}
                 ref={this.questionRef}
                 detailPage={true}
                 questionValue={this.state.form.questions}
@@ -444,11 +466,13 @@ class KnowledgeDataDetail extends Component {
               />
 
               <BaseResponse
+                disable={this.state.disable}
                 baseResponseValue={this.state.form.baseResponse}
                 onChange={this.handleInputForm}
               />
 
               <Synonyms
+                disable={this.state.disable}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -461,7 +485,12 @@ class KnowledgeDataDetail extends Component {
                 setHoverWord={this.setHoverWord}
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
-                <Button type="submit" color="info" onClick={this.submitForm}>
+                <Button
+                  disabled={this.state.disable}
+                  type="submit"
+                  color="info"
+                  onClick={this.submitForm}
+                >
                   <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
                 </Button>
               </Row>

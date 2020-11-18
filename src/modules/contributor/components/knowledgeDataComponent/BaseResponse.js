@@ -6,8 +6,11 @@ class BaseResponse extends Component {
     return (
       <Row xs="1">
         <Col>
-          <Label className="label" for="baseResponse">Base response:</Label>
+          <Label className="label" for="baseResponse">
+            Base response:
+          </Label>
           <Input
+            disabled={this.props.disable}
             placeholder="Enter base response here"
             required
             type="textarea"

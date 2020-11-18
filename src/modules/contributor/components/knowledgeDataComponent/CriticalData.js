@@ -178,6 +178,7 @@ class CriticalData extends Component {
                     </Col>
                     <Col xs="auto">
                       <Button
+                        disabled={this.props.disable}
                         color="danger"
                         onClick={() => {
                           this.removeCritical(index);
@@ -191,6 +192,7 @@ class CriticalData extends Component {
                     <Col className="border-right-solid">
                       <Label>Subject component: </Label>
                       <CriticalDataItem
+                        disable={this.props.disable}
                         checkSubjectType={
                           this.state.criticalData[index].word.length === 0 &&
                           this.checkSubjectType
@@ -211,6 +213,7 @@ class CriticalData extends Component {
                                   </Col>
                                   <Col xs="auto">
                                     <Button
+                                      disabled={this.props.disable}
                                       color="danger"
                                       onClick={() => {
                                         this.removeComponent(
@@ -233,6 +236,7 @@ class CriticalData extends Component {
                     <Col>
                       <Label>Verb: </Label>
                       <CriticalDataItem
+                        disable={this.props.disable}
                         checkSubjectType={this.checkSubjectType}
                         type={VERB}
                         index={index}
@@ -250,6 +254,7 @@ class CriticalData extends Component {
                                   </Col>
                                   <Col xs="auto">
                                     <Button
+                                      disabled={this.props.disable}
                                       color="danger"
                                       onClick={() => {
                                         this.removeComponent(
@@ -275,7 +280,11 @@ class CriticalData extends Component {
             })}
           </ListGroup>
           <div className="d-flex justify-content-end mt-2">
-            <Button color="primary" onClick={this.addCriticalData}>
+            <Button
+              disabled={this.props.disable}
+              color="primary"
+              onClick={this.addCriticalData}
+            >
               <FontAwesomeIcon icon={faPlusCircle} /> Subject
             </Button>
           </div>
