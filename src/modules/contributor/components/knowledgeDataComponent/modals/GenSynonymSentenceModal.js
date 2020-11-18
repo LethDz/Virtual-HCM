@@ -30,7 +30,6 @@ class GenSynonymSentenceModal extends Component {
   componentDidMount = () => {
     this._isMounted = true;
     let rowData = [];
-    console.log(this.props.rowData);
     this.props.rowData.forEach((data) => {
       rowData.push({ sentence: data.sentence });
     });
@@ -44,8 +43,6 @@ class GenSynonymSentenceModal extends Component {
   onGridReady = (params) => {
     params.api.forEachNode((node) => {
       this.props.rowData.forEach((sentence) => {
-        console.log(sentence);
-        console.log(node);
         if (node.data.sentence === sentence.sentence && sentence.accept === 1) {
           node.setSelected(true);
         }

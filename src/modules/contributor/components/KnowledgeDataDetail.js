@@ -6,7 +6,7 @@ import { GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS } from 'src/constants';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   getDataApprovalDetail,
-  pullDataApproval, 
+  pullDataApproval,
   resetDataApprovalDetail,
   Question,
   FormSectionTitle,
@@ -109,20 +109,20 @@ class KnowledgeDataDetail extends Component {
   };
 
   checkFormSubmit = () => {
-    let form = this.state.form
-    let errorFlag = false
-    if (form.baseResponse.trim() === '') errorFlag = true
-    if (form.intent.trim() === '') errorFlag = true
-    if (form.intentFullName.trim() === '') errorFlag = true
-    if (form.rawData.trim() === '') errorFlag = true
-    if (form.documentReference.length === 0) errorFlag = true
-    if (form.coresponse.length === 0) errorFlag = true
-    if (form.criticalData.length === 0) errorFlag = true
-    form.criticalData.forEach(data => {
-      if (data.word.length === 0) errorFlag = true
-    })
-    return errorFlag
-  }
+    let form = this.state.form;
+    let errorFlag = false;
+    if (form.baseResponse.trim() === '') errorFlag = true;
+    if (form.intent.trim() === '') errorFlag = true;
+    if (form.intentFullName.trim() === '') errorFlag = true;
+    if (form.rawData.trim() === '') errorFlag = true;
+    if (form.documentReference.length === 0) errorFlag = true;
+    if (form.coresponse.length === 0) errorFlag = true;
+    if (form.criticalData.length === 0) errorFlag = true;
+    form.criticalData.forEach((data) => {
+      if (data.word.length === 0) errorFlag = true;
+    });
+    return errorFlag;
+  };
 
   submitForm = (event) => {
     event.preventDefault();
@@ -141,7 +141,7 @@ class KnowledgeDataDetail extends Component {
             });
           if (response.data.status) {
             history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
-            this.props.resetDataApprovalDetail()
+            this.props.resetDataApprovalDetail();
           } else {
             this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
@@ -158,8 +158,7 @@ class KnowledgeDataDetail extends Component {
           this.setSuccessAlert(false);
           this.scrollToTop();
         });
-    }
-    else {
+    } else {
       this.setErrorAlert(true);
       this.setSuccessAlert(false);
       this.scrollToTop();
@@ -352,7 +351,7 @@ class KnowledgeDataDetail extends Component {
     this.questionRef.current.resetGeneratedQuestion();
   };
 
-  render() {
+  renderProcessMode = () => {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
@@ -471,6 +470,10 @@ class KnowledgeDataDetail extends Component {
         )}
       </Container>
     );
+  };
+
+  render() {
+    return this.renderProcessMode();
   }
 }
 
@@ -480,7 +483,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
-  resetDataApprovalDetail: () => dispatch(resetDataApprovalDetail())
+  resetDataApprovalDetail: () => dispatch(resetDataApprovalDetail()),
 });
 
 export default connect(

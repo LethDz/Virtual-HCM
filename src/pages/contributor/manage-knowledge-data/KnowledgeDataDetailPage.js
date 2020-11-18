@@ -4,7 +4,7 @@ import { KnowledgeDataDetail } from 'src/modules/contributor';
 
 const KnowledgeDataDetailPage = (props) => (
   <LayoutWrapper>
-    <KnowledgeDataDetail intent={props.match.params.intent}/>
+    <KnowledgeDataDetail intent={props.match.params.intent} />
   </LayoutWrapper>
 );
 

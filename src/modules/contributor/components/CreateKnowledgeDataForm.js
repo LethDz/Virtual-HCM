@@ -270,7 +270,6 @@ class CreateKnowledgeDataForm extends Component {
   setHoverWord = (word, from) => {
     if (from === 'SYNONYM' && this._isMounted) {
       this.setState({ hoverWord: word });
-      console.log(word);
     }
   };
 

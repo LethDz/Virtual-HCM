@@ -107,14 +107,10 @@ class CriticalData extends Component {
     }
 
     if (criticalData[criticalIndex].word.length === 1) {
-      console.log("il do this")
-      console.log(criticalData[criticalIndex])
-      console.log(criticalData[criticalIndex].word[0].word)
       let type = 'MISC';
       this.props.ner.forEach((ner) => {
         if (ner.word === criticalData[criticalIndex].word[0].word) {
           type = ner.type;
-          console.log(type)
         }
       });
       criticalData[criticalIndex].type = type;
