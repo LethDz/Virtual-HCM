@@ -79,7 +79,7 @@ class Coresponse extends Component {
     return (
       <Row>
         <Col>
-          <Label className="label">Coresponse:</Label>
+          <Label className="label">Coresponse answer:</Label>
           <Row>
             <Col xs="auto">
               <Input

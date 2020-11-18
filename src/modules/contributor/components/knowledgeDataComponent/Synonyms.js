@@ -13,7 +13,11 @@ import { handleInputChange } from 'src/common/handleInputChange';
 import { SynonymsModal } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlusCircle,
+  faTrashAlt,
+  faTasks,
+} from '@fortawesome/free-solid-svg-icons';
 
 class Synonyms extends Component {
   _isMounted = false;
@@ -44,7 +48,7 @@ class Synonyms extends Component {
     synonyms.forEach((synonym) => {
       let synonymId = [];
       synonym.synonyms.forEach((sy) => {
-        synonymId.push(sy.synonym_id);
+        sy.synonym_id ? synonymId.push(sy.synonym_id) : synonymId.push(sy.id)
       });
       let synonymObject = {
         word: synonym.word,
@@ -64,10 +68,10 @@ class Synonyms extends Component {
     if (this.state.synonymWord !== '' && this.state.synonymWord !== null) {
       let synonyms = this.state.synonyms;
       synonyms.push({
-        word: this.state.synonymWord,
+        word: this.state.synonymWord.trim(),
         synonyms: [],
       });
-      if (this._isMounted) this.setState({ synonyms: synonyms });
+      if (this._isMounted) this.setState({ synonyms: synonyms, synonymWord: '' });
     }
   };
 
@@ -112,13 +116,20 @@ class Synonyms extends Component {
     this.setSynonymToForm();
   };
 
+  onMouseOver = (word) => {
+    this.props.setHoverWord(word, 'SYNONYM')
+  };
+
+  onMouseLeave = () => {
+    this.props.setHoverWord('', 'SYNONYM')
+  }
+
   render() {
     return (
       <Row xs="1">
         {this.state.isOpenSynonymModal && (
           <SynonymsModal
             scrollToTop={this.scrollToTop}
-            setAlertMessage={this.props.setAlertMessage}
             setSuccessAlert={this.props.setSuccessAlert}
             setErrorAlert={this.props.setErrorAlert}
             setErrorList={this.props.setErrorList}
@@ -134,23 +145,20 @@ class Synonyms extends Component {
           <Row>
             <Col>
               <Input
-                type="select"
                 id="coresponse-index"
                 name="synonymWord"
-                defaultValue={''}
+                value={this.state.synonymWord}
                 onChange={this.handleInput}
-              >
-                <option value="" disabled>
-                  None
-                </option>
-                {this.props.wordArray.map((data, index) => {
-                  return <option key={index}>{data.value}</option>;
-                })}
-              </Input>
+              ></Input>
               <ListGroup>
                 {this.state.synonyms.map((word, index) => {
                   return (
-                    <ListGroupItem key={index} className="mt-1 bound-group">
+                    <ListGroupItem
+                      key={index}
+                      className="mt-1 bound-group synonym"
+                      onMouseOver={() => this.onMouseOver(word.word)}
+                      onMouseLeave={this.onMouseLeave}
+                    >
                       <Row>
                         <Col>
                           {word.word}
@@ -163,31 +171,8 @@ class Synonyms extends Component {
                                       <Col>
                                         {synonym.meaning}:&nbsp;
                                         {synonym.words.map((key, index) => {
-                                          const hoverWord = this.props
-                                            .hoverWord;
-                                          let className = '';
-                                          if (hoverWord.trim() === key.trim()) {
-                                            className += 'hover-word';
-                                          }
-                                          return React.createElement(
-                                            'span',
-                                            {
-                                              className: className,
-                                              key: index,
-                                              onMouseOver: (event) => {
-                                                this.props.hover(
-                                                  word.word,
-                                                  'SYNONYM'
-                                                );
-                                                event.target.className =
-                                                  'hover-word';
-                                              },
-                                              onMouseLeave: (event) => {
-                                                this.props.hover('', 'SYNONYM');
-                                                event.target.className = '';
-                                              },
-                                            },
-                                            (key += ' ')
+                                          return (
+                                            <span key={index}>{key} </span>
                                           );
                                         })}
                                       </Col>
@@ -218,7 +203,8 @@ class Synonyms extends Component {
                               this.toggleSynonymModal(index);
                             }}
                           >
-                            <FontAwesomeIcon icon={faPlusCircle} /> Synonym
+                            <FontAwesomeIcon icon={faTasks} /> Apply synonym
+                            sets
                           </Button>
                         </Col>
                         <Col xs="auto">

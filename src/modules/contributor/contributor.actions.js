@@ -10,7 +10,8 @@ import {
   GET_REFERENCE_DETAIL,
   DELETE_REFERENCE,
   GET_ALL_DATA_APPROVAL,
-  GET_DATA_APPROVAL
+  GET_DATA_APPROVAL,
+  RESET_DATA_APPROVAL_DETAIL
 } from 'src/modules/contributor/index';
 
 //Synonym
@@ -28,6 +29,10 @@ export const pullDataApproval = (dataApproval) => ({
   }
 })
 
+export const resetDataApprovalDetail = () => ({
+  type: RESET_DATA_APPROVAL_DETAIL,
+  payload: {}
+})
 
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,

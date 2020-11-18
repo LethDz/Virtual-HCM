@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Button, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { history } from 'src/common/history';
 import {
   CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
   ALL,
@@ -23,7 +22,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import axiosClient from 'src/common/axiosClient';
 import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class KnowledgeDataList extends Component {
@@ -36,6 +35,7 @@ class KnowledgeDataList extends Component {
       errorList: [],
       loading: false,
       errorAlert: false,
+      intent: '',
     };
     this.titleRef = React.createRef();
   }
@@ -92,11 +92,17 @@ class KnowledgeDataList extends Component {
     axiosClient
       .get(KNOWLEDGE_DATA + ALL)
       .then((response) => {
-        this.props.fetchAllDataApproval(response.data.result_data.knowledges);
-        this.setAlertMessage('Load successful');
-        this.setSuccessAlert(true);
         this._isMounted && this.setState({ loading: false });
-        // catch
+        if (response.data.status) {
+          this.props.fetchAllDataApproval(response.data.result_data.knowledges);
+          this.setAlertMessage('Load successful');
+          this.setSuccessAlert(true);
+        } else {
+          this.setErrorList(response.data.messages);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+          this.scrollToTop();
+        }
       })
       .catch((error) => {
         this.setErrorAlert(true);
@@ -115,7 +121,13 @@ class KnowledgeDataList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let intent = selectedRows.length === 1 ? selectedRows[0].intent : '';
-    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(intent));
+    this._isMounted && this.setState({
+      intent,
+    });
+  };
+
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
   };
 
   render() {
@@ -123,7 +135,7 @@ class KnowledgeDataList extends Component {
       <Container id="cl-container" className="cl-container vh-100">
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading data approval"
+          text="Loading knowledge data"
         />
         <Row>
           <Col className="justify-content-center d-flex">
@@ -156,6 +168,30 @@ class KnowledgeDataList extends Component {
               </Button>
             </Link>
           </Col>
+          <Col xs="auto">
+            {this.state.intent !== '' ? (
+              <Link
+                to={GET_KNOWLEDGE_DATA_BY_INTENT(this.state.intent)}
+                className="link-no-underline"
+              >
+                <Button color="success">
+                  <FontAwesomeIcon icon={faEdit} color="white" />
+                    &nbsp; Edit
+                  </Button>
+              </Link>
+            ) : (
+                <Button color="success" disabled={this.state.intent === ''}>
+                  <FontAwesomeIcon icon={faEdit} color="white" />
+                  &nbsp; Edit
+                </Button>
+              )}
+          </Col>
+          <Col xs="auto" className="mr-auto">
+            <Button color="info" onClick={this.sizeToFit}>
+              <FontAwesomeIcon icon={faWrench} color="white" />
+                &nbsp; Size column to Fit
+              </Button>
+          </Col>
         </Row>
         <div
           className="ag-theme-alpine"
@@ -169,10 +205,10 @@ class KnowledgeDataList extends Component {
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}
-            onRowDoubleClicked={this.onRowSelected.bind(this)}
+            onSelectionChanged={this.onRowSelected.bind(this)}
             columnDefs={columnFieldDef}
-            // frameworkComponents={frameworkComponents}
-            // context={context(this)}
+          // frameworkComponents={frameworkComponents}
+          // context={context(this)}
           ></AgGridReact>
         </div>
       </Container>

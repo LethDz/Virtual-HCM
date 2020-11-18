@@ -59,10 +59,8 @@ class SynonymsModal extends Component {
             );
             this.setSynonymList(response.data.result_data.synonym_dicts);
             this.setState({ loading: false });
-            this.props.setAlertMessage('Load synonym successful');
-            this.props.setSuccessAlert(true);
           } else {
-            this.props.scrollToTop();
+            this.props.setSuccessAlert(false);
             this.props.setErrorAlert(true);
             this.props.setErrorList(response.data.messages);
           }
@@ -74,7 +72,6 @@ class SynonymsModal extends Component {
             });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
-          this.props.scrollToTop();
         });
     } else {
       this.setSynonymList(this.props.synonymsList);

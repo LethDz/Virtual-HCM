@@ -24,6 +24,9 @@ import { history } from 'src/common/history';
 import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, ADD } from 'src/constants';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+
 class CreateKnowledgeDataForm extends Component {
   _isMounted = false;
   constructor() {
@@ -43,12 +46,11 @@ class CreateKnowledgeDataForm extends Component {
       tokenizedWord: [],
       ner: [],
       loading: false,
-      hoverWord: '',
-      hoverWordFromSynonym: '',
       alertMessage: '',
       successAlert: false,
       errorAlert: false,
       errorList: [],
+      hoverWord: '',
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -101,24 +103,38 @@ class CreateKnowledgeDataForm extends Component {
     return wordArray;
   };
 
+  checkFormSubmit = () => {
+    let form = this.state.form
+    let errorFlag = false
+    if (form.baseResponse.trim() === '') errorFlag = true
+    if (form.intent.trim() === '') errorFlag = true
+    if (form.intentFullName.trim() === '') errorFlag = true
+    if (form.rawData.trim() === '') errorFlag = true
+    if (form.documentReference.length === 0) errorFlag = true
+    if (form.coresponse.length === 0) errorFlag = true
+    if (form.criticalData.length === 0) errorFlag = true
+    form.criticalData.forEach(data => {
+      if (data.word.length === 0) errorFlag = true
+    })
+    return errorFlag
+  }
+
   submitForm = (event) => {
     this._isMounted &&
       this.setState({
         loading: true,
       });
     event.preventDefault();
-    if (this.state.errorList.length === 0) {
+    if (!this.checkFormSubmit()) {
       axiosClient
         .post(KNOWLEDGE_DATA + ADD, this.state.form)
         .then((response) => {
-          if (this._isMounted)
+          this._isMounted &&
             this.setState({
               loading: false,
             });
           if (response.data.status) {
             history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
-            this.setErrorAlert(false);
-            this.setSuccessAlert(true);
           } else {
             this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
@@ -135,9 +151,17 @@ class CreateKnowledgeDataForm extends Component {
           this.setSuccessAlert(false);
           this.scrollToTop();
         });
-    } else {
-      this._isMounted && this.setState({ errorAlert: true, loading: false });
     }
+    else {
+      this._isMounted &&
+        this.setState({
+          loading: false,
+        });
+      this.setErrorAlert(true);
+      this.setSuccessAlert(false);
+      this.scrollToTop();
+    }
+
   };
 
   setCoresponse = (coresponse) => {
@@ -201,15 +225,6 @@ class CreateKnowledgeDataForm extends Component {
     this._isMounted && this.setState({ synonymIdList: synonym });
   };
 
-  hover = (word, from) => {
-    if (from === 'SYNONYM')
-      if (this._isMounted)
-        this.setState({ hoverWord: word, hoverWordFromSynonym: word });
-      else {
-        if (this._isMounted) this.setState({ hoverWord: word });
-      }
-  };
-
   setSuccessAlert = (status) => {
     this._isMounted &&
       this.setState({
@@ -250,6 +265,12 @@ class CreateKnowledgeDataForm extends Component {
       behavior: 'smooth',
       block: 'end',
     });
+  };
+
+  setHoverWord = (word, from) => {
+    if (from === 'SYNONYM' && this._isMounted) {
+      this.setState({ hoverWord: word });
+    }
   };
 
   cancelCriticalData = () => {
@@ -294,22 +315,15 @@ class CreateKnowledgeDataForm extends Component {
             <MetaData
               onChange={this.handleInputForm}
               setReference={this.setReference}
-              scrollToTop={this.scrollToTop}
-              setAlertMessage={this.setAlertMessage}
-              setSuccessAlert={this.setSuccessAlert}
-              setErrorAlert={this.setErrorAlert}
-              setErrorList={this.setErrorList}
             />
             <hr className="mr-3 ml-3 divider" />
             <FormSectionTitle title="Data analysis" />
             <RawData
+              hoverWord={this.state.hoverWord}
               scrollToTop={this.scrollToTop}
-              setAlertMessage={this.setAlertMessage}
               setSuccessAlert={this.setSuccessAlert}
               setErrorAlert={this.setErrorAlert}
               setErrorList={this.setErrorList}
-              hover={this.hover}
-              hoverWord={this.state.hoverWordFromSynonym}
               setTokenizeWord={this.setTokenizeWord}
               getWordArray={this.getWordArray}
               setRawData={this.setRawData}
@@ -319,6 +333,7 @@ class CreateKnowledgeDataForm extends Component {
             <CriticalData
               ref={this.criticalDataRef}
               wordArray={wordArray}
+              ner={this.state.ner}
               setCritical={this.setCriticalData}
             />
 
@@ -327,17 +342,15 @@ class CreateKnowledgeDataForm extends Component {
               wordArray={wordArray}
             />
             <Question
+              hoverWord={this.state.hoverWord}
               ref={this.questionRef}
               questionValue={this.state.form.questions}
               scrollToTop={this.scrollToTop}
-              setAlertMessage={this.setAlertMessage}
               setSuccessAlert={this.setSuccessAlert}
               setErrorAlert={this.setErrorAlert}
               setErrorList={this.setErrorList}
               setQuestions={this.setQuestions}
               setTokenizeWord={this.setTokenizeWord}
-              hover={this.hover}
-              hoverWord={this.state.hoverWordFromSynonym}
               synonymsArray={this.state.form.synonyms}
               synonymIds={this.state.synonymIdList}
               className="mt-3"
@@ -353,13 +366,13 @@ class CreateKnowledgeDataForm extends Component {
               setErrorList={this.setErrorList}
               setSynonym={this.setSynonym}
               wordArray={wordArray}
-              hover={this.hover}
-              hoverWord={this.state.hoverWord}
               resetGeneratedQuestion={this.resetGeneratedQuestion}
+              setHoverWord={this.setHoverWord}
             />
             <Row className="d-flex justify-content-around pt-3 pb-3">
               <Button type="submit" color="info" onClick={this.submitForm}>
-                Create new data approval
+                <FontAwesomeIcon icon={faPlusCircle} /> Create new knowledge
+                data
               </Button>
             </Row>
           </div>

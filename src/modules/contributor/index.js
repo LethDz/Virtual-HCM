@@ -21,13 +21,13 @@ import RawData from 'src/modules/contributor/components/knowledgeDataComponent/R
 import BaseResponse from 'src/modules/contributor/components/knowledgeDataComponent/BaseResponse';
 import Coresponse from 'src/modules/contributor/components/knowledgeDataComponent/Coresponse';
 import CriticalData from 'src/modules/contributor/components/knowledgeDataComponent/CriticalData';
-import GenSynonymSentence from 'src/modules/contributor/components/knowledgeDataComponent/generate-component/GenSynonymSentence';
 
 // List component
 import ReferenceList from 'src/modules/contributor/components/reference/ReferenceList';
 import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataList';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
 
+import KnowledgeDataDetailProcessingMode from 'src/modules/contributor/components/KnowledgeDataDetailProcessingMode';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -45,6 +45,7 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
+  KnowledgeDataDetailProcessingMode,
   Contributor,
   ReferenceList,
   KnowledgeDataDetail,
@@ -54,7 +55,6 @@ export {
   SynonymsModal,
   ReferenceModal,
   MetaData,
-  GenSynonymSentence,
   SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,

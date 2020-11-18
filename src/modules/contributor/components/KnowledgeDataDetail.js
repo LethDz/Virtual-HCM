@@ -7,6 +7,7 @@ import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   getDataApprovalDetail,
   pullDataApproval,
+  resetDataApprovalDetail,
   Question,
   FormSectionTitle,
   MetaData,
@@ -28,6 +29,9 @@ import { history } from 'src/common/history';
 import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
 class KnowledgeDataDetail extends Component {
   _isMounted = false;
   constructor(props) {
@@ -48,14 +52,13 @@ class KnowledgeDataDetail extends Component {
       tokenizedWord: [],
       ner: [],
       loading: true,
-      hoverWord: '',
-      hoverWordFromSynonym: '',
       alertMessage: '',
       successAlert: false,
       errorAlert: false,
       errorList: [],
       sendLoading: false,
       synonymIdList: [],
+      hoverWord: '',
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -97,7 +100,7 @@ class KnowledgeDataDetail extends Component {
     form.synonyms.forEach((synonyms) => {
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
-        synonymIds.push(item.id);
+        synonymIds.push(item.id ? item.id : item);
       });
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
@@ -105,10 +108,26 @@ class KnowledgeDataDetail extends Component {
     this._isMounted && this.setState({ form: form });
   };
 
+  checkFormSubmit = () => {
+    let form = this.state.form;
+    let errorFlag = false;
+    if (form.baseResponse.trim() === '') errorFlag = true;
+    if (form.intent.trim() === '') errorFlag = true;
+    if (form.intentFullName.trim() === '') errorFlag = true;
+    if (form.rawData.trim() === '') errorFlag = true;
+    if (form.documentReference.length === 0) errorFlag = true;
+    if (form.coresponse.length === 0) errorFlag = true;
+    if (form.criticalData.length === 0) errorFlag = true;
+    form.criticalData.forEach((data) => {
+      if (data.word.length === 0) errorFlag = true;
+    });
+    return errorFlag;
+  };
+
   submitForm = (event) => {
     event.preventDefault();
-    this.reformatForm();
-    if (this.state.errorList.length === 0) {
+    if (!this.checkFormSubmit()) {
+      this.reformatForm();
       this._isMounted &&
         this.setState({
           sendLoading: true,
@@ -122,8 +141,7 @@ class KnowledgeDataDetail extends Component {
             });
           if (response.data.status) {
             history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
-            this.setErrorAlert(false);
-            this.setSuccessAlert(true);
+            this.props.resetDataApprovalDetail();
           } else {
             this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
@@ -141,8 +159,9 @@ class KnowledgeDataDetail extends Component {
           this.scrollToTop();
         });
     } else {
-      this._isMounted &&
-        this.setState({ errorAlert: true, sendLoading: false });
+      this.setErrorAlert(true);
+      this.setSuccessAlert(false);
+      this.scrollToTop();
     }
   };
 
@@ -192,15 +211,6 @@ class KnowledgeDataDetail extends Component {
       });
   };
 
-  hover = (word, from) => {
-    if (from === 'SYNONYM')
-      if (this._isMounted)
-        this.setState({ hoverWord: word, hoverWordFromSynonym: word });
-      else {
-        if (this._isMounted) this.setState({ hoverWord: word });
-      }
-  };
-
   setSuccessAlert = (status) => {
     this._isMounted &&
       this.setState({
@@ -243,6 +253,12 @@ class KnowledgeDataDetail extends Component {
     });
   };
 
+  setHoverWord = (word, from) => {
+    if (from === 'SYNONYM' && this._isMounted) {
+      this.setState({ hoverWord: word });
+    }
+  };
+
   componentWillUnmount = () => {
     this._isMounted = false;
   };
@@ -269,6 +285,7 @@ class KnowledgeDataDetail extends Component {
               response.data.result_data.knowledge_data
             );
             this.setErrorAlert(false);
+            this.setAlertMessage('Load successful');
             this.setSuccessAlert(true);
           } else {
             this.setErrorAlert(true);
@@ -308,7 +325,7 @@ class KnowledgeDataDetail extends Component {
     form.synonyms.forEach((synonyms) => {
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
-        synonymIds.push(item.id);
+        synonymIds.push(item.id ? item.id : item.synonym_id);
       });
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
@@ -334,7 +351,7 @@ class KnowledgeDataDetail extends Component {
     this.questionRef.current.resetGeneratedQuestion();
   };
 
-  render() {
+  renderProcessMode = () => {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
@@ -378,25 +395,18 @@ class KnowledgeDataDetail extends Component {
                 referenceValue={this.state.form.documentReference}
                 onChange={this.handleInputForm}
                 setReference={this.setReference}
-                scrollToTop={this.scrollToTop}
-                setAlertMessage={this.setAlertMessage}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setErrorList={this.setErrorList}
               />
               <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData
+                  hoverWord={this.state.hoverWord}
                   detailPage={true}
                   rawDataValue={this.state.form.rawData}
                   scrollToTop={this.scrollToTop}
-                  setAlertMessage={this.setAlertMessage}
                   setSuccessAlert={this.setSuccessAlert}
                   setErrorAlert={this.setErrorAlert}
                   setErrorList={this.setErrorList}
-                  hover={this.hover}
-                  hoverWord={this.state.hoverWordFromSynonym}
                   setTokenizeWord={this.setTokenizeWord}
                   getWordArray={this.getWordArray}
                   setRawData={this.setRawData}
@@ -409,6 +419,7 @@ class KnowledgeDataDetail extends Component {
                 ref={this.criticalDataRef}
                 criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
+                ner={this.state.ner}
                 setCritical={this.setCriticalData}
               />
 
@@ -422,14 +433,11 @@ class KnowledgeDataDetail extends Component {
                 detailPage={true}
                 questionValue={this.state.form.questions}
                 scrollToTop={this.scrollToTop}
-                setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
                 setQuestions={this.setQuestions}
                 setTokenizeWord={this.setTokenizeWord}
-                hover={this.hover}
-                hoverWord={this.state.hoverWordFromSynonym}
                 synonymsArray={this.state.form.synonyms}
                 synonymIds={this.state.synonymIdList}
                 className="mt-3"
@@ -448,14 +456,13 @@ class KnowledgeDataDetail extends Component {
                 setErrorList={this.setErrorList}
                 setSynonym={this.setSynonym}
                 wordArray={wordArray}
-                hover={this.hover}
-                hoverWord={this.state.hoverWord}
                 resetGeneratedQuestion={this.resetGeneratedQuestion}
                 synonymsValue={this.state.form.synonyms}
+                setHoverWord={this.setHoverWord}
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
                 <Button type="submit" color="info" onClick={this.submitForm}>
-                  Edit data approval
+                  <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
                 </Button>
               </Row>
             </div>
@@ -463,6 +470,10 @@ class KnowledgeDataDetail extends Component {
         )}
       </Container>
     );
+  };
+
+  render() {
+    return this.renderProcessMode();
   }
 }
 
@@ -472,6 +483,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
+  resetDataApprovalDetail: () => dispatch(resetDataApprovalDetail()),
 });
 
 export default connect(
