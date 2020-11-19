@@ -218,7 +218,7 @@ export const columnSynonymFieldDef = [
   {
     field: 'meaning',
     headerName: 'Meaning',
-    width: 200,
+    width: 100,
     sortable: true,
     filter: true,
     resizable: true,
