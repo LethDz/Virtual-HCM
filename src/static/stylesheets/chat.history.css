@@ -52,19 +52,15 @@ body {
 }
 
 .chat-list .chat-body {
-  /* margin-left: 5px; */
   float: left;
 }
 
 .chat-list .in .chat-message:before {
-  /* left: -5px; */
   border-bottom: 20px solid transparent;
-  /* border-right: 20px solid #5a99ee; */
 }
 
 .chat-list .out .chat-body {
   float: right;
-  /* margin-right: 5px; */
   text-align: right;
 }
 
@@ -73,9 +69,7 @@ body {
 }
 
 .chat-list .out .chat-message:before {
-  /* right: -5px; */
   border-bottom: 20px solid transparent;
-  /* border-left: 20px solid #fc6d4c; */
 }
 
 .card .card-header:first-child {
@@ -84,7 +78,7 @@ body {
   border-radius: 0.3rem 0.3rem 0 0;
 }
 .card .card-header {
-  background: #1e282c;
+  background: #166999;
   border: 0;
   font-size: 1rem;
   padding: 0.65rem 1rem;
@@ -105,10 +99,10 @@ body {
 }
 
 .list-details {
-  font-weight: 600;
+  font-weight: 400;
   color: #223035;
-  font-size: 15px;
   line-height: 15px;
+  background-color: #add2e7;
 }
 
 .list-details small {

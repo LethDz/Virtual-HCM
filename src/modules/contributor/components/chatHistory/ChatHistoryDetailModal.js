@@ -10,7 +10,6 @@ import {
   ModalHeader,
   Row,
   Col,
-  CardFooter,
 } from 'reactstrap';
 import 'src/static/stylesheets/chat.history.css';
 
@@ -21,7 +20,7 @@ class ChatHistoryDetailModal extends Component {
       tooltipOpen: false,
       data: {
         id: '1',
-        contributor: 'Hoa',
+        contributor: 'HoaKT',
         start: '9:00 14/11/2020',
         end: '12:00 14/11/2020',
         system: [
@@ -74,7 +73,7 @@ class ChatHistoryDetailModal extends Component {
                       <span>{this.state.data.start}</span>
                       <small>Start</small>
                     </Row>
-                    <Row className="list-details mt-2">
+                    <Row className="list-details mt-3">
                       <span>{this.state.data.end}</span>
                       <small>End</small>
                     </Row>
