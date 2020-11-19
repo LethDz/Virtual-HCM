@@ -24,6 +24,7 @@ import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { history } from 'src/common/history';
 
 class KnowledgeDataList extends Component {
   _isMounted = false;
@@ -92,6 +93,7 @@ class KnowledgeDataList extends Component {
     axiosClient
       .get(KNOWLEDGE_DATA + ALL)
       .then((response) => {
+        this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
           this.props.fetchAllDataApproval(response.data.result_data.knowledges);
@@ -126,9 +128,17 @@ class KnowledgeDataList extends Component {
     });
   };
 
+  onRowDoubleClicked = (row) => {
+    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(row.data.intent));
+  }
+
   sizeToFit = () => {
     this.gridApi.sizeColumnsToFit();
   };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  }
 
   render() {
     return (
@@ -201,14 +211,18 @@ class KnowledgeDataList extends Component {
           }}
         >
           <AgGridReact
+            onFirstDataRendered={this.onFirstDataRendered}
             rowData={this.props.dataApprovalList}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}
             onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnFieldDef}
-          // frameworkComponents={frameworkComponents}
-          // context={context(this)}
+            // frameworkComponents={frameworkComponents}
+            // context={context(this)}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
         </div>
       </Container>

@@ -66,6 +66,7 @@ class CriticalDataItem extends Component {
         </Col>
         <Col xs="auto">
           <Input
+            disabled={this.props.disable}
             defaultValue={''}
             type="select"
             name="word"
@@ -80,7 +81,11 @@ class CriticalDataItem extends Component {
           </Input>
         </Col>
         <Col xs="auto" className="p-0">
-          <Button color="success" onClick={this.setVerb}>
+          <Button
+            disabled={this.props.disable}
+            color="success"
+            onClick={this.setVerb}
+          >
             <FontAwesomeIcon icon={faPlus} />
           </Button>
         </Col>

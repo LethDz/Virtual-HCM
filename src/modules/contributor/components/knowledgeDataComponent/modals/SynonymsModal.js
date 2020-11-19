@@ -48,34 +48,30 @@ class SynonymsModal extends Component {
   };
 
   setData = () => {
-    if (this.props.synonymsList.length === 0) {
-      if (this._isMounted) this.setState({ loading: true });
-      axiosClient
-        .get(SYNONYM + ALL)
-        .then((response) => {
-          if (response.data.status) {
-            this.props.fetchAllSynonyms(
-              response.data.result_data.synonym_dicts
-            );
-            this.setSynonymList(response.data.result_data.synonym_dicts);
-            this.setState({ loading: false });
-          } else {
-            this.props.setSuccessAlert(false);
-            this.props.setErrorAlert(true);
-            this.props.setErrorList(response.data.messages);
-          }
-        })
-        .catch((err) => {
-          if (this._isMounted)
-            this.setState({
-              loading: false,
-            });
-          this.props.setErrorAlert(true);
+    if (this._isMounted) this.setState({ loading: true });
+    axiosClient
+      .get(SYNONYM + ALL)
+      .then((response) => {
+        if (response.data.status) {
+          this.props.fetchAllSynonyms(
+            response.data.result_data.synonym_dicts
+          );
+          this.setSynonymList(response.data.result_data.synonym_dicts);
+          this.setState({ loading: false });
+        } else {
           this.props.setSuccessAlert(false);
-        });
-    } else {
-      this.setSynonymList(this.props.synonymsList);
-    }
+          this.props.setErrorAlert(true);
+          this.props.setErrorList(response.data.messages);
+        }
+      })
+      .catch((err) => {
+        if (this._isMounted)
+          this.setState({
+            loading: false,
+          });
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+      });
   };
 
   setSynonymList = (list) => {
@@ -171,6 +167,8 @@ class SynonymsModal extends Component {
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   columnDefs={columnSynonymListRef}
+                  pagination={true}
+                  paginationAutoPageSize={true}
                 ></AgGridReact>
               </div>
             </ModalBody>

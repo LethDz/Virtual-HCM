@@ -12,7 +12,7 @@ import { columnGenSentenceDef } from 'src/modules/contributor';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 class GenSynonymSentenceModal extends Component {
   _isMounted = false;
@@ -31,7 +31,7 @@ class GenSynonymSentenceModal extends Component {
     this._isMounted = true;
     let rowData = [];
     this.props.rowData.forEach((data) => {
-      rowData.push({ sentence: data.sentence });
+      rowData.push({ sentence: data.sentence, question: data.question });
     });
     this.setState({ rowData: rowData });
   };
@@ -68,10 +68,11 @@ class GenSynonymSentenceModal extends Component {
           isSelected = true;
         }
       });
+      
       if (isSelected) {
-        results.push({ sentence: sentence.sentence, accept: 1 });
+        results.push({ question: sentence.question, sentence: sentence.sentence, accept: 1 });
       } else {
-        results.push({ sentence: sentence.sentence, accept: 0 });
+        results.push({ question: sentence.question, sentence: sentence.sentence, accept: 0 });
       }
     });
     this._isMounted && this.setState({ selectedSentence: results });
@@ -81,6 +82,11 @@ class GenSynonymSentenceModal extends Component {
     this.props.setSelectedSentence(this.state.selectedSentence);
     this.props.toggle();
   };
+
+  discard = () => {
+    this.props.saveGeneratedSentences(false);
+    this.props.toggle();
+  }
 
   toggleThisModal = () => {
     !this.state.loading && this.props.toggle();
@@ -110,10 +116,15 @@ class GenSynonymSentenceModal extends Component {
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   columnDefs={columnGenSentenceDef}
+                  pagination={true}
+                  paginationAutoPageSize={true}
                 />
               </div>
             </ModalBody>
             <ModalFooter>
+              <Button color="danger" onClick={this.discard}>
+                <FontAwesomeIcon icon={faBan} /> Discard
+              </Button>
               <Button color="success" onClick={this.setSelectedSentence}>
                 <FontAwesomeIcon icon={faSave} /> Save
               </Button>

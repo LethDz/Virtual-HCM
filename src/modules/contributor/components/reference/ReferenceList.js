@@ -252,6 +252,8 @@ class ReferenceList extends Component {
             onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
         </div>
       </div>

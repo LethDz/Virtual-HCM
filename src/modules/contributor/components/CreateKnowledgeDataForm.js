@@ -104,20 +104,47 @@ class CreateKnowledgeDataForm extends Component {
   };
 
   checkFormSubmit = () => {
-    let form = this.state.form
-    let errorFlag = false
-    if (form.baseResponse.trim() === '') errorFlag = true
-    if (form.intent.trim() === '') errorFlag = true
-    if (form.intentFullName.trim() === '') errorFlag = true
-    if (form.rawData.trim() === '') errorFlag = true
-    if (form.documentReference.length === 0) errorFlag = true
-    if (form.coresponse.length === 0) errorFlag = true
-    if (form.criticalData.length === 0) errorFlag = true
-    form.criticalData.forEach(data => {
-      if (data.word.length === 0) errorFlag = true
-    })
-    return errorFlag
-  }
+    const form = this.state.form;
+    let errorFlag = false;
+    let errorList = []
+
+    if (form.baseResponse.trim() === '') {
+      errorFlag = true
+      errorList.push("Fill in base response")
+    };
+    if (form.intent.trim() === '') {
+      errorFlag = true
+      errorList.push("Fill in intent")
+    };
+    if (form.intentFullName.trim() === '') {
+      errorFlag = true;
+      errorList.push("Fill in intent fullname")
+    }
+    if (form.rawData.trim() === '') {
+      errorFlag = true;
+      errorList.push("Fill in raw data")
+    }
+    if (form.documentReference.length === 0) {
+      errorFlag = true;
+      errorList.push("Document reference required at least 1 reference")
+    }
+    if (form.coresponse.length === 0) {
+      errorFlag = true
+      errorList.push("Fill in coresponse")
+    };
+    if (form.criticalData.length === 0) {
+      errorFlag = true;
+      errorList.push("Subject required at least 1 subject")
+    }
+    form.criticalData.forEach((data, index) => {
+      if (data.word.length === 0) {
+        errorFlag = true;
+        errorList.push(`Subject ${index} need at least 1 component`)
+      }
+    });
+    this._isMounted && this.setState({ errorList: errorList })
+    return errorFlag;
+  };
 
   submitForm = (event) => {
     this._isMounted &&

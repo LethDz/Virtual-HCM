@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import {
   questionType,
-  GenSynonymSentenceModal
+  GenSynonymSentenceModal,
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,6 +35,7 @@ export default class Question extends Component {
       tokenizeData: [],
       ner: [],
       loading: false,
+      generateLoading: false,
       type: [
         { id: 1, value: 1, isChecked: false },
         { id: 2, value: 2, isChecked: false },
@@ -46,8 +47,14 @@ export default class Question extends Component {
       ],
       tooltipOpen: false,
       isOpenGenerateModal: false,
-      generated_sentences: []
+      generated_sentences: [],
+      saveGeneratedSentences: false
     };
+  }
+
+  saveGeneratedSentences = (status) => {
+    status === false && this._isMounted && this.setState({ generated_sentences: [] })
+    this._isMounted && this.setState({ saveGeneratedSentences: status })
   }
 
   handleCheck = (event) => {
@@ -63,14 +70,22 @@ export default class Question extends Component {
     this._isMounted = true;
     if (this.props.questionValue && this.props.questionValue.length) {
       let questionList = [];
+      let generatedList = []
       this.props.questionValue.forEach((question) => {
         questionList.push({
           question: question.question,
           type: question.type,
           generated_questions: question.generated_questions,
         });
+        question.generated_questions.forEach(generated_questions => {
+          generatedList.push({
+            sentence: generated_questions.question,
+            accept: generated_questions.accept,
+            question: question.question
+          })
+        })
       });
-      this.setState({ questions: questionList });
+      this.setState({ questions: questionList, generated_sentences: generatedList, saveGeneratedSentences: true });
     }
   };
 
@@ -197,6 +212,7 @@ export default class Question extends Component {
     if (index > -1) {
       questionsTemp.splice(index, 1);
     }
+    this.resetGeneratedQuestion()
     if (this._isMounted) this.setState(questionsTemp);
   };
 
@@ -224,14 +240,14 @@ export default class Question extends Component {
       });
     });
     this.props.setQuestions(questionList);
-    this._isMounted && this.setState({ questions: questionList, generated_sentences: [] });
+    this.saveGeneratedSentences(false)
+    this._isMounted &&
+      this.setState({ questions: questionList, generated_sentences: [], saveGeneratedSentences: false });
   };
 
-  onMouseOver = (event, value) => {
-  }
+  onMouseOver = (event, value) => { };
 
-  onMouseLeave = (event) => {
-  }
+  onMouseLeave = (event) => { };
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index;
@@ -249,43 +265,44 @@ export default class Question extends Component {
   };
 
   prepareGenerateData = () => {
-    let preSynonymList = this.createSynonymArray()
-    let preDataList = []
+    let preSynonymList = this.createSynonymArray();
+    let preDataList = [];
     for (let i in this.state.questions) {
       preDataList.push({
         sentence: this.createTokenizeSentence(i),
-        synonyms: preSynonymList
-      })
+        synonyms: preSynonymList,
+      });
     }
-    return { sentences: preDataList }
-  }
+    return { sentences: preDataList };
+  };
 
   generatedSentences = () => {
-    let data = this.prepareGenerateData()
+    let data = this.prepareGenerateData();
     this._isMounted &&
       this.setState({
-        loading: true,
+        generateLoading: true,
       });
     axiosClient
       .post(NLP + GENERATE_SIMILARIES, data)
       .then((response) => {
         if (response.data.status) {
           let data = [];
-          response.data.result_data.similaries.forEach((sentences) => {
+          response.data.result_data.similaries.forEach((sentences, index) => {
             sentences.forEach((sentence) => {
-              data.push({ accept: 0, sentence: sentence });
+              data.push({ accept: 0, sentence: sentence, question: this.state.questions[index].question });
             });
           });
           this._isMounted &&
             this.setState({
-              loading: false,
-              generated_sentences: data
+              generateLoading: false,
+              generated_sentences: data,
             });
 
-          this.toggleGenerateModal()
+          this.toggleGenerateModal();
           this.props.setErrorAlert(false);
           this.props.setSuccessAlert(true);
         } else {
+          this._isMounted && this.setState({ generateLoading: false })
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
         }
@@ -293,20 +310,20 @@ export default class Question extends Component {
       .catch((err) => {
         this._isMounted &&
           this.setState({
-            loading: false,
+            generateLoading: false,
           });
         this.props.setErrorAlert(true);
         this.props.setSuccessAlert(false);
       });
-  }
+  };
 
   viewGeneratedSentences = () => {
-    this.toggleGenerateModal()
-  }
+    this.toggleGenerateModal();
+  };
 
   createTokenizeSentence = (index) => {
     let tokenizedWordArray = [];
-    tokenizedWordArray = this.state.questions[index].question.split(" ")
+    tokenizedWordArray = this.state.questions[index].question.split(' ');
     return tokenizedWordArray.join(' ');
   };
 
@@ -316,139 +333,180 @@ export default class Question extends Component {
   };
 
   setSelectedSentence = (sentences) => {
-    this._isMounted && this.setState({ generated_sentences: sentences })
-  }
+    this.saveGeneratedSentences(true);
+
+    let questions = this.state.questions
+    let generated_sentences = sentences
+    questions.forEach((question, index) => {
+      let list = []
+      generated_sentences.forEach(generatedSentence => {
+        if (generatedSentence.question === question.question) {
+          list.push({ question: generatedSentence.sentence, accept: generatedSentence.accept })
+        }
+      })
+      questions[index].generated_questions = list
+    })
+
+    this._isMounted && this.setState({ generated_sentences: sentences, questions: questions });
+    this.props.setQuestions(this.state.questions)
+  };
 
   renderGenerateButton = () => {
     if (this.state.questions.length !== 0) {
-      if (this.state.generated_sentences.length === 0) {
-        return <div className="d-flex justify-content-end">
-        <Button onClick={this.generatedSentences}>Generate</Button>
-      </div>
-      }
-      else {
-        return <div className="d-flex justify-content-end">
-        <Button onClick={this.viewGeneratedSentences}>View</Button>
-      </div>
+      if (!this.state.saveGeneratedSentences) {
+        return (
+          <div className="d-flex justify-content-end mt-2">
+            <Button
+              disabled={this.props.disable}
+              onClick={this.generatedSentences}
+            >
+              Generate
+            </Button>
+          </div>
+        );
+      } else {
+        return (
+          <div className="d-flex justify-content-end mt-2">
+            <Button
+              disabled={this.props.disable}
+              onClick={this.viewGeneratedSentences}
+            >
+              View
+            </Button>
+          </div>
+        );
       }
     }
-    return null
-  }
+    return null;
+  };
 
   render() {
     return (
       <Fragment>
         {this.state.isOpenGenerateModal && (
-          <GenSynonymSentenceModal toggle={this.toggleGenerateModal} rowData={this.state.generated_sentences} isOpen={this.state.isOpenGenerateModal} setSelectedSentence={this.setSelectedSentence} />
+          <GenSynonymSentenceModal
+            saveGeneratedSentences={this.saveGeneratedSentences}
+            toggle={this.toggleGenerateModal}
+            rowData={this.state.generated_sentences}
+            isOpen={this.state.isOpenGenerateModal}
+            setSelectedSentence={this.setSelectedSentence}
+          />
         )}
 
         <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
+          <LoadingSpinner loading={this.state.generateLoading} text="Generating question" />
           <Row xs="1">
             <Col>
               <Label className="label">Question:</Label>
             </Col>
-            <Col>
-              <Row>
-                <Col>
-                  <Input
-                    placeholder="Enter question then choose type then press the add button :3"
-                    type="text"
-                    name="question"
-                    id="question"
-                    value={this.state.question}
-                    onChange={this.handleInput}
-                  />
-                </Col>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Button
-                        type="button"
-                        color="warning"
-                        id="DisabledAutoHide"
-                        onClick={this.openToolTip}
-                      >
-                        <FontAwesomeIcon icon={faTasks} /> Choose Type
-                      </Button>
-                      <Tooltip
-                        placement="top"
-                        isOpen={this.state.tooltipOpen}
-                        autohide={false}
-                        target="DisabledAutoHide"
-                      >
-                        <Row>
-                          <Col>
-                            <CustomInput
-                              type="checkbox"
-                              id="1"
-                              label="What"
-                              checked={this.state.type[0].isChecked}
-                              onChange={this.handleCheck}
-                            />
-                            <CustomInput
-                              type="checkbox"
-                              id="2"
-                              label="When"
-                              checked={this.state.type[1].isChecked}
-                              onChange={this.handleCheck}
-                            />
-                            <CustomInput
-                              type="checkbox"
-                              checked={this.state.type[2].isChecked}
-                              id="3"
-                              label="Where"
-                              onChange={this.handleCheck}
-                            />
-                            <CustomInput
-                              type="checkbox"
-                              label="Yes/No"
-                              checked={this.state.type[6].isChecked}
-                              id="7"
-                              onChange={this.handleCheck}
-                            />
-                          </Col>
-                          <Col xs="auto">
-                            <CustomInput
-                              type="checkbox"
-                              checked={this.state.type[3].isChecked}
-                              id="4"
-                              label="Who"
-                              onChange={this.handleCheck}
-                            />
-                            <CustomInput
-                              type="checkbox"
-                              checked={this.state.type[4].isChecked}
-                              id="5"
-                              label="Why"
-                              onChange={this.handleCheck}
-                            />
-                            <CustomInput
-                              type="checkbox"
-                              checked={this.state.type[5].isChecked}
-                              id="6"
-                              label="How"
-                              onChange={this.handleCheck}
-                            />
-                          </Col>
-                        </Row>
-                      </Tooltip>
-                    </Col>
-                  </Row>
-                </FormGroup>
-                <Col xs="auto">
-                  <Button
-                    color="success"
-                    onClick={() => {
-                      if (this.getQuestion().trim() !== '') {
-                        this.addQuestion(this.getQuestion());
-                      }
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faPlus} />
+            {!this.props.disable &&
+              <Col>
+                <Row>
+                  <Col>
+                    <Input
+                      disabled={this.props.disable}
+                      placeholder="Enter question then choose type then press the add button :3"
+                      type="text"
+                      name="question"
+                      id="question"
+                      value={this.state.question}
+                      onChange={this.handleInput}
+                    />
+                  </Col>
+                  <FormGroup>
+                    <Row>
+                      <Col>
+                        <Button
+                          disabled={this.props.disable}
+                          type="button"
+                          color="warning"
+                          id="DisabledAutoHide"
+                          onClick={this.openToolTip}
+                        >
+                          <FontAwesomeIcon icon={faTasks} /> Choose Type
                   </Button>
-                </Col>
-              </Row>
-            </Col>
+                        <Tooltip
+                          placement="top"
+                          isOpen={this.state.tooltipOpen}
+                          autohide={false}
+                          target="DisabledAutoHide"
+                        >
+                          <Row>
+                            <Col>
+                              <CustomInput
+                                type="checkbox"
+                                id="1"
+                                label="What"
+                                checked={this.state.type[0].isChecked}
+                                onChange={this.handleCheck}
+                              />
+                              <CustomInput
+                                type="checkbox"
+                                id="2"
+                                label="When"
+                                checked={this.state.type[1].isChecked}
+                                onChange={this.handleCheck}
+                              />
+                              <CustomInput
+                                type="checkbox"
+                                checked={this.state.type[2].isChecked}
+                                id="3"
+                                label="Where"
+                                onChange={this.handleCheck}
+                              />
+                              <CustomInput
+                                type="checkbox"
+                                label="Yes/No"
+                                checked={this.state.type[6].isChecked}
+                                id="7"
+                                onChange={this.handleCheck}
+                              />
+                            </Col>
+                            <Col xs="auto">
+                              <CustomInput
+                                type="checkbox"
+                                checked={this.state.type[3].isChecked}
+                                id="4"
+                                label="Who"
+                                onChange={this.handleCheck}
+                              />
+                              <CustomInput
+                                type="checkbox"
+                                checked={this.state.type[4].isChecked}
+                                id="5"
+                                label="Why"
+                                onChange={this.handleCheck}
+                              />
+                              <CustomInput
+                                type="checkbox"
+                                checked={this.state.type[5].isChecked}
+                                id="6"
+                                label="How"
+                                onChange={this.handleCheck}
+                              />
+                            </Col>
+                          </Row>
+                        </Tooltip>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                  <Col xs="auto">
+                    <Button
+                      disabled={this.props.disable}
+                      color="success"
+                      onClick={() => {
+                        if (this.getQuestion().trim() !== '') {
+                          this.addQuestion(this.getQuestion());
+                        }
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            }
+
           </Row>
           <div>
             <ListGroup className="mt-1">
@@ -459,7 +517,17 @@ export default class Question extends Component {
                     <Row>
                       <Col>
                         {wordArray.map((value, index) => {
-                          return <span key={index} onMouseOver={(event) => this.onMouseOver(event, value)} onMouseLeave={this.onMouseLeave}>{value} </span>
+                          return (
+                            <span
+                              key={index}
+                              onMouseOver={(event) =>
+                                this.onMouseOver(event, value)
+                              }
+                              onMouseLeave={this.onMouseLeave}
+                            >
+                              {value}{' '}
+                            </span>
+                          );
                         })}
                       </Col>
                       <Col xs="auto">
@@ -533,24 +601,28 @@ export default class Question extends Component {
                           }
                         })}
                       </Col>
-                      <Col xs="auto">
-                        <Button
-                          color="danger"
-                          onClick={() => {
-                            this.removeQuestion(question);
-                            this.props.setQuestions(this.state.questions);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </Button>
-                      </Col>
+
+                      {!this.props.disable &&
+                        <Col xs="auto">
+                          <Button
+                            disabled={this.props.disable}
+                            color="danger"
+                            onClick={() => {
+                              this.removeQuestion(question);
+                              this.props.setQuestions(this.state.questions);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </Button>
+                        </Col>
+                      }
                     </Row>
                   </ListGroupItem>
                 );
               })}
             </ListGroup>
           </div>
-          {this.renderGenerateButton()}
+          {!this.props.disable && this.renderGenerateButton()}
         </LoadingSpinner>
       </Fragment>
     );

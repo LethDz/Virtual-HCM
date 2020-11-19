@@ -251,6 +251,8 @@ class SynonymList extends Component {
             columnDefs={columnSynonymFieldDef}
             onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
         </div>
       </div>
