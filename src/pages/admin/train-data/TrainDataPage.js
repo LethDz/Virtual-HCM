@@ -1,10 +1,13 @@
 import React from 'react';
+import { ToastProvider } from 'react-toast-notifications';
 import LayoutWrapper from 'src/layouts/LayoutWrapper';
-import { TrainDataList } from 'src/modules/admin';
+import { TrainData } from 'src/modules/admin';
 
 const TrainDataPage = () => (
   <LayoutWrapper>
-    <TrainDataList />
+    <ToastProvider placement="top-center" autoDismiss={true}>
+      <TrainData />
+    </ToastProvider>
   </LayoutWrapper>
 );
 

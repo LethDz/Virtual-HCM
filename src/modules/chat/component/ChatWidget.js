@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Launcher } from 'react-chat-window';
 import { connect } from 'react-redux';
-import { agentProfile, updateStatusOfChatSocket } from 'src/modules/chat';
+import {
+  agentProfile,
+  updateStatusOfChatSocket,
+  getStatusOfChatSocket,
+} from 'src/modules/chat';
 import 'src/static/stylesheets/chat.css';
 
 class ChatWidget extends Component {
@@ -164,12 +168,14 @@ class ChatWidget extends Component {
         // e.g. server process killed or network down
         // event.code is usually 1006 in this case
         console.log('[chat_close] Connection died unexpectedly');
+        !_self.props.statusOfChatSocket &&
+          _self.props.updateStatusOfChatSocket(true);
       }
-
-      _self.props.updateStatusOfChatSocket(false);
     };
     chatSocket.onerror = function (error) {
       console.log(`[chat_error] ${error.message}`);
+      !_self.props.statusOfChatSocket &&
+        _self.props.updateStatusOfChatSocket(true);
     };
     return chatSocket;
   };
@@ -228,6 +234,7 @@ class ChatWidget extends Component {
 
   componentWillUnmount() {
     this.chatSocket.close(1000);
+    this.props.updateStatusOfChatSocket(false);
   }
 
   render() {
@@ -245,9 +252,13 @@ class ChatWidget extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  statusOfChatSocket: getStatusOfChatSocket(state),
+});
+
 const mapDispatchToProps = (dispatch) => ({
   updateStatusOfChatSocket: (status) =>
     dispatch(updateStatusOfChatSocket(status)),
 });
 
-export default connect(null, mapDispatchToProps)(ChatWidget);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatWidget);

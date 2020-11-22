@@ -1,7 +1,7 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   Button,
@@ -36,11 +36,13 @@ const TrainDataCreate = (props) => {
   const [filename, setFilename] = useState('');
   const [description, setDescription] = useState('');
   const [successAlert, setSuccessAlert] = useState(false);
+  const mounted = useRef(false);
 
-  const onCreate = () => {
-    setLoading(true);
-    setErrorAlert(false);
-    setSuccessAlert(false);
+  const onCreate = (event) => {
+    event.preventDefault();
+    mounted.current && setLoading(true);
+    mounted.current && setErrorAlert(false);
+    mounted.current && setSuccessAlert(false);
 
     const data = {
       filename: filename,
@@ -54,17 +56,17 @@ const TrainDataCreate = (props) => {
         if (response.data.status) {
           const data = response.data.result_data;
           props.addNewTrainData(data);
-          resetForm();
-          setSuccessAlert(true);
+          mounted.current && resetForm();
+          mounted.current && setSuccessAlert(true);
         } else {
-          setErrorAlert(true);
-          setErrorList(response.data.messages);
+          mounted.current && setErrorAlert(true);
+          mounted.current && setErrorList(response.data.messages);
         }
-        setLoading(false);
+        mounted.current && setLoading(false);
       })
       .catch(() => {
-        setErrorAlert(true);
-        setLoading(false);
+        mounted.current && setErrorAlert(true);
+        mounted.current && setLoading(false);
       });
   };
 
@@ -101,7 +103,7 @@ const TrainDataCreate = (props) => {
             return element.id;
           })
         : '';
-    setKnowledgeList(knowledges);
+    mounted.current && setKnowledgeList(knowledges);
   };
 
   const onFirstDataRendered = () => {
@@ -109,7 +111,7 @@ const TrainDataCreate = (props) => {
   };
 
   const onInputChange = (event, setState) => {
-    handleInputHook(event, setState);
+    mounted.current && handleInputHook(event, setState);
   };
 
   const resetForm = () => {
@@ -117,6 +119,13 @@ const TrainDataCreate = (props) => {
     setFilename('');
     gridApi.deselectAll();
   };
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   return (
     <Modal
@@ -126,7 +135,7 @@ const TrainDataCreate = (props) => {
       size="lg"
     >
       <ModalHeader toggle={toggle}>Create Train Data File</ModalHeader>
-      <LoadingSpinner loading={loading} text="Loading">
+      <LoadingSpinner loading={loading} text="Loading" type="MODAL">
         <Form onSubmit={onCreate}>
           <ModalBody>
             {errorAlert && (
@@ -189,22 +198,23 @@ const TrainDataCreate = (props) => {
                     onSelectionChanged={onRowSelected}
                     columnDefs={trainableKnowledgeCol}
                     pagination={true}
+                    paginationAutoPageSize={true}
                   ></AgGridReact>
                 </div>
               </Col>
             </FormGroup>
           </ModalBody>
+          <ModalFooter>
+            <Button color="info" type="submit" disabled={knowledgeList === ''}>
+              <FontAwesomeIcon icon={faPlus} />
+              &nbsp; Create
+            </Button>{' '}
+            <Button color="secondary" onClick={toggle}>
+              Cancel
+            </Button>
+          </ModalFooter>
         </Form>
       </LoadingSpinner>
-      <ModalFooter>
-        <Button color="info" type="submit" disabled={knowledgeList === ''}>
-          <FontAwesomeIcon icon={faPlus} />
-          &nbsp; Create
-        </Button>{' '}
-        <Button color="secondary" onClick={toggle}>
-          Cancel
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 };

@@ -1,6 +1,6 @@
-import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Col,
@@ -18,21 +18,38 @@ import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputHook } from 'src/common/handleInputChange';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import { ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA } from 'src/constants';
+import {
+  getTrainDataDetail,
+  editTrainDataDescription,
+  pullTrainDataDetail,
+} from 'src/modules/admin';
+import {
+  ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA,
+  ADMIN_DOWNLOAD_TRAIN_DATA,
+  API_PREFIX,
+  API_URL,
+} from 'src/constants';
+import { connect } from 'react-redux';
 
 const TrainDataEdit = (props) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorList, setErrorList] = useState([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(
+    props.trainDataDetail.description
+  );
+  const mounted = useRef(false);
   const [successAlert, setSuccessAlert] = useState(false);
+  const propsRef = useRef(props);
 
-  const onCreate = () => {
-    setLoading(true);
-    setErrorAlert(false);
-    setSuccessAlert(false);
+  const onEdit = (event) => {
+    event.preventDefault();
+    mounted.current && setLoading(true);
+    mounted.current && setErrorAlert(false);
+    mounted.current && setSuccessAlert(false);
 
     const data = {
+      id: props.trainDataDetail.id,
       description: description,
     };
 
@@ -40,42 +57,62 @@ const TrainDataEdit = (props) => {
       .post(ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA, data)
       .then((response) => {
         if (response.data.status) {
-          const data = response.data.result_data;
-          props.addNewTrainData(data);
-          resetForm();
-          setSuccessAlert(true);
+          const data = {
+            id: props.trainDataDetail.id,
+            filename: props.trainDataDetail.filename,
+            type: props.trainDataDetail.type,
+            description: description,
+            cdate: props.trainDataDetail.cdate,
+            mdate: props.trainDataDetail.mdate,
+          };
+          mounted.current && props.editTrainDataDescription(data);
+          mounted.current && setSuccessAlert(true);
         } else {
-          setErrorAlert(true);
-          setErrorList(response.data.messages);
+          mounted.current && setErrorAlert(true);
+          mounted.current && setErrorList(response.data.messages);
         }
-        setLoading(false);
+        mounted.current && setLoading(false);
       })
       .catch(() => {
-        setErrorAlert(true);
-        setLoading(false);
+        mounted.current && setErrorAlert(true);
+        mounted.current && setLoading(false);
       });
   };
 
   const toggle = () => {
-    !loading && props.setOpenCreateModal(false);
+    !loading && props.setOpenEditModal(false);
   };
 
   const onInputChange = (event, setState) => {
-    handleInputHook(event, setState);
+    mounted.current && handleInputHook(event, setState);
   };
 
-  const resetForm = () => {};
+  const url = `${API_URL}${API_PREFIX}${ADMIN_DOWNLOAD_TRAIN_DATA(
+    props.trainDataDetail.id
+  )}`;
+
+  useEffect(
+    (props) => {
+      mounted.current = true;
+      const propsReference = propsRef;
+
+      return () => {
+        propsReference.current.pullTrainDataDetail(null);
+        mounted.current = false;
+      };
+    },
+    [props.openEditModal]
+  );
+
+  const onDownload = () => {
+    return;
+  };
 
   return (
-    <Modal
-      isOpen={props.openCreateModal}
-      toggle={toggle}
-      unmountOnClose={true}
-      size="lg"
-    >
-      <ModalHeader toggle={toggle}>Create Train Data File</ModalHeader>
-      <LoadingSpinner loading={loading} text="Loading">
-        <Form onSubmit={onCreate}>
+    <Modal isOpen={props.openEditModal} toggle={toggle} unmountOnClose={true}>
+      <ModalHeader toggle={toggle}>Train Data Detail</ModalHeader>
+      <LoadingSpinner loading={loading} text="Loading" type="MODAL">
+        <Form onSubmit={onEdit}>
           <ModalBody>
             {errorAlert && (
               <ErrorAlert
@@ -87,10 +124,24 @@ const TrainDataEdit = (props) => {
             {successAlert && (
               <SuccessAlert
                 successAlert={successAlert}
-                text="Add new train data successfully"
+                text="Edit train data successfully."
                 onDismiss={() => setSuccessAlert(false)}
               />
             )}
+            <FormGroup row>
+              <Col>
+                <Label for="id">ID:</Label>
+                <Input
+                  id="id"
+                  name="id"
+                  type="text"
+                  placeholder="Enter id"
+                  disabled
+                  required
+                  value={props.trainDataDetail.id}
+                />
+              </Col>
+            </FormGroup>
             <FormGroup row>
               <Col>
                 <Label for="filename">Filename:</Label>
@@ -99,10 +150,13 @@ const TrainDataEdit = (props) => {
                   name="filename"
                   type="text"
                   placeholder="Enter filename"
+                  disabled
                   required
                   value={props.trainDataDetail.filename}
                 />
               </Col>
+            </FormGroup>
+            <FormGroup row>
               <Col>
                 <Label for="description">Description:</Label>
                 <Input
@@ -118,27 +172,44 @@ const TrainDataEdit = (props) => {
             </FormGroup>
             <FormGroup row>
               <Col>
-                <Label for="table">Knowledge Data:</Label>
+                <Label for="btnDownload">Knowledge Data:</Label>
+                <br />
+                <a href={url} download>
+                  <Button color="primary" id="btnDownload" onClick={onDownload}>
+                    <FontAwesomeIcon icon={faDownload} />
+                    &nbsp; Download Training Data File
+                  </Button>
+                </a>
               </Col>
             </FormGroup>
           </ModalBody>
+          <ModalFooter>
+            <Button
+              color="info"
+              type="submit"
+              disabled={description === props.trainDataDetail.description}
+            >
+              <FontAwesomeIcon icon={faSave} />
+              &nbsp; Save
+            </Button>{' '}
+            <Button color="secondary" onClick={toggle}>
+              Cancel
+            </Button>
+          </ModalFooter>
         </Form>
       </LoadingSpinner>
-      <ModalFooter>
-        <Button
-          color="info"
-          type="submit"
-          disabled={description === props.trainDataDetail.description}
-        >
-          <FontAwesomeIcon icon={faSave} />
-          &nbsp; Save
-        </Button>{' '}
-        <Button color="secondary" onClick={toggle}>
-          Cancel
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 };
 
-export default TrainDataEdit;
+const mapStateToProps = (state) => ({
+  trainDataDetail: getTrainDataDetail(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  editTrainDataDescription: (data) => dispatch(editTrainDataDescription(data)),
+  pullTrainDataDetail: (dataDetail) =>
+    dispatch(pullTrainDataDetail(dataDetail)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrainDataEdit);

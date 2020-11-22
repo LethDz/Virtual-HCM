@@ -236,7 +236,7 @@ class ManageTrainingProcess extends Component {
       this.props.statusOfChatSocket &&
       (this.connectTimeOut = setTimeout(
         () => this.remoteAction('connect'),
-        2000
+        1000
       ));
   };
 

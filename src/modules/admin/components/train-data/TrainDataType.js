@@ -32,17 +32,16 @@ const TrainDataType = (props) => {
 
   const toggleStatus = () => {
     context.setLoading(true);
-    context.setErrorAlert(false);
-    context.setSuccessAlert(false);
+    context.props.setErrorAlert(false);
+    context.props.setSuccessAlert(false);
     axiosClient
       .get(ADMIN_TOGGLE_STATUS_TRAIN_DATA(rowData.id))
       .then((response) => {
         if (response.data.status) {
           props.editStatusOfTrainData(rowData.id);
-          context.setSuccessAlert(true);
-          context.setAccountStatus && context.setAccountStatus(!props.value);
+          context.props.setSuccessAlert(true);
         } else {
-          context.setErrorAlert(true);
+          context.props.setErrorAlert(true);
         }
       })
       .then(() => {
@@ -50,8 +49,8 @@ const TrainDataType = (props) => {
         props.api && props.api.refreshCells();
       })
       .catch(() => {
-        context.setSuccessAlert(false);
-        context.setErrorAlert(true);
+        context.props.setSuccessAlert(false);
+        context.props.setErrorAlert(true);
         context.setLoading(false);
       });
   };
@@ -62,7 +61,7 @@ const TrainDataType = (props) => {
         <CustomInput
           className="data-status"
           type="switch"
-          id="toggleStatus"
+          id={`toggleStatus-${props.data.id}`}
           name="toggleStatus"
           label={label}
           checked={status}

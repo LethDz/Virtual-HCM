@@ -12,6 +12,10 @@ export const PULL_CURRENT_STATE = 'PULL_CURRENT_STATE';
 export const PULL_TRAIN_DATA = 'PULL_TRAIN_DATA';
 export const ADD_NEW_TO_TRAIN_DATA = 'ADD_NEW_TO_TRAIN_DATA';
 export const CHANGE_TRAIN_DATA_STATUS = 'CHANGE_TRAIN_DATA_STATUS';
+export const PULL_TRAIN_DATA_DETAIL = 'PULL_TRAIN_DATA_DETAIL';
+export const EDIT_TRAIN_DATA_DESCRIPTION = 'EDIT_TRAIN_DATA_DESCRIPTION';
+export const DELETE_TRAIN_DATA = 'DELETE_TRAIN_DATA';
+export const PULL_TRAIN_DATA_DELETED = 'PULL_TRAIN_DATA_DELETED';
 
 // AG-Grid Setting
 // Column Field Definition
@@ -227,6 +231,54 @@ export const trainableKnowledgeCol = [
     sortable: true,
     filter: true,
     width: 100,
+  },
+  {
+    headerName: 'Created Date',
+    field: 'cdate',
+    sortable: true,
+    filter: true,
+    width: 120,
+    resizable: true,
+  },
+  {
+    headerName: 'Modified Date',
+    field: 'mdate',
+    sortable: true,
+    filter: true,
+    width: 120,
+    resizable: true,
+  },
+];
+
+// Trainable Data Column Definition
+export const trainDataDeleted = [
+  {
+    headerName: 'ID',
+    field: 'id',
+    sortable: true,
+    filter: true,
+    width: 70,
+  },
+  {
+    headerName: 'File Name',
+    field: 'filename',
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    headerName: 'Deleted Reason',
+    field: 'delete_reason',
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    headerName: 'Description',
+    field: 'description',
+    sortable: true,
+    filter: true,
+    resizable: true,
   },
   {
     headerName: 'Created Date',
