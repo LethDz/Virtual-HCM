@@ -104,4 +104,4 @@ export const ROLE_CONTRIBUTOR = 'Contributor';
 export const CSRF_TOKEN = 'csrftoken';
 
 // Base 64 Image generate
-export const imgBase64 = (image) => `data:image/png;base64,${image}`;
+export const imgBase64 = (image) => `https://127.0.0.1:8000${image}`;

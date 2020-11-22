@@ -1,3 +1,4 @@
+import { dateComparator } from 'src/common/getDate';
 import { BtnChangeStatus, TrainDataType } from 'src/modules/admin';
 
 // Action Types
@@ -55,6 +56,7 @@ const fields = (width) => [
     filter: true,
     resizable: true,
     width: width,
+    comparator: dateComparator,
   },
   {
     headerName: 'Email',
@@ -160,6 +162,7 @@ export const trainDataCol = [
     filter: true,
     width: 120,
     resizable: true,
+    comparator: dateComparator,
   },
   {
     headerName: 'Modified Date',
@@ -168,6 +171,7 @@ export const trainDataCol = [
     filter: true,
     width: 120,
     resizable: true,
+    comparator: dateComparator,
   },
 ];
 
@@ -226,11 +230,10 @@ export const trainableKnowledgeCol = [
     resizable: true,
   },
   {
-    headerName: 'Status',
-    field: 'status',
+    headerName: 'Edit User',
+    field: 'edit_user',
     sortable: true,
     filter: true,
-    width: 100,
   },
   {
     headerName: 'Created Date',
@@ -239,6 +242,7 @@ export const trainableKnowledgeCol = [
     filter: true,
     width: 120,
     resizable: true,
+    comparator: dateComparator,
   },
   {
     headerName: 'Modified Date',
@@ -247,6 +251,7 @@ export const trainableKnowledgeCol = [
     filter: true,
     width: 120,
     resizable: true,
+    comparator: dateComparator,
   },
 ];
 
@@ -287,6 +292,7 @@ export const trainDataDeleted = [
     filter: true,
     width: 120,
     resizable: true,
+    comparator: dateComparator,
   },
   {
     headerName: 'Modified Date',
@@ -295,5 +301,6 @@ export const trainDataDeleted = [
     filter: true,
     width: 120,
     resizable: true,
+    comparator: dateComparator,
   },
 ];
