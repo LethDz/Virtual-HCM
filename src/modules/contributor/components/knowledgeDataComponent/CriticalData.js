@@ -177,29 +177,35 @@ class CriticalData extends Component {
                       </Row>
                     </Col>
                     <Col xs="auto">
-                      <Button
-                        color="danger"
-                        onClick={() => {
-                          this.removeCritical(index);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </Button>
+                      {!this.props.disable &&
+                        <Button
+                          disabled={this.props.disable}
+                          color="danger"
+                          onClick={() => {
+                            this.removeCritical(index);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </Button>}
                     </Col>
                   </Row>
                   <Row>
                     <Col className="border-right-solid">
                       <Label>Subject component: </Label>
-                      <CriticalDataItem
-                        checkSubjectType={
-                          this.state.criticalData[index].word.length === 0 &&
-                          this.checkSubjectType
-                        }
-                        type={CRITICAL}
-                        index={index}
-                        wordArray={this.props.wordArray}
-                        setCriticalData={this.setCriticalData}
-                      />
+                      {!this.props.disable &&
+                        <CriticalDataItem
+                          disable={this.props.disable}
+                          checkSubjectType={
+                            this.state.criticalData[index].word.length === 0 &&
+                            this.checkSubjectType
+                          }
+                          type={CRITICAL}
+                          index={index}
+                          wordArray={this.props.wordArray}
+                          setCriticalData={this.setCriticalData}
+                        />
+                      }
+
                       <ListGroup>
                         {this.state.criticalData[index].word.map(
                           (word, index) => {
@@ -210,18 +216,21 @@ class CriticalData extends Component {
                                     {word.type}: {word.word}
                                   </Col>
                                   <Col xs="auto">
-                                    <Button
-                                      color="danger"
-                                      onClick={() => {
-                                        this.removeComponent(
-                                          CRITICAL,
-                                          criticalData.index,
-                                          index
-                                        );
-                                      }}
-                                    >
-                                      <FontAwesomeIcon icon={faTrashAlt} />
-                                    </Button>
+                                    {!this.props.disable &&
+                                      <Button
+                                        disabled={this.props.disable}
+                                        color="danger"
+                                        onClick={() => {
+                                          this.removeComponent(
+                                            CRITICAL,
+                                            criticalData.index,
+                                            index
+                                          );
+                                        }}
+                                      >
+                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                      </Button>
+                                    }
                                   </Col>
                                 </Row>
                               </ListGroupItem>
@@ -232,13 +241,16 @@ class CriticalData extends Component {
                     </Col>
                     <Col>
                       <Label>Verb: </Label>
-                      <CriticalDataItem
-                        checkSubjectType={this.checkSubjectType}
-                        type={VERB}
-                        index={index}
-                        wordArray={this.props.wordArray}
-                        setVerb={this.setVerb}
-                      />
+                      {!this.props.disable &&
+                        <CriticalDataItem
+                          disable={this.props.disable}
+                          checkSubjectType={this.checkSubjectType}
+                          type={VERB}
+                          index={index}
+                          wordArray={this.props.wordArray}
+                          setVerb={this.setVerb}
+                        />}
+
                       <ListGroup>
                         {this.state.criticalData[index].verb.map(
                           (verb, index) => {
@@ -249,18 +261,21 @@ class CriticalData extends Component {
                                     {verb.type}: {verb.word}
                                   </Col>
                                   <Col xs="auto">
-                                    <Button
-                                      color="danger"
-                                      onClick={() => {
-                                        this.removeComponent(
-                                          VERB,
-                                          criticalData.index,
-                                          index
-                                        );
-                                      }}
-                                    >
-                                      <FontAwesomeIcon icon={faTrashAlt} />
-                                    </Button>
+                                    {!this.props.disable &&
+                                      <Button
+                                        disabled={this.props.disable}
+                                        color="danger"
+                                        onClick={() => {
+                                          this.removeComponent(
+                                            VERB,
+                                            criticalData.index,
+                                            index
+                                          );
+                                        }}
+                                      >
+                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                      </Button>
+                                    }
                                   </Col>
                                 </Row>
                               </ListGroupItem>
@@ -274,11 +289,18 @@ class CriticalData extends Component {
               );
             })}
           </ListGroup>
-          <div className="d-flex justify-content-end mt-2">
-            <Button color="primary" onClick={this.addCriticalData}>
-              <FontAwesomeIcon icon={faPlusCircle} /> Subject
-            </Button>
-          </div>
+          {!this.props.disable &&
+            <div className="d-flex justify-content-end mt-2">
+              <Button
+                disabled={this.props.disable}
+                color="primary"
+                onClick={this.addCriticalData}
+              >
+                <FontAwesomeIcon icon={faPlusCircle} /> Subject
+          </Button>
+            </div>
+          }
+
         </Col>
       </Row>
     );

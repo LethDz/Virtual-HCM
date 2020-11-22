@@ -1,11 +1,6 @@
-.r-button {
-  background-color: #3c8dbc !important;
-  border: 1px solid #367fa9 !important;
-}
-
 .r-ag-grid {
-  height: "60vh" !important;
-  width: "80%" !important;
+  height: '60vh' !important;
+  width: '80%' !important;
 }
 
 .upload-btn-wrapper {
@@ -25,7 +20,6 @@
   width: 100%;
   max-width: 100px;
   height: 150px;
-  border: 1px solid #4391BE;
-  border-radius: 4%;;
+  border: 1px solid #4391be;
+  border-radius: 4%;
 }
-

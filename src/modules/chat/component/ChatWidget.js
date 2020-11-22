@@ -119,7 +119,7 @@ class ChatWidget extends Component {
             );
             break;
           case _self.response_types.LAST_SESSION_MESSAGES:
-            if (received.data && received.data > 0) {
+            if (received.data && received.data.length > 0) {
               _self.setChatboxMessages(received.data);
             } else {
               _self.send_websocket_command(
@@ -192,17 +192,17 @@ class ChatWidget extends Component {
   setChatboxMessages = (data) => {
     if (data) {
       let messages = [];
-      for (let message in data) {
+      for (var i = 0, l = data.length; i < l; i++) {
         messages.push({
           type: 'text',
-          author: message.sent === 1 ? 'me' : 'them',
+          author: data[i].sent === 1 ? 'me' : 'them',
           data: {
-            text: message.text,
+            text: data[i].text,
           },
         });
       }
       this.setState({
-        messageList: [...this.state.messageList, messages],
+        messageList: [...this.state.messageList, ...messages],
       });
     }
   };

@@ -11,7 +11,7 @@ import {
 import { REFERENCE, ALL } from 'src/constants';
 import { columnRefFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import 'src/static/stylesheets/reference.css';
@@ -39,27 +39,28 @@ class ReferenceList extends Component {
   }
 
   setRowData = async () => {
-    if (this.props.referenceList.length === 0) {
-      this._isMounted && this.setState({ loading: true });
-      axiosClient
-        .get(REFERENCE + ALL)
-        .then((response) => {
+    this._isMounted && this.setState({ loading: true });
+    axiosClient
+      .get(REFERENCE + ALL)
+      .then((response) => {
+        if (response.data.status) {
           const references = response.data.result_data.references;
           this.props.fetchAllDocumentReference(references);
-          this.setState({ loading: false, referenceList: references });
-        })
-        .then(() => {
-          this.setStyleForGrid();
-        })
-        .catch((error) => {
-          this.setLoading(false);
+          this.setState({ referenceList: references });
+        } else {
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    } else {
-      await this.setReferenceList(this.props.referenceList);
-      await this.setStyleForGrid();
-    }
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.setStyleForGrid();
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   setReferenceList = (list) => {
@@ -85,16 +86,23 @@ class ReferenceList extends Component {
     await this.gridApi.sizeColumnsToFit();
   };
 
-  onRowDoubleClicked = () => {
+  onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let id =
       selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
     this._isMounted &&
       this.setState({
         selectedId: id,
-        modalReferenceDetail: !this.state.modalReferenceDetail,
       });
   };
+
+  onRowDoubleClicked = (row) =>{
+    let id = row.data.reference_document_id;
+    this.setState({
+      selectedId: id,
+      modalReferenceDetail: !this.state.modalReferenceDetail,
+    });
+  }
 
   toggleReferenceDetail = () => {
     this.setState({
@@ -195,7 +203,7 @@ class ReferenceList extends Component {
         )}
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
-            <Button onClick={this.onReferenceCreateClick} className="r-button">
+            <Button onClick={this.onReferenceCreateClick} color="primary">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
@@ -203,6 +211,24 @@ class ReferenceList extends Component {
               <CreateReferenceModal
                 isOpen={this.state.modalReferenceCreate}
                 toggle={this.toggleReferenceCreate}
+                updateReferenceList={this.setReferenceList}
+              />
+            )}
+          </Col>
+          <Col xs="auto">
+            <Button
+              color="success"
+              disabled={this.state.selectedId === ''}
+              onClick={this.toggleReferenceDetail}
+            >
+              <FontAwesomeIcon icon={faEdit} color="white" />
+              &nbsp; Edit
+            </Button>
+            {this.state.modalReferenceDetail && (
+              <DocumentReferenceModal
+                isOpen={this.state.modalReferenceDetail}
+                id={this.state.selectedId}
+                toggle={this.toggleReferenceDetail}
                 updateReferenceList={this.setReferenceList}
               />
             )}
@@ -223,17 +249,12 @@ class ReferenceList extends Component {
             onGridReady={this.onGridReady}
             rowData={this.state.referenceList}
             rowSelection="single"
+            onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
-          {this.state.modalReferenceDetail && (
-            <DocumentReferenceModal
-              isOpen={this.state.modalReferenceDetail}
-              id={this.state.selectedId}
-              toggle={this.toggleReferenceDetail}
-              updateReferenceList={this.setReferenceList}
-            />
-          )}
         </div>
       </div>
     );

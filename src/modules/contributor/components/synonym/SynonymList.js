@@ -7,7 +7,7 @@ import {
   CreateSynonymModal,
 } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
@@ -52,39 +52,45 @@ class SynonymList extends Component {
   };
 
   setRowData = async () => {
-    if (this.props.synonymsList.length === 0) {
-      this._isMounted && this.setLoading(true);
-      axiosClient
-        .get(SYNONYM + ALL)
-        .then((response) => {
+    this._isMounted && this.setLoading(true);
+    axiosClient
+      .get(SYNONYM + ALL)
+      .then((response) => {
+        if (response.data.status) {
           const synonyms = response.data.result_data.synonym_dicts;
           this.props.fetchAllSynonyms(synonyms);
           this.setSynonymList(synonyms);
-          this.setLoading(false);
-        })
-        .then(() => {
-          this.setStyleForGrid();
-        })
-        .catch((error) => {
-          this.setLoading(false);
+        } else {
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    } else {
-      await this.setSynonymList(this.props.synonymsList);
-      await this.setStyleForGrid();
-    }
-  };
-
-  onRowDoubleClicked = () => {
-    let selectedRows = this.gridApi.getSelectedRows();
-    let id = selectedRows.length === 1 ? selectedRows[0].synonym_id : '';
-    this._isMounted &&
-      this.setState({
-        selectedId: id,
-        modalSynonymDetail: !this.state.modalSynonymDetail,
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.setStyleForGrid();
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
       });
   };
+
+  onRowSelected = () => {
+    let selectedRows = this.gridApi.getSelectedRows();
+    let id = selectedRows.length === 1 ? selectedRows[0].synonym_id : '';
+    this.setState({
+      selectedId: id,
+    });
+  };
+
+  onRowDoubleClicked = (row) =>{
+    let id = row.data.synonym_id;
+    this.setState({
+      selectedId: id,
+      modalSynonymDetail: !this.state.modalSynonymDetail,
+    });
+  }
 
   setSynonymList = (list) => {
     this._isMounted &&
@@ -94,27 +100,31 @@ class SynonymList extends Component {
   };
 
   toggleSynonymCreate = () => {
-    this._isMounted && this.setState({
-      modalSynonymCreate: !this.state.modalSynonymCreate,
-    });
+    this._isMounted &&
+      this.setState({
+        modalSynonymCreate: !this.state.modalSynonymCreate,
+      });
   };
 
   toggleSynonymDetail = () => {
-    this._isMounted && this.setState({
-      modalSynonymDetail: !this.state.modalSynonymDetail,
-    });
+    this._isMounted &&
+      this.setState({
+        modalSynonymDetail: !this.state.modalSynonymDetail,
+      });
   };
 
   onSynonymCreateClick = () => {
-    this._isMounted && this.setState({
-      modalSynonymCreate: !this.state.modalSynonymCreate,
-    });
+    this._isMounted &&
+      this.setState({
+        modalSynonymCreate: !this.state.modalSynonymCreate,
+      });
   };
 
   updateSynonymList = () => {
-    this._isMounted && this.setState({
-      synonymsList: this.props.synonymsList,
-    });
+    this._isMounted &&
+      this.setState({
+        synonymsList: this.props.synonymsList,
+      });
   };
 
   setStyleForGrid = () => {
@@ -192,7 +202,7 @@ class SynonymList extends Component {
         )}
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
-            <Button onClick={this.onSynonymCreateClick} color="success">
+            <Button onClick={this.onSynonymCreateClick} color="primary">
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>
@@ -200,6 +210,24 @@ class SynonymList extends Component {
               <CreateSynonymModal
                 isOpen={this.state.modalSynonymCreate}
                 toggle={this.toggleSynonymCreate}
+                updateSynonymList={this.setSynonymList}
+              />
+            )}
+          </Col>
+          <Col xs="auto">
+            <Button
+              color="success"
+              disabled={this.state.selectedId === ''}
+              onClick={this.toggleSynonymDetail}
+            >
+              <FontAwesomeIcon icon={faEdit} color="white" />
+              &nbsp; Edit
+            </Button>
+            {this.state.modalSynonymDetail && (
+              <SynonymDetailModal
+                isOpen={this.state.modalSynonymDetail}
+                id={this.state.selectedId}
+                toggle={this.toggleSynonymDetail}
                 updateSynonymList={this.setSynonymList}
               />
             )}
@@ -221,16 +249,11 @@ class SynonymList extends Component {
             rowData={this.state.synonymsList}
             rowSelection="single"
             columnDefs={columnSynonymFieldDef}
-            onRowDoubleClicked={this.onRowDoubleClicked}
+            onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
-          {this.state.modalSynonymDetail && (
-            <SynonymDetailModal
-              isOpen={this.state.modalSynonymDetail}
-              id={this.state.selectedId}
-              toggle={this.toggleSynonymDetail}
-              updateSynonymList={this.setSynonymList}
-            />
-          )}
         </div>
       </div>
     );
