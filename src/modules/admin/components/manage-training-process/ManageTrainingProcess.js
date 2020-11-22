@@ -77,6 +77,8 @@ class ManageTrainingProcess extends Component {
     inputTerminal[0].addEventListener('blur', () => {
       terminal[0].style.boxShadow = 'unset';
     });
+
+    inputTerminal[0].disabled = true;
   };
 
   connected = () => {

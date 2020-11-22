@@ -1,5 +1,5 @@
 import { dateComparator } from 'src/common/getDate';
-import { BtnChangeStatus, TrainDataType } from 'src/modules/admin';
+import { BtnChangeStatus, TrainDataType, AccountRole } from 'src/modules/admin';
 
 // Action Types
 export const GET_CONTRIBUTORS_LIST = 'GET_CONTRIBUTORS_LIST';
@@ -39,7 +39,17 @@ const fields = (width) => [
     field: 'username',
     sortable: true,
     filter: true,
+    width: 120,
     resizable: true,
+  },
+  {
+    headerName: 'Role',
+    field: 'admin',
+    sortable: true,
+    filter: true,
+    resizable: true,
+    width: 120,
+    cellRenderer: 'accountRole',
   },
   {
     headerName: 'Full Name',
@@ -50,7 +60,7 @@ const fields = (width) => [
     width: width,
   },
   {
-    headerName: 'Date of birth',
+    headerName: 'Date Of Birth',
     field: 'date_of_birth',
     sortable: true,
     filter: true,
@@ -80,6 +90,7 @@ const fields = (width) => [
 // set Component to Ag-grid
 export const frameworkComponents = {
   btnChangeStatus: BtnChangeStatus,
+  accountRole: AccountRole,
 };
 
 // set context to Ag-grid

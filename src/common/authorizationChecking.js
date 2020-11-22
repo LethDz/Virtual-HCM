@@ -9,6 +9,7 @@ import {
   LOGOUT,
   ROLE_ADMIN,
   ROLE_CONTRIBUTOR,
+  USER_HAS_BEEN_BANNED,
   USER_IS_INACTIVE,
   USER_NOT_FOUND,
   WRONG_PASSWORD,
@@ -94,4 +95,5 @@ export const checkMessageIsNotValidUser = (resultData) =>
     resultData.error_detail === USER_IS_INACTIVE ||
     resultData.error_detail === ACCESS_TOKEN_EXPIRED ||
     resultData.error_detail === WRONG_PASSWORD ||
-    resultData.error_detail === AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED);
+    resultData.error_detail === AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED ||
+    resultData.error_detail === USER_HAS_BEEN_BANNED);

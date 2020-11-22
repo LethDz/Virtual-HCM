@@ -1,6 +1,7 @@
 import {
   BOTH_USERNAME_AND_PASSWORD_REQUIRED,
   FORBIDDEN,
+  USER_HAS_BEEN_BANNED,
   USER_NOT_FOUND,
   WRONG_PASSWORD,
 } from 'src/constants';
@@ -28,6 +29,15 @@ export const showLoginError = (data, component, addToast) => {
           passwordInvalid: true,
           usernameInvalid: true,
         });
+
+      resultData.error_detail === USER_HAS_BEEN_BANNED &&
+        addToast(
+          `${resultData.error_detail}.
+          Please contact to Admin for support`,
+          {
+            appearance: 'error',
+          }
+        );
     } else {
       addToast(resultData.error_detail, {
         appearance: 'error',
