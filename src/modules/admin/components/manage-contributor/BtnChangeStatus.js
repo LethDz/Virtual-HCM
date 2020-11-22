@@ -43,7 +43,7 @@ const BtnChangeStatus = (props) => {
 
   return (
     <div className={props.editPage ? '' : 'align-center-table'}>
-      <span className={`${props.value ? 'text-success' : 'text-danger'} mr-2`}>
+      <span className={`${props.value ? 'text-success' : 'text-danger'} mr-1`}>
         <FontAwesomeIcon
           icon={props.value ? faCheck : faTimes}
           color={props.value ? 'green' : 'red'}
@@ -51,15 +51,20 @@ const BtnChangeStatus = (props) => {
         {props.value ? 'Active' : 'Disabled'}
       </span>
       &nbsp;
-      <Button
-        color={props.value ? 'danger' : 'success'}
-        size="sm"
-        onClick={changeStatus}
-        className="ml-2"
-      >
-        <FontAwesomeIcon icon={props.value ? faTimes : faCheck} color="white" />
-        &nbsp; {props.value ? 'Disable' : 'Active'}
-      </Button>
+      {rowData && !rowData.admin && (
+        <Button
+          color={props.value ? 'danger' : 'success'}
+          size="sm"
+          onClick={changeStatus}
+          className="ml-1"
+        >
+          <FontAwesomeIcon
+            icon={props.value ? faTimes : faCheck}
+            color="white"
+          />
+          &nbsp; {props.value ? 'Disable' : 'Active'}
+        </Button>
+      )}
     </div>
   );
 };

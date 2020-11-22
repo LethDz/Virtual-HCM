@@ -1,0 +1,18 @@
+.align-center-type {
+  display: flex;
+  margin: 0 auto;
+  height: 100%;
+  align-items: center;
+}
+
+.data-status {
+  display: flex !important;
+}
+
+.data-status label {
+  display: flex;
+  position: relative;
+  margin-bottom: 0;
+  vertical-align: bottom;
+  align-items: center;
+}

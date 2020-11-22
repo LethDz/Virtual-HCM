@@ -108,7 +108,7 @@ export const deleteReference = (id) => ({
 });
 
 //Report
-export const fetchAllDocumentReference = (reportList) => ({
+export const fetchAllReport = (reportList) => ({
   type: GET_ALL_REPORT,
   payload: {
     reportList,

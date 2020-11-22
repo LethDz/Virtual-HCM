@@ -19,7 +19,47 @@ export const changeToFormatDateVN = (dateString, divider) => {
 };
 
 export const isoFormatDate = (dateString) => {
-  let dateParts = dateString.split('/');
+  const dateParts = dateString.split('/');
   // month is 0-based, that's why we need dataParts[1] - 1
   return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+};
+
+// Date Comparator for Ag-grid
+export const dateComparator = (date1, date2) => {
+  const date1Number = dateToMilliseconds(date1);
+  const date2Number = dateToMilliseconds(date2);
+  if (date1Number === null && date2Number === null) {
+    return 0;
+  }
+
+  if (date1Number === null) {
+    return -1;
+  }
+
+  if (date2Number === null) {
+    return 1;
+  }
+
+  return date1Number - date2Number;
+};
+
+export const dateToMilliseconds = (dateString) => {
+  if (dateString === undefined || dateString === null) {
+    return null;
+  }
+
+  let isoFormat = '';
+
+  if (dateString.includes(' ')) {
+    const datePart = dateString.split(' ')[0];
+    const timePart = dateString.split(' ')[1];
+    isoFormat = `${isoFormatDate(datePart)} ${timePart}`;
+  } else {
+    isoFormat = isoFormatDate(dateString);
+  }
+
+  const date = new Date(isoFormat);
+  const milliseconds = date.getTime();
+
+  return milliseconds;
 };

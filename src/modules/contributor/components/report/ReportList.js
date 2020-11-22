@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import React, { Component } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
@@ -14,6 +13,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import { AgGridReact } from 'ag-grid-react';
 
 class ReportList extends Component {
   _isMounted = false;
@@ -45,7 +45,6 @@ class ReportList extends Component {
           this.setState({ reportList: reports });
         } else {
           this.setErrorAlert(true);
-          this.setErrorList(response.data.messages);
         }
         this.setLoading(false);
       })

@@ -8,7 +8,7 @@ import { FirstLoginModal } from 'src/modules/login';
 const PrivateRouteContributor = ({ component: Component, ...rest }) => {
   const checkAuthorization = (props) => {
     const user = getUserData();
-    return user && !user.admin ? (
+    return user ? (
       <ErrorBoundary>
         <Component {...props} />
         {!user.first_login && <FirstLoginModal firstLogin={!user.first_login} />}

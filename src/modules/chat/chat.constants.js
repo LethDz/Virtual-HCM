@@ -4,3 +4,6 @@ export const agentProfile = {
   teamName: 'Kụ',
   imageUrl: botLogo,
 };
+
+// Action Type
+export const UPDATE_STATUS_OF_CHAT_SOCKET = 'UPDATE_STATUS_OF_CHAT_SOCKET';

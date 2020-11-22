@@ -42,13 +42,13 @@ const SideBarContributorContent = () => {
       />
       <SideBarItem
         name="Document Reference"
-        icon={<FontAwesomeIcon icon={faFileAlt} />}
+        icon={<FontAwesomeIcon icon={faBookOpen} />}
         link={REFERENCE_LIST_PAGE}
         active={location.includes(REFERENCE_LIST_PAGE)}
       />
       <SideBarItem
         name="Synonym"
-        icon={<FontAwesomeIcon icon={faBookOpen} />}
+        icon={<FontAwesomeIcon icon={faFileAlt} />}
         link={SYNONYM_LIST_PAGE}
         active={location.includes(SYNONYM_LIST_PAGE)}
       />

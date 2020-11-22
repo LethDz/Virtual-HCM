@@ -67,7 +67,7 @@ class SynonymList extends Component {
         this.setLoading(false);
       })
       .then(() => {
-        this.setStyleForGrid();
+        this.sizeToFit();
       })
       .catch((error) => {
         this.setLoading(false);
@@ -84,13 +84,13 @@ class SynonymList extends Component {
     });
   };
 
-  onRowDoubleClicked = (row) =>{
+  onRowDoubleClicked = (row) => {
     let id = row.data.synonym_id;
     this.setState({
       selectedId: id,
       modalSynonymDetail: !this.state.modalSynonymDetail,
     });
-  }
+  };
 
   setSynonymList = (list) => {
     this._isMounted &&
@@ -174,6 +174,14 @@ class SynonymList extends Component {
       });
   };
 
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  };
+
   render() {
     return (
       <div
@@ -253,6 +261,7 @@ class SynonymList extends Component {
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             pagination={true}
             paginationAutoPageSize={true}
+            onFirstDataRendered={this.onFirstDataRendered}
           ></AgGridReact>
         </div>
       </div>
