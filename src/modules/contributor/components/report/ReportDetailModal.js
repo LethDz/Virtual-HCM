@@ -107,7 +107,7 @@ class ReportDetailModal extends Component {
                 <FormGroup>
                   <Label>Detail: </Label>
                   <Input
-                    name="link"
+                    name="detail"
                     type="textarea"
                     readOnly
                     value={this.state.detail}
