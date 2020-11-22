@@ -101,7 +101,7 @@ class ReportDetailModal extends Component {
                     name="reference_type"
                     type="text"
                     readOnly
-                    value={this.state.reference_type}
+                    value={this.state.report_type}
                   />
                 </FormGroup>
                 <FormGroup>
