@@ -16,6 +16,8 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  Vote,
+  Comment,
   PROCESSING,
   DONE,
   DISABLE,
@@ -29,6 +31,7 @@ import {
   handleInputChange,
 } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
+import { getUserData } from 'src/common/authorizationChecking';
 
 import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
@@ -52,6 +55,8 @@ class KnowledgeDataDetail extends Component {
         baseResponse: '',
         documentReference: [],
       },
+      comments: [],
+      userList: [],
       documentList: [],
       tokenizedWord: [],
       ner: [],
@@ -65,7 +70,7 @@ class KnowledgeDataDetail extends Component {
       hoverWord: '',
       formStatus: '',
       disable: true,
-      owner: false
+      owner: false,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -118,43 +123,43 @@ class KnowledgeDataDetail extends Component {
   checkFormSubmit = () => {
     const form = this.state.form;
     let errorFlag = false;
-    let errorList = []
+    let errorList = [];
 
     if (form.baseResponse.trim() === '') {
-      errorFlag = true
-      errorList.push("Fill in base response")
-    };
+      errorFlag = true;
+      errorList.push('Fill in base response');
+    }
     if (form.intent.trim() === '') {
-      errorFlag = true
-      errorList.push("Fill in intent")
-    };
+      errorFlag = true;
+      errorList.push('Fill in intent');
+    }
     if (form.intentFullName.trim() === '') {
       errorFlag = true;
-      errorList.push("Fill in intent fullname")
+      errorList.push('Fill in intent fullname');
     }
     if (form.rawData.trim() === '') {
       errorFlag = true;
-      errorList.push("Fill in raw data")
+      errorList.push('Fill in raw data');
     }
     if (form.documentReference.length === 0) {
       errorFlag = true;
-      errorList.push("Document reference required at least 1 reference")
+      errorList.push('Document reference required at least 1 reference');
     }
     if (form.coresponse.length === 0) {
-      errorFlag = true
-      errorList.push("Fill in coresponse")
-    };
+      errorFlag = true;
+      errorList.push('Fill in coresponse');
+    }
     if (form.criticalData.length === 0) {
       errorFlag = true;
-      errorList.push("Subject required at least 1 subject")
+      errorList.push('Subject required at least 1 subject');
     }
     form.criticalData.forEach((data, index) => {
       if (data.word.length === 0) {
         errorFlag = true;
-        errorList.push(`Subject ${index} need at least 1 component`)
+        errorList.push(`Subject ${index} need at least 1 component`);
       }
     });
-    this._isMounted && this.setState({ errorList: errorList })
+    this._isMounted && this.setState({ errorList: errorList });
     return errorFlag;
   };
 
@@ -227,24 +232,23 @@ class KnowledgeDataDetail extends Component {
     let form = this.state.form;
     form.synonyms = synonyms;
     this.resetGeneratedQuestion();
-    let synonymIdList = []
+    let synonymIdList = [];
     synonyms.forEach((synonyms) => {
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
         if (item.id) {
           synonymIds.push(item.id);
-        }
-        else if (item.synonym_id) {
+        } else if (item.synonym_id) {
           synonymIds.push(item.synonym_id);
-        }
-        else {
+        } else {
           synonymIds.push(item);
         }
       });
       synonymIdList.push({ word: synonyms.word, synonyms: synonymIds });
     });
 
-    if (this._isMounted) this.setState({ form: form, synonymIdList: synonymIdList });
+    if (this._isMounted)
+      this.setState({ form: form, synonymIdList: synonymIdList });
   };
 
   setRawData = (rawData) => {
@@ -320,14 +324,15 @@ class KnowledgeDataDetail extends Component {
   };
 
   setFormStatus = () => {
-    let user = JSON.parse(sessionStorage.getItem('user'));
+    let user = getUserData();
     switch (this.props.dataApprovalDetail.status.toUpperCase()) {
       case AVAILABLE:
-        this._isMounted && this.setState({ formStatus: AVAILABLE, disable: false });
+        this._isMounted &&
+          this.setState({ formStatus: AVAILABLE, disable: false });
         break;
       case PROCESSING:
         this._isMounted && this.setState({ formStatus: PROCESSING });
-        if (this.props.dataApprovalDetail.edit_user === user.username && this.props.dataApprovalDetail.edit_user_id === user.user_id) {
+        if (this.props.dataApprovalDetail.edit_user_id === user.user_id) {
           this._isMounted && this.setState({ owner: true, disable: false });
         }
         break;
@@ -335,11 +340,12 @@ class KnowledgeDataDetail extends Component {
         this._isMounted && this.setState({ formStatus: DONE, disable: true });
         break;
       case DISABLE:
-        this._isMounted && this.setState({ formStatus: DISABLE, disable: true });
+        this._isMounted &&
+          this.setState({ formStatus: DISABLE, disable: true });
         break;
       default:
     }
-  }
+  };
 
   getInformation = () => {
     if (
@@ -353,14 +359,18 @@ class KnowledgeDataDetail extends Component {
         .get(GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.props.intent))
         .then((response) => {
           if (response.data.status) {
-            this.setFormData(response.data.result_data.knowledge_data);
-            this.props.pullDataApproval(
-              response.data.result_data.knowledge_data
-            );
+            this.setFormData(response.data.result_data);
+            this.props.pullDataApproval(response.data.result_data);
+            this._isMounted &&
+              this.setState({
+                comments: response.data.result_data.comments.data,
+                userList: response.data.result_data.comments.users,
+              });
             this.setFormStatus();
             this.setErrorAlert(false);
             this.setAlertMessage('Load successful');
             this.setSuccessAlert(true);
+            this._isMounted && this.setState({ loading: false });
           } else {
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
@@ -405,7 +415,7 @@ class KnowledgeDataDetail extends Component {
     });
 
     this._isMounted &&
-      this.setState({ form: form, loading: false, synonymIdList: synonym });
+      this.setState({ form: form, synonymIdList: synonym });
   };
 
   getWordArray = () => {
@@ -426,7 +436,7 @@ class KnowledgeDataDetail extends Component {
   };
 
   renderProcessMode = () => {
-    const wordArray = this.getWordArray();
+    // const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
         <LoadingSpinner
@@ -462,7 +472,11 @@ class KnowledgeDataDetail extends Component {
                   </h4>
                 </Col>
               </Row>
-              <FormSectionTitle title="Meta data" />
+
+              {/* Set condition for Vote */}
+              <Vote />
+
+              {/* <FormSectionTitle title="Meta data" />
               <MetaData
                 disable={this.state.disable}
                 intentValue={this.state.form.intent}
@@ -540,18 +554,26 @@ class KnowledgeDataDetail extends Component {
                 resetGeneratedQuestion={this.resetGeneratedQuestion}
                 synonymsValue={this.state.form.synonyms}
                 setHoverWord={this.setHoverWord}
+              /> */}
+              <Comment
+                comments={this.state.comments}
+                userList={this.state.userList}
               />
-              <Row className="d-flex justify-content-around pt-3 pb-3">
-                {!this.state.disable && (this.state.formStatus === AVAILABLE || (this.state.formStatus === PROCESSING && this.state.owner)) &&
-                  <Button
-                    disabled={this.state.disable}
-                    type="submit"
-                    color="info"
-                    onClick={this.submitForm}
-                  >
-                    <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
-                </Button>}
 
+              <Row className="d-flex justify-content-around pt-3 pb-3">
+                {!this.state.disable &&
+                  (this.state.formStatus === AVAILABLE ||
+                    (this.state.formStatus === PROCESSING &&
+                      this.state.owner)) && (
+                    <Button
+                      disabled={this.state.disable}
+                      type="submit"
+                      color="info"
+                      onClick={this.submitForm}
+                    >
+                      <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
+                    </Button>
+                  )}
               </Row>
             </div>
           </Form>

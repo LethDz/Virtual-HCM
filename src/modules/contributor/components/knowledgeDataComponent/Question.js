@@ -48,14 +48,16 @@ export default class Question extends Component {
       tooltipOpen: false,
       isOpenGenerateModal: false,
       generated_sentences: [],
-      saveGeneratedSentences: false
+      saveGeneratedSentences: false,
     };
   }
 
   saveGeneratedSentences = (status) => {
-    status === false && this._isMounted && this.setState({ generated_sentences: [] })
-    this._isMounted && this.setState({ saveGeneratedSentences: status })
-  }
+    status === false &&
+      this._isMounted &&
+      this.setState({ generated_sentences: [] });
+    this._isMounted && this.setState({ saveGeneratedSentences: status });
+  };
 
   handleCheck = (event) => {
     let types = this.state.type;
@@ -70,22 +72,26 @@ export default class Question extends Component {
     this._isMounted = true;
     if (this.props.questionValue && this.props.questionValue.length) {
       let questionList = [];
-      let generatedList = []
+      let generatedList = [];
       this.props.questionValue.forEach((question) => {
         questionList.push({
           question: question.question,
           type: question.type,
           generated_questions: question.generated_questions,
         });
-        question.generated_questions.forEach(generated_questions => {
+        question.generated_questions.forEach((generated_questions) => {
           generatedList.push({
             sentence: generated_questions.question,
             accept: generated_questions.accept,
-            question: question.question
-          })
-        })
+            question: question.question,
+          });
+        });
       });
-      this.setState({ questions: questionList, generated_sentences: generatedList, saveGeneratedSentences: true });
+      this.setState({
+        questions: questionList,
+        generated_sentences: generatedList,
+        saveGeneratedSentences: true,
+      });
     }
   };
 
@@ -212,7 +218,7 @@ export default class Question extends Component {
     if (index > -1) {
       questionsTemp.splice(index, 1);
     }
-    this.resetGeneratedQuestion()
+    this.resetGeneratedQuestion();
     if (this._isMounted) this.setState(questionsTemp);
   };
 
@@ -240,14 +246,18 @@ export default class Question extends Component {
       });
     });
     this.props.setQuestions(questionList);
-    this.saveGeneratedSentences(false)
+    this.saveGeneratedSentences(false);
     this._isMounted &&
-      this.setState({ questions: questionList, generated_sentences: [], saveGeneratedSentences: false });
+      this.setState({
+        questions: questionList,
+        generated_sentences: [],
+        saveGeneratedSentences: false,
+      });
   };
 
-  onMouseOver = (event, value) => { };
+  onMouseOver = (event, value) => {};
 
-  onMouseLeave = (event) => { };
+  onMouseLeave = (event) => {};
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index;
@@ -289,7 +299,11 @@ export default class Question extends Component {
           let data = [];
           response.data.result_data.similaries.forEach((sentences, index) => {
             sentences.forEach((sentence) => {
-              data.push({ accept: 0, sentence: sentence, question: this.state.questions[index].question });
+              data.push({
+                accept: 0,
+                sentence: sentence,
+                question: this.state.questions[index].question,
+              });
             });
           });
           this._isMounted &&
@@ -302,7 +316,7 @@ export default class Question extends Component {
           this.props.setErrorAlert(false);
           this.props.setSuccessAlert(true);
         } else {
-          this._isMounted && this.setState({ generateLoading: false })
+          this._isMounted && this.setState({ generateLoading: false });
           this.props.setErrorAlert(true);
           this.props.setSuccessAlert(false);
         }
@@ -335,20 +349,24 @@ export default class Question extends Component {
   setSelectedSentence = (sentences) => {
     this.saveGeneratedSentences(true);
 
-    let questions = this.state.questions
-    let generated_sentences = sentences
+    let questions = this.state.questions;
+    let generated_sentences = sentences;
     questions.forEach((question, index) => {
-      let list = []
-      generated_sentences.forEach(generatedSentence => {
+      let list = [];
+      generated_sentences.forEach((generatedSentence) => {
         if (generatedSentence.question === question.question) {
-          list.push({ question: generatedSentence.sentence, accept: generatedSentence.accept })
+          list.push({
+            question: generatedSentence.sentence,
+            accept: generatedSentence.accept,
+          });
         }
-      })
-      questions[index].generated_questions = list
-    })
+      });
+      questions[index].generated_questions = list;
+    });
 
-    this._isMounted && this.setState({ generated_sentences: sentences, questions: questions });
-    this.props.setQuestions(this.state.questions)
+    this._isMounted &&
+      this.setState({ generated_sentences: sentences, questions: questions });
+    this.props.setQuestions(this.state.questions);
   };
 
   renderGenerateButton = () => {
@@ -394,12 +412,15 @@ export default class Question extends Component {
         )}
 
         <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
-          <LoadingSpinner loading={this.state.generateLoading} text="Generating question" />
+          <LoadingSpinner
+            loading={this.state.generateLoading}
+            text="Generating question"
+          />
           <Row xs="1">
             <Col>
               <Label className="label">Question:</Label>
             </Col>
-            {!this.props.disable &&
+            {!this.props.disable && (
               <Col>
                 <Row>
                   <Col>
@@ -424,7 +445,7 @@ export default class Question extends Component {
                           onClick={this.openToolTip}
                         >
                           <FontAwesomeIcon icon={faTasks} /> Choose Type
-                  </Button>
+                        </Button>
                         <Tooltip
                           placement="top"
                           isOpen={this.state.tooltipOpen}
@@ -505,8 +526,7 @@ export default class Question extends Component {
                   </Col>
                 </Row>
               </Col>
-            }
-
+            )}
           </Row>
           <div>
             <ListGroup className="mt-1">
@@ -602,7 +622,7 @@ export default class Question extends Component {
                         })}
                       </Col>
 
-                      {!this.props.disable &&
+                      {!this.props.disable && (
                         <Col xs="auto">
                           <Button
                             disabled={this.props.disable}
@@ -615,7 +635,7 @@ export default class Question extends Component {
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </Button>
                         </Col>
-                      }
+                      )}
                     </Row>
                   </ListGroupItem>
                 );

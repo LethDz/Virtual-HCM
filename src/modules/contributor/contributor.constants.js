@@ -22,6 +22,12 @@ export const DONE = 'DONE';
 export const AVAILABLE = 'AVAILABLE';
 export const DISABLE = 'DISABLE';
 
+export const DELETED = 'DELETED';
+export const VIEWABLE = 'VIEWABLE';
+
+export const NORMAL_COMMENT = 'NORMAL_COMMENT';
+export const REPLY_COMMENT = 'REPLY_COMMENT';
+
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 export const questionType = [
   'WHAT',
@@ -109,7 +115,7 @@ export const columnFieldDef = [
     headerName: 'Last modified date',
     sortable: true,
     filter: true,
-    sort: 'desc'
+    sort: 'desc',
   },
   {
     field: 'status',
@@ -141,7 +147,7 @@ export const columnReferenceListDef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 365,
@@ -159,7 +165,7 @@ export const columnSynonymListRef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 170,
