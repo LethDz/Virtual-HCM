@@ -2,11 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import 'src/static/stylesheets/contributor.list.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEdit,
-  faWrench,
-  faUserPlus,
-} from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
 import {
   columnFieldDef,
@@ -55,35 +51,25 @@ class ContributorsList extends Component {
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    if (this.props.contributors.length === 0) {
-      axiosClient
-        .get(ADMIN_GET_USER_ALL)
-        .then((response) => {
-          if (response.data.status) {
-            const users = response.data.result_data.users;
-            this.props.pullContributorsList(users);
-            this.setContributorsList(users);
-            this.setErrorAlert(false);
-            this.setSuccessAlert(true);
-          } else {
-            this.setErrorAlert(true);
-            this.setSuccessAlert(false);
-          }
-          this.setLoading(false);
-          this.setStyleForGrid();
-        })
-        .catch(() => {
-          this.setLoading(false);
+    axiosClient
+      .get(ADMIN_GET_USER_ALL)
+      .then((response) => {
+        if (response.data.status) {
+          const users = response.data.result_data.users;
+          this.props.pullContributorsList(users);
+          this.setContributorsList(users);
+          this.setErrorAlert(false);
+          this.setSuccessAlert(true);
+        } else {
           this.setErrorAlert(true);
-          this.setStyleForGrid();
-        });
-    } else {
-      this.setLoading(false);
-      this.setErrorAlert(false);
-      this.setSuccessAlert(false);
-      this.setContributorsList(this.props.contributors);
-      this.setStyleForGrid();
-    }
+          this.setSuccessAlert(false);
+        }
+        this.setLoading(false);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+      });
   };
 
   setContributorsList = (list) => {
@@ -106,7 +92,7 @@ class ContributorsList extends Component {
   };
 
   onFirstDataRendered = () => {
-    this.gridApi.sizeColumnsToFit();
+    this.sizeToFit();
   };
 
   onRowSelected = () => {
@@ -196,22 +182,16 @@ class ContributorsList extends Component {
                   className="link-no-underline"
                 >
                   <Button color="success">
-                    <FontAwesomeIcon icon={faEdit} color="white" />
+                    <FontAwesomeIcon icon={faUserEdit} color="white" />
                     &nbsp; Edit
                   </Button>
                 </Link>
               ) : (
                 <Button color="success" disabled={this.state.id === ''}>
-                  <FontAwesomeIcon icon={faEdit} color="white" />
+                  <FontAwesomeIcon icon={faUserEdit} color="white" />
                   &nbsp; Edit
                 </Button>
               )}
-            </Col>
-            <Col xs="auto" className="mr-auto">
-              <Button color="info" onClick={this.sizeToFit}>
-                <FontAwesomeIcon icon={faWrench} color="white" />
-                &nbsp; Size column to Fit
-              </Button>
             </Col>
           </Row>
           <div
@@ -231,6 +211,8 @@ class ContributorsList extends Component {
               columnDefs={columnFieldDef(this.state.containerWidth)}
               frameworkComponents={frameworkComponents}
               context={context(this)}
+              pagination={true}
+              paginationAutoPageSize={true}
             ></AgGridReact>
           </div>
         </div>

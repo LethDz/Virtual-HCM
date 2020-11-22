@@ -1,4 +1,7 @@
-import StatusBar from 'src/modules/contributor/components/dataApprovalListComponent/StatusBar';
+import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
+
+export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
+
 export const SET_INTENT = 'SET_INTENT';
 export const SET_INTENT_FULLNAME = 'SET_INTENT_FULLNAME';
 
@@ -14,11 +17,23 @@ export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
 export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
-export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
+export const PROCESSING = 'PROCESSING';
+export const DONE = 'DONE';
+export const AVAILABLE = 'AVAILABLE';
+export const DISABLE = 'DISABLE';
 
+export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
+export const questionType = [
+  'WHAT',
+  'WHEN',
+  'WHERE',
+  'WHO',
+  'WHY',
+  'HOW',
+  'YES/NO',
+];
 export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
 export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
-export const questionType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
 export const POSTags = [
   'Np',
   'Nc',
@@ -60,6 +75,12 @@ export const frameworkComponents = {
 
 export const columnFieldDef = [
   {
+    field: 'id',
+    headerName: 'ID',
+    sortable: true,
+    filter: true,
+  },
+  {
     field: 'intent',
     headerName: 'Intent',
     sortable: true,
@@ -88,6 +109,7 @@ export const columnFieldDef = [
     headerName: 'Last modified date',
     sortable: true,
     filter: true,
+    sort: 'desc'
   },
   {
     field: 'status',
@@ -119,6 +141,7 @@ export const columnReferenceListDef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
+    sort: 'asc'
   },
   {
     width: 365,
@@ -136,6 +159,7 @@ export const columnSynonymListRef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
+    sort: 'asc'
   },
   {
     width: 170,
@@ -202,7 +226,7 @@ export const columnSynonymFieldDef = [
   {
     field: 'meaning',
     headerName: 'Meaning',
-    width: 200,
+    width: 100,
     sortable: true,
     filter: true,
     resizable: true,

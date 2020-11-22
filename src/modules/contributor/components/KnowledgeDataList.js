@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Button, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { history } from 'src/common/history';
 import {
-  CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM,
+  CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
   ALL,
   KNOWLEDGE_DATA,
   GET_KNOWLEDGE_DATA_BY_INTENT,
@@ -23,17 +22,21 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import axiosClient from 'src/common/axiosClient';
 import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { history } from 'src/common/history';
 
-class DataApprovalList extends Component {
+class KnowledgeDataList extends Component {
   _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       containerHeight: 0,
       alertMessage: '',
+      errorList: [],
       loading: false,
+      errorAlert: false,
+      intent: '',
     };
     this.titleRef = React.createRef();
   }
@@ -90,10 +93,18 @@ class DataApprovalList extends Component {
     axiosClient
       .get(KNOWLEDGE_DATA + ALL)
       .then((response) => {
-        this.props.fetchAllDataApproval(response.data.result_data.knowledges);
-        this.setAlertMessage('Load successful');
-        this.setSuccessAlert(true);
+        this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
+        if (response.data.status) {
+          this.props.fetchAllDataApproval(response.data.result_data.knowledges);
+          this.setAlertMessage('Load successful');
+          this.setSuccessAlert(true);
+        } else {
+          this.setErrorList(response.data.messages);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+          this.scrollToTop();
+        }
       })
       .catch((error) => {
         this.setErrorAlert(true);
@@ -112,19 +123,33 @@ class DataApprovalList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let intent = selectedRows.length === 1 ? selectedRows[0].intent : '';
-    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(intent));
+    this._isMounted && this.setState({
+      intent,
+    });
   };
+
+  onRowDoubleClicked = (row) => {
+    history.push(GET_KNOWLEDGE_DATA_BY_INTENT(row.data.intent));
+  }
+
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  }
 
   render() {
     return (
       <Container id="cl-container" className="cl-container vh-100">
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading data approval"
+          text="Loading knowledge data"
         />
         <Row>
           <Col className="justify-content-center d-flex">
-            <h5 className="mt-2 mb-2">Data approval</h5>
+            <h5 className="mt-2 mb-2">Knowledge data</h5>
           </Col>
         </Row>
         {this.state.successAlert && (
@@ -144,7 +169,7 @@ class DataApprovalList extends Component {
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
             <Link
-              to={CONTRIBUTOR_PAGE_CREATE_DATA_APPROVAL_FORM}
+              to={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
               className="link-no-underline"
             >
               <Button color="primary">
@@ -152,6 +177,30 @@ class DataApprovalList extends Component {
                 &nbsp; Create
               </Button>
             </Link>
+          </Col>
+          <Col xs="auto">
+            {this.state.intent !== '' ? (
+              <Link
+                to={GET_KNOWLEDGE_DATA_BY_INTENT(this.state.intent)}
+                className="link-no-underline"
+              >
+                <Button color="success">
+                  <FontAwesomeIcon icon={faEdit} color="white" />
+                    &nbsp; Edit
+                  </Button>
+              </Link>
+            ) : (
+                <Button color="success" disabled={this.state.intent === ''}>
+                  <FontAwesomeIcon icon={faEdit} color="white" />
+                  &nbsp; Edit
+                </Button>
+              )}
+          </Col>
+          <Col xs="auto" className="mr-auto">
+            <Button color="info" onClick={this.sizeToFit}>
+              <FontAwesomeIcon icon={faWrench} color="white" />
+                &nbsp; Size column to Fit
+              </Button>
           </Col>
         </Row>
         <div
@@ -162,14 +211,18 @@ class DataApprovalList extends Component {
           }}
         >
           <AgGridReact
+            onFirstDataRendered={this.onFirstDataRendered}
             rowData={this.props.dataApprovalList}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}
-            onRowDoubleClicked={this.onRowSelected.bind(this)}
+            onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnFieldDef}
             // frameworkComponents={frameworkComponents}
             // context={context(this)}
+            pagination={true}
+            paginationAutoPageSize={true}
           ></AgGridReact>
         </div>
       </Container>
@@ -187,4 +240,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataApprovalList);
+export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeDataList);

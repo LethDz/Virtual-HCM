@@ -3,11 +3,9 @@ import { ListGroup } from 'reactstrap';
 import SideBarItem from 'src/layouts/SideBarItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBook,
   faFileAlt,
   faNewspaper,
   faClipboardList,
-  faComments,
   faTachometerAlt,
   faBookOpen,
   faHistory,
@@ -15,10 +13,9 @@ import {
 
 import {
   CONTRIBUTOR_PAGE,
-  CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL,
+  CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
-  KNOWLEDGE_DATA_LIST_PAGE,
   CHAT_HISTORY_LIST_PAGE,
 } from 'src/constants';
 
@@ -33,30 +30,26 @@ const SideBarContributorContent = () => {
         active={location === CONTRIBUTOR_PAGE}
       />
       <SideBarItem
-        name="Data Approval"
-        icon={<FontAwesomeIcon icon={faClipboardList} />}
-        link={CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL}
-        active={location.includes(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL)}
-      />
-      <SideBarItem
-        name="Chat Log"
-        icon={<FontAwesomeIcon icon={faComments} />}
-        link="chat-log"
-      />
-      <SideBarItem
         name="Knowledge Data"
-        icon={<FontAwesomeIcon icon={faBook} />}
-        link={KNOWLEDGE_DATA_LIST_PAGE}
+        icon={<FontAwesomeIcon icon={faClipboardList} />}
+        link={CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}
+        active={location.includes(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA)}
+      />
+      <SideBarItem
+        name="Chat History"
+        icon={<FontAwesomeIcon icon={faHistory} />}
+        link={CHAT_HISTORY_LIST_PAGE}
+        active={location.includes(CHAT_HISTORY_LIST_PAGE)}
       />
       <SideBarItem
         name="Document Reference"
-        icon={<FontAwesomeIcon icon={faFileAlt} />}
+        icon={<FontAwesomeIcon icon={faBookOpen} />}
         link={REFERENCE_LIST_PAGE}
         active={location.includes(REFERENCE_LIST_PAGE)}
       />
       <SideBarItem
         name="Synonym"
-        icon={<FontAwesomeIcon icon={faBookOpen} />}
+        icon={<FontAwesomeIcon icon={faFileAlt} />}
         link={SYNONYM_LIST_PAGE}
         active={location.includes(SYNONYM_LIST_PAGE)}
       />
@@ -64,12 +57,6 @@ const SideBarContributorContent = () => {
         name="Reports"
         icon={<FontAwesomeIcon icon={faNewspaper} />}
         link="reports"
-      />
-      <SideBarItem
-        name="Chat History"
-        icon={<FontAwesomeIcon icon={faHistory} />}
-        link={CHAT_HISTORY_LIST_PAGE}
-        active={location.includes(CHAT_HISTORY_LIST_PAGE)}
       />
     </ListGroup>
   );

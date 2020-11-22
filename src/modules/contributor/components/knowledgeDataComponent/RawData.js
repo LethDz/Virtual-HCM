@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Row, Col, Label, Button, Input } from 'reactstrap';
 
 import axiosClient from 'src/common/axiosClient';
@@ -27,7 +27,7 @@ class RawData extends Component {
   componentDidMount() {
     this._isMounted = true;
     if (this.props.detailPage) {
-      this.stateTokenizeRawDate(() => {
+      this.stateTokenizeRawData(() => {
         this.setTokenizedWordArray();
       });
     }
@@ -42,7 +42,7 @@ class RawData extends Component {
     this.props.onChange(event, this);
   };
 
-  stateTokenizeRawDate = () => {
+  stateTokenizeRawData = () => {
     if (this._isMounted) this.setState({ loading: true });
     const paragraph = {
       paragraph: this.state.rawData,
@@ -89,9 +89,8 @@ class RawData extends Component {
               ner: modifiedNer,
             });
           this.setTokenizedWordArray();
-          this.props.setAlertMessage('Tokenize successful');
-          this.props.setSuccessAlert(true);
         } else {
+          this.props.setSuccessAlert(false);
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);
           this.props.scrollToTop();
@@ -114,10 +113,13 @@ class RawData extends Component {
   };
 
   stateCancelTokenize = () => {
-    if (this._isMounted) this.setState({ mode: 'NORMAL' });
+    this._isMounted && this.setState({ mode: 'NORMAL' });
+    this.props.cancelCriticalData();
   };
 
-  genData = () => {};
+  onMouseOver = (event, data) => { };
+
+  onMouseLeave = (event) => { };
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -131,9 +133,13 @@ class RawData extends Component {
                   if (ner.index === index) flag = true;
                 });
                 let className = 'mr-1 word-box ';
-                if (this.props.hoverWord === data.value) {
-                  className += 'hover-word ';
-                }
+
+                let hoverWordList = this.props.hoverWord.split(' ');
+                hoverWordList.forEach((word) => {
+                  if (word === data.value) {
+                    className += 'hover-word ';
+                  }
+                });
 
                 if (data.type === V) {
                   className += 'verb ';
@@ -142,78 +148,74 @@ class RawData extends Component {
                 } else if (flag) {
                   className += 'name ';
                 }
-
-                let reactNode = React.createElement(
-                  'span',
-                  {
-                    className: className,
-                    key: index,
-                    onMouseOver: (event) => {
-                      this.props.hover(data.value, 'RAW_DATA');
-                      let currentClassName = event.target.className;
-                      if (!currentClassName.includes('hover-word')) {
-                        currentClassName += 'hover-word';
-                      }
-                      event.target.className = currentClassName;
-                    },
-                    onMouseLeave: (event) => {
-                      this.props.hover('', 'RAW_DATA');
-                      let currentClassName = event.target.className;
-                      let newClassName = currentClassName.replace(
-                        'hover-word',
-                        ''
-                      );
-                      event.target.className = newClassName;
-                    },
-                  },
-                  data.value
+                return (
+                  <span
+                    title={data.type}
+                    key={index}
+                    className={className}
+                    onMouseOver={(event) => this.onMouseOver(event, data)}
+                    onMouseLeave={this.onMouseLeave}
+                  >
+                    {data.value}
+                  </span>
                 );
-                return reactNode;
               })}
             </div>
           </Col>
           <Col xs="auto">
-            <Button
-              type="button"
-              color="danger"
-              onClick={this.stateCancelTokenize}
-            >
-              <FontAwesomeIcon icon={faBan} />{' '} Cancel
-            </Button>
+            {!this.props.disable &&
+              <Button
+                disabled={this.props.disable}
+                type="button"
+                color="danger"
+                onClick={this.stateCancelTokenize}
+              >
+                <FontAwesomeIcon icon={faBan} /> Cancel
+            </Button>}
+
           </Col>
         </Row>
       );
     } else {
       return (
         <Row>
-          <Col>
-            <Input
-              required
-              type="textarea"
-              name="rawData"
-              id="rawData"
-              value={this.state.rawData}
-              onChange={this.handleInput}
-            />
-          </Col>
-          <Col xs="auto">
-            <Button
-              type="button"
-              color="primary"
-              onClick={this.stateTokenizeRawDate}
-            >
-              <FontAwesomeIcon icon={faHammer} />{' '} Tokenize
-            </Button>
-          </Col>
+          {!this.props.disable && (
+            <Fragment>
+              <Col>
+                <Input
+                  disabled={this.props.disable}
+                  placeholder="Enter raw data here and remember to tokenize it :3"
+                  required
+                  type="textarea"
+                  name="rawData"
+                  id="rawData"
+                  value={this.state.rawData}
+                  onChange={this.handleInput}
+                />
+              </Col>
+              <Col xs="auto">
+                <Button
+                  disabled={this.props.disable}
+                  type="button"
+                  color="primary"
+                  onClick={this.stateTokenizeRawData}
+                >
+                  <FontAwesomeIcon icon={faHammer} /> Tokenize
+              </Button>
+              </Col>
+            </Fragment>
+          )}
         </Row>
       );
     }
   };
   render() {
     return (
-      <Row className="p-3" xs="1">
+      <Row xs="1">
         <Col>
-          <Label for="rawData">Raw data:</Label>
+          <Label className="label" for="rawData">
+            Raw data:
+          </Label>
         </Col>
         <Col>
           <LoadingSpinner loading={this.state.loading} text="Tokenizing">

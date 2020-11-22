@@ -15,9 +15,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
+  faMinus,
+  faPlus,
   faSave,
   faTrash,
-  faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   SYNONYM,
@@ -42,6 +43,7 @@ import {
   getSynonymDetail,
   editSynonymDetail,
   deleteSynonym,
+  POSTags,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/synonym.css';
 
@@ -61,11 +63,16 @@ class SynonymDetailModal extends Component {
       paragraph: '',
       tokenizedWords: [],
     };
+    this.conRef = React.createRef();
   }
 
   componentDidMount = () => {
     this._isMounted = true;
     this.initiateData();
+  };
+
+  componentDidUpdate = () => {
+    this.scrollToBottom();
   };
 
   componentWillUnmount() {
@@ -157,6 +164,9 @@ class SynonymDetailModal extends Component {
     this.state.words.map((word) => {
       if (word === newWord) {
         duplicate = true;
+        let error = this.state.errorList;
+        error.push('This word existed!');
+        this.setErrorList(error);
       }
       return duplicate;
     });
@@ -165,36 +175,44 @@ class SynonymDetailModal extends Component {
 
   editSynonym = (event) => {
     event.preventDefault();
-    this.setLoading(true);
-    axiosClient
-      .post(SYNONYM + EDIT, {
-        id: this.state.synonym_id,
-        meaning: this.state.meaning,
-        words: this.state.words,
-      })
-      .then((response) => {
-        if (response.data.status) {
-          const synonym = response.data.result_data;
-          this.props.editSynonymDetail(synonym);
-          this.setState({
-            ...synonym,
-          });
-          this.props.updateSynonymList([]);
-          this.setSuccessAlert(true);
-        } else {
+    const synonymDetail = this.props.synonymDetail;
+    const currentSynonym = {
+      synonym_id: this.state.synonym_id,
+      meaning: this.state.meaning,
+      words: this.state.words,
+    };
+    if (JSON.stringify(synonymDetail) !== JSON.stringify(currentSynonym)) {
+      this.setLoading(true);
+      axiosClient
+        .post(SYNONYM + EDIT, {
+          id: this.state.synonym_id,
+          meaning: this.state.meaning,
+          words: this.state.words,
+        })
+        .then((response) => {
+          if (response.data.status) {
+            const synonym = response.data.result_data;
+            this.props.editSynonymDetail(synonym);
+            this.setState({
+              ...synonym,
+            });
+            this.props.updateSynonymList([]);
+            this.setSuccessAlert(true);
+          } else {
+            this.setErrorAlert(true);
+            this.setErrorList(response.data.messages);
+          }
+          this.setLoading(false);
+        })
+        .then(() => {
+          this.props.updateSynonymList(this.props.synonymsList);
+        })
+        .catch(() => {
+          this.setLoading(false);
           this.setErrorAlert(true);
-          this.setErrorList(response.data.messages);
-        }
-        this.setLoading(false);
-      })
-      .then(() => {
-        this.props.updateSynonymList(this.props.synonymsList);
-      })
-      .catch(() => {
-        this.setLoading(false);
-        this.setErrorAlert(true);
-        this.setSuccessAlert(false);
-      });
+          this.setSuccessAlert(false);
+        });
+    }
   };
 
   deleteSynonym = () => {
@@ -219,86 +237,99 @@ class SynonymDetailModal extends Component {
       });
   };
 
-  tokenizeWord = () => {
-    if (this.state.paragraph) {
-      this.setLoading(true);
+  addNewWord = async () => {
+    await this.setErrorList([]);
+    let newWord = this.state.newWord.trim();
+    if (
+      !this.checkDuplicateWord(newWord) &&
+      this.checkInputEmpty(newWord, 'Input cannot be empty')
+    ) {
       this.setErrorAlert(false);
-      this.setSuccessAlert(false);
-      axiosClient
-        .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
-        .then((response) => {
-          if (response.data.status) {
-            let words = [];
-            response.data.result_data.pos.map((sentence) => {
-              sentence.map((word) => {
-                if (word.type !== 'CH') {
-                  words.push(word.value);
-                }
-                return word;
-              });
-              return sentence;
-            });
-
-            this.setState({
-              tokenizedWords: words,
-            });
-            this.setLoading(false);
-          } else {
-            this.setErrorAlert(true);
-            this.setErrorList(response.data.messages);
-          }
-        })
-        .catch(() => {
-          this.setLoading(false);
-          this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    }
-  };
-
-  handleCheckBoxChange = (event) => {
-    const newWord = event.target.name;
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      if (!this.checkDuplicateWord(newWord)) {
-        this.setErrorAlert(false);
-        let listWord = this.state.words;
-        listWord.push(newWord);
+      let listWord = this.state.words;
+      listWord.push(newWord);
+      this._isMounted &&
         this.setState({
           words: listWord,
           newWord: '',
         });
-      } else {
-        this.setErrorAlert(true);
-      }
     } else {
-      let list = this.state.words;
-      let position = -1;
-      list.map((word, index) => {
-        if (word === newWord) {
-          position = index;
-        }
-        return -1;
-      });
-      if (position > -1) {
-        list.splice(position, 1);
-        this._isMounted &&
-          this.setState({
-            words: list,
+      this.setErrorAlert(true);
+    }
+  };
+
+  tokenizeWord = async () => {
+    await this.setErrorList([]);
+    const paragraph = this.state.paragraph;
+    if (this.checkInputEmpty(paragraph, 'Nothing to check!')) {
+      if (paragraph !== this.state.oldParagraph) {
+        this.setLoading(true);
+        this.setErrorAlert(false);
+        this.setSuccessAlert(false);
+        this.setState({
+          oldParagraph: paragraph,
+          tokenizedWords: [],
+        });
+        axiosClient
+          .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
+          .then((response) => {
+            if (response.data.status) {
+              let words = [];
+              response.data.result_data.pos.map((sentence) => {
+                sentence.map((word) => {
+                  if (word.type !== POSTags[POSTags.length - 1]) {
+                    words.push(word.value);
+                  }
+                  return word;
+                });
+                return sentence;
+              });
+
+              this.setState({
+                tokenizedWords: words,
+              });
+            } else {
+              this.setErrorAlert(true);
+              this.setErrorList(response.data.messages);
+            }
+            this.setLoading(false);
+          })
+          .catch(() => {
+            this.setLoading(false);
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
           });
       }
+    } else {
+      this.setErrorAlert(true);
     }
+  };
+
+  checkInputEmpty = (word, message) => {
+    if (!word) {
+      let error = this.state.errorList;
+      error.push(message);
+      this.setErrorList(error);
+      return false;
+    }
+    return true;
+  };
+
+  scrollToBottom = () => {
+    this.conRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  toggle = () => {
+    !this.state.loading && this.props.toggle();
   };
 
   render() {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        toggle={this.props.toggle}
+        toggle={this.toggle}
         unmountOnClose={true}
-        backdrop="static"
       >
-        <ModalHeader toggle={this.props.toggle}>Synonym</ModalHeader>
+        <ModalHeader toggle={this.toggle}>Synonym</ModalHeader>
         <Form onSubmit={this.editSynonym}>
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -331,13 +362,12 @@ class SynonymDetailModal extends Component {
               />
             </FormGroup>
             <Label>Words: </Label>
-
             <div className="container justify-content-center">
               <div className="border border-light p-3 list-word">
                 {this._isMounted &&
                   this.state.words.map((word, index) => (
                     <Row className="mt-2" key={index}>
-                      <Col className="col-3">Word {index + 1}</Col>
+                      <Col className="col-3 mt-2">Word {index + 1}</Col>
                       <Col className="col-7">
                         <Input
                           name={index}
@@ -350,17 +380,35 @@ class SynonymDetailModal extends Component {
                       </Col>
                       <Col className="col-2">
                         <Button
-                          color="danger"
+                          color="warning"
                           id={index}
                           onClick={this.deleteWord.bind(this, index)}
                         >
-                          <FontAwesomeIcon icon={faTrashAlt} />
+                          <FontAwesomeIcon icon={faMinus} color="white" />
                         </Button>
                       </Col>
                     </Row>
                   ))}
+                <Row className="mt-2">
+                  <Col className="col-3 mt-2">New word</Col>
+                  <Col className="col-7">
+                    <Input
+                      name="newWord"
+                      type="text"
+                      onChange={this.handleInput}
+                      disabled={this.state.loading}
+                      value={this.state.newWord}
+                    />
+                  </Col>
+                  <Col className="col-2">
+                    <Button color="success" onClick={this.addNewWord}>
+                      <FontAwesomeIcon icon={faPlus} color="white" />
+                    </Button>
+                  </Col>
+                </Row>
+                <div ref={this.conRef}></div>
               </div>
-              <Label className="mt-2">Check word tokenize:</Label>
+              <Label className="mt-2">Check tokenizing word:</Label>
               <Row>
                 <Col className="col-10">
                   <Input
@@ -382,19 +430,15 @@ class SynonymDetailModal extends Component {
                 </Col>
               </Row>
               <Label className="mt-2">Tokenized words: </Label>
-              <div className="container border border-light p-3 tokenize-word">
-                {this.state.tokenizedWords &&
-                  this.state.tokenizedWords.map((word, index) => (
-                    <label key={'checkbox' + index} className="mr-2">
-                      <input
-                        type="checkbox"
-                        onChange={this.handleCheckBoxChange}
-                        name={word}
-                      />{' '}
-                      {word}
-                    </label>
-                  ))}
-              </div>
+              <Row>
+                <Col className="col-10">
+                  <Input
+                    type="textarea"
+                    value={this.state.tokenizedWords}
+                    readOnly
+                  />
+                </Col>
+              </Row>
             </div>
           </ModalBody>
           <ModalFooter>
@@ -403,7 +447,7 @@ class SynonymDetailModal extends Component {
               &nbsp;Save
             </Button>
             <Button
-              color="warning"
+              color="danger"
               disabled={this.state.loading}
               style={{ color: 'white' }}
               onClick={this.deleteSynonym}

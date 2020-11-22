@@ -7,6 +7,7 @@ import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   getDataApprovalDetail,
   pullDataApproval,
+  resetDataApprovalDetail,
   Question,
   FormSectionTitle,
   MetaData,
@@ -15,6 +16,10 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  PROCESSING,
+  DONE,
+  DISABLE,
+  AVAILABLE,
 } from 'src/modules/contributor/index';
 import 'src/static/stylesheets/contributor.css';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
@@ -25,10 +30,13 @@ import {
 } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
 
-import { CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL } from 'src/constants';
+import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
-class DataApprovalDetail extends Component {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
+class KnowledgeDataDetail extends Component {
   _isMounted = false;
   constructor(props) {
     super();
@@ -48,15 +56,20 @@ class DataApprovalDetail extends Component {
       tokenizedWord: [],
       ner: [],
       loading: true,
-      hoverWord: '',
-      hoverWordFromSynonym: '',
       alertMessage: '',
       successAlert: false,
       errorAlert: false,
       errorList: [],
       sendLoading: false,
+      synonymIdList: [],
+      hoverWord: '',
+      formStatus: '',
+      disable: true,
+      owner: false
     };
     this.titleRef = React.createRef();
+    this.criticalDataRef = React.createRef();
+    this.questionRef = React.createRef();
   }
 
   handleInputForm = (event) => handleInputFormChange(event, this);
@@ -88,36 +101,13 @@ class DataApprovalDetail extends Component {
       });
   };
 
-  setError = () => {
-    let errorMessage = [];
-    if (this.state.form.questions.length === 0) {
-      errorMessage.push(`Question field required at least one question`);
-    }
-    if (this.state.form.criticalData.length === 0) {
-      errorMessage.push(`Subject field required at least one subject`);
-    }
-    for (let i in this.state.form.criticalData) {
-      if (this.state.form.criticalData[i].word.length === 0) {
-        errorMessage.push(
-          `Subject at index ${i} required at least one component`
-        );
-      }
-    }
-    this.setErrorList(errorMessage);
-    this.scrollToTop();
-    if (this._isMounted)
-      this.setState({
-        loading: false,
-      });
-  };
-
   reformatForm = () => {
     let form = this.state.form;
     let synonym = [];
     form.synonyms.forEach((synonyms) => {
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
-        synonymIds.push(item.id);
+        synonymIds.push(item.id ? item.id : item);
       });
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
@@ -125,11 +115,53 @@ class DataApprovalDetail extends Component {
     this._isMounted && this.setState({ form: form });
   };
 
+  checkFormSubmit = () => {
+    const form = this.state.form;
+    let errorFlag = false;
+    let errorList = []
+
+    if (form.baseResponse.trim() === '') {
+      errorFlag = true
+      errorList.push("Fill in base response")
+    };
+    if (form.intent.trim() === '') {
+      errorFlag = true
+      errorList.push("Fill in intent")
+    };
+    if (form.intentFullName.trim() === '') {
+      errorFlag = true;
+      errorList.push("Fill in intent fullname")
+    }
+    if (form.rawData.trim() === '') {
+      errorFlag = true;
+      errorList.push("Fill in raw data")
+    }
+    if (form.documentReference.length === 0) {
+      errorFlag = true;
+      errorList.push("Document reference required at least 1 reference")
+    }
+    if (form.coresponse.length === 0) {
+      errorFlag = true
+      errorList.push("Fill in coresponse")
+    };
+    if (form.criticalData.length === 0) {
+      errorFlag = true;
+      errorList.push("Subject required at least 1 subject")
+    }
+    form.criticalData.forEach((data, index) => {
+      if (data.word.length === 0) {
+        errorFlag = true;
+        errorList.push(`Subject ${index} need at least 1 component`)
+      }
+    });
+    this._isMounted && this.setState({ errorList: errorList })
+    return errorFlag;
+  };
+
   submitForm = (event) => {
     event.preventDefault();
-    this.setError();
-    this.reformatForm();
-    if (this.state.errorList.length === 0) {
+    if (!this.checkFormSubmit()) {
+      this.reformatForm();
       this._isMounted &&
         this.setState({
           sendLoading: true,
@@ -137,26 +169,33 @@ class DataApprovalDetail extends Component {
       axiosClient
         .post(KNOWLEDGE_DATA + EDIT, this.state.form)
         .then((response) => {
+          this._isMounted &&
+            this.setState({
+              sendLoading: false,
+            });
           if (response.data.status) {
-            if (this._isMounted)
-              this.setState({
-                sendLoading: false,
-              });
-            history.push(CONTRIBUTOR_PAGE_LIST_DATA_APPROVAL);
-            this.setErrorAlert(false);
-            this.setSuccessAlert(true);
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
+            this.props.resetDataApprovalDetail();
           } else {
+            this.setErrorList(response.data.messages);
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
+            this.scrollToTop();
           }
         })
         .catch((err) => {
+          this._isMounted &&
+            this.setState({
+              sendLoading: false,
+            });
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
           this.scrollToTop();
         });
     } else {
-      this._isMounted && this.setState({ errorAlert: true, sendLoading: false });
+      this.setErrorAlert(true);
+      this.setSuccessAlert(false);
+      this.scrollToTop();
     }
   };
 
@@ -174,10 +213,7 @@ class DataApprovalDetail extends Component {
 
   setQuestions = (questions) => {
     let form = this.state.form;
-    form.questions.push({
-      question: questions,
-      generated_questions: [],
-    });
+    form.questions = questions;
     if (this._isMounted) this.setState({ form: form });
   };
 
@@ -190,7 +226,25 @@ class DataApprovalDetail extends Component {
   setSynonym = (synonyms) => {
     let form = this.state.form;
     form.synonyms = synonyms;
-    if (this._isMounted) this.setState({ form: form });
+    this.resetGeneratedQuestion();
+    let synonymIdList = []
+    synonyms.forEach((synonyms) => {
+      let synonymIds = [];
+      synonyms.synonyms.forEach((item) => {
+        if (item.id) {
+          synonymIds.push(item.id);
+        }
+        else if (item.synonym_id) {
+          synonymIds.push(item.synonym_id);
+        }
+        else {
+          synonymIds.push(item);
+        }
+      });
+      synonymIdList.push({ word: synonyms.word, synonyms: synonymIds });
+    });
+
+    if (this._isMounted) this.setState({ form: form, synonymIdList: synonymIdList });
   };
 
   setRawData = (rawData) => {
@@ -206,21 +260,6 @@ class DataApprovalDetail extends Component {
       this.setState({
         form: form,
       });
-  };
-
-  setGeneratedSentences = (generatedSentences, index) => {
-    let form = this.state.form;
-    form.questions[index].generated_questions = generatedSentences;
-    if (this._isMounted) this.setState({ form: form });
-  };
-
-  hover = (word, from) => {
-    if (from === 'SYNONYM')
-      if (this._isMounted)
-        this.setState({ hoverWord: word, hoverWordFromSynonym: word });
-      else {
-        if (this._isMounted) this.setState({ hoverWord: word });
-      }
   };
 
   setSuccessAlert = (status) => {
@@ -265,6 +304,12 @@ class DataApprovalDetail extends Component {
     });
   };
 
+  setHoverWord = (word, from) => {
+    if (from === 'SYNONYM' && this._isMounted) {
+      this.setState({ hoverWord: word });
+    }
+  };
+
   componentWillUnmount = () => {
     this._isMounted = false;
   };
@@ -273,6 +318,28 @@ class DataApprovalDetail extends Component {
     this._isMounted = true;
     this.getInformation();
   };
+
+  setFormStatus = () => {
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    switch (this.props.dataApprovalDetail.status.toUpperCase()) {
+      case AVAILABLE:
+        this._isMounted && this.setState({ formStatus: AVAILABLE, disable: false });
+        break;
+      case PROCESSING:
+        this._isMounted && this.setState({ formStatus: PROCESSING });
+        if (this.props.dataApprovalDetail.edit_user === user.username && this.props.dataApprovalDetail.edit_user_id === user.user_id) {
+          this._isMounted && this.setState({ owner: true, disable: false });
+        }
+        break;
+      case DONE:
+        this._isMounted && this.setState({ formStatus: DONE, disable: true });
+        break;
+      case DISABLE:
+        this._isMounted && this.setState({ formStatus: DISABLE, disable: true });
+        break;
+      default:
+    }
+  }
 
   getInformation = () => {
     if (
@@ -285,10 +352,22 @@ class DataApprovalDetail extends Component {
       axiosClient
         .get(GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.props.intent))
         .then((response) => {
-          this.setFormData(response.data.result_data.knowledge_data);
-          this.props.pullDataApproval(response.data.result_data.knowledge_data);
+          if (response.data.status) {
+            this.setFormData(response.data.result_data.knowledge_data);
+            this.props.pullDataApproval(
+              response.data.result_data.knowledge_data
+            );
+            this.setFormStatus();
+            this.setErrorAlert(false);
+            this.setAlertMessage('Load successful');
+            this.setSuccessAlert(true);
+          } else {
+            this.setErrorAlert(true);
+            this.setSuccessAlert(false);
+          }
         })
         .catch((err) => {
+          this.setErrorAlert(true);
           this._isMounted && this.setState({ loading: false });
         });
     }
@@ -315,7 +394,18 @@ class DataApprovalDetail extends Component {
     form.rawData = dataApproval.rawData;
     form.synonyms = dataApproval.synonyms;
     form.id = dataApproval.id;
-    this._isMounted && this.setState({ form: form, loading: false });
+
+    let synonym = [];
+    form.synonyms.forEach((synonyms) => {
+      let synonymIds = [];
+      synonyms.synonyms.forEach((item) => {
+        synonymIds.push(item.id ? item.id : item.synonym_id);
+      });
+      synonym.push({ word: synonyms.word, synonyms: synonymIds });
+    });
+
+    this._isMounted &&
+      this.setState({ form: form, loading: false, synonymIdList: synonym });
   };
 
   getWordArray = () => {
@@ -327,7 +417,15 @@ class DataApprovalDetail extends Component {
     return wordArray;
   };
 
-  render() {
+  cancelCriticalData = () => {
+    this.criticalDataRef.current.resetCriticalData();
+  };
+
+  resetGeneratedQuestion = () => {
+    this.questionRef.current.resetGeneratedQuestion();
+  };
+
+  renderProcessMode = () => {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
@@ -337,8 +435,8 @@ class DataApprovalDetail extends Component {
         />
         <LoadingSpinner loading={this.state.sendLoading} text="Sending form" />
         {!this.state.loading && (
-          <Form onSubmit={this.submitForm} className="mt-3">
-            <div className="form-item form-item-meta">
+          <Form className="mt-3">
+            <div className="form-item form-item-meta pr-3 pl-3">
               <div className="mr-3 ml-3">
                 {this.state.successAlert && (
                   <SuccessAlert
@@ -366,72 +464,72 @@ class DataApprovalDetail extends Component {
               </Row>
               <FormSectionTitle title="Meta data" />
               <MetaData
+                disable={this.state.disable}
                 intentValue={this.state.form.intent}
                 intentFullNameValue={this.state.form.intentFullName}
                 referenceValue={this.state.form.documentReference}
                 onChange={this.handleInputForm}
                 setReference={this.setReference}
-                scrollToTop={this.scrollToTop}
-                setAlertMessage={this.setAlertMessage}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setErrorList={this.setErrorList}
               />
               <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="Data analysis" />
               {this.state.form.rawData && (
                 <RawData
+                  disable={this.state.disable}
+                  hoverWord={this.state.hoverWord}
                   detailPage={true}
                   rawDataValue={this.state.form.rawData}
                   scrollToTop={this.scrollToTop}
-                  setAlertMessage={this.setAlertMessage}
                   setSuccessAlert={this.setSuccessAlert}
                   setErrorAlert={this.setErrorAlert}
                   setErrorList={this.setErrorList}
-                  hover={this.hover}
-                  hoverWord={this.state.hoverWordFromSynonym}
                   setTokenizeWord={this.setTokenizeWord}
                   getWordArray={this.getWordArray}
                   setRawData={this.setRawData}
+                  cancelCriticalData={this.cancelCriticalData}
                   onChange={this.handleInputForm}
                 />
               )}
 
               <CriticalData
+                disable={this.state.disable}
+                ref={this.criticalDataRef}
                 criticalDataValue={this.state.form.criticalData}
                 wordArray={wordArray}
+                ner={this.state.ner}
                 setCritical={this.setCriticalData}
               />
 
               <Coresponse
+                disable={this.state.disable}
                 coresponseValue={this.state.form.coresponse}
                 setCoresponse={this.setCoresponse}
                 wordArray={wordArray}
               />
               <Question
+                disable={this.state.disable}
+                ref={this.questionRef}
                 detailPage={true}
                 questionValue={this.state.form.questions}
                 scrollToTop={this.scrollToTop}
-                setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
-                className="mt-3"
                 setQuestions={this.setQuestions}
                 setTokenizeWord={this.setTokenizeWord}
-                setGeneratedSentences={this.setGeneratedSentences}
-                hover={this.hover}
-                hoverWord={this.state.hoverWordFromSynonym}
                 synonymsArray={this.state.form.synonyms}
+                synonymIds={this.state.synonymIdList}
+                className="mt-3"
               />
 
               <BaseResponse
+                disable={this.state.disable}
                 baseResponseValue={this.state.form.baseResponse}
                 onChange={this.handleInputForm}
               />
 
               <Synonyms
-                synonymsValue={this.state.form.synonyms}
+                disable={this.state.disable}
                 scrollToTop={this.scrollToTop}
                 setAlertMessage={this.setAlertMessage}
                 setSuccessAlert={this.setSuccessAlert}
@@ -439,19 +537,31 @@ class DataApprovalDetail extends Component {
                 setErrorList={this.setErrorList}
                 setSynonym={this.setSynonym}
                 wordArray={wordArray}
-                hover={this.hover}
-                hoverWord={this.state.hoverWord}
+                resetGeneratedQuestion={this.resetGeneratedQuestion}
+                synonymsValue={this.state.form.synonyms}
+                setHoverWord={this.setHoverWord}
               />
               <Row className="d-flex justify-content-around pt-3 pb-3">
-                <Button type="submit" color="info">
-                  Edit data approval
-                </Button>
+                {!this.state.disable && (this.state.formStatus === AVAILABLE || (this.state.formStatus === PROCESSING && this.state.owner)) &&
+                  <Button
+                    disabled={this.state.disable}
+                    type="submit"
+                    color="info"
+                    onClick={this.submitForm}
+                  >
+                    <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
+                </Button>}
+
               </Row>
             </div>
           </Form>
         )}
       </Container>
     );
+  };
+
+  render() {
+    return this.renderProcessMode();
   }
 }
 
@@ -461,6 +571,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   pullDataApproval: (dataApproval) => dispatch(pullDataApproval(dataApproval)),
+  resetDataApprovalDetail: () => dispatch(resetDataApprovalDetail()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataApprovalDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KnowledgeDataDetail);

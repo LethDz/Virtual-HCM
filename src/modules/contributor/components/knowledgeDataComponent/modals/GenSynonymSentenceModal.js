@@ -8,10 +8,11 @@ import {
   Form,
 } from 'reactstrap';
 import { AgGridReact } from 'ag-grid-react';
-import { columnGenSentenceDef } from 'src/modules/contributor/index';
+import { columnGenSentenceDef } from 'src/modules/contributor';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import { NLP, GENERATE_SIMILARIES } from 'src/constants';
-import axiosClient from 'src/common/axiosClient';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 class GenSynonymSentenceModal extends Component {
   _isMounted = false;
@@ -20,83 +21,39 @@ class GenSynonymSentenceModal extends Component {
     this.state = {
       gridApi: '',
       gridColumnApi: '',
-      selectedSentence: [],
-      rowData: props.similaries,
+      selectedSentence: props.rowData,
+      rowData: [],
       loading: false,
     };
   }
 
   componentDidMount = () => {
     this._isMounted = true;
+    let rowData = [];
+    this.props.rowData.forEach((data) => {
+      rowData.push({ sentence: data.sentence, question: data.question });
+    });
+    this.setState({ rowData: rowData });
   };
 
   componentWillUnmount = () => {
     this._isMounted = false;
   };
 
-  generate = () => {
-    let data = { sentences: [] };
-    data.sentences.push({
-      sentence: this.props.createTokenizeSentence(),
-      synonyms: this.props.createSynonymArray(),
-    });
-    axiosClient
-      .post(NLP + GENERATE_SIMILARIES, data)
-      .then((response) => {
-        let data = [];
-        response.data.result_data.similaries.forEach((sentences) => {
-          sentences.forEach((sentence) => {
-            data.push({ sentence: sentence });
-          });
-        });
-        this._isMounted &&
-          this.setState({
-            rowData: data,
-            loading: false,
-          });
-      })
-      .catch((err) => {
-        this._isMounted &&
-          this.setState({
-            loading: false,
-          });
-        this.props.setErrorAlert(true);
-        this.props.setSuccessAlert(false);
-      });
-  };
-
-  generateSentences = async () => {
-    this.setState({ loading: true });
-    await this.generate();
-  };
-
   onGridReady = (params) => {
-    if (this.props.currentRowData.length !== 0) {
-      let data = [];
-      this.props.currentRowData.forEach((question) => {
-        data.push({ sentence: question.question });
+    params.api.forEachNode((node) => {
+      this.props.rowData.forEach((sentence) => {
+        if (node.data.sentence === sentence.sentence && sentence.accept === 1) {
+          node.setSelected(true);
+        }
       });
-      this._isMounted && this.setState({ rowData: data });
-
-      params.api.forEachNode((node) => {
-        this.props.currentRowData.forEach((question) => {
-          if (
-            node.data.sentence === question.question &&
-            question.accept === 1
-          ) {
-            node.setSelected(true);
-          }
-        });
-      });
-    } else {
-      this.generateSentences();
-    }
-    this._isMounted &&
-      this.setState({ gridApi: params.api, gridColumnApi: params.columnApi });
+    });
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
   };
 
   onSelectionChanged = () => {
-    let nodes = this.state.gridApi.getSelectedNodes();
+    let nodes = this.gridApi.getSelectedNodes();
     let selectedRow = [];
     nodes.forEach((node) => {
       if (typeof node !== 'undefined') {
@@ -111,13 +68,14 @@ class GenSynonymSentenceModal extends Component {
           isSelected = true;
         }
       });
+      
       if (isSelected) {
-        results.push({ question: sentence.sentence, accept: 1 });
+        results.push({ question: sentence.question, sentence: sentence.sentence, accept: 1 });
       } else {
-        results.push({ question: sentence.sentence, accept: 0 });
+        results.push({ question: sentence.question, sentence: sentence.sentence, accept: 0 });
       }
     });
-    if (this._isMounted) this.setState({ selectedSentence: results });
+    this._isMounted && this.setState({ selectedSentence: results });
   };
 
   setSelectedSentence = () => {
@@ -125,15 +83,25 @@ class GenSynonymSentenceModal extends Component {
     this.props.toggle();
   };
 
+  discard = () => {
+    this.props.saveGeneratedSentences(false);
+    this.props.toggle();
+  }
+
+  toggleThisModal = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
         <LoadingSpinner
+          type="MODAL"
           loading={this.state.loading}
           text="Generating sentences"
         >
           <Form>
-            <ModalHeader toggle={this.props.toggle}>
+            <ModalHeader toggle={this.toggleThisModal}>
               Generate sentence
             </ModalHeader>
             <ModalBody>
@@ -148,12 +116,17 @@ class GenSynonymSentenceModal extends Component {
                   rowMultiSelectWithClick
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   columnDefs={columnGenSentenceDef}
+                  pagination={true}
+                  paginationAutoPageSize={true}
                 />
               </div>
             </ModalBody>
             <ModalFooter>
+              <Button color="danger" onClick={this.discard}>
+                <FontAwesomeIcon icon={faBan} /> Discard
+              </Button>
               <Button color="success" onClick={this.setSelectedSentence}>
-                Create
+                <FontAwesomeIcon icon={faSave} /> Save
               </Button>
             </ModalFooter>
           </Form>

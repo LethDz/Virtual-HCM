@@ -27,6 +27,7 @@ import { changeToFormatDateVN, getDateNowToString } from 'src/common/getDate';
 import BackButton from 'src/common/BackButton';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import { history } from 'src/common/history';
 
 class ContributorCreate extends Component {
   _isMounted = false;
@@ -116,12 +117,13 @@ class ContributorCreate extends Component {
           this.props.addContributorToList(user);
           this.setSuccessAlert(true);
           this.resetFormAfterSubmit();
+          history.push(ADMIN_CONTRIBUTOR_LIST_PAGE);
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
+          this.setLoading(false);
+          this.scrollToRef();
         }
-        this.setLoading(false);
-        this.scrollToRef();
       })
       .catch(() => {
         this.setLoading(false);
