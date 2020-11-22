@@ -54,6 +54,7 @@ class KnowledgeDataDetail extends Component {
         synonyms: [],
         baseResponse: '',
         documentReference: [],
+        id: null
       },
       comments: [],
       userList: [],
@@ -361,10 +362,18 @@ class KnowledgeDataDetail extends Component {
           if (response.data.status) {
             this.setFormData(response.data.result_data);
             this.props.pullDataApproval(response.data.result_data);
+
+            let userList = response.data.result_data.comments.users
+            const currentUser = getUserData()
+            userList[currentUser.user_id] = {
+              email: currentUser.email,
+              fullname: currentUser.fullname,
+              username: currentUser.username
+            }
             this._isMounted &&
               this.setState({
                 comments: response.data.result_data.comments.data,
-                userList: response.data.result_data.comments.users,
+                userList: userList,
               });
             this.setFormStatus();
             this.setErrorAlert(false);
@@ -436,7 +445,6 @@ class KnowledgeDataDetail extends Component {
   };
 
   renderProcessMode = () => {
-    // const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
         <LoadingSpinner
@@ -556,6 +564,7 @@ class KnowledgeDataDetail extends Component {
                 setHoverWord={this.setHoverWord}
               /> */}
               <Comment
+                knowledgeDataId={this.state.form.id}
                 comments={this.state.comments}
                 userList={this.state.userList}
               />

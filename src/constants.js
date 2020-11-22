@@ -25,11 +25,14 @@ export const ADD = '/add';
 
 export const GENERATE_SIMILARIES = '/generate-similaries';
 export const ALL = '/all';
-
 export const EDIT = '/edit';
 
-export const DELETE_REFERENCE = (id) => `/delete?reference_document_id=${id}`;
+export const EDIT_COMMENT = `/edit-comment`
+export const POST_COMMENT = '/post-comment'
+export const GET_ALL_COMMENT = (id) => `/all-comment?knowledge_data=${id}`
+export const DELETE_COMMENT = (id) => `/delete-comment?id=${id}`
 
+export const DELETE_REFERENCE = (id) => `/delete?reference_document_id=${id}`;
 export const GET_REFERENCE = (id) => `/get?reference_document_id=${id}`;
 
 // API Admin Route Path

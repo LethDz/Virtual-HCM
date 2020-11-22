@@ -16,19 +16,27 @@ import {
 } from 'src/modules/contributor/index';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { getUserData } from 'src/common/authorizationChecking';
+import axiosClient from 'src/common/axiosClient';
+import {
+  KNOWLEDGE_DATA, POST_COMMENT, GET_ALL_COMMENT, DELETE_COMMENT, EDIT_COMMENT
+} from 'src/constants';
+import Pagination from "react-js-pagination";
 
 export default class Comment extends Component {
   _isMounted = false;
   constructor(props) {
     super();
     this.state = {
-      comments: props.comments,
+      comments: this.addIndexFieldForList(props.comments),
       userList: props.userList,
       backupComment: '',
-      page: 0,
       editCommentIndex: null,
       user: getUserData(),
       comment: '',
+      activePage: 1,
+      showComment: [],
+      numberOfPage: props.comments.length / 5,
+      index: 0
     };
     this.commentRef = React.createRef();
   }
@@ -44,6 +52,17 @@ export default class Comment extends Component {
   componentWillUnmount = () => {
     this._isMounted = false;
   };
+
+  addIndexFieldForList = (list) => {
+    let tempList = []
+    list.forEach((item, index) => {
+      tempList.push({
+        ...item,
+        index: index
+      })
+    })
+    return tempList
+  }
 
   setEditCommentIndex = (index) => {
     this._isMounted &&
@@ -71,16 +90,31 @@ export default class Comment extends Component {
   };
 
   removeComment = (index) => {
-    let comments = this.state.comments;
-    if (index > -1) {
-      comments.splice(index, 1);
-    }
-    this._isMounted && this.setState({ comments: comments });
+    const id = this.state.comments[index].id
+    axiosClient
+      .get(KNOWLEDGE_DATA + DELETE_COMMENT(id))
+      .then(() => {
+        this.refreshComment()
+      })
+      .catch(err => {
+        console.log(err)
+      })
   };
 
-  saveComment = () => {
-    this._isMounted &&
-      this.setState({ editCommentIndex: null, backupComment: '' });
+  saveComment = (index) => {
+    axiosClient
+      .post(KNOWLEDGE_DATA + EDIT_COMMENT, {
+        id: this.state.comments[index].id,
+        comment: this.state.comments[index].comment
+      })
+      .then(() => {
+        this._isMounted &&
+          this.setState({ editCommentIndex: null, backupComment: '' });
+        this.refreshComment()
+      })
+      .catch(err => {
+        console.log(err)
+      })
   };
 
   setReplyComment = (index) => {
@@ -89,74 +123,73 @@ export default class Comment extends Component {
   };
 
   addComment = () => {
-    let commentList = this.state.comments;
-    const comment = this.state.comment;
-    switch (this.checkIsReply()) {
-      case NORMAL_COMMENT:
-        comment.trim() !== '' &&
-          commentList.push({
-            id: commentList.length + 1,
-            comment_user: this.state.user.username,
-            comment_mention_comment: null,
-            comment: comment,
-            comment_status: VIEWABLE,
-            create_date: '12/4/2020',
-            modified_date: '12/4/2020',
-          });
-        break;
-      case REPLY_COMMENT:
-        const commentSplit = comment.split('|');
-        const commentReferTag = commentSplit[0];
-        const commentReferIndex = commentReferTag.substring(1);
-        let commentReferId = this.state.comments[commentReferIndex].if;
-        comment.trim() !== '' &&
-          commentList.push({
-            id: commentList.length + 1,
-            comment_user: this.state.user.username,
-            comment_mention_comment: commentReferId,
-            comment: comment.substring(commentReferTag.length + 1),
-            comment_status: VIEWABLE,
-            create_date: '12/4/2020',
-            modified_date: '12/4/2020',
-          });
-        break;
-      default:
-        console.log('not allow');
-        comment.trim() !== '' &&
-          commentList.push({
-            id: commentList.length + 1,
-            comment_user: this.state.user.username,
-            comment_mention_comment: null,
-            comment: comment,
-            comment_status: VIEWABLE,
-            create_date: '12/4/2020',
-            modified_date: '12/4/2020',
-          });
+    const comment = this.state.comment
+    const commentSplit = comment.split('|');
+    const commentReferTag = commentSplit[0];
+    let data = {
+      knowledge_data: this.props.knowledgeDataId,
+      reply_to: this.returnReplyIndex() ? this.state.comments[this.returnReplyIndex()].id : null,
+      comment: this.returnReplyIndex() ? comment.substring(commentReferTag.length + 1).trim() : this.state.comment.trim(),
     }
-
-    this._isMounted && this.setState({ comments: commentList, comment: '' });
+    axiosClient
+      .post(KNOWLEDGE_DATA + POST_COMMENT, data)
+      .then(() => {
+        this._isMounted && this.setState({ comment: '' })
+        this.refreshComment()
+      })
+      .catch(err => {
+        console.log(err)
+      })
   };
 
-  checkIsReply = () => {
+  returnReplyIndex = () => {
     const comment = this.state.comment;
     const commentSplit = comment.split('|');
     const commentReferTag = commentSplit[0];
     const commentReferIndex = commentReferTag.substring(1);
-    // recheck here
-    if (commentReferIndex + 1 <= comment.length) {
-      return REPLY_COMMENT;
-    } else if (comment[commentReferIndex]) {
-      return NORMAL_COMMENT;
+    if (commentReferIndex < comment.length) {
+      return commentReferIndex;
     } else {
       return null;
     }
   };
 
-  refreshComment = () => {};
+  refreshComment = () => {
+    axiosClient
+      .get(KNOWLEDGE_DATA + GET_ALL_COMMENT(this.props.knowledgeDataId))
+      .then(response => {
+        this._isMounted && this.setState({
+          comments: response.data.result_data.data,
+          userList: response.data.result_data.users,
+          comment: '',
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  };
 
   getUserById = (id) => {
-    return this.state.userList.id;
+    return this.state.userList[`${id}`]
   };
+
+  linkIdToIndex = (id) => {
+    let indexId = -1
+    this.state.comments.forEach((comment, index) => {
+      if (comment.id === id) {
+        indexId = index
+      }
+    })
+    return indexId
+  }
+
+  handlePageChange(pageNumber) {
+    let showComment = []
+    for (let i = 0; i < 5; i++) {
+      showComment.push(this.state.comments[(pageNumber - 1) * 5 + i])
+    }
+    this.setState({ activePage: pageNumber, showComment: showComment, index: pageNumber * 5 });
+  }
 
   render() {
     return (
@@ -181,36 +214,36 @@ export default class Comment extends Component {
             </Col>
           </Row>
           <ListGroup className="mt-2">
-            {this.state.comments.map((comment, index) => {
-              console.log(comment.user);
+            {this.state.showComment.map((comment, index) => {
+              let user = this.getUserById(comment.user)
               return (
                 <ListGroupItem key={index} className="comment">
                   <Row>
                     <Col xs="1" className="d-flex align-items-center">
-                      #{index}
+                      #{comment.index}
                     </Col>
                     {this.state.editCommentIndex !== index ? (
                       <Col>
                         <Row>
                           <Col>
-                            <h6>{comment.comment_user}</h6>
+                            <h6>{user.username}</h6>
                           </Col>
-                          <Col xs="auto">{comment.modified_date}</Col>
+                          <Col xs="auto">{comment.mdate}</Col>
                         </Row>
                         <Row>
                           <Col>
                             <span>
-                              {comment.comment_mention_comment && (
-                                <span>#{comment.comment_mention_comment} </span>
+                              {comment.reply_to && (
+                                <span>#{this.linkIdToIndex(comment.reply_to)} </span>
                               )}
-                              {comment.comment}
+                              {comment.status === 2 ? "Comment has been deleted" : comment.comment}
                             </span>
                           </Col>
                           <Col xs="auto">
                             <Row>
                               {this.state.user &&
                                 this.state.user.username ===
-                                  comment.comment_user && (
+                                user.username && comment.status !== 2 && (
                                   <Fragment>
                                     <Button
                                       type="button"
@@ -235,71 +268,82 @@ export default class Comment extends Component {
                                     </Button>
                                   </Fragment>
                                 )}
-                              <Button
-                                type="button"
-                                color="info"
-                                size="sm"
-                                className="ml-2"
-                                onClick={() => {
-                                  this.setReplyComment(index);
-                                }}
-                              >
-                                Reply
-                              </Button>
+                              {comment.status !== 2 ?
+                                <Button
+                                  type="button"
+                                  color="info"
+                                  size="sm"
+                                  className="ml-2"
+                                  onClick={() => {
+                                    this.setReplyComment(index);
+                                  }}
+                                >
+                                  Reply
+                              </Button> : null
+                              }
+
                             </Row>
                           </Col>
                         </Row>
                       </Col>
                     ) : (
-                      <Col>
-                        <Row>
-                          <Col>
-                            <h6>{comment.comment_user}</h6>
-                          </Col>
-                          <Col xs="auto">{comment.modified_date}</Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Input
-                              value={this.state.comments[index].comment}
-                              onChange={(event) => {
-                                this.handleCommentInput(event, index);
-                              }}
-                            />
-                          </Col>
-                          <Col xs="auto">
-                            <Row>
-                              <Fragment>
-                                <Button
-                                  type="button"
-                                  color="warning"
-                                  size="sm"
-                                  onClick={() => {
-                                    this.saveComment(index);
-                                  }}
-                                >
-                                  Save
+                        <Col>
+                          <Row>
+                            <Col>
+                              <h6>{user.username}</h6>
+                            </Col>
+                            <Col xs="auto">{comment.mdate}</Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <Input
+                                value={this.state.comments[index].comment}
+                                onChange={(event) => {
+                                  this.handleCommentInput(event, index);
+                                }}
+                              />
+                            </Col>
+                            <Col xs="auto">
+                              <Row>
+                                <Fragment>
+                                  <Button
+                                    type="button"
+                                    color="warning"
+                                    size="sm"
+                                    onClick={() => {
+                                      this.saveComment(index);
+                                    }}
+                                  >
+                                    Save
                                 </Button>
-                                <Button
-                                  type="button"
-                                  color="danger"
-                                  size="sm"
-                                  className="ml-2"
-                                  onClick={() => this.cancelEditMode(index)}
-                                >
-                                  Cancel
+                                  <Button
+                                    type="button"
+                                    color="danger"
+                                    size="sm"
+                                    className="ml-2"
+                                    onClick={() => this.cancelEditMode(index)}
+                                  >
+                                    Cancel
                                 </Button>
-                              </Fragment>
-                            </Row>
-                          </Col>
-                        </Row>
-                      </Col>
-                    )}
+                                </Fragment>
+                              </Row>
+                            </Col>
+                          </Row>
+                        </Col>
+                      )}
                   </Row>
                 </ListGroupItem>
               );
             })}
           </ListGroup>
+          <Pagination
+            activePage={this.state.activePage}
+            totalItemsCount={this.state.comments.length}
+            itemsCountPerPage={5}
+            onChange={this.handlePageChange.bind(this)}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </Col>
       </Row>
     );
