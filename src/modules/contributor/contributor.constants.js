@@ -17,6 +17,9 @@ export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
 export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
+export const GET_ALL_REPORT = 'GET_ALL_REPORT';
+export const GET_REPORT_DETAIL = 'GET_REPORT_DETAIL';
+
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
 export const AVAILABLE = 'AVAILABLE';
@@ -240,3 +243,39 @@ export const columnSynonymFieldDef = [
     resizable: true,
   },
 ];
+
+//Column Report Field Definition
+export const columnReportFieldDef = [
+  {
+    field: 'report_id',
+    headerName: 'ID',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_name',
+    headerName: 'Report',
+    width: 150,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_type',
+    headerName: 'Type',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'c_date',
+    headerName: 'Created date',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  }
+]

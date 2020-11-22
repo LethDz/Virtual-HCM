@@ -12,6 +12,7 @@ import KnowledgeDataListPage from 'src/pages/contributor/manage-knowledge-data/K
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
+import ReportListPage from 'src/pages/contributor/report/ReportListPage';
 
 export {
   HomePage,
@@ -28,4 +29,5 @@ export {
   ReferenceListPage,
   SynonymListPage,
   KnowledgeDataDetailPage,
+  ReportListPage,
 };

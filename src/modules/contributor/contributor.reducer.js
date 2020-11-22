@@ -11,8 +11,10 @@ import {
   GET_REFERENCE_DETAIL,
   DELETE_REFERENCE,
   GET_ALL_DATA_APPROVAL,
-  GET_DATA_APPROVAL, 
+  GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
+  GET_ALL_REPORT,
+  GET_REPORT_DETAIL,
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -21,7 +23,9 @@ const initialState = {
   dataApprovalList: [],
   referenceDetail: null,
   synonymDetail: null,
-  dataApprovalDetail: null
+  dataApprovalDetail: null,
+  reportList: [],
+  reportDetail: null,
 };
 
 export const contributorReducer = (state = initialState, action) => {
@@ -29,8 +33,8 @@ export const contributorReducer = (state = initialState, action) => {
     case RESET_DATA_APPROVAL_DETAIL:
       return {
         ...state,
-        dataApprovalDetail: null
-      }
+        dataApprovalDetail: null,
+      };
     //cases for synonym
     case GET_ALL_DATA_APPROVAL:
       const dataApprovalList = action.payload.dataApprovalList;
@@ -43,8 +47,8 @@ export const contributorReducer = (state = initialState, action) => {
       const dataApproval = action.payload.dataApproval;
       return {
         ...state,
-        dataApprovalDetail: dataApproval
-      }
+        dataApprovalDetail: dataApproval,
+      };
 
     case GET_ALL_SYNONYMS:
       const synonymsList = action.payload.synonymsList;
@@ -160,6 +164,21 @@ export const contributorReducer = (state = initialState, action) => {
       return {
         ...state,
         documentReferenceList: listAfterDelete,
+      };
+
+    //case for report
+    case GET_ALL_REPORT:
+      const reportsList = action.payload.reportList;
+      return {
+        ...state,
+        reportList: reportsList,
+      };
+
+    case GET_REPORT_DETAIL:
+      const detailReport = action.payload.report;
+      return {
+        ...state,
+        reportDetail: detailReport,
       };
     case LOGOUT: {
       return initialState;

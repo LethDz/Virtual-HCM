@@ -11,7 +11,9 @@ import {
   DELETE_REFERENCE,
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
-  RESET_DATA_APPROVAL_DETAIL
+  RESET_DATA_APPROVAL_DETAIL,
+  GET_ALL_REPORT,
+  GET_REPORT_DETAIL,
 } from 'src/modules/contributor/index';
 
 //Synonym
@@ -25,14 +27,14 @@ export const fetchAllDataApproval = (dataApprovalList) => ({
 export const pullDataApproval = (dataApproval) => ({
   type: GET_DATA_APPROVAL,
   payload: {
-    dataApproval
-  }
-})
+    dataApproval,
+  },
+});
 
 export const resetDataApprovalDetail = () => ({
   type: RESET_DATA_APPROVAL_DETAIL,
-  payload: {}
-})
+  payload: {},
+});
 
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,
@@ -102,5 +104,20 @@ export const deleteReference = (id) => ({
   type: DELETE_REFERENCE,
   payload: {
     id,
+  },
+});
+
+//Report
+export const fetchAllDocumentReference = (reportList) => ({
+  type: GET_ALL_REPORT,
+  payload: {
+    reportList,
+  },
+});
+
+export const pullReportDetail = (report) => ({
+  type: GET_REPORT_DETAIL,
+  payload: {
+    report,
   },
 });

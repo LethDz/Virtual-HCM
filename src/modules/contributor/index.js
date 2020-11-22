@@ -9,6 +9,7 @@ import SynonymDetailModal from 'src/modules/contributor/components/synonym/Synon
 import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/GenSynonymSentenceModal';
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
+import ReportDetailModal from 'src/modules/contributor/components/report/ReportDetailModal';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -26,6 +27,7 @@ import CriticalData from 'src/modules/contributor/components/knowledgeDataCompon
 import ReferenceList from 'src/modules/contributor/components/reference/ReferenceList';
 import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataList';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
+import ReportList from 'src/modules/contributor/components/report/ReportList';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -55,4 +57,6 @@ export {
   SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,
+  ReportList,
+  ReportDetailModal,
 };
