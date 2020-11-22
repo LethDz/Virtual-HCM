@@ -14,6 +14,7 @@ import TrainDataEdit from 'src/modules/admin/components/train-data/TrainDataEdit
 import TrainDataDelete from 'src/modules/admin/components/train-data/TrainDataDelete';
 import TrainDataDeletedList from 'src/modules/admin/components/train-data/TrainDataDeletedList';
 import TrainData from 'src/modules/admin/components/train-data/TrainData';
+import AccountRole from 'src/modules/admin/components/manage-contributor/AccountRole';
 
 export * from 'src/modules/admin/admin.actions';
 export * from 'src/modules/admin/admin.constants.js';
@@ -37,4 +38,5 @@ export {
   TrainDataDeletedList,
   TrainDataEdit,
   TrainData,
+  AccountRole,
 };

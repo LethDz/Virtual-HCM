@@ -53,6 +53,7 @@ export const ADMIN_ADD_TRAIN_DATA = `/train-data/add`;
 export const FORBIDDEN = 403;
 
 // API error message:
+export const USER_HAS_BEEN_BANNED = 'User has been banned';
 export const AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED =
   'Authentication credentials were not provided.';
 export const ACCESS_TOKEN_EXPIRED = 'Access token expired';
