@@ -90,31 +90,27 @@ class ReportDetailModal extends Component {
                 onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
-            <Row>
-              <Col className="col-9">
-                <Label>
-                  <h5>ID: {this.state.report_id}</h5>
-                </Label>
-                <FormGroup>
-                  <Label>Report type: </Label>
-                  <Input
-                    name="reference_type"
-                    type="text"
-                    readOnly
-                    value={this.state.report_type}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Detail: </Label>
-                  <Input
-                    name="detail"
-                    type="textarea"
-                    readOnly
-                    value={this.state.detail}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
+            <Label>
+              <h5>ID: {this.state.report_id}</h5>
+            </Label>
+            <FormGroup>
+              <Label>Report type: </Label>
+              <Input
+                name="reference_type"
+                type="text"
+                readOnly
+                value={this.state.report_type}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Detail: </Label>
+              <Input
+                name="detail"
+                type="textarea"
+                readOnly
+                value={this.state.detail}
+              />
+            </FormGroup>
           </ModalBody>
           <ModalFooter>
             <Button color="primary" type="submit" disabled={this.state.loading}>
