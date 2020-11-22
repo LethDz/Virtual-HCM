@@ -1,24 +1,13 @@
 import {
   faFileCode,
   faPlayCircle,
-  faPlug,
   faStopCircle,
   faSyncAlt,
-  faTimes,
   faUndoAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Fragment, useState } from 'react';
-import {
-  Badge,
-  Button,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Row,
-} from 'reactstrap';
+import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import {
   activations,
   SelectFileModal,
@@ -27,10 +16,6 @@ import {
 
 const ControlPanel = (props) => {
   const [openModal, setOpenModal] = useState(false);
-  const onConnect = (event) => {
-    event.preventDefault();
-    props.remoteAction('connect');
-  };
 
   const onStart = (event) => {
     event.preventDefault();
@@ -50,11 +35,6 @@ const ControlPanel = (props) => {
 
   return (
     <Fragment>
-      <Row>
-        <Col className="d-flex">
-          <h6 className="mt-2 mb-2 text-primary">Control Panel: </h6>
-        </Col>
-      </Row>
       {openModal && (
         <SelectFileModal
           openModal={openModal}
@@ -62,7 +42,7 @@ const ControlPanel = (props) => {
           selectTrainableData={props.selectTrainableData}
         />
       )}
-      <Form className="control-panel p-3" onSubmit={onConnect}>
+      <Form className="control-panel p-3" onSubmit={onStart}>
         <FormGroup row>
           <Col>
             <Label for="data" className="text-sm">
@@ -75,25 +55,17 @@ const ControlPanel = (props) => {
               size="sm"
               onClick={() => setOpenModal(true)}
               className="mr-2"
+              block
             >
-              <FontAwesomeIcon icon={faFileCode} />
-              &nbsp; Select Data File
+              {props.state.data ? (
+                props.state.data.filename
+              ) : (
+                <Fragment>
+                  <FontAwesomeIcon icon={faFileCode} />
+                  &nbsp;Select Data File
+                </Fragment>
+              )}
             </Button>
-            <br />
-            {props.state.data && (
-              <Fragment>
-                <Badge color="success" pill className="mt-2">
-                  {props.state.data.filename}
-                </Badge>
-                <Button
-                  className="link-unstyled"
-                  color="link"
-                  onClick={() => props.selectTrainableData(null)}
-                >
-                  <FontAwesomeIcon icon={faTimes} color="red" />
-                </Button>
-              </Fragment>
-            )}
           </Col>
           <Col>
             <Label for="type" className="text-sm">
@@ -116,6 +88,8 @@ const ControlPanel = (props) => {
               ))}
             </Input>
           </Col>
+        </FormGroup>
+        <FormGroup row>
           <Col>
             <Label for="sentence_length" className="text-sm">
               Sentence Length:
@@ -165,7 +139,7 @@ const ControlPanel = (props) => {
           </Col>
           <Col>
             <Label for="learning_rate" className="text-sm">
-              Learing Rate:
+              Learning Rate:
             </Label>
             <Input
               bsSize="sm"
@@ -178,6 +152,8 @@ const ControlPanel = (props) => {
               required
             />
           </Col>
+        </FormGroup>
+        <FormGroup row>
           <Col>
             <Label for="epsilon" className="text-sm">
               Epsilon:
@@ -216,13 +192,7 @@ const ControlPanel = (props) => {
         </FormGroup>
         <FormGroup row>
           <Col xs="auto" className="pr-0">
-            <Button size="sm" color="primary" type="submit">
-              <FontAwesomeIcon icon={faPlug} />
-              &nbsp; Connect
-            </Button>
-          </Col>
-          <Col xs="auto" className="pr-0">
-            <Button size="sm" color="success" onClick={onStart}>
+            <Button size="sm" color="success" type="submit">
               <FontAwesomeIcon icon={faPlayCircle} />
               &nbsp; Start
             </Button>
@@ -233,13 +203,15 @@ const ControlPanel = (props) => {
               &nbsp; Stop
             </Button>
           </Col>
+        </FormGroup>
+        <FormGroup row>
           <Col xs="auto" className="pr-0">
             <Button size="sm" color="secondary" onClick={onDefault}>
               <FontAwesomeIcon icon={faUndoAlt} />
               &nbsp; Reset to default
             </Button>
           </Col>
-          <Col xs="auto" className="ml-auto">
+          <Col xs="auto">
             <Button size="sm" color="warning" onClick={onReloadModal}>
               <FontAwesomeIcon icon={faSyncAlt} />
               &nbsp; Reload Model

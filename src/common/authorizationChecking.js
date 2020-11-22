@@ -2,6 +2,7 @@ import { history } from 'src/common/history';
 import {
   ACCESS_TOKEN_EXPIRED,
   ADMIN_PAGE,
+  AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED,
   CONTRIBUTOR_PAGE,
   FORBIDDEN,
   LOGIN_PAGE,
@@ -38,13 +39,13 @@ export const getTheCurrentUserRole = () => {
 };
 
 export const getUserData = () => {
-  return !sessionStorage.getItem('user')
+  return !localStorage.getItem('user')
     ? null
-    : JSON.parse(sessionStorage.getItem('user'));
+    : JSON.parse(localStorage.getItem('user'));
 };
 
 export const signOut = () => {
-  sessionStorage.removeItem('user');
+  localStorage.removeItem('user');
   axiosClient.get(LOGOUT);
   store.dispatch(resetAllRedux());
   history.push(LOGIN_PAGE);
@@ -70,7 +71,7 @@ export const getCookie = (cname) => {
 // if error occurs with 403 status code
 // check the code if message returns authorization error message sign out the user
 export const denyAuthorization = (error) => {
-  const data = error.response.data;
+  const data = error.response && error.response.data;
   if (data && !data.status) {
     const resultData = data.result_data;
     if (
@@ -92,4 +93,5 @@ export const checkMessageIsNotValidUser = (resultData) =>
   (resultData.error_detail === USER_NOT_FOUND ||
     resultData.error_detail === USER_IS_INACTIVE ||
     resultData.error_detail === ACCESS_TOKEN_EXPIRED ||
-    resultData.error_detail === WRONG_PASSWORD);
+    resultData.error_detail === WRONG_PASSWORD ||
+    resultData.error_detail === AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED);

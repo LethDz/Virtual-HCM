@@ -29,27 +29,22 @@ const SelectFileModal = (props) => {
 
   const onGridReady = async (params) => {
     await setGridApi(params.api);
-
-    if (props.trainableData.length === 0) {
-      await axiosClient
-        .get(ADMIN_GET_ALL_TRAINABLE_DATA)
-        .then((response) => {
-          if (response.data.status) {
-            const data = response.data.result_data;
-            props.pullTrainableData(data);
-            setErrorAlert(false);
-          } else {
-            setErrorAlert(true);
-          }
-          setLoading(false);
-        })
-        .catch(() => {
+    await axiosClient
+      .get(ADMIN_GET_ALL_TRAINABLE_DATA)
+      .then((response) => {
+        if (response.data.status) {
+          const data = response.data.result_data;
+          props.pullTrainableData(data);
+          setErrorAlert(false);
+        } else {
           setErrorAlert(true);
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setErrorAlert(true);
+        setLoading(false);
+      });
   };
 
   const onRowSelected = () => {
@@ -65,7 +60,7 @@ const SelectFileModal = (props) => {
   return (
     <Modal isOpen={props.openModal} toggle={toggle} unmountOnClose={true}>
       <ModalHeader toggle={toggle}>Select Data Files</ModalHeader>
-      <LoadingSpinner loading={loading} text="Loading">
+      <LoadingSpinner loading={loading} text="Loading" type="MODAL">
         <ModalBody>
           {errorAlert && (
             <ErrorAlert

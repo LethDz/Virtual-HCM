@@ -11,6 +11,7 @@ export const LOGOUT = '/logout';
 export const FIRST_LOGIN_CHANGE_PASSWORD = '/user/update-password-first-login';
 
 export const KNOWLEDGE_DATA = '/knowledge-data';
+export const KNOWLEDGE_DATA_ALL_TRAINABLE = `${KNOWLEDGE_DATA}/all-trainable`;
 export const NLP = '/nlp';
 export const TOKENIZE = '/tokenize';
 
@@ -38,11 +39,22 @@ export const ADMIN_ADD_USER = '/user/add';
 export const ADMIN_EDIT_USER = '/user/edit';
 export const ADMIN_CHANGE_STATUS_USER = (id) => `/user/change-status?id=${id}`;
 export const ADMIN_GET_ALL_TRAINABLE_DATA = `/train-data/all-trainable`;
+export const ADMIN_GET_ALL_TRAIN_DATA = `/train-data/all`;
+export const ADMIN_GET_ALL_DELETED_TRAIN_DATA = `/train-data/all-deleted`;
+export const ADMIN_DOWNLOAD_TRAIN_DATA = (id) =>
+  `/train-data/download?id=${id}`;
+export const ADMIN_TOGGLE_STATUS_TRAIN_DATA = (id) =>
+  `/train-data/toggle?id=${id}`;
+export const ADMIN_DELETE_TRAIN_DATA = `/train-data/delete`;
+export const ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA = `/train-data/change-description`;
+export const ADMIN_ADD_TRAIN_DATA = `/train-data/add`;
 
 // API status code:
 export const FORBIDDEN = 403;
 
 // API error message:
+export const AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED =
+  'Authentication credentials were not provided.';
 export const ACCESS_TOKEN_EXPIRED = 'Access token expired';
 export const USER_IS_INACTIVE = 'User is inactive';
 export const USER_NOT_FOUND = 'User not found';
@@ -66,6 +78,7 @@ export const ADMIN_CONTRIBUTOR_EDIT_PAGE = (id) =>
     : `${ADMIN_CONTRIBUTOR_LIST_PAGE}/edit/:id`;
 export const ADMIN_MANAGE_TRAINING_PROCESS_PAGE = `${ADMIN_PAGE}/manage-training-process`;
 export const ADMIN_CONFIGURE_SYSTEM_PAGE = `${ADMIN_PAGE}/configure-system`;
+export const ADMIN_TRAIN_DATA_PAGE = `${ADMIN_PAGE}/train-data`;
 
 // Contributor Page
 export const CONTRIBUTOR_PAGE = '/contributor';
@@ -91,4 +104,4 @@ export const ROLE_CONTRIBUTOR = 'Contributor';
 export const CSRF_TOKEN = 'csrftoken';
 
 // Base 64 Image generate
-export const imgBase64 = (image) => `data:image/png;base64,${image}`;
+export const imgBase64 = (image) => `https://127.0.0.1:8000${image}`;

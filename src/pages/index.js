@@ -9,6 +9,7 @@ import ConfigureSystemPage from 'src/pages/admin/configure-system/ConfigureSyste
 import ManageTrainingProcessPage from 'src/pages/admin/manage-training-process/ManageTrainingProcessPage';
 import KnowledgeDataCreateFormPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataCreateFormPage';
 import KnowledgeDataListPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataListPage';
+import TrainDataPage from 'src/pages/admin/train-data/TrainDataPage';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
@@ -28,4 +29,5 @@ export {
   ReferenceListPage,
   SynonymListPage,
   KnowledgeDataDetailPage,
+  TrainDataPage,
 };

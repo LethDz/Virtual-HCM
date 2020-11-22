@@ -5,7 +5,7 @@ import { LOGIN_PAGE } from 'src/constants';
 import { getUserData } from 'src/common/authorizationChecking';
 import { FirstLoginModal } from 'src/modules/login';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRouteAdmin = ({ component: Component, ...rest }) => {
   const checkAuthorization = (props) => {
     const user = getUserData();
     return user && user.admin ? (
@@ -32,4 +32,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return <Route {...rest} render={checkAuthorization} />;
 };
 
-export default PrivateRoute;
+export default PrivateRouteAdmin;
