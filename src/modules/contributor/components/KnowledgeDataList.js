@@ -96,7 +96,7 @@ class KnowledgeDataList extends Component {
         this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
-          this.props.fetchAllDataApproval(response.data.result_data.knowledges);
+          this.props.fetchAllDataApproval(response.data.result_data);
           this.setAlertMessage('Load successful');
           this.setSuccessAlert(true);
         } else {
