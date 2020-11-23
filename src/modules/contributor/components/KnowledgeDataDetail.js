@@ -29,6 +29,7 @@ import {
   handleInputChange,
 } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
+import { getUserData } from 'src/common/authorizationChecking';
 
 import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
@@ -320,14 +321,14 @@ class KnowledgeDataDetail extends Component {
   };
 
   setFormStatus = () => {
-    let user = JSON.parse(sessionStorage.getItem('user'));
+    let user = getUserData()
     switch (this.props.dataApprovalDetail.status.toUpperCase()) {
       case AVAILABLE:
         this._isMounted && this.setState({ formStatus: AVAILABLE, disable: false });
         break;
       case PROCESSING:
         this._isMounted && this.setState({ formStatus: PROCESSING });
-        if (this.props.dataApprovalDetail.edit_user === user.username && this.props.dataApprovalDetail.edit_user_id === user.user_id) {
+        if (this.props.dataApprovalDetail.edit_user_id === user.user_id) {
           this._isMounted && this.setState({ owner: true, disable: false });
         }
         break;
@@ -353,9 +354,9 @@ class KnowledgeDataDetail extends Component {
         .get(GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.props.intent))
         .then((response) => {
           if (response.data.status) {
-            this.setFormData(response.data.result_data.knowledge_data);
+            this.setFormData(response.data.result_data);
             this.props.pullDataApproval(
-              response.data.result_data.knowledge_data
+              response.data.result_data
             );
             this.setFormStatus();
             this.setErrorAlert(false);
