@@ -1,5 +1,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Production Build
+- ```serve -s build --listen 3000 --ssl-cert "./.cert/cert.pem" --ssl-key "./.cert/key.pem"```
+
 ## Tech Stack
 
 - [Axios][axios] (★ 55k) create HTTP Request from browser.

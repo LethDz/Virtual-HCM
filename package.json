@@ -1,5 +1,20 @@
 {
   "name": "virtual-hcm",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/pages/**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -34,7 +49,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,12 +59,17 @@
     "production": [
       ">0.2%",
       "not dead",
+      "not ie <= 11",
       "not op_mini all"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      ">0.2%",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all"
     ]
+  },
+  "devDependencies": {
+    "jest": "24.9.0"
   }
 }
