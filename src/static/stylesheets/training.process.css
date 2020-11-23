@@ -9,9 +9,12 @@
 
 .terminal-base {
   font-family: monospace;
-  box-shadow: 0px 0px 5px 1px #7E8083;
+  box-shadow: 0px 0px 5px 1px #7e8083;
   border: 1px solid #bbbbbb;
-  max-width: 100% !important;
+  height: unset !important;
+  max-width: unset !important;
+  min-height: 450px !important;
+  max-height: 480px !important;
 }
 
 .terminal-base .sc-EHOje {

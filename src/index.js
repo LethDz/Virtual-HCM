@@ -28,7 +28,12 @@ ReactDOM.render(
 const renderChatWidget = () => {
   const pathname = window.location.pathname;
   if (pathname.includes(ADMIN_PAGE) || pathname.includes(CONTRIBUTOR_PAGE)) {
-    ReactDOM.render(<ChatWidget />, document.getElementById('chat-widget'));
+    ReactDOM.render(
+      <Provider store={store}>
+        <ChatWidget />
+      </Provider>,
+      document.getElementById('chat-widget')
+    );
   }
 
   history.listen((location) => {
@@ -36,7 +41,12 @@ const renderChatWidget = () => {
       location.pathname.includes(ADMIN_PAGE) ||
       location.pathname.includes(CONTRIBUTOR_PAGE)
     ) {
-      ReactDOM.render(<ChatWidget />, document.getElementById('chat-widget'));
+      ReactDOM.render(
+        <Provider store={store}>
+          <ChatWidget />
+        </Provider>,
+        document.getElementById('chat-widget')
+      );
     } else {
       ReactDOM.unmountComponentAtNode(document.getElementById('chat-widget'));
     }

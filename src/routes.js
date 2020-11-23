@@ -16,6 +16,7 @@ import {
   SynonymListPage,
   KnowledgeDataDetailPage,
   ReportListPage,
+  TrainDataPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -33,6 +34,7 @@ import {
   SYNONYM_LIST_PAGE,
   GET_KNOWLEDGE_DATA_BY_INTENT,
   REPORT_LIST_PAGE,
+  ADMIN_TRAIN_DATA_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -73,6 +75,11 @@ const Routes = () => (
         exact
         path={ADMIN_CONFIGURE_SYSTEM_PAGE}
         component={ConfigureSystemPage}
+      />
+      <PrivateRouteAdmin
+        exact
+        path={ADMIN_TRAIN_DATA_PAGE}
+        component={TrainDataPage}
       />
       <PrivateRouteContributor
         exact

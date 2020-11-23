@@ -54,7 +54,7 @@ class ReferenceList extends Component {
         this.setLoading(false);
       })
       .then(() => {
-        this.setStyleForGrid();
+        this.sizeToFit();
       })
       .catch((error) => {
         this.setLoading(false);
@@ -96,13 +96,13 @@ class ReferenceList extends Component {
       });
   };
 
-  onRowDoubleClicked = (row) =>{
+  onRowDoubleClicked = (row) => {
     let id = row.data.reference_document_id;
     this.setState({
       selectedId: id,
       modalReferenceDetail: !this.state.modalReferenceDetail,
     });
-  }
+  };
 
   toggleReferenceDetail = () => {
     this.setState({
@@ -173,6 +173,14 @@ class ReferenceList extends Component {
       this.setState({
         errorList: list,
       });
+  };
+
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
   };
 
   render() {
@@ -254,6 +262,7 @@ class ReferenceList extends Component {
             columnDefs={columnRefFieldDef}
             pagination={true}
             paginationAutoPageSize={true}
+            onFirstDataRendered={this.onFirstDataRendered}
           ></AgGridReact>
         </div>
       </div>

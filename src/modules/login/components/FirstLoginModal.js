@@ -71,7 +71,7 @@ class FirstLoginModal extends Component {
         if (response.data.status) {
           let user = getUserData();
           user.first_login = true;
-          sessionStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('user', JSON.stringify(user));
           this.toggle();
         } else {
           this.setErrorAlert(true);

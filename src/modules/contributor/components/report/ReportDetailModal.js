@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import React, { Component } from 'react';
 import {
   Form,
   Input,
@@ -15,6 +14,9 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -65,6 +67,7 @@ class ReportDetailModal extends Component {
         errorList: list,
       });
   };
+  
   render() {
     return (
       <Modal

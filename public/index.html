@@ -26,21 +26,25 @@
     <title>Virtual Hồ Chí Minh</title>
   </head>
   <body>
-    <script>
-      if (window.location.pathname === '/') {
-        let jquery = document.createElement('script');
-        jquery.src = './portfolio/js/jquery-3.3.1.min.js';
-        jquery.async = true;
-        document.body.appendChild(jquery);
-        let homeSource = document.createElement('script');
-        homeSource.src = './home-source.import.js';
-        jquery.async = true;
-        document.body.appendChild(homeSource);
-      }
+    <script crossorigin>
+      const loadModule = async () => {
+        if (window.location.pathname === '/') {
+          let jquery = document.createElement('script');
+          jquery.src = './portfolio/js/jquery-3.3.1.min.js';
+          jquery.async = true;
+          await document.body.appendChild(jquery);
+          let homeSource = document.createElement('script');
+          homeSource.src = './home-source.import.js';
+          homeSource.async = true;
+          await document.body.appendChild(homeSource);
+        }
+      };
+      loadModule();
     </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <div id="chat-widget"></div>
+    <a href="#" id="downloadFile" style="display: none"></a>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
