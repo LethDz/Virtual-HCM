@@ -146,6 +146,19 @@ class CreateKnowledgeDataForm extends Component {
     return errorFlag;
   };
 
+  reformatForm = () => {
+    let form = this.state.form
+    let references = []
+    form.documentReference.forEach(reference => {
+      references.push({
+        ...reference,
+        page: parseInt(reference.page)
+      })
+    })
+    form.documentReference = references
+    return form
+  }
+
   submitForm = (event) => {
     this._isMounted &&
       this.setState({
@@ -154,7 +167,7 @@ class CreateKnowledgeDataForm extends Component {
     event.preventDefault();
     if (!this.checkFormSubmit()) {
       axiosClient
-        .post(KNOWLEDGE_DATA + ADD, this.state.form)
+        .post(KNOWLEDGE_DATA + ADD, this.reformatForm())
         .then((response) => {
           this._isMounted &&
             this.setState({

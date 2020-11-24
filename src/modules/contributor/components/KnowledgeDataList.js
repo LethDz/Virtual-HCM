@@ -13,7 +13,11 @@ import {
   // context,
   // frameworkComponents,
   getAllDataApproval,
-  fetchAllDataApproval
+  fetchAllDataApproval, 
+  AVAILABLE, 
+  PROCESSING, 
+  DONE, 
+  DISABLE
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
@@ -96,7 +100,7 @@ class KnowledgeDataList extends Component {
         this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
-          this.props.fetchAllDataApproval(response.data.result_data.knowledges);
+          this.props.fetchAllDataApproval(response.data.result_data);
           this.setAlertMessage('Load successful');
           this.setSuccessAlert(true);
         } else {
@@ -138,6 +142,28 @@ class KnowledgeDataList extends Component {
 
   onFirstDataRendered = () => {
     this.sizeToFit();
+  }
+
+  setRowData = () => {
+    let data = this.props.dataApprovalList
+    data.forEach((item, index) => {
+      switch (item.status) {
+        case 0:
+          data[index].status = AVAILABLE
+          break;
+        case 1:
+          data[index].status = PROCESSING
+          break;
+        case 2:
+          data[index].status = DONE
+          break;
+        case 3:
+          data[index].status = DISABLE
+          break;
+        default:
+      }
+    })
+    return data
   }
 
   render() {
@@ -212,7 +238,7 @@ class KnowledgeDataList extends Component {
         >
           <AgGridReact
             onFirstDataRendered={this.onFirstDataRendered}
-            rowData={this.props.dataApprovalList}
+            rowData={this.setRowData()}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}

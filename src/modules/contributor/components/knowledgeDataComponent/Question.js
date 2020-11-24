@@ -18,7 +18,7 @@ import {
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt, faTasks } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrashAlt, faTasks, faListAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import { NLP, TOKENIZE, GENERATE_SIMILARIES } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
@@ -46,6 +46,7 @@ export default class Question extends Component {
         { id: 7, value: 7, isChecked: false },
       ],
       tooltipOpen: false,
+      tooltipTypeOpen: false,
       isOpenGenerateModal: false,
       generated_sentences: [],
       saveGeneratedSentences: false,
@@ -110,8 +111,7 @@ export default class Question extends Component {
       if (type.isChecked === true) hasType = true;
     });
     if (!hasType) {
-      this.props.setErrorAlert(true);
-      this.props.scrollToTop();
+      this.openTypeToolTip()
       return;
     }
 
@@ -192,7 +192,6 @@ export default class Question extends Component {
 
           this.props.setQuestions(this.state.questions);
         } else {
-          this.props.setSuccessAlert(false);
           this.props.setErrorAlert(true);
           this.props.setErrorList(response.data.messages);
           this.props.scrollToTop();
@@ -207,7 +206,6 @@ export default class Question extends Component {
             loading: false,
           });
         this.props.setErrorAlert(true);
-        this.props.setSuccessAlert(false);
         this.props.scrollToTop();
       });
   };
@@ -227,8 +225,13 @@ export default class Question extends Component {
   };
 
   openToolTip = () => {
+    this._isMounted && this.setState({ tooltipTypeOpen: false })
     this._isMounted && this.setState({ tooltipOpen: !this.state.tooltipOpen });
   };
+
+  openTypeToolTip = () => {
+    this._isMounted && this.setState({ tooltipTypeOpen: !this.state.tooltipTypeOpen })
+  }
 
   setGeneratedSentences = (generatedSentences, index) => {
     let questions = this.state.questions;
@@ -255,9 +258,9 @@ export default class Question extends Component {
       });
   };
 
-  onMouseOver = (event, value) => {};
+  onMouseOver = (event, value) => { };
 
-  onMouseLeave = (event) => {};
+  onMouseLeave = (event) => { };
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index;
@@ -313,12 +316,9 @@ export default class Question extends Component {
             });
 
           this.toggleGenerateModal();
-          this.props.setErrorAlert(false);
-          this.props.setSuccessAlert(true);
         } else {
           this._isMounted && this.setState({ generateLoading: false });
           this.props.setErrorAlert(true);
-          this.props.setSuccessAlert(false);
         }
       })
       .catch((err) => {
@@ -327,7 +327,6 @@ export default class Question extends Component {
             generateLoading: false,
           });
         this.props.setErrorAlert(true);
-        this.props.setSuccessAlert(false);
       });
   };
 
@@ -375,10 +374,11 @@ export default class Question extends Component {
         return (
           <div className="d-flex justify-content-end mt-2">
             <Button
+              block
               disabled={this.props.disable}
               onClick={this.generatedSentences}
             >
-              Generate
+              <FontAwesomeIcon icon={faListAlt} /> Generate
             </Button>
           </div>
         );
@@ -386,10 +386,11 @@ export default class Question extends Component {
         return (
           <div className="d-flex justify-content-end mt-2">
             <Button
+              block
               disabled={this.props.disable}
               onClick={this.viewGeneratedSentences}
             >
-              View
+              <FontAwesomeIcon icon={faEye} /> View
             </Button>
           </div>
         );
@@ -448,13 +449,22 @@ export default class Question extends Component {
                         </Button>
                         <Tooltip
                           placement="top"
+                          isOpen={this.state.tooltipTypeOpen}
+                          autohide={true}
+                          target="DisabledAutoHide"
+                        >
+                          Choose type before add type
+                        </Tooltip>
+                        <Tooltip
+                          placement="top"
                           isOpen={this.state.tooltipOpen}
                           autohide={false}
                           target="DisabledAutoHide"
                         >
-                          <Row>
-                            <Col>
+                          <div className="row coresponse-tool-tip">
+                            <Col xs='auto'>
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 id="1"
                                 label="What"
@@ -462,6 +472,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 id="2"
                                 label="When"
@@ -469,6 +480,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 checked={this.state.type[2].isChecked}
                                 id="3"
@@ -476,6 +488,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 label="Yes/No"
                                 checked={this.state.type[6].isChecked}
@@ -483,8 +496,9 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                             </Col>
-                            <Col xs="auto">
+                            <Col xs='auto'>
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 checked={this.state.type[3].isChecked}
                                 id="4"
@@ -492,6 +506,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 checked={this.state.type[4].isChecked}
                                 id="5"
@@ -499,6 +514,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                               <CustomInput
+                                className="check-box-tag"
                                 type="checkbox"
                                 checked={this.state.type[5].isChecked}
                                 id="6"
@@ -506,7 +522,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                             </Col>
-                          </Row>
+                          </div>
                         </Tooltip>
                       </Col>
                     </Row>

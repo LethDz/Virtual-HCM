@@ -2,10 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import 'src/static/stylesheets/contributor.list.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUserPlus,
-  faUserEdit,
-} from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
 import {
   columnFieldDef,
@@ -95,7 +92,7 @@ class ContributorsList extends Component {
   };
 
   onFirstDataRendered = () => {
-    this.gridApi.sizeColumnsToFit();
+    this.sizeToFit();
   };
 
   onRowSelected = () => {

@@ -129,3 +129,16 @@
 .comment-area {
   resize: none;
 }
+
+.check-box-tag {
+  padding-left: 0 !important
+}
+
+.check-box-tag label {
+  position: unset
+}
+
+.coresponse-tool-tip {
+  margin-right: 0 !important;
+  margin-left: 15px !important
+}

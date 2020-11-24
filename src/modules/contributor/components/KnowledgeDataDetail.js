@@ -118,6 +118,16 @@ class KnowledgeDataDetail extends Component {
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
     form.synonyms = synonym;
+
+    let references = []
+    form.documentReference.forEach(reference => {
+      references.push({
+        ...reference,
+        page: parseInt(reference.page)
+      })
+    })
+    form.documentReference = references
+
     this._isMounted && this.setState({ form: form });
   };
 
@@ -482,7 +492,14 @@ class KnowledgeDataDetail extends Component {
                 </Col>
               </Row>
 
-              <Vote formStatus={this.state.formStatus} knowledgeDataId={this.state.form.id} owner={this.state.owner} />
+              <Vote
+                formStatus={this.state.formStatus}
+                knowledgeDataId={this.state.form.id}
+                owner={this.state.owner}
+                setSuccessAlert={this.setSuccessAlert}
+                setErrorAlert={this.setErrorAlert}
+                setAlertMessage={this.setAlertMessage}
+              />
 
               <FormSectionTitle title="Meta data" />
               <MetaData

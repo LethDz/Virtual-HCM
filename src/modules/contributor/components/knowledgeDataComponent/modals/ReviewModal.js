@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
-import { Button, Input, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Button, Input, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { KNOWLEDGE_DATA, REVIEW } from 'src/constants';
-import { ACCEPT, DECLINE, DRAFT } from 'src/modules/contributor/index';
+import { ACCEPT, DECLINE, DRAFT, getDataApprovalDetail } from 'src/modules/contributor/index';
+import { connect } from 'react-redux';
 
 import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { history } from 'src/common/history';
+import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 
-export default class ReviewModal extends Component {
+class ReviewModal extends Component {
   _isMounted = false;
   constructor(props) {
     super();
     this.state = {
       buttonId: props.buttonId,
       comment: '',
+      loading: false,
+      status: null
     };
   }
 
@@ -22,13 +28,22 @@ export default class ReviewModal extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    const userReview = this.props.dataApprovalDetail.user_review
+    userReview &&
+      this._isMounted && this.setState({ comment: userReview.review_detail, status: userReview.status })
   };
 
   componentWillUnmount = () => {
     this._isMounted = false;
   };
 
+  setLoading = (status) => {
+    this._isMounted && this.setState({ loading: status })
+  }
+
   sendReview = (status) => {
+    this.setLoading(true)
+    this.props.setErrorAlert(false)
     let data = {
       knowledge_data: this.props.knowledgeDataId,
       status: status,
@@ -37,8 +52,34 @@ export default class ReviewModal extends Component {
     axiosClient
       .post(KNOWLEDGE_DATA + REVIEW, data)
       .then(response => {
-
+        this.setLoading(false)
+        if (response.data.status) {
+          history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
+        }
+        else {
+          this.props.setSuccessAlert(false)
+          this.props.setErrorAlert(true)
+        }
       })
+      .catch(err => {
+        this.setLoading(false)
+        this.props.setSuccessAlert(false)
+        this.props.setErrorAlert(true)
+      })
+  }
+
+  getAlert = () => {
+    let message = (status) => `You have ${status} this knowledge data`
+    switch (this.state.status) {
+      case 1:
+        return <Alert color="success">{message('accepted')}</Alert>
+      case 2:
+        return <Alert color="danger">{message('declined')}</Alert>
+      case 3:
+        return <Alert color="warning">{message('to re-review or finish')}</Alert>
+      default:
+        return null
+    }
   }
 
   render() {
@@ -53,11 +94,19 @@ export default class ReviewModal extends Component {
         flip={false}
         trigger="legacy"
       >
+        <LoadingSpinner
+          loading={this.state.loading}
+          text="Sending review"
+        />
         <PopoverHeader>Review knowledge data</PopoverHeader>
         <PopoverBody>
+          {this.state.status &&
+            this.getAlert()
+          }
           <div className="w-600px">
             <Input
               onChange={this.handleInput}
+              value={this.state.comment}
               className="h-170px comment-area"
               placeholder="Enter comment here"
               type="textarea"
@@ -96,3 +145,9 @@ export default class ReviewModal extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  dataApprovalDetail: getDataApprovalDetail(state),
+});
+
+export default connect(mapStateToProps)(ReviewModal)
