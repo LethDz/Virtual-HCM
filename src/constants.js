@@ -21,6 +21,7 @@ export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
 export const REPORT = '/report';
+export const REJECT_REPORT = (id, reason) => `/report/reject?report_id=${id}&&reject_reason=${reason}`;
 
 export const ADD = '/add';
 

@@ -14,6 +14,7 @@ import {
   RESET_DATA_APPROVAL_DETAIL,
   GET_ALL_REPORT,
   GET_REPORT_DETAIL,
+  EDIT_REPORT_STATUS,
 } from 'src/modules/contributor/index';
 
 //Synonym
@@ -117,6 +118,13 @@ export const fetchAllReport = (reportList) => ({
 
 export const pullReportDetail = (report) => ({
   type: GET_REPORT_DETAIL,
+  payload: {
+    report,
+  },
+});
+
+export const changeReportStatus = (report) => ({
+  type: EDIT_REPORT_STATUS,
   payload: {
     report,
   },

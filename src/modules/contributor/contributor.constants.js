@@ -19,6 +19,7 @@ export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
 export const GET_ALL_REPORT = 'GET_ALL_REPORT';
 export const GET_REPORT_DETAIL = 'GET_REPORT_DETAIL';
+export const EDIT_REPORT_STATUS = 'EDIT_REPORT_STATUS';
 
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
@@ -255,7 +256,7 @@ export const columnReportFieldDef = [
     resizable: true,
   },
   {
-    field: 'report_name',
+    field: 'report_data',
     headerName: 'Report',
     width: 150,
     sortable: true,
@@ -263,7 +264,7 @@ export const columnReportFieldDef = [
     resizable: true,
   },
   {
-    field: 'report_type',
+    field: 'type',
     headerName: 'Type',
     width: 50,
     sortable: true,
@@ -271,8 +272,8 @@ export const columnReportFieldDef = [
     resizable: true,
   },
   {
-    field: 'c_date',
-    headerName: 'Created date',
+    field: 'status',
+    headerName: 'Status',
     width: 100,
     sortable: true,
     filter: true,

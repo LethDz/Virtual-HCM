@@ -15,6 +15,7 @@ import {
   RESET_DATA_APPROVAL_DETAIL,
   GET_ALL_REPORT,
   GET_REPORT_DETAIL,
+  EDIT_REPORT_STATUS,
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -180,6 +181,22 @@ export const contributorReducer = (state = initialState, action) => {
         ...state,
         reportDetail: detailReport,
       };
+
+    case EDIT_REPORT_STATUS:
+      const report = action.payload.report;
+      let listReport = state.reportList.map((reportDetail) => {
+        if (reportDetail.report_id === report.report_id) {
+          reportDetail = report;
+        }
+        return reportDetail;
+      });
+
+      return {
+        ...state,
+        reportDetail: report,
+        reportList: listReport,
+      };
+
     case LOGOUT: {
       return initialState;
     }
