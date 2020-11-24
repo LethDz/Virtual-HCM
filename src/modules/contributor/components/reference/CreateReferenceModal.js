@@ -90,7 +90,7 @@ class CreateReferenceModal extends Component {
           const reference = response.data.result_data;
           this.props.addReferenceToList(reference);
           this.props.updateReferenceList([]);
-          this.setSuccessAlert(true);
+          this.props.toggle();
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
