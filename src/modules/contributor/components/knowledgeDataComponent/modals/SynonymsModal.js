@@ -57,6 +57,7 @@ class SynonymsModal extends Component {
             response.data.result_data.synonym_dicts
           );
           this.setSynonymList(response.data.result_data.synonym_dicts);
+          this.sizeToFit()
           this.setState({ loading: false });
         } else {
           this.props.setSuccessAlert(false);
@@ -126,6 +127,14 @@ class SynonymsModal extends Component {
     !this.state.loading && this.props.toggle();
   };
 
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  }
+
   render() {
     return (
       <div>
@@ -161,6 +170,7 @@ class SynonymsModal extends Component {
                 style={{ height: 700, width: "100%" }}
               >
                 <AgGridReact
+                  onFirstDataRendered={this.onFirstDataRendered}
                   onGridReady={this.onGridReady}
                   onRowDoubleClicked={this.onRowDoubleClicked}
                   rowData={this.state.synonymsList}
@@ -182,7 +192,11 @@ class SynonymsModal extends Component {
               >
                 <FontAwesomeIcon icon={faPlus} /> New synonym
               </Button>
-              <Button color="success" onClick={this.addSynonyms}>
+              <Button
+                color="success"
+                onClick={this.addSynonyms}
+                disabled={this.state.selectedSynonyms.length === 0}
+              >
                 <FontAwesomeIcon icon={faPlus} /> Add
               </Button>
             </ModalFooter>

@@ -13,6 +13,7 @@ import {
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL, 
   RESET_DATA_APPROVAL_DETAIL,
+  GET_KNOWLEDGE_DATA_SETTINGS
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -21,11 +22,17 @@ const initialState = {
   dataApprovalList: [],
   referenceDetail: null,
   synonymDetail: null,
-  dataApprovalDetail: null
+  dataApprovalDetail: null,
+  knowledgeDataSettings: null
 };
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_KNOWLEDGE_DATA_SETTINGS:
+      return {
+        ...state,
+        knowledgeDataSettings: action.payload.knowledgeDataSettings
+      }
     case RESET_DATA_APPROVAL_DETAIL:
       return {
         ...state,

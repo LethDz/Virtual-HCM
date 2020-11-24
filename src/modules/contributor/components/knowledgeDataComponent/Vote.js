@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Badge, ButtonGroup } from 'reactstrap';
 import { ReviewModal, PROCESSING, getDataApprovalDetail } from 'src/modules/contributor/index';
 import { connect } from 'react-redux';
 
@@ -53,7 +53,15 @@ class Vote extends Component {
         <Row>
           <Col>
             <div>
-              <h3>ACCEPT: {this.state.accept} DECLINE: {this.state.decline}</h3>
+              <ButtonGroup className="width-50">
+                <Button type="button" color="success" outline>
+                  Accept <Badge color="success">{this.state.accept}</Badge>
+                </Button>
+                <Button type="button" color="danger" outline>
+                  Decline <Badge color="danger">{this.state.decline}</Badge>
+                </Button>
+              </ButtonGroup>
+
             </div>
           </Col>
           <Col xs='auto'>

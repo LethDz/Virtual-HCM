@@ -11,8 +11,16 @@ import {
   DELETE_REFERENCE,
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
-  RESET_DATA_APPROVAL_DETAIL
+  RESET_DATA_APPROVAL_DETAIL,
+  GET_KNOWLEDGE_DATA_SETTINGS
 } from 'src/modules/contributor/index';
+
+export const fetchKnowledgeDataSetting = (knowledgeDataSettings) => ({
+  type: GET_KNOWLEDGE_DATA_SETTINGS,
+  payload: {
+    knowledgeDataSettings
+  }
+})
 
 //Synonym
 export const fetchAllDataApproval = (dataApprovalList) => ({

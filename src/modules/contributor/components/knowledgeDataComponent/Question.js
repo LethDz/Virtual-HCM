@@ -396,7 +396,7 @@ export default class Question extends Component {
         );
       }
     }
-    return null;
+    return <Fragment></Fragment>;
   };
 
   render() {

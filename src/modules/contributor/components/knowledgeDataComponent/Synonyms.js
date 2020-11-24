@@ -149,7 +149,7 @@ class Synonyms extends Component {
                 <Input
                   disabled={this.props.disable}
                   name="synonymWord"
-                  placeholder="Copy word above and paste here"
+                  placeholder="Enter tokenized word here"
                   value={this.state.synonymWord}
                   onChange={this.handleInput}
                 ></Input>

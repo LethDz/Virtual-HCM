@@ -9,3 +9,5 @@ export const getAllDataApproval = (store) =>
   store.contributorReducer.dataApprovalList;
 export const getDataApprovalDetail = (store) =>
   store.contributorReducer.dataApprovalDetail;
+export const getKnowledgeDataSettings = (store) =>
+  store.contributorReducer.knowledgeDataSettings;

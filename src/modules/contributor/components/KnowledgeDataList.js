@@ -10,13 +10,14 @@ import {
 } from 'src/constants';
 import {
   columnFieldDef,
-  // context,
-  // frameworkComponents,
+  context,
+  frameworkComponents,
   getAllDataApproval,
-  fetchAllDataApproval, 
-  AVAILABLE, 
-  PROCESSING, 
-  DONE, 
+  fetchAllDataApproval,
+  fetchKnowledgeDataSetting,
+  AVAILABLE,
+  PROCESSING,
+  DONE,
   DISABLE
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
@@ -100,7 +101,8 @@ class KnowledgeDataList extends Component {
         this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
-          this.props.fetchAllDataApproval(response.data.result_data);
+          this.props.fetchAllDataApproval(response.data.result_data.knowledge_datas);
+          this.props.fetchKnowledgeDataSetting(response.data.result_data.review_settings);
           this.setAlertMessage('Load successful');
           this.setSuccessAlert(true);
         } else {
@@ -245,8 +247,8 @@ class KnowledgeDataList extends Component {
             onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnFieldDef}
-            // frameworkComponents={frameworkComponents}
-            // context={context(this)}
+            frameworkComponents={frameworkComponents}
+            context={context(this)}
             pagination={true}
             paginationAutoPageSize={true}
           ></AgGridReact>
@@ -264,6 +266,9 @@ const mapDispatchToProps = (dispatch) => ({
   fetchAllDataApproval: (dataApprovalList) => {
     dispatch(fetchAllDataApproval(dataApprovalList));
   },
+  fetchKnowledgeDataSetting: (knowledgeDataSettings) => {
+    dispatch(fetchKnowledgeDataSetting(knowledgeDataSettings))
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeDataList);

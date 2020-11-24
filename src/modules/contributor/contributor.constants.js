@@ -1,4 +1,5 @@
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
+import StatusBadge from 'src/modules/contributor/components/knowLedgeListComponent/StatusBadge';
 import { dateComparator } from 'src/common/getDate'
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
@@ -17,6 +18,7 @@ export const EDIT_REFERENCE = 'EDIT_REFERENCE';
 export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
 export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
+export const GET_KNOWLEDGE_DATA_SETTINGS = 'GET_KNOWLEDGE_DATA_SETTINGS';
 
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
@@ -92,6 +94,7 @@ export const context = (component) => ({
 
 export const frameworkComponents = {
   statusBar: StatusBar,
+  statusBadge: StatusBadge
 };
 
 export const columnFieldDef = [
@@ -144,8 +147,14 @@ export const columnFieldDef = [
     headerName: 'Status',
     sortable: true,
     filter: true,
-    resizable: true
-    // cellRenderer: 'statusBar',
+    resizable: true,
+    cellRenderer: "statusBadge"
+  },
+  {
+    field: 'reviews',
+    headerName: 'Progress',
+    resizable: true,
+    cellRenderer: "statusBar",
   },
 ];
 
@@ -247,7 +256,7 @@ export const columnSynonymFieldDef = [
   {
     field: 'synonym_id',
     headerName: 'ID',
-    width: 50,
+    width: 70,
     sortable: true,
     filter: true,
     resizable: true,
@@ -255,7 +264,6 @@ export const columnSynonymFieldDef = [
   {
     field: 'meaning',
     headerName: 'Meaning',
-    width: 100,
     sortable: true,
     filter: true,
     resizable: true,
@@ -263,7 +271,6 @@ export const columnSynonymFieldDef = [
   {
     field: 'words',
     headerName: 'Words',
-    width: 300,
     sortable: true,
     filter: true,
     resizable: true,

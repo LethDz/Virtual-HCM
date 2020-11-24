@@ -492,15 +492,6 @@ class KnowledgeDataDetail extends Component {
                 </Col>
               </Row>
 
-              <Vote
-                formStatus={this.state.formStatus}
-                knowledgeDataId={this.state.form.id}
-                owner={this.state.owner}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setAlertMessage={this.setAlertMessage}
-              />
-
               <FormSectionTitle title="Meta data" />
               <MetaData
                 disable={this.state.disable}
@@ -581,6 +572,16 @@ class KnowledgeDataDetail extends Component {
                 setHoverWord={this.setHoverWord}
               />
 
+              <hr className="mr-3 ml-3 divider" />
+              <FormSectionTitle title="User review" />
+              <Vote
+                formStatus={this.state.formStatus}
+                knowledgeDataId={this.state.form.id}
+                owner={this.state.owner}
+                setSuccessAlert={this.setSuccessAlert}
+                setErrorAlert={this.setErrorAlert}
+                setAlertMessage={this.setAlertMessage}
+              />
               <Comment
                 formStatus={this.state.formStatus}
                 knowledgeDataId={this.state.form.id}

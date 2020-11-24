@@ -7,6 +7,7 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
+  ButtonGroup
 } from 'reactstrap';
 import {
   MAXIMUM_COMMENT_PER_PAGE,
@@ -272,10 +273,10 @@ export default class Comment extends Component {
                 />
               </Col>
               <Col xs="auto">
-                <Button color="primary" onClick={this.addComment}><FontAwesomeIcon icon={faPaperPlane} /> </Button>
-              </Col>
-              <Col xs="auto">
-                <Button color="success" onClick={this.refreshComment}><FontAwesomeIcon icon={faSync} /></Button>
+                <ButtonGroup>
+                  <Button size="lg" color="primary" onClick={this.addComment}><FontAwesomeIcon icon={faPaperPlane} /> </Button>
+                  <Button size="lg" color="success" onClick={this.refreshComment}><FontAwesomeIcon icon={faSync} /></Button>
+                </ButtonGroup>
               </Col>
             </Row>
           }
