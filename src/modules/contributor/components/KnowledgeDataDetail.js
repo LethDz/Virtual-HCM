@@ -445,6 +445,7 @@ class KnowledgeDataDetail extends Component {
   };
 
   renderProcessMode = () => {
+    const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
         <LoadingSpinner
@@ -481,10 +482,9 @@ class KnowledgeDataDetail extends Component {
                 </Col>
               </Row>
 
-              {/* Set condition for Vote */}
-              <Vote />
+              <Vote formStatus={this.state.formStatus} knowledgeDataId={this.state.form.id} owner={this.state.owner} />
 
-              {/* <FormSectionTitle title="Meta data" />
+              <FormSectionTitle title="Meta data" />
               <MetaData
                 disable={this.state.disable}
                 intentValue={this.state.form.intent}
@@ -562,11 +562,14 @@ class KnowledgeDataDetail extends Component {
                 resetGeneratedQuestion={this.resetGeneratedQuestion}
                 synonymsValue={this.state.form.synonyms}
                 setHoverWord={this.setHoverWord}
-              /> */}
+              />
+
               <Comment
+                formStatus={this.state.formStatus}
                 knowledgeDataId={this.state.form.id}
                 comments={this.state.comments}
                 userList={this.state.userList}
+                setErrorAlert={this.setErrorAlert}
               />
 
               <Row className="d-flex justify-content-around pt-3 pb-3">

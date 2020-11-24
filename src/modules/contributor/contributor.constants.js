@@ -28,6 +28,12 @@ export const VIEWABLE = 'VIEWABLE';
 export const NORMAL_COMMENT = 'NORMAL_COMMENT';
 export const REPLY_COMMENT = 'REPLY_COMMENT';
 
+export const MAXIMUM_COMMENT_PER_PAGE = 5;
+
+export const ACCEPT = 1
+export const DECLINE = 2
+export const DRAFT = 3
+
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 export const questionType = [
   'WHAT',

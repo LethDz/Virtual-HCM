@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Input, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
+import { KNOWLEDGE_DATA, REVIEW } from 'src/constants';
+import { ACCEPT, DECLINE, DRAFT } from 'src/modules/contributor/index';
+
+import axiosClient from 'src/common/axiosClient';
 
 export default class ReviewModal extends Component {
   _isMounted = false;
@@ -24,19 +28,18 @@ export default class ReviewModal extends Component {
     this._isMounted = false;
   };
 
-  accept = () => {
-    // let message = {
-    //   comment: this.state.comment,
-    //   type: 'ACCEPT'
-    // }
-  };
+  sendReview = (status) => {
+    let data = {
+      knowledge_data: this.props.knowledgeDataId,
+      status: status,
+      review_detail: this.state.comment
+    }
+    axiosClient
+      .post(KNOWLEDGE_DATA + REVIEW, data)
+      .then(response => {
 
-  decline = () => {
-    // let message = {
-    //   comment: this.state.comment,
-    //   type: 'DECLINE'
-    // }
-  };
+      })
+  }
 
   render() {
     return (
@@ -64,12 +67,26 @@ export default class ReviewModal extends Component {
               <Button
                 size="sm"
                 className="mr-3"
+                color="warning"
+                onClick={() => {
+                  this.sendReview(DRAFT)
+                }}
+              >
+                Draft
+              </Button>
+              <Button
+                size="sm"
+                className="mr-3"
                 color="danger"
-                onClick={this.decline}
+                onClick={() => {
+                  this.sendReview(DECLINE)
+                }}
               >
                 Decline
               </Button>
-              <Button size="sm" color="success" onClick={this.accept}>
+              <Button size="sm" color="success" onClick={() => {
+                this.sendReview(ACCEPT)
+              }}>
                 Approve
               </Button>
             </div>
