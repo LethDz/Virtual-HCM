@@ -16,6 +16,8 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  Vote,
+  Comment,
   PROCESSING,
   DONE,
   DISABLE,
@@ -52,7 +54,10 @@ class KnowledgeDataDetail extends Component {
         synonyms: [],
         baseResponse: '',
         documentReference: [],
+        id: null
       },
+      comments: [],
+      userList: [],
       documentList: [],
       tokenizedWord: [],
       ner: [],
@@ -66,7 +71,7 @@ class KnowledgeDataDetail extends Component {
       hoverWord: '',
       formStatus: '',
       disable: true,
-      owner: false
+      owner: false,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -113,49 +118,59 @@ class KnowledgeDataDetail extends Component {
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
     form.synonyms = synonym;
+
+    let references = []
+    form.documentReference.forEach(reference => {
+      references.push({
+        ...reference,
+        page: parseInt(reference.page)
+      })
+    })
+    form.documentReference = references
+
     this._isMounted && this.setState({ form: form });
   };
 
   checkFormSubmit = () => {
     const form = this.state.form;
     let errorFlag = false;
-    let errorList = []
+    let errorList = [];
 
     if (form.baseResponse.trim() === '') {
-      errorFlag = true
-      errorList.push("Fill in base response")
-    };
+      errorFlag = true;
+      errorList.push('Fill in base response');
+    }
     if (form.intent.trim() === '') {
-      errorFlag = true
-      errorList.push("Fill in intent")
-    };
+      errorFlag = true;
+      errorList.push('Fill in intent');
+    }
     if (form.intentFullName.trim() === '') {
       errorFlag = true;
-      errorList.push("Fill in intent fullname")
+      errorList.push('Fill in intent fullname');
     }
     if (form.rawData.trim() === '') {
       errorFlag = true;
-      errorList.push("Fill in raw data")
+      errorList.push('Fill in raw data');
     }
     if (form.documentReference.length === 0) {
       errorFlag = true;
-      errorList.push("Document reference required at least 1 reference")
+      errorList.push('Document reference required at least 1 reference');
     }
     if (form.coresponse.length === 0) {
-      errorFlag = true
-      errorList.push("Fill in coresponse")
-    };
+      errorFlag = true;
+      errorList.push('Fill in coresponse');
+    }
     if (form.criticalData.length === 0) {
       errorFlag = true;
-      errorList.push("Subject required at least 1 subject")
+      errorList.push('Subject required at least 1 subject');
     }
     form.criticalData.forEach((data, index) => {
       if (data.word.length === 0) {
         errorFlag = true;
-        errorList.push(`Subject ${index} need at least 1 component`)
+        errorList.push(`Subject ${index} need at least 1 component`);
       }
     });
-    this._isMounted && this.setState({ errorList: errorList })
+    this._isMounted && this.setState({ errorList: errorList });
     return errorFlag;
   };
 
@@ -228,24 +243,23 @@ class KnowledgeDataDetail extends Component {
     let form = this.state.form;
     form.synonyms = synonyms;
     this.resetGeneratedQuestion();
-    let synonymIdList = []
+    let synonymIdList = [];
     synonyms.forEach((synonyms) => {
       let synonymIds = [];
       synonyms.synonyms.forEach((item) => {
         if (item.id) {
           synonymIds.push(item.id);
-        }
-        else if (item.synonym_id) {
+        } else if (item.synonym_id) {
           synonymIds.push(item.synonym_id);
-        }
-        else {
+        } else {
           synonymIds.push(item);
         }
       });
       synonymIdList.push({ word: synonyms.word, synonyms: synonymIds });
     });
 
-    if (this._isMounted) this.setState({ form: form, synonymIdList: synonymIdList });
+    if (this._isMounted)
+      this.setState({ form: form, synonymIdList: synonymIdList });
   };
 
   setRawData = (rawData) => {
@@ -321,10 +335,11 @@ class KnowledgeDataDetail extends Component {
   };
 
   setFormStatus = () => {
-    let user = getUserData()
+    let user = getUserData();
     switch (this.props.dataApprovalDetail.status.toUpperCase()) {
       case AVAILABLE:
-        this._isMounted && this.setState({ formStatus: AVAILABLE, disable: false });
+        this._isMounted &&
+          this.setState({ formStatus: AVAILABLE, disable: false });
         break;
       case PROCESSING:
         this._isMounted && this.setState({ formStatus: PROCESSING });
@@ -336,11 +351,12 @@ class KnowledgeDataDetail extends Component {
         this._isMounted && this.setState({ formStatus: DONE, disable: true });
         break;
       case DISABLE:
-        this._isMounted && this.setState({ formStatus: DISABLE, disable: true });
+        this._isMounted &&
+          this.setState({ formStatus: DISABLE, disable: true });
         break;
       default:
     }
-  }
+  };
 
   getInformation = () => {
     if (
@@ -355,13 +371,25 @@ class KnowledgeDataDetail extends Component {
         .then((response) => {
           if (response.data.status) {
             this.setFormData(response.data.result_data);
-            this.props.pullDataApproval(
-              response.data.result_data
-            );
+            this.props.pullDataApproval(response.data.result_data);
+
+            let userList = response.data.result_data.comments.users
+            const currentUser = getUserData()
+            userList[currentUser.user_id] = {
+              email: currentUser.email,
+              fullname: currentUser.fullname,
+              username: currentUser.username
+            }
+            this._isMounted &&
+              this.setState({
+                comments: response.data.result_data.comments.data,
+                userList: userList,
+              });
             this.setFormStatus();
             this.setErrorAlert(false);
             this.setAlertMessage('Load successful');
             this.setSuccessAlert(true);
+            this._isMounted && this.setState({ loading: false });
           } else {
             this.setErrorAlert(true);
             this.setSuccessAlert(false);
@@ -406,7 +434,7 @@ class KnowledgeDataDetail extends Component {
     });
 
     this._isMounted &&
-      this.setState({ form: form, loading: false, synonymIdList: synonym });
+      this.setState({ form: form, synonymIdList: synonym });
   };
 
   getWordArray = () => {
@@ -463,6 +491,16 @@ class KnowledgeDataDetail extends Component {
                   </h4>
                 </Col>
               </Row>
+
+              <Vote
+                formStatus={this.state.formStatus}
+                knowledgeDataId={this.state.form.id}
+                owner={this.state.owner}
+                setSuccessAlert={this.setSuccessAlert}
+                setErrorAlert={this.setErrorAlert}
+                setAlertMessage={this.setAlertMessage}
+              />
+
               <FormSectionTitle title="Meta data" />
               <MetaData
                 disable={this.state.disable}
@@ -542,17 +580,29 @@ class KnowledgeDataDetail extends Component {
                 synonymsValue={this.state.form.synonyms}
                 setHoverWord={this.setHoverWord}
               />
-              <Row className="d-flex justify-content-around pt-3 pb-3">
-                {!this.state.disable && (this.state.formStatus === AVAILABLE || (this.state.formStatus === PROCESSING && this.state.owner)) &&
-                  <Button
-                    disabled={this.state.disable}
-                    type="submit"
-                    color="info"
-                    onClick={this.submitForm}
-                  >
-                    <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
-                </Button>}
 
+              <Comment
+                formStatus={this.state.formStatus}
+                knowledgeDataId={this.state.form.id}
+                comments={this.state.comments}
+                userList={this.state.userList}
+                setErrorAlert={this.setErrorAlert}
+              />
+
+              <Row className="d-flex justify-content-around pt-3 pb-3">
+                {!this.state.disable &&
+                  (this.state.formStatus === AVAILABLE ||
+                    (this.state.formStatus === PROCESSING &&
+                      this.state.owner)) && (
+                    <Button
+                      disabled={this.state.disable}
+                      type="submit"
+                      color="info"
+                      onClick={this.submitForm}
+                    >
+                      <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
+                    </Button>
+                  )}
               </Row>
             </div>
           </Form>

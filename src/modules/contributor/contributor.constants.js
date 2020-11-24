@@ -1,4 +1,5 @@
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
+import { dateComparator } from 'src/common/getDate'
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
 
@@ -22,6 +23,18 @@ export const DONE = 'DONE';
 export const AVAILABLE = 'AVAILABLE';
 export const DISABLE = 'DISABLE';
 
+export const DELETED = 'DELETED';
+export const VIEWABLE = 'VIEWABLE';
+
+export const NORMAL_COMMENT = 'NORMAL_COMMENT';
+export const REPLY_COMMENT = 'REPLY_COMMENT';
+
+export const MAXIMUM_COMMENT_PER_PAGE = 5;
+
+export const ACCEPT = 1
+export const DECLINE = 2
+export const DRAFT = 3
+
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 export const questionType = [
   'WHAT',
@@ -31,6 +44,14 @@ export const questionType = [
   'WHY',
   'HOW',
   'YES/NO',
+];
+export const coresponseType = [
+  'WHAT',
+  'WHEN',
+  'WHERE',
+  'WHO',
+  'WHY',
+  'HOW',
 ];
 export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
 export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
@@ -79,43 +100,51 @@ export const columnFieldDef = [
     headerName: 'ID',
     sortable: true,
     filter: true,
+    width: 70
   },
   {
     field: 'intent',
     headerName: 'Intent',
     sortable: true,
     filter: true,
+    resizable: true
   },
   {
     field: 'intent_fullname',
     headerName: 'Intent fullname',
     sortable: true,
     filter: true,
+    resizable: true
   },
   {
     field: 'create_user',
     headerName: 'Created by',
     sortable: true,
     filter: true,
+    resizable: true
   },
   {
     field: 'edit_user',
     headerName: 'Modified by',
     sortable: true,
     filter: true,
+    resizable: true
   },
   {
     field: 'mdate',
     headerName: 'Last modified date',
     sortable: true,
     filter: true,
-    sort: 'desc'
+    sort: 'desc',
+    comparator: dateComparator,
+    resizable: true
   },
   {
     field: 'status',
     headerName: 'Status',
     sortable: true,
     filter: true,
+    resizable: true
     // cellRenderer: 'statusBar',
   },
 ];
@@ -141,7 +170,7 @@ export const columnReferenceListDef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 365,
@@ -159,7 +188,7 @@ export const columnSynonymListRef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 170,

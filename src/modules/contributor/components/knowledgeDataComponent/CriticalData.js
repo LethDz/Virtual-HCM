@@ -290,8 +290,9 @@ class CriticalData extends Component {
             })}
           </ListGroup>
           {!this.props.disable &&
-            <div className="d-flex justify-content-end mt-2">
+            <div className="mt-2">
               <Button
+                block
                 disabled={this.props.disable}
                 color="primary"
                 onClick={this.addCriticalData}

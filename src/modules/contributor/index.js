@@ -9,6 +9,7 @@ import SynonymDetailModal from 'src/modules/contributor/components/synonym/Synon
 import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/GenSynonymSentenceModal';
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
+import ReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReviewModal';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -21,6 +22,8 @@ import RawData from 'src/modules/contributor/components/knowledgeDataComponent/R
 import BaseResponse from 'src/modules/contributor/components/knowledgeDataComponent/BaseResponse';
 import Coresponse from 'src/modules/contributor/components/knowledgeDataComponent/Coresponse';
 import CriticalData from 'src/modules/contributor/components/knowledgeDataComponent/CriticalData';
+import Vote from 'src/modules/contributor/components/knowledgeDataComponent/Vote';
+import Comment from 'src/modules/contributor/components/knowledgeDataComponent/Comment';
 
 // List component
 import ReferenceList from 'src/modules/contributor/components/reference/ReferenceList';
@@ -43,6 +46,8 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
+  Vote,
+  Comment,
   Contributor,
   ReferenceList,
   KnowledgeDataDetail,
@@ -55,4 +60,5 @@ export {
   SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,
+  ReviewModal,
 };

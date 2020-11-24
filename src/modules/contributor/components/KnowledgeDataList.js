@@ -13,7 +13,11 @@ import {
   // context,
   // frameworkComponents,
   getAllDataApproval,
-  fetchAllDataApproval
+  fetchAllDataApproval, 
+  AVAILABLE, 
+  PROCESSING, 
+  DONE, 
+  DISABLE
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
@@ -140,6 +144,28 @@ class KnowledgeDataList extends Component {
     this.sizeToFit();
   }
 
+  setRowData = () => {
+    let data = this.props.dataApprovalList
+    data.forEach((item, index) => {
+      switch (item.status) {
+        case 0:
+          data[index].status = AVAILABLE
+          break;
+        case 1:
+          data[index].status = PROCESSING
+          break;
+        case 2:
+          data[index].status = DONE
+          break;
+        case 3:
+          data[index].status = DISABLE
+          break;
+        default:
+      }
+    })
+    return data
+  }
+
   render() {
     return (
       <Container id="cl-container" className="cl-container vh-100">
@@ -212,7 +238,7 @@ class KnowledgeDataList extends Component {
         >
           <AgGridReact
             onFirstDataRendered={this.onFirstDataRendered}
-            rowData={this.props.dataApprovalList}
+            rowData={this.setRowData()}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}

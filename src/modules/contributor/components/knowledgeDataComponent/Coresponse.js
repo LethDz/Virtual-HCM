@@ -9,7 +9,7 @@ import {
   Button,
   Badge,
 } from 'reactstrap';
-import { questionType } from 'src/modules/contributor/index';
+import { coresponseType } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -22,7 +22,7 @@ class Coresponse extends Component {
     this.state = {
       coresponse: [],
       currentCoresponse: '',
-      currentCoresponseType: questionType[0],
+      currentCoresponseType: coresponseType[0],
     };
   }
 
@@ -90,7 +90,7 @@ class Coresponse extends Component {
                   ref={this.coresponseRef}
                   type="select"
                 >
-                  {questionType.map((value, index) => {
+                  {coresponseType.map((value, index) => {
                     return <option key={index}>{value}</option>;
                   })}
                 </Input>
@@ -119,26 +119,23 @@ class Coresponse extends Component {
             {this.state.coresponse.map((coresponse, index) => {
               let type;
               switch (coresponse.type.toUpperCase()) {
-                case questionType[0]:
+                case coresponseType[0]:
                   type = <Badge color="primary">{coresponse.type.toUpperCase()}</Badge>;
                   break;
-                case questionType[1]:
+                case coresponseType[1]:
                   type = <Badge color="secondary">{coresponse.type.toUpperCase()}</Badge>;
                   break;
-                case questionType[2]:
+                case coresponseType[2]:
                   type = <Badge color="success">{coresponse.type.toUpperCase()}</Badge>;
                   break;
-                case questionType[3]:
+                case coresponseType[3]:
                   type = <Badge color="danger">{coresponse.type.toUpperCase()}</Badge>;
                   break;
-                case questionType[4]:
+                case coresponseType[4]:
                   type = <Badge color="warning">{coresponse.type.toUpperCase()}</Badge>;
                   break;
-                case questionType[5]:
+                case coresponseType[5]:
                   type = <Badge color="info">{coresponse.type.toUpperCase()}</Badge>;
-                  break;
-                case questionType[6]:
-                  type = <Badge color="dark">{coresponse.type.toUpperCase()}</Badge>;
                   break;
                 default:
               }
