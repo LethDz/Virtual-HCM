@@ -175,44 +175,36 @@ class SynonymDetailModal extends Component {
 
   editSynonym = (event) => {
     event.preventDefault();
-    const synonymDetail = this.props.synonymDetail;
-    const currentSynonym = {
-      synonym_id: this.state.synonym_id,
-      meaning: this.state.meaning,
-      words: this.state.words,
-    };
-    if (JSON.stringify(synonymDetail) !== JSON.stringify(currentSynonym)) {
-      this.setLoading(true);
-      axiosClient
-        .post(SYNONYM + EDIT, {
-          id: this.state.synonym_id,
-          meaning: this.state.meaning,
-          words: this.state.words,
-        })
-        .then((response) => {
-          if (response.data.status) {
-            const synonym = response.data.result_data;
-            this.props.editSynonymDetail(synonym);
-            this.setState({
-              ...synonym,
-            });
-            this.props.updateSynonymList([]);
-            this.setSuccessAlert(true);
-          } else {
-            this.setErrorAlert(true);
-            this.setErrorList(response.data.messages);
-          }
-          this.setLoading(false);
-        })
-        .then(() => {
-          this.props.updateSynonymList(this.props.synonymsList);
-        })
-        .catch(() => {
-          this.setLoading(false);
+    this.setLoading(true);
+    axiosClient
+      .post(SYNONYM + EDIT, {
+        id: this.state.synonym_id,
+        meaning: this.state.meaning,
+        words: this.state.words,
+      })
+      .then((response) => {
+        if (response.data.status) {
+          const synonym = response.data.result_data;
+          this.props.editSynonymDetail(synonym);
+          this.setState({
+            ...synonym,
+          });
+          this.props.updateSynonymList([]);
+          this.setSuccessAlert(true);
+        } else {
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    }
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.props.updateSynonymList(this.props.synonymsList);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   deleteSynonym = () => {
