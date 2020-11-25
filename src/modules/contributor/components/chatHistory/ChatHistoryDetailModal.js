@@ -2,167 +2,129 @@ import React, { Component } from 'react';
 import {
   Card,
   CardBody,
-  CardHeader,
-  Container,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row,
-  Col,
 } from 'reactstrap';
 import 'src/static/stylesheets/chat.history.css';
+import { CHAT_HISTORY_DETAIL } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 
 class ChatHistoryDetailModal extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
-      tooltipOpen: false,
-      data: {
-        id: '1',
-        contributor: 'HoaKT',
-        start: '9:00 14/11/2020',
-        end: '12:00 14/11/2020',
-        system: [
-          {
-            message:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            date: '9:00',
-          },
-          {
-            message:
-              'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ',
-            date: '9:05',
-          },
-        ],
-        send: [
-          {
-            message:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-            date: '9:02',
-          },
-          {
-            message:
-              'But also the leap into electronic typesetting, remaining essentially unchanged. ',
-            date: '9:07',
-          },
-        ],
-      },
+      chatLog: [],
+      loading: false,
+      errorAlert: false,
+      successAlert: false,
+      errorList: [],
     };
   }
 
-  toggle = () => {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen,
-    });
+  componentDidMount = () => {
+    this._isMounted = true;
+    this.initiateData();
+  };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  initiateData = () => {
+    this.setLoading(true);
+    axiosClient
+      .get(CHAT_HISTORY_DETAIL(this.props.id))
+      .then((response) => {
+        if (response.data.status) {
+          const chatLog = response.data.result_data;
+          this.setState({
+            chatLog,
+          });
+        } else {
+          this.setErrorAlert(true);
+        }
+        this.setLoading(false);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
+
+  setLoading = (status) => {
+    this._isMounted &&
+      this.setState({
+        loading: status,
+      });
+  };
+
+  onDismiss = (name) => {
+    this._isMounted &&
+      this.setState({
+        [name]: false,
+      });
+  };
+
+  setSuccessAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        successAlert: status,
+      });
+  };
+
+  setErrorAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        errorAlert: status,
+      });
+  };
+
+  setErrorList = (list) => {
+    this._isMounted &&
+      this.setState({
+        errorList: list,
+      });
   };
   render() {
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>
-          Chat History Detail
+          Chat Message
         </ModalHeader>
         <ModalBody>
-          <Container>
-            <Row>
-              <Col className="col-4">
-                <Card>
-                  <CardHeader>{this.state.data.contributor}</CardHeader>
-                  <CardBody>
-                    <Row className="list-details">
-                      <span>{this.state.data.start}</span>
-                      <small>Start</small>
-                    </Row>
-                    <Row className="list-details mt-3">
-                      <span>{this.state.data.end}</span>
-                      <small>End</small>
-                    </Row>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col className="chat-container col-8">
-                <Card>
-                  <CardHeader>Chat</CardHeader>
-                  <CardBody>
-                    <ul className="chat-list">
-                      <li className="in">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>Raw denim heard of them tofu master cleanse</p>
-                          </div>
+          <LoadingSpinner loading={this.state.loading} text={'Loading'} />
+          {this.state.errorAlert && (
+            <ErrorAlert
+              errorAlert={this.state.errorAlert}
+              errorList={this.state.errorList}
+              onDismiss={() => this.onDismiss('errorAlert')}
+            />
+          )}
+          <Card>
+            {/* <CardHeader>Chat</CardHeader> */}
+            <CardBody>
+              <ul className="chat-list">
+                {this.state.chatLog &&
+                  this.state.chatLog.map((chat) => (
+                    <li className={chat.from === 1 ? 'in' : 'out'}>
+                      <div className="chat-body">
+                        <span className="time_date">{chat.time}</span>
+                        <div className="chat-message">
+                          <p>{chat.message}</p>
                         </div>
-                      </li>
-                      <li className="out">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>Next level</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="in">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>
-                              Raw denim heard of them tofu master cleanse Raw
-                              denim heard of them tofu master cleanseRaw denim
-                              heard of them tofu master cleanse
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="out">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>
-                              Next level Raw denim heard of them tofu master
-                              cleanse Raw denim heard of them tofu master
-                              cleanseRaw denim heard of them tofu master cleanse
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="in">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>Raw denim heard of them tofu master cleanse</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="out">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>Next level</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="in">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>Raw denim heard of them tofu master cleanse</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="out">
-                        <div className="chat-body">
-                          <span className="time_date">11:01 AM</span>
-                          <div className="chat-message">
-                            <p>Next level</p>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </CardBody>
+          </Card>
         </ModalBody>
         <ModalFooter></ModalFooter>
       </Modal>

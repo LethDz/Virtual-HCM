@@ -1,3 +1,4 @@
+import { dateComparator } from 'src/common/getDate';
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
@@ -109,7 +110,7 @@ export const columnFieldDef = [
     headerName: 'Last modified date',
     sortable: true,
     filter: true,
-    sort: 'desc'
+    sort: 'desc',
   },
   {
     field: 'status',
@@ -141,7 +142,7 @@ export const columnReferenceListDef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 365,
@@ -159,7 +160,7 @@ export const columnSynonymListRef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 170,
@@ -238,5 +239,42 @@ export const columnSynonymFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+  },
+];
+
+export const columnChatHistoryFieldDef = [
+  {
+    field: 'log_id',
+    headerName: 'ID',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'user',
+    headerName: 'User ID',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'session_start',
+    headerName: 'Session Start',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+  {
+    field: 'session_end',
+    headerName: 'Session End',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
   },
 ];

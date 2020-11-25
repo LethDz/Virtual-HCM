@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Button } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
-import {ChatHistoryDetailModal} from 'src/modules/contributor/index';
+import { ChatHistoryDetailModal } from 'src/modules/contributor/index';
+import { columnChatHistoryFieldDef } from 'src/modules/contributor';
+import { CHAT_HISTORY, ALL, ADMIN_GET_USER } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
 
 class ChatHistoryList extends Component {
   _isMounted = false;
@@ -20,51 +25,58 @@ class ChatHistoryList extends Component {
       errorAlert: false,
       successAlert: false,
       errorList: [],
-      rowData: [
-        {
-          id: '1',
-          contributor: 'Hoa',
-          start: '9:00 14-11-2020',
-          end: '12:00 14-11-2020',
-        },
-        {
-          id: '2',
-          contributor: 'Hoa',
-          start: '14:00 14-11-2020',
-          end: '20:00 14-11-2020',
-        },
-        {
-          id: '3',
-          contributor: 'Hoa',
-          start: '14:00 14-11-2020',
-          end: '20:00 14-11-2020',
-        },
-      ],
-      columnDefs: [
-        { headerName: 'Id', field: 'id', sortable: true, filter: true },
-        {
-          headerName: 'Contributor',
-          field: 'contributor',
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: 'Session Start',
-          field: 'start',
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: 'Session End',
-          field: 'end',
-          sortable: true,
-          filter: true,
-        },
-      ],
     };
 
     this.conRef = React.createRef();
   }
+
+  setRowData = async () => {
+    this._isMounted && this.setState({ loading: true });
+    axiosClient
+      .get(CHAT_HISTORY + ALL)
+      .then((response) => {
+        if (response.data.status) {
+          const chatLogs = response.data.result_data;
+          // chatLogs.map((chatLog) => {
+          //   const user_id = chatLog.user;
+          //   const user_name = this.getUserName(user_id);
+          //   chatLog.push({user_name: user_name});
+          // });
+          this.setState({ chatHistoryList: chatLogs });
+        } else {
+          this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .then(() => {
+        this.sizeToFit();
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
+
+  getUserName = (user_id) => {
+    const username = '';
+    axiosClient
+      .get(ADMIN_GET_USER(user_id))
+      .then((response) => {
+        if (response.data.status) {
+          const user = response.data.result_data;
+          username = user.username;
+          return username;
+        }
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+    return username;
+  };
 
   componentDidMount() {
     this._isMounted = true;
@@ -78,6 +90,7 @@ class ChatHistoryList extends Component {
   onGridReady = async (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
+    await this.setRowData();
     await this.gridApi.sizeColumnsToFit();
   };
 
@@ -128,19 +141,36 @@ class ChatHistoryList extends Component {
       });
   };
 
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  };
+
   toggleChatHistoryDetail = () => {
     this.setState({
       modalChatHistoryDetail: !this.state.modalChatHistoryDetail,
     });
   };
 
-  onRowDoubleClicked = () => {
-    let selectedRows = this.gridApi.getSelectedRows();
-    let id = selectedRows.length === 1 ? selectedRows[0].id : '';
+  onRowDoubleClicked = (row) => {
+    let id = row.data.log_id;
     this._isMounted &&
       this.setState({
         selectedId: id,
         modalChatHistoryDetail: !this.state.modalChatHistoryDetail,
+      });
+  };
+
+  onRowSelected = () => {
+    let selectedRows = this.gridApi.getSelectedRows();
+    let id =
+      selectedRows.length === 1 ? selectedRows[0].log_id : '';
+    this._isMounted &&
+      this.setState({
+        selectedId: id,
       });
   };
 
@@ -170,6 +200,25 @@ class ChatHistoryList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
+        <Row className="d-flex flex-row-reverse">
+          <Col xs="auto">
+            <Button
+              color="success"
+              disabled={this.state.selectedId === ''}
+              onClick={this.toggleChatHistoryDetail}
+            >
+              <FontAwesomeIcon icon={faEye} color="white" />
+              &nbsp; View chat log
+            </Button>
+            {this.state.modalChatHistoryDetail && (
+              <ChatHistoryDetailModal
+                isOpen={this.state.modalChatHistoryDetail}
+                id={this.state.selectedId}
+                toggle={this.toggleChatHistoryDetail}
+              />
+            )}
+          </Col>
+        </Row>
         <LoadingSpinner
           loading={this.state.loading}
           text="Loading"
@@ -183,16 +232,15 @@ class ChatHistoryList extends Component {
         >
           <AgGridReact
             onGridReady={this.onGridReady}
-            rowData={this.state.rowData}
+            rowData={this.state.chatHistoryList}
             rowSelection="single"
-            columnDefs={this.state.columnDefs}
+            onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+            columnDefs={columnChatHistoryFieldDef}
+            pagination={true}
+            paginationAutoPageSize={true}
+            onFirstDataRendered={this.onFirstDataRendered}
           ></AgGridReact>
-          <ChatHistoryDetailModal
-            isOpen={this.state.modalChatHistoryDetail}
-            id={this.state.selectedId}
-            toggle={this.toggleChatHistoryDetail}
-          />
         </div>
       </div>
     );

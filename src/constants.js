@@ -20,6 +20,8 @@ export const GET_SYNONYM = (id) => `/get?id=${id}`;
 export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
+export const CHAT_HISTORY = '/chat-history';
+export const CHAT_HISTORY_DETAIL = (id) =>`/chat-history/get?log_id=${id}`;
 
 export const ADD = '/add';
 

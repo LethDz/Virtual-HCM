@@ -2,10 +2,6 @@ body {
   background: #eee;
 }
 
-.modal {
-  width: 70%;
-}
-
 .chat-list {
   padding: 0;
   font-size: 0.8rem;
@@ -27,6 +23,11 @@ body {
   color: #ffffff;
 }
 
+.chat-list .out{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
 .chat-list .chat-message {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -35,6 +36,7 @@ body {
   display: inline-block;
   padding: 10px 20px;
   position: relative;
+  max-width: 70%;
 }
 
 .chat-list .chat-message:before {
@@ -85,10 +87,6 @@ body {
   position: relative;
   font-weight: 600;
   color: #ffffff;
-}
-
-.chat-container {
-  width: 70%;
 }
 
 .time_date {
