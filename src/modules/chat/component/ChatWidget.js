@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Launcher } from 'react-chat-window';
 import { connect } from 'react-redux';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   agentProfile,
   updateStatusOfChatSocket,
   getStatusOfChatSocket,
 } from 'src/modules/chat';
 import 'src/static/stylesheets/chat.css';
+import ReactDOM from 'react-dom';
 
 class ChatWidget extends Component {
   constructor() {
@@ -15,6 +17,7 @@ class ChatWidget extends Component {
       messageList: [],
       newMessagesCount: 0,
       isOpen: false,
+      loading: false,
     };
     this.chatSocket = null;
     this.current_command = null;
@@ -239,15 +242,22 @@ class ChatWidget extends Component {
 
   render() {
     return (
-      <Launcher
-        agentProfile={agentProfile}
-        onMessageWasSent={this._onMessageWasSent.bind(this)}
-        messageList={this.state.messageList}
-        newMessagesCount={this.state.newMessagesCount}
-        showEmoji={false}
-        handleClick={this._handleClick.bind(this)}
-        isOpen={this.state.isOpen}
-      />
+      <Fragment>
+        <Launcher
+          agentProfile={agentProfile}
+          onMessageWasSent={this._onMessageWasSent.bind(this)}
+          messageList={this.state.messageList}
+          newMessagesCount={this.state.newMessagesCount}
+          showEmoji={false}
+          handleClick={this._handleClick.bind(this)}
+          isOpen={this.state.isOpen}
+        />
+        {this.state.loading &&
+          ReactDOM.createPortal(
+            <LoadingSpinner loading={this.state.isOpen} text="loading" type="MODAL"/>,
+            document.getElementsByClassName('sc-chat-window')[0]
+          )}
+      </Fragment>
     );
   }
 }

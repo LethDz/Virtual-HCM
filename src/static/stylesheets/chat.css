@@ -2,3 +2,39 @@
   width: 50px;
   height: 50px;
 }
+
+.sc-chat-window {
+  width: calc(100% - 50%) !important;
+  height: calc(100% - 120px) !important;
+  max-height: unset !important;
+}
+
+.sc-message {
+  margin-left: auto;
+  margin-right: 20px;
+  width: 95%;
+}
+
+.sc-message--text {
+  width: fit-content !important;
+}
+
+.sc-message--text {
+  max-width: 50%;
+}
+
+.sc-user-input--text {
+  width: calc(100% - 45px) !important;
+}
+
+.sc-user-input--file-icon-wrapper {
+  display: none !important;
+}
+
+.sc-user-input--buttons {
+  max-width: 45px;
+}
+
+.sc-user-input {
+  max-height: 55px;
+}
