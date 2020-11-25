@@ -36,7 +36,7 @@ body {
   display: inline-block;
   padding: 10px 20px;
   position: relative;
-  max-width: 70%;
+  max-width: 75%;
 }
 
 .chat-list .chat-message:before {

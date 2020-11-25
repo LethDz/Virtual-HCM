@@ -6,13 +6,15 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Button,
 } from 'reactstrap';
 import 'src/static/stylesheets/chat.history.css';
 import { CHAT_HISTORY_DETAIL } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 class ChatHistoryDetailModal extends Component {
   _isMounted = false;
@@ -95,9 +97,7 @@ class ChatHistoryDetailModal extends Component {
   render() {
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>
-          Chat Message
-        </ModalHeader>
+        <ModalHeader toggle={this.props.toggle}>Chat Message</ModalHeader>
         <ModalBody>
           <LoadingSpinner loading={this.state.loading} text={'Loading'} />
           {this.state.errorAlert && (
@@ -126,7 +126,16 @@ class ChatHistoryDetailModal extends Component {
             </CardBody>
           </Card>
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={this.props.toggle}
+            disabled={this.state.loading}
+          >
+            <FontAwesomeIcon icon={faTimes} color="white" />
+            &nbsp;Close
+          </Button>
+        </ModalFooter>
       </Modal>
     );
   }
