@@ -28,7 +28,7 @@ const initialState = {
   dataApprovalDetail: null,
   reportList: [],
   reportDetail: null,
-  approvalDetail: null,
+  approvalReportDetail: null,
 };
 
 export const contributorReducer = (state = initialState, action) => {
@@ -187,7 +187,7 @@ export const contributorReducer = (state = initialState, action) => {
     case REJECT_REPORT:
       const report = action.payload.report;
       let listReport = state.reportList.map((reportDetail) => {
-        if (reportDetail.report_id === report.report_id) {
+        if (reportDetail.report_id === report.id) {
           reportDetail = report;
         }
         return reportDetail;
@@ -200,10 +200,10 @@ export const contributorReducer = (state = initialState, action) => {
       };
 
       case APPROVE_REPORT:
-        const approvalDetail = action.payload.approvalDetail;
+        const approvalDetail = action.payload.approvalReportDetail;
         return {
           ...state,
-          approvalDetail: approvalDetail,
+          approvalReportDetail: approvalDetail,
         };
 
     case LOGOUT: {

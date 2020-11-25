@@ -13,4 +13,4 @@ export const getAllPendingReport = (store) => store.contributorReducer.reportLis
 export const getReportDetail = (store) => store.contributorReducer.reportDetail;
 export const getAllAcceptedReport = (store) => store.contributorReducer.acceptedReportList;
 export const getAllRejectedReport = (store) => store.contributorReducer.rejectedReportList;
-export const getNewApprovalReport = (store) => store.contributorReducer.approvalDetail;
+export const getNewApprovalReport = (store) => store.contributorReducer.approvalReportDetail;

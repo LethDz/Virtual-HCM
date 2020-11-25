@@ -147,9 +147,9 @@ export const rejectReport = (report) => ({
   },
 });
 
-export const approveReport = (approvalDetail) => ({
+export const approveReport = (approvalReportDetail) => ({
   type: APPROVE_REPORT,
   payload: {
-    approvalDetail,
+    approvalReportDetail,
   },
 });

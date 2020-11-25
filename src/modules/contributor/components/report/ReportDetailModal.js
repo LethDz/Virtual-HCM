@@ -23,7 +23,7 @@ import {
   GET_PENDING_REPORT,
   CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
   REJECT_REPORT,
-  GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS,
+  GET_KNOWLEDGE_DATA_BY_INTENT,
 } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { connect } from 'react-redux';
@@ -32,7 +32,6 @@ import {
   getReportDetail,
   rejectReport,
   approveReport,
-  getNewApprovalReport,
   getAllPendingReport,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/report.detail.css';
@@ -137,9 +136,6 @@ class ReportDetailModal extends Component {
           if (response.data.status) {
             const report = response.data.result_data;
             this.props.rejectReport(report);
-            this.setState({
-              ...report,
-            });
             this.props.updateReportList([]);
             this.setSuccessAlert(true);
           } else {
@@ -197,7 +193,7 @@ class ReportDetailModal extends Component {
           Report ID: {this.state.report.id}
         </ModalHeader>
         <Form>
-          <ModalBody>
+          <ModalBody className="report-container">
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
             {this.state.successAlert && (
               <SuccessAlert
@@ -213,7 +209,7 @@ class ReportDetailModal extends Component {
                 onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
-            <Row>
+            <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Report type: </Col>
               <Col className="col-9">
                 {this.state.report.report_type === 1
@@ -221,25 +217,25 @@ class ReportDetailModal extends Component {
                   : 'Contribute data'}
               </Col>
             </Row>
-            <Row>
+            <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Reporter:</Col>
               <Col className="col-9">{this.state.report.reporter}</Col>
             </Row>
             {this.state.report.reported_intent && (
-              <Row>
+              <Row className="custom-border">
                 <Col className="col-3 font-weight-bold">Reported Intent:</Col>
                 <Col className="col-9">
-                  <span className="label success">
+                  <span className="intent">
                     {this.state.report.reported_intent}
                   </span>
                 </Col>
               </Row>
             )}
-            <Row>
+            <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Bot version date:</Col>
               <Col className="col-9">{this.state.report.bot_version_date}</Col>
             </Row>
-            <Row>
+            <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Created date:</Col>
               <Col className="col-9">{this.state.report.cdate}</Col>
             </Row>
@@ -297,7 +293,7 @@ class ReportDetailModal extends Component {
               to={
                 this.state.knowledge_data_id === 0
                   ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
-                  : GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(
+                  : GET_KNOWLEDGE_DATA_BY_INTENT(
                       this.state.selectedIntent
                     )
               }
@@ -330,13 +326,12 @@ class ReportDetailModal extends Component {
 
 const mapStateToProps = (state) => ({
   reportDetail: getReportDetail(state),
-  newApprovalReport: getNewApprovalReport(state),
   reportList: getAllPendingReport(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   rejectReport: (reportDetail) => dispatch(rejectReport(reportDetail)),
-  approveReport: (approvalDetail) => dispatch(approveReport(approvalDetail)),
+  approveReport: (approvalReportDetail) => dispatch(approveReport(approvalReportDetail)),
   pullReportDetail: (report) => dispatch(pullReportDetail(report)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ReportDetailModal);
