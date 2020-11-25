@@ -27,6 +27,8 @@ export const GET_ALL_ACCEPTED_REPORT = '/report/all-accepted';
 export const GET_ALL_REJECTED_REPORT = '/report/all-rejected';
 export const REJECT_REPORT = '/report/reject-report';
 export const GET_PENDING_REPORT = (id) => `/report/get-pending?id=${id}`;
+export const GET_ACCEPTED_REPORT = (id) => `/report/get-accepted?id=${id}`;
+export const GET_REJECTED_REPORT = (id) => `/report/get-rejected?id=${id}`;
 
 export const ADD = '/add';
 

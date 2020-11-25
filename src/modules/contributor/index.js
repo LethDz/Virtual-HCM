@@ -11,6 +11,11 @@ import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledg
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
 import ReportDetailModal from 'src/modules/contributor/components/report/ReportDetailModal';
 import ReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReviewModal';
+import ReportType from 'src/modules/contributor/components/report/ReportType';
+import ReportDetailModalAccepted from 'src/modules/contributor/components/report/ReportDetailModalAccepted';
+import ReportDetailModalRejected from 'src/modules/contributor/components/report/ReportDetailModalRejected';
+import DetailModalViewOnly from 'src/modules/contributor/components/report/DetailModalViewOnly';
+import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -71,4 +76,9 @@ export {
   ReportRejectedList,
   Report,
   ReviewModal,
+  ReportType,
+  ReportDetailModalAccepted,
+  ReportDetailModalRejected,
+  DetailModalViewOnly,
+  StatusBar,
 };
