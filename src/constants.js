@@ -25,7 +25,7 @@ export const REFERENCE = '/reference-document';
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';
 export const GET_ALL_ACCEPTED_REPORT = '/report/all-accepted';
 export const GET_ALL_REJECTED_REPORT = '/report/all-rejected';
-export const REJECT_REPORT = '/report/';
+export const REJECT_REPORT = '/report/reject-report';
 export const GET_PENDING_REPORT = (id) => `/report/get-pending?id=${id}`;
 export const GET_ACCEPTED_REPORT  = (id) => `/report/get-accepted?id=${id}`;
 
@@ -34,12 +34,12 @@ export const ADD = '/add';
 export const GENERATE_SIMILARIES = '/generate-similaries';
 export const ALL = '/all';
 export const EDIT = '/edit';
-export const REVIEW = '/review'
+export const REVIEW = '/review';
 
-export const EDIT_COMMENT = `/edit-comment`
-export const POST_COMMENT = '/post-comment'
-export const GET_ALL_COMMENT = (id) => `/all-comment?knowledge_data=${id}`
-export const DELETE_COMMENT = (id) => `/delete-comment?id=${id}`
+export const EDIT_COMMENT = `/edit-comment`;
+export const POST_COMMENT = '/post-comment';
+export const GET_ALL_COMMENT = (id) => `/all-comment?knowledge_data=${id}`;
+export const DELETE_COMMENT = (id) => `/delete-comment?id=${id}`;
 
 export const DELETE_REFERENCE = (id) => `/delete?reference_document_id=${id}`;
 export const GET_REFERENCE = (id) => `/get?reference_document_id=${id}`;

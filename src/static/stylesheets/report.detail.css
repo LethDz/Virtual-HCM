@@ -1,0 +1,31 @@
+.modal-body {
+  width: 90%;
+  margin: auto;
+}
+span {
+  border-radius: 12px;
+}
+.label {
+  color: white;
+  padding: 5px;
+}
+
+.info {
+  background-color: #2196f3;
+}
+
+.success {
+  background-color: #79bd7a;
+}
+
+.message {
+  border-radius: 3px;
+  background: aliceblue;
+  padding: 10px 20px;
+}
+
+.row {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d5dadb;
+}
