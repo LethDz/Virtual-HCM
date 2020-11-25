@@ -179,7 +179,7 @@ class ReportList extends Component {
                 isOpen={this.state.modalReportDetail}
                 id={this.state.selectedId}
                 toggle={this.toggleReportDetail}
-                updateReferenceList={this.setReferenceList}
+                updateReportList={this.setReportList}
               />
             )}
           </Col>

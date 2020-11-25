@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faBan } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
@@ -32,8 +32,10 @@ import {
   getReportDetail,
   rejectReport,
   approveReport,
+  getNewApprovalReport,
+  getAllPendingReport,
 } from 'src/modules/contributor';
-import { getNewApprovalReport } from '../../contributor.selectors';
+import 'src/static/stylesheets/report.detail.css';
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -48,7 +50,7 @@ class ReportDetailModal extends Component {
       errorList: [],
       reject: false,
       knowledge_data_id: 0,
-      selectedIntent: "",
+      selectedIntent: '',
     };
   }
 
@@ -85,6 +87,7 @@ class ReportDetailModal extends Component {
   };
 
   handleInput = (event) => handleInputChange(event, this);
+
   setLoading = (status) => {
     this._isMounted &&
       this.setState({
@@ -122,13 +125,13 @@ class ReportDetailModal extends Component {
 
   rejectReport = () => {
     const reason = this.state.reporter_note.trim();
-    const report_id = this.state.report.report_id;
+    const report_id = this.state.report.id;
     if (reason) {
       this.setLoading(true);
       axiosClient
         .post(REJECT_REPORT, {
-          report_id: report_id,
-          reporter_note: reason,
+          id: report_id,
+          processor_note: reason,
         })
         .then((response) => {
           if (response.data.status) {
@@ -211,49 +214,48 @@ class ReportDetailModal extends Component {
               />
             )}
             <Row>
-              <Col className="col-3">Report type: </Col>
+              <Col className="col-3 font-weight-bold">Report type: </Col>
               <Col className="col-9">
                 {this.state.report.report_type === 1
                   ? 'Wrong answer'
                   : 'Contribute data'}
               </Col>
             </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Reporter:</Col>
+            <Row>
+              <Col className="col-3 font-weight-bold">Reporter:</Col>
               <Col className="col-9">{this.state.report.reporter}</Col>
             </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Reported Intent:</Col>
-              <Col className="col-9">{this.state.report.reported_intent}</Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Bot version date:</Col>
+            {this.state.report.reported_intent && (
+              <Row>
+                <Col className="col-3 font-weight-bold">Reported Intent:</Col>
+                <Col className="col-9">
+                  <span className="label success">
+                    {this.state.report.reported_intent}
+                  </span>
+                </Col>
+              </Row>
+            )}
+            <Row>
+              <Col className="col-3 font-weight-bold">Bot version date:</Col>
               <Col className="col-9">{this.state.report.bot_version_date}</Col>
             </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Created date:</Col>
+            <Row>
+              <Col className="col-3 font-weight-bold">Created date:</Col>
               <Col className="col-9">{this.state.report.cdate}</Col>
             </Row>
             <FormGroup className="mt-3">
-              <Label>Question: </Label>
-              <Input
-                name="question"
-                type="textarea"
-                readOnly
-                value={this.state.report.question}
-              />
+              <Label className="font-weight-bold">Question: </Label>
+              <div className="message">{this.state.report.question}</div>
             </FormGroup>
             <FormGroup>
-              <Label>Bot answer: </Label>
-              <Input
-                name="answer"
-                type="textarea"
-                readOnly
-                value={this.state.report.bot_answer}
-              />
+              <Label className="font-weight-bold">Bot answer: </Label>
+              <div className="message">{this.state.report.bot_answer}</div>
             </FormGroup>
             <FormGroup>
-              <Label for="knowledge_data_availability">
+              <Label
+                for="knowledge_data_availability"
+                className="font-weight-bold"
+              >
                 Select knowledge data:
               </Label>
               <Input
@@ -266,7 +268,10 @@ class ReportDetailModal extends Component {
                 {this.state.report.available_knowledge_data &&
                   this.state.report.available_knowledge_data.map(
                     (knowledge_data) => (
-                      <option value={knowledge_data.intent} key={knowledge_data.id}>
+                      <option
+                        value={knowledge_data.intent}
+                        key={knowledge_data.id}
+                      >
                         {knowledge_data.intent_fullname}
                       </option>
                     )
@@ -275,14 +280,14 @@ class ReportDetailModal extends Component {
             </FormGroup>
             {this.state.reject && (
               <FormGroup>
-                <Label>Reporter note: </Label>
+                <Label className="font-weight-bold">Reporter note: </Label>
                 <Input
                   name="reporter_note"
                   type="textarea"
                   value={this.state.reporter_note}
                   onChange={this.handleInput}
                   autoFocus
-                  placeholder="Please input the reason why you reject..."
+                  placeholder="Please input the reason why you want to reject..."
                 />
               </FormGroup>
             )}
@@ -292,7 +297,9 @@ class ReportDetailModal extends Component {
               to={
                 this.state.knowledge_data_id === 0
                   ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
-                  : GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.state.selectedIntent)
+                  : GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(
+                      this.state.selectedIntent
+                    )
               }
               className="link-no-underline"
             >
@@ -302,7 +309,7 @@ class ReportDetailModal extends Component {
                 disabled={this.state.loading}
                 onClick={this.approveReport}
               >
-                <FontAwesomeIcon icon={faPlus} color="white" />
+                <FontAwesomeIcon icon={faCheck} color="white" />
                 &nbsp;To Knowledge Data Process
               </Button>
             </Link>
@@ -311,7 +318,7 @@ class ReportDetailModal extends Component {
               disabled={this.state.loading}
               onClick={this.rejectReport}
             >
-              <FontAwesomeIcon icon={faMinus} color="white" />
+              <FontAwesomeIcon icon={faBan} color="white" />
               &nbsp;Reject
             </Button>
           </ModalFooter>
@@ -324,6 +331,7 @@ class ReportDetailModal extends Component {
 const mapStateToProps = (state) => ({
   reportDetail: getReportDetail(state),
   newApprovalReport: getNewApprovalReport(state),
+  reportList: getAllPendingReport(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
