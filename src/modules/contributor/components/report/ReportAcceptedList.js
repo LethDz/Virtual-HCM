@@ -3,6 +3,7 @@ import { GET_ALL_ACCEPTED_REPORT } from 'src/constants';
 import {
   columnAcceptedReportFieldDef,
   ReportDetailModalAccepted,
+  frameworkComponentsForReport,
 } from 'src/modules/contributor';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -185,6 +186,7 @@ class ReportAcceptedList extends Component {
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             pagination={true}
             paginationAutoPageSize={true}
+            frameworkComponents={frameworkComponentsForReport}
           ></AgGridReact>
         </div>
       </Fragment>

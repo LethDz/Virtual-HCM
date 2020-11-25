@@ -5,7 +5,8 @@ import {
   ReportDetailModal,
   getAllPendingReport,
   fetchAllPendingReport,
-} from 'src/modules/contributor/index';
+  frameworkComponentsForReport,
+} from 'src/modules/contributor';
 import { GET_ALL_PENDING_REPORT } from 'src/constants';
 import { columnPendingReportFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -204,6 +205,7 @@ class ReportList extends Component {
             columnDefs={columnPendingReportFieldDef}
             pagination={true}
             paginationAutoPageSize={true}
+            frameworkComponents={frameworkComponentsForReport}
           ></AgGridReact>
         </div>
       </Fragment>

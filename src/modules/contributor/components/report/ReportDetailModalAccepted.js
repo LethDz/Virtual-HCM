@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Row,
-  Col,
-  Form,
-  Badge,
-} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import axiosClient from 'src/common/axiosClient';
 import { GET_ACCEPTED_REPORT } from 'src/constants';
-import { reportType } from 'src/modules/contributor';
+import { DetailModalViewOnly } from 'src/modules/contributor';
 
 class ReportDetailModalAccepted extends Component {
   _isMounted = false;
@@ -24,7 +14,6 @@ class ReportDetailModalAccepted extends Component {
       report: {},
       loading: false,
       errorAlert: false,
-      successAlert: false,
       errorList: [],
     };
   }
@@ -56,7 +45,6 @@ class ReportDetailModalAccepted extends Component {
       .catch(() => {
         this.setLoading(false);
         this.setErrorAlert(true);
-        this.setSuccessAlert(false);
       });
   };
 
@@ -71,13 +59,6 @@ class ReportDetailModalAccepted extends Component {
     this._isMounted &&
       this.setState({
         [name]: false,
-      });
-  };
-
-  setSuccessAlert = (status) => {
-    this._isMounted &&
-      this.setState({
-        successAlert: status,
       });
   };
 
@@ -111,15 +92,8 @@ class ReportDetailModalAccepted extends Component {
           Report ID: {this.state.report.id}
         </ModalHeader>
         <Form>
-          <ModalBody>
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} />
-            {this.state.successAlert && (
-              <SuccessAlert
-                successAlert={this.state.successAlert}
-                text="Rejecting is successfully"
-                onDismiss={() => this.onDismiss('successAlert')}
-              />
-            )}
+          <ModalBody className="report-container">
+            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
             {this.state.errorAlert && (
               <ErrorAlert
                 errorAlert={this.state.errorAlert}
@@ -127,84 +101,7 @@ class ReportDetailModalAccepted extends Component {
                 onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
-            <Row>
-              <Col className="col-3">Report type: </Col>
-              <Col className="col-9">
-                <Badge
-                  color={`${
-                    reportType[this.state.report.report_type] === reportType[1]
-                      ? 'primary'
-                      : 'success'
-                  }`}
-                >
-                  {reportType[this.state.report.report_type]}
-                </Badge>
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Reporter:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.reporter}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Reporter Note:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.reporter_note}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Reported Intent:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.reported_intent}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Report Data:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.report_data}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Question:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.question}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Bot answer:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.bot_answer}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Bot version date:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.bot_version_date}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Processor:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.processor}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Processor Note:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.processor_note}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Forward Intent Name:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.forward_intent_name}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-3">Modified date:</Col>
-              <Col className="col-9 text-break">{this.state.report.mdate}</Col>
-            </Row>
+            <DetailModalViewOnly report={this.state.report} />
           </ModalBody>
           <ModalFooter></ModalFooter>
         </Form>

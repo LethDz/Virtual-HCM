@@ -194,7 +194,7 @@ class ReportDetailModal extends Component {
         </ModalHeader>
         <Form>
           <ModalBody className="report-container">
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} />
+            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL" />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}

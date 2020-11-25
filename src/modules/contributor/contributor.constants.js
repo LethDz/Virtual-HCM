@@ -1,5 +1,5 @@
-import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 import { dateComparator } from 'src/common/getDate';
+import { StatusBar, ReportType } from 'src/modules/contributor';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
 
@@ -287,6 +287,7 @@ export const columnPendingReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'reportType',
   },
   {
     field: 'reporter',
@@ -340,6 +341,7 @@ export const columnAcceptedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'reportType',
   },
   {
     field: 'reporter',
@@ -401,6 +403,7 @@ export const columnRejectedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'reportType',
   },
   {
     field: 'reporter',
@@ -444,6 +447,10 @@ export const columnRejectedReportFieldDef = [
     comparator: dateComparator,
   },
 ];
+
+export const frameworkComponentsForReport = {
+  reportType: ReportType,
+};
 
 export const reportType = {
   1: 'Wrong answer',

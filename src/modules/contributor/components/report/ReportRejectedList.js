@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { GET_ALL_REJECTED_REPORT } from 'src/constants';
-import { columnRejectedReportFieldDef } from 'src/modules/contributor';
+import {
+  columnRejectedReportFieldDef,
+  ReportDetailModalRejected,
+} from 'src/modules/contributor';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
@@ -9,7 +12,11 @@ import { connect } from 'react-redux';
 import {
   getAllRejectedReport,
   pullAllRejectedReport,
+  frameworkComponentsForReport,
 } from 'src/modules/contributor';
+import { Button, Col, Row } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 class ReportRejectedList extends Component {
   _isMounted = false;
@@ -107,6 +114,29 @@ class ReportRejectedList extends Component {
       });
   };
 
+  onRowSelected = () => {
+    let selectedRows = this.gridApi.getSelectedRows();
+    let id = selectedRows.length === 1 ? selectedRows[0].report_id : '';
+    this._isMounted &&
+      this.setState({
+        selectedId: id,
+      });
+  };
+
+  onRowDoubleClicked = (row) => {
+    let id = row.data.report_id;
+    this.setState({
+      selectedId: id,
+      modalReportDetail: !this.state.modalReportDetail,
+    });
+  };
+
+  toggleReportDetail = () => {
+    this.setState({
+      modalReportDetail: !this.state.modalReportDetail,
+    });
+  };
+
   render() {
     return (
       <Fragment>
@@ -117,6 +147,25 @@ class ReportRejectedList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
+        <Row className="d-flex flex-row-reverse">
+          <Col xs="auto">
+            <Button
+              color="success"
+              disabled={this.state.selectedId === ''}
+              onClick={this.toggleReportDetail}
+            >
+              <FontAwesomeIcon icon={faEye} color="white" />
+              &nbsp; View Report
+            </Button>
+            {this.state.modalReportDetail && (
+              <ReportDetailModalRejected
+                isOpen={this.state.modalReportDetail}
+                id={this.state.selectedId}
+                toggle={this.toggleReportDetail}
+              />
+            )}
+          </Col>
+        </Row>
         <LoadingSpinner
           loading={this.state.loading}
           text="Loading"
@@ -132,9 +181,12 @@ class ReportRejectedList extends Component {
             onGridReady={this.onGridReady}
             rowData={this.state.rejectedReportList}
             rowSelection="single"
+            onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRejectedReportFieldDef}
             pagination={true}
             paginationAutoPageSize={true}
+            frameworkComponents={frameworkComponentsForReport}
           ></AgGridReact>
         </div>
       </Fragment>
