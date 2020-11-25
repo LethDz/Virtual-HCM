@@ -135,7 +135,7 @@ class ReportDetailModal extends Component {
         .then((response) => {
           if (response.data.status) {
             const report = response.data.result_data;
-            this.props.rejectReport(report);
+            this.props.rejectReport(report_id);
             this.props.updateReportList([]);
             this.setSuccessAlert(true);
           } else {

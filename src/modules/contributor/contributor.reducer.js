@@ -185,18 +185,21 @@ export const contributorReducer = (state = initialState, action) => {
       };
 
     case REJECT_REPORT:
-      const report = action.payload.report;
-      let listReport = state.reportList.map((reportDetail) => {
-        if (reportDetail.report_id === report.id) {
-          reportDetail = report;
-        }
-        return reportDetail;
-      });
+      const report_id = action.payload.report_id;
+      let position = -1;
+      let reportsAfterRejecting = state.reportList.map(
+        (report, index) => {
+          if (report.report_id === report_id) {
+            position = index;
+          }
 
+          return report;
+        }
+      );
+      reportsAfterRejecting.splice(position, 1);
       return {
         ...state,
-        reportDetail: report,
-        reportList: listReport,
+        reportList: reportsAfterRejecting,
       };
 
       case APPROVE_REPORT:

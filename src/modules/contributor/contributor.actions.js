@@ -140,10 +140,10 @@ export const pullReportDetail = (report) => ({
   },
 });
 
-export const rejectReport = (report) => ({
+export const rejectReport = (report_id) => ({
   type: REJECT_REPORT,
   payload: {
-    report,
+    report_id,
   },
 });
 
