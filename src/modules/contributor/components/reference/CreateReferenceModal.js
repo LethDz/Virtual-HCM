@@ -90,7 +90,7 @@ class CreateReferenceModal extends Component {
           const reference = response.data.result_data;
           this.props.addReferenceToList(reference);
           this.props.updateReferenceList([]);
-          this.setSuccessAlert(true);
+          this.props.toggle();
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -195,7 +195,7 @@ class CreateReferenceModal extends Component {
                         src={this.state.imageSrc ? this.state.imageSrc : cover}
                       ></img>
                     </Row>
-                    <Row className="justify-content-center upload-btn-wrapper">
+                    <Row className="justify-content-center upload-btn-wrapper-reference-modal">
                       <Button color="warning">
                         <FontAwesomeIcon icon={faFolderOpen} color="white" />
                       </Button>

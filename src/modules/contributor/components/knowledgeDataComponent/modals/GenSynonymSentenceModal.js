@@ -68,7 +68,7 @@ class GenSynonymSentenceModal extends Component {
           isSelected = true;
         }
       });
-      
+
       if (isSelected) {
         results.push({ question: sentence.question, sentence: sentence.sentence, accept: 1 });
       } else {
@@ -92,9 +92,17 @@ class GenSynonymSentenceModal extends Component {
     !this.state.loading && this.props.toggle();
   };
 
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  }
+  
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal} size="lg">
         <LoadingSpinner
           type="MODAL"
           loading={this.state.loading}
@@ -107,9 +115,10 @@ class GenSynonymSentenceModal extends Component {
             <ModalBody>
               <div
                 className="ag-theme-alpine"
-                style={{ height: 400, width: 465 }}
+                style={{ height: 700, width: "100%" }}
               >
                 <AgGridReact
+                  onFirstDataRendered={this.onFirstDataRendered}
                   onGridReady={this.onGridReady}
                   rowData={this.state.rowData}
                   rowSelection="multiple"

@@ -61,7 +61,7 @@ class SignInForm extends Component {
           this.setState({
             loading: false,
           });
-        error.response
+        error && error.response
           ? showLoginError(error.response.data, this, this.props.addToast)
           : this.showException();
       });

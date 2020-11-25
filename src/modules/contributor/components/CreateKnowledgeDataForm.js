@@ -106,45 +106,58 @@ class CreateKnowledgeDataForm extends Component {
   checkFormSubmit = () => {
     const form = this.state.form;
     let errorFlag = false;
-    let errorList = []
+    let errorList = [];
 
     if (form.baseResponse.trim() === '') {
-      errorFlag = true
-      errorList.push("Fill in base response")
-    };
+      errorFlag = true;
+      errorList.push('Fill in base response');
+    }
     if (form.intent.trim() === '') {
-      errorFlag = true
-      errorList.push("Fill in intent")
-    };
+      errorFlag = true;
+      errorList.push('Fill in intent');
+    }
     if (form.intentFullName.trim() === '') {
       errorFlag = true;
-      errorList.push("Fill in intent fullname")
+      errorList.push('Fill in intent fullname');
     }
     if (form.rawData.trim() === '') {
       errorFlag = true;
-      errorList.push("Fill in raw data")
+      errorList.push('Fill in raw data');
     }
     if (form.documentReference.length === 0) {
       errorFlag = true;
-      errorList.push("Document reference required at least 1 reference")
+      errorList.push('Document reference required at least 1 reference');
     }
     if (form.coresponse.length === 0) {
-      errorFlag = true
-      errorList.push("Fill in coresponse")
-    };
+      errorFlag = true;
+      errorList.push('Fill in coresponse');
+    }
     if (form.criticalData.length === 0) {
       errorFlag = true;
-      errorList.push("Subject required at least 1 subject")
+      errorList.push('Subject required at least 1 subject');
     }
     form.criticalData.forEach((data, index) => {
       if (data.word.length === 0) {
         errorFlag = true;
-        errorList.push(`Subject ${index} need at least 1 component`)
+        errorList.push(`Subject ${index} need at least 1 component`);
       }
     });
-    this._isMounted && this.setState({ errorList: errorList })
+    this._isMounted && this.setState({ errorList: errorList });
     return errorFlag;
   };
+
+  reformatForm = () => {
+    let form = this.state.form
+    let references = []
+    form.documentReference.forEach(reference => {
+      references.push({
+        ...reference,
+        page: parseInt(reference.page)
+      })
+    })
+    form.documentReference = references
+    return form
+  }
 
   submitForm = (event) => {
     this._isMounted &&
@@ -154,7 +167,7 @@ class CreateKnowledgeDataForm extends Component {
     event.preventDefault();
     if (!this.checkFormSubmit()) {
       axiosClient
-        .post(KNOWLEDGE_DATA + ADD, this.state.form)
+        .post(KNOWLEDGE_DATA + ADD, this.reformatForm())
         .then((response) => {
           this._isMounted &&
             this.setState({
@@ -178,8 +191,7 @@ class CreateKnowledgeDataForm extends Component {
           this.setSuccessAlert(false);
           this.scrollToTop();
         });
-    }
-    else {
+    } else {
       this._isMounted &&
         this.setState({
           loading: false,
@@ -188,7 +200,6 @@ class CreateKnowledgeDataForm extends Component {
       this.setSuccessAlert(false);
       this.scrollToTop();
     }
-
   };
 
   setCoresponse = (coresponse) => {
@@ -398,8 +409,7 @@ class CreateKnowledgeDataForm extends Component {
             />
             <Row className="d-flex justify-content-around pt-3 pb-3">
               <Button type="submit" color="info" onClick={this.submitForm}>
-                <FontAwesomeIcon icon={faPlusCircle} /> Create new knowledge
-                data
+                <FontAwesomeIcon icon={faPlusCircle} /> Create
               </Button>
             </Row>
           </div>

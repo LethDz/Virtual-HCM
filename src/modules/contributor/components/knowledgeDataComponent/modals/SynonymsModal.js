@@ -147,6 +147,7 @@ class SynonymsModal extends Component {
         <Modal
           isOpen={this.props.isOpenSynonymModal}
           toggle={this.toggleThisModal}
+          size="lg"
         >
           <LoadingSpinner
             type="MODAL"
@@ -157,7 +158,7 @@ class SynonymsModal extends Component {
             <ModalBody>
               <div
                 className="ag-theme-alpine"
-                style={{ height: 400, width: 465 }}
+                style={{ height: 700, width: "100%" }}
               >
                 <AgGridReact
                   onGridReady={this.onGridReady}
