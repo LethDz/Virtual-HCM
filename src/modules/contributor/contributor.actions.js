@@ -12,9 +12,12 @@ import {
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
-  GET_ALL_REPORT,
+  GET_ALL_PENDING_REPORT,
   GET_REPORT_DETAIL,
-  EDIT_REPORT_STATUS,
+  REJECT_REPORT,
+  APPROVE_REPORT,
+  GET_ALL_ACCEPTED_REPORT,
+  GET_ALL_REJECTED_REPORT,
 } from 'src/modules/contributor/index';
 
 //Synonym
@@ -109,10 +112,24 @@ export const deleteReference = (id) => ({
 });
 
 //Report
-export const fetchAllReport = (reportList) => ({
-  type: GET_ALL_REPORT,
+export const fetchAllPendingReport = (reportList) => ({
+  type: GET_ALL_PENDING_REPORT,
   payload: {
     reportList,
+  },
+});
+
+export const pullAllAcceptedReport = (acceptedReportList) => ({
+  type: GET_ALL_ACCEPTED_REPORT,
+  payload: {
+    acceptedReportList,
+  },
+});
+
+export const pullAllRejectedReport = (rejectedReportList) => ({
+  type: GET_ALL_REJECTED_REPORT,
+  payload: {
+    rejectedReportList,
   },
 });
 
@@ -123,9 +140,16 @@ export const pullReportDetail = (report) => ({
   },
 });
 
-export const changeReportStatus = (report) => ({
-  type: EDIT_REPORT_STATUS,
+export const rejectReport = (report) => ({
+  type: REJECT_REPORT,
   payload: {
     report,
+  },
+});
+
+export const approveReport = (approvalDetail) => ({
+  type: APPROVE_REPORT,
+  payload: {
+    approvalDetail,
   },
 });

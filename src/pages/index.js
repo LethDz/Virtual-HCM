@@ -13,7 +13,7 @@ import TrainDataPage from 'src/pages/admin/train-data/TrainDataPage';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
-import ReportListPage from 'src/pages/contributor/report/ReportListPage';
+import ReportPage from 'src/pages/contributor/report/ReportPage';
 
 export {
   HomePage,
@@ -30,6 +30,6 @@ export {
   ReferenceListPage,
   SynonymListPage,
   KnowledgeDataDetailPage,
-  ReportListPage,
+  ReportPage,
   TrainDataPage,
 };

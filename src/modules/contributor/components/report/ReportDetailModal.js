@@ -9,6 +9,8 @@ import {
   ModalBody,
   FormGroup,
   ModalFooter,
+  Row,
+  Col,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,35 +20,68 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import axiosClient from 'src/common/axiosClient';
 import {
-  REJECT_REPORT,
+  GET_PENDING_REPORT,
   CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
+  REJECT_REPORT,
+  CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
 } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { connect } from 'react-redux';
 import {
-  getAllReport,
   pullReportDetail,
   getReportDetail,
-  changeReportStatus,
+  rejectReport,
+  approveReport,
 } from 'src/modules/contributor';
+import { getNewApprovalReport } from '../../contributor.selectors';
 
 class ReportDetailModal extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      report_id: '',
-      type: '',
-      report_data: '',
-      status: '',
-      reject_reason: '',
+      report: {},
+      reporter_note: '',
       loading: false,
       errorAlert: false,
       successAlert: false,
       errorList: [],
       reject: false,
+      knowledge_data_id: 0,
     };
   }
+
+  componentDidMount = () => {
+    this._isMounted = true;
+    this.initiateData();
+  };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  initiateData = () => {
+    this.setLoading(true);
+    axiosClient
+      .get(GET_PENDING_REPORT(this.props.id))
+      .then((response) => {
+        if (response.data.status) {
+          const report = response.data.result_data;
+          this.props.pullReportDetail(report);
+          this.setState({
+            report: report,
+          });
+        } else {
+          this.setErrorAlert(true);
+        }
+        this.setLoading(false);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
 
   handleInput = (event) => handleInputChange(event, this);
   setLoading = (status) => {
@@ -85,18 +120,19 @@ class ReportDetailModal extends Component {
   };
 
   rejectReport = () => {
-    const reason = this.state.reject_reason.trim();
+    const reason = this.state.reporter_note.trim();
+    const report_id = this.state.report.report_id;
     if (reason) {
       this.setLoading(true);
       axiosClient
         .post(REJECT_REPORT, {
-          report_id: this.state.report_id,
-          reject_reason: reason,
+          report_id: report_id,
+          reporter_note: reason,
         })
         .then((response) => {
           if (response.data.status) {
             const report = response.data.result_data;
-            this.props.changeReportStatus(report);
+            this.props.rejectReport(report);
             this.setState({
               ...report,
             });
@@ -123,21 +159,45 @@ class ReportDetailModal extends Component {
     }
   };
 
+  approveReport = () => {
+    const approvalReport = this.state.report;
+    const knowledge_data_id = this.state.knowledge_data_id;
+    const approvalDetail = {
+      report: approvalReport,
+      knowledge_data_id: knowledge_data_id,
+    };
+    this.props.approvalReport(approvalDetail);
+  };
+
+  onSelectedChange = (event) => {
+    console.log(this.state.knowledge_data_id);
+    this.setState({
+      knowledge_data_id: event.target.value,
+    });
+  };
+
+  toggle = () => {
+    !this.state.loading && this.props.toggle();
+  };
+
   render() {
     return (
       <Modal
         isOpen={this.props.isOpen}
         toggle={this.toggle}
         unmountOnClose={true}
+        size="lg"
       >
-        <ModalHeader toggle={this.toggle}>Report</ModalHeader>
+        <ModalHeader toggle={this.toggle}>
+          Report ID: {this.state.report.id}
+        </ModalHeader>
         <Form>
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
-                text="Creating is successfully"
+                text="Rejecting is successfully"
                 onDismiss={() => this.onDismiss('successAlert')}
               />
             )}
@@ -148,43 +208,102 @@ class ReportDetailModal extends Component {
                 onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
-            <Label>
-              <h5>ID: {this.state.report_id}</h5>
-            </Label>
+            <Row>
+              <Col className="col-3">Report type: </Col>
+              <Col className="col-9">
+                <Input
+                  name="report_type"
+                  type="text"
+                  value={
+                    this.state.report.report_type === 1
+                      ? 'Wrong answer'
+                      : 'Contribute data'
+                  }
+                />
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col className="col-3">Reporter:</Col>
+              <Col className="col-9">
+                <Input
+                  name="status"
+                  type="text"
+                  value={this.state.report.reporter}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col className="col-3">Reported Intent:</Col>
+              <Col className="col-9">
+                <Input
+                  name="reported_intent"
+                  type="text"
+                  value={this.state.report.reported_intent}
+                />
+              </Col>
+            </Row>
             <FormGroup>
-              <Label>Report type: </Label>
+              <Label>Question: </Label>
               <Input
-                name="reference_type"
-                type="text"
-                readOnly
-                value={this.state.type}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Status: </Label>
-              <Input
-                name="status"
-                type="text"
-                readOnly
-                value={this.state.status}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Detail: </Label>
-              <Input
-                name="report_data"
+                name="question"
                 type="textarea"
                 readOnly
-                value={this.state.report_data}
+                value={this.state.report.question}
               />
+            </FormGroup>
+            <FormGroup>
+              <Label>Bot answer: </Label>
+              <Input
+                name="answer"
+                type="textarea"
+                readOnly
+                value={this.state.report.bot_answer}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Bot version date: </Label>
+              <Input
+                name="version"
+                type="text"
+                readOnly
+                value={this.state.report.bot_version_date}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Created date: </Label>
+              <Input
+                name="c_date"
+                type="text"
+                readOnly
+                value={this.state.report.cdate}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="knowledge_data_availability">Select</Label>
+              <Input
+                type="select"
+                name="select"
+                id="exampleSelect"
+                onChange={this.onSelectedChange.bind(this)}
+              >
+                <option value={0}>Create new knowledge data</option>
+                {this.state.report.available_knowledge_data &&
+                  this.state.report.available_knowledge_data.map(
+                    (knowledge_data) => (
+                      <option value={knowledge_data.id}>
+                        {knowledge_data.intent_fullname}
+                      </option>
+                    )
+                  )}
+              </Input>
             </FormGroup>
             {this.state.reject && (
               <FormGroup>
-                <Label>Reason to reject: </Label>
+                <Label>Reporter note: </Label>
                 <Input
-                  name="reject_reason"
+                  name="reporter_note"
                   type="textarea"
-                  value={this.state.reject_reason}
+                  value={this.state.reporter_note}
                   onChange={this.handleInput}
                   autoFocus
                   placeholder="Please input the reason why you reject..."
@@ -194,16 +313,21 @@ class ReportDetailModal extends Component {
           </ModalBody>
           <ModalFooter>
             <Link
-              to={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
+              to={
+                this.state.knowledge_data_id === 0
+                  ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
+                  : CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA
+              }
               className="link-no-underline"
             >
               <Button
                 color="primary"
                 type="submit"
                 disabled={this.state.loading}
+                onClick={this.approveReport}
               >
                 <FontAwesomeIcon icon={faPlus} color="white" />
-                &nbsp;Create data approval
+                &nbsp;To Knowledge Data Process
               </Button>
             </Link>
             <Button
@@ -223,12 +347,12 @@ class ReportDetailModal extends Component {
 
 const mapStateToProps = (state) => ({
   reportDetail: getReportDetail(state),
-  reportList: getAllReport(state),
+  newApprovalReport: getNewApprovalReport(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeReportStatus: (reportDetail) =>
-    dispatch(changeReportStatus(reportDetail)),
+  rejectReport: (reportDetail) => dispatch(rejectReport(reportDetail)),
+  approveReport: (approvalDetail) => dispatch(approveReport(approvalDetail)),
   pullReportDetail: (report) => dispatch(pullReportDetail(report)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ReportDetailModal);

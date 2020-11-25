@@ -28,6 +28,9 @@ import ReferenceList from 'src/modules/contributor/components/reference/Referenc
 import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataList';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
 import ReportList from 'src/modules/contributor/components/report/ReportList';
+import ReportAcceptedList from 'src/modules/contributor/components/report/ReportAcceptedList';
+import ReportRejectedList from 'src/modules/contributor/components/report/ReportRejectedList';
+import Report from 'src/modules/contributor/components/report/Report';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -59,4 +62,7 @@ export {
   CreateSynonymModal,
   ReportList,
   ReportDetailModal,
+  ReportAcceptedList,
+  ReportRejectedList,
+  Report,
 };

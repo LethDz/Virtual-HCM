@@ -1,4 +1,5 @@
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
+import { dateComparator } from 'src/common/getDate';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
 
@@ -17,9 +18,12 @@ export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
 export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
-export const GET_ALL_REPORT = 'GET_ALL_REPORT';
+export const GET_ALL_PENDING_REPORT = 'GET_ALL_PENDING_REPORT';
+export const GET_ALL_ACCEPTED_REPORT = 'GET_ALL_PENDING_ACCEPTED_REPORT';
+export const GET_ALL_REJECTED_REPORT = 'GET_ALL_PENDING_REJECTED_REPORT';
 export const GET_REPORT_DETAIL = 'GET_REPORT_DETAIL';
-export const EDIT_REPORT_STATUS = 'EDIT_REPORT_STATUS';
+export const REJECT_REPORT = 'REJECT_REPORT';
+export const APPROVE_REPORT = 'APPROVE_REPORT';
 
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
@@ -113,7 +117,7 @@ export const columnFieldDef = [
     headerName: 'Last modified date',
     sortable: true,
     filter: true,
-    sort: 'desc'
+    sort: 'desc',
   },
   {
     field: 'status',
@@ -145,7 +149,7 @@ export const columnReferenceListDef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 365,
@@ -163,7 +167,7 @@ export const columnSynonymListRef = [
     headerName: 'Id',
     sortable: true,
     filter: true,
-    sort: 'asc'
+    sort: 'asc',
   },
   {
     width: 170,
@@ -245,38 +249,177 @@ export const columnSynonymFieldDef = [
   },
 ];
 
-//Column Report Field Definition
-export const columnReportFieldDef = [
+//Column Pending Report Field Definition
+export const columnPendingReportFieldDef = [
   {
     field: 'report_id',
     headerName: 'ID',
-    width: 50,
+    width: 30,
     sortable: true,
     filter: true,
     resizable: true,
   },
   {
-    field: 'report_data',
-    headerName: 'Report',
-    width: 150,
-    sortable: true,
-    filter: true,
-    resizable: true,
-  },
-  {
-    field: 'type',
+    field: 'report_type',
     headerName: 'Type',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
     width: 50,
     sortable: true,
     filter: true,
     resizable: true,
   },
   {
-    field: 'status',
-    headerName: 'Status',
+    field: 'reported_intent',
+    headerName: 'Reported Intent',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'cdate',
+    headerName: 'Created Date',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+  {
+    field: 'bot_version',
+    headerName: 'Bot Version',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+];
+
+//Column Accepted Report Field Definition
+export const columnAcceptedReportFieldDef = [
+  {
+    field: 'report_id',
+    headerName: 'ID',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_type',
+    headerName: 'Type',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'processor',
+    headerName: 'Processor',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reported_intent',
+    headerName: 'Reported Intent',
     width: 100,
     sortable: true,
     filter: true,
     resizable: true,
-  }
-]
+  },
+  {
+    field: 'forward_intent',
+    headerName: 'Forward Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified Date',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+];
+
+//Column Rejected Report Field Definition
+export const columnRejectedReportFieldDef = [
+  {
+    field: 'report_id',
+    headerName: 'ID',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_type',
+    headerName: 'Type',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'processor',
+    headerName: 'Processor',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reported_intent',
+    headerName: 'Reported Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'bot_version',
+    headerName: 'Bot Version',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified Date',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+];

@@ -20,8 +20,13 @@ export const GET_SYNONYM = (id) => `/get?id=${id}`;
 export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
-export const REPORT = '/report';
-export const REJECT_REPORT = (id, reason) => `/report/reject?report_id=${id}&&reject_reason=${reason}`;
+
+//report
+export const GET_ALL_PENDING_REPORT = '/report/all-pending';
+export const GET_ALL_ACCEPTED_REPORT = '/report/all-accepted';
+export const GET_ALL_REJECTED_REPORT = '/report/all-rejected';
+export const REJECT_REPORT = '/report/';
+export const GET_PENDING_REPORT = (id) => `/report/get-pending?id=${id}`;
 
 export const ADD = '/add';
 

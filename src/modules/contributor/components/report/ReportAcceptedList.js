@@ -1,26 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Col, Row } from 'reactstrap';
-import { connect } from 'react-redux';
-import {
-  ReportDetailModal,
-  getAllPendingReport,
-  fetchAllPendingReport,
-} from 'src/modules/contributor/index';
-import { GET_ALL_PENDING_REPORT } from 'src/constants';
-import { columnPendingReportFieldDef } from 'src/modules/contributor';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { GET_ALL_ACCEPTED_REPORT } from 'src/constants';
+import { columnAcceptedReportFieldDef } from 'src/modules/contributor';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import { AgGridReact } from 'ag-grid-react';
+import { connect } from 'react-redux';
+import {
+  getAllAcceptedReport,
+  pullAllAcceptedReport,
+} from 'src/modules/contributor';
 
-class ReportList extends Component {
+class ReportAcceptedList extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      reportList: [],
+      acceptedReportList: [],
       modalReportDetail: false,
       containerHeight: 0,
       containerWidth: 0,
@@ -37,12 +33,12 @@ class ReportList extends Component {
   setRowData = async () => {
     this._isMounted && this.setState({ loading: true });
     axiosClient
-      .get(GET_ALL_PENDING_REPORT)
+      .get(GET_ALL_ACCEPTED_REPORT)
       .then((response) => {
         if (response.data.status) {
           const reports = response.data.result_data;
-          this.props.fetchAllPendingReport(reports);
-          this.setState({ reportList: reports });
+          this.props.pullAllAcceptedReport(reports);
+          this.setState({ acceptedReportList: reports });
         } else {
           this.setErrorAlert(true);
         }
@@ -55,13 +51,6 @@ class ReportList extends Component {
         this.setLoading(false);
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
-      });
-  };
-
-  setReportList = (list) => {
-    this._isMounted &&
-      this.setState({
-        reportList: list,
       });
   };
 
@@ -79,35 +68,6 @@ class ReportList extends Component {
     this.gridColumnApi = params.columnApi;
     await this.setRowData();
     await this.gridApi.sizeColumnsToFit();
-  };
-
-  onRowSelected = () => {
-    let selectedRows = this.gridApi.getSelectedRows();
-    let id = selectedRows.length === 1 ? selectedRows[0].report_id : '';
-    this._isMounted &&
-      this.setState({
-        selectedId: id,
-      });
-  };
-
-  onRowDoubleClicked = (row) => {
-    let id = row.data.report_id;
-    this.setState({
-      selectedId: id,
-      modalReportDetail: !this.state.modalReportDetail,
-    });
-  };
-
-  toggleReportDetail = () => {
-    this.setState({
-      modalReportDetail: !this.state.modalReportDetail,
-    });
-  };
-
-  updateReportList = () => {
-    this.setState({
-      reportList: this.props.reportList,
-    });
   };
 
   setStyleForGrid = () => {
@@ -133,13 +93,6 @@ class ReportList extends Component {
       });
   };
 
-  setSuccessAlert = (status) => {
-    this._isMounted &&
-      this.setState({
-        successAlert: status,
-      });
-  };
-
   setErrorAlert = (status) => {
     this._isMounted &&
       this.setState({
@@ -153,7 +106,6 @@ class ReportList extends Component {
         errorList: list,
       });
   };
-
   render() {
     return (
       <Fragment>
@@ -164,29 +116,9 @@ class ReportList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
-        <Row className="d-flex flex-row-reverse">
-          <Col xs="auto">
-            <Button
-              color="success"
-              disabled={this.state.selectedId === ''}
-              onClick={this.toggleReportDetail}
-            >
-              <FontAwesomeIcon icon={faEye} color="white" />
-              &nbsp; View Report
-            </Button>
-            {this.state.modalReportDetail && (
-              <ReportDetailModal
-                isOpen={this.state.modalReportDetail}
-                id={this.state.selectedId}
-                toggle={this.toggleReportDetail}
-                updateReferenceList={this.setReferenceList}
-              />
-            )}
-          </Col>
-        </Row>
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading report"
+          text="Loading"
         ></LoadingSpinner>
         <div
           className="ag-theme-alpine"
@@ -197,11 +129,9 @@ class ReportList extends Component {
         >
           <AgGridReact
             onGridReady={this.onGridReady}
-            rowData={this.state.reportList}
+            rowData={this.state.acceptedReportList}
             rowSelection="single"
-            onSelectionChanged={this.onRowSelected.bind(this)}
-            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
-            columnDefs={columnPendingReportFieldDef}
+            columnDefs={columnAcceptedReportFieldDef}
             pagination={true}
             paginationAutoPageSize={true}
           ></AgGridReact>
@@ -210,14 +140,13 @@ class ReportList extends Component {
     );
   }
 }
-
 const mapStateToProps = (state) => ({
-  reportList: getAllPendingReport(state),
+  acceptedReportList: getAllAcceptedReport(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchAllPendingReport: (reportList) =>
-    dispatch(fetchAllPendingReport(reportList)),
+  pullAllAcceptedReport: (acceptedReportList) =>
+    dispatch(pullAllAcceptedReport(acceptedReportList)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportList);
+export default connect(mapStateToProps, mapDispatchToProps)(ReportAcceptedList);

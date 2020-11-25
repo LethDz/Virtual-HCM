@@ -15,7 +15,7 @@ import {
   ReferenceListPage,
   SynonymListPage,
   KnowledgeDataDetailPage,
-  ReportListPage,
+  ReportPage,
   TrainDataPage,
 } from 'src/pages';
 import {
@@ -114,7 +114,7 @@ const Routes = () => (
       <PrivateRouteContributor
         exact
         path={REPORT_LIST_PAGE}
-        component={ReportListPage}
+        component={ReportPage}
       />
     </Switch>
   </Fragment>

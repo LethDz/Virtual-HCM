@@ -13,9 +13,10 @@ import {
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
-  GET_ALL_REPORT,
+  GET_ALL_PENDING_REPORT,
   GET_REPORT_DETAIL,
-  EDIT_REPORT_STATUS,
+  REJECT_REPORT,
+  APPROVE_REPORT 
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
   dataApprovalDetail: null,
   reportList: [],
   reportDetail: null,
+  approvalDetail: null,
 };
 
 export const contributorReducer = (state = initialState, action) => {
@@ -168,7 +170,7 @@ export const contributorReducer = (state = initialState, action) => {
       };
 
     //case for report
-    case GET_ALL_REPORT:
+    case GET_ALL_PENDING_REPORT:
       const reportsList = action.payload.reportList;
       return {
         ...state,
@@ -182,7 +184,7 @@ export const contributorReducer = (state = initialState, action) => {
         reportDetail: detailReport,
       };
 
-    case EDIT_REPORT_STATUS:
+    case REJECT_REPORT:
       const report = action.payload.report;
       let listReport = state.reportList.map((reportDetail) => {
         if (reportDetail.report_id === report.report_id) {
@@ -196,6 +198,13 @@ export const contributorReducer = (state = initialState, action) => {
         reportDetail: report,
         reportList: listReport,
       };
+
+      case APPROVE_REPORT:
+        const approvalDetail = action.payload.approvalDetail;
+        return {
+          ...state,
+          approvalDetail: approvalDetail,
+        };
 
     case LOGOUT: {
       return initialState;
