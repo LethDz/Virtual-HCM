@@ -23,7 +23,7 @@ import {
   GET_PENDING_REPORT,
   CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
   REJECT_REPORT,
-  CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
+  GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS,
 } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { connect } from 'react-redux';
@@ -48,6 +48,7 @@ class ReportDetailModal extends Component {
       errorList: [],
       reject: false,
       knowledge_data_id: 0,
+      selectedIntent: "",
     };
   }
 
@@ -166,14 +167,15 @@ class ReportDetailModal extends Component {
       report: approvalReport,
       knowledge_data_id: knowledge_data_id,
     };
-    this.props.approvalReport(approvalDetail);
+    this.props.approveReport(approvalDetail);
   };
 
   onSelectedChange = (event) => {
-    console.log(this.state.knowledge_data_id);
     this.setState({
-      knowledge_data_id: event.target.value,
+      knowledge_data_id: event.target.key,
+      selectedIntent: event.target.value,
     });
+    console.log(event.target.value);
   };
 
   toggle = () => {
@@ -211,38 +213,28 @@ class ReportDetailModal extends Component {
             <Row>
               <Col className="col-3">Report type: </Col>
               <Col className="col-9">
-                <Input
-                  name="report_type"
-                  type="text"
-                  value={
-                    this.state.report.report_type === 1
-                      ? 'Wrong answer'
-                      : 'Contribute data'
-                  }
-                />
+                {this.state.report.report_type === 1
+                  ? 'Wrong answer'
+                  : 'Contribute data'}
               </Col>
             </Row>
             <Row className="mt-3">
               <Col className="col-3">Reporter:</Col>
-              <Col className="col-9">
-                <Input
-                  name="status"
-                  type="text"
-                  value={this.state.report.reporter}
-                />
-              </Col>
+              <Col className="col-9">{this.state.report.reporter}</Col>
             </Row>
             <Row className="mt-3">
               <Col className="col-3">Reported Intent:</Col>
-              <Col className="col-9">
-                <Input
-                  name="reported_intent"
-                  type="text"
-                  value={this.state.report.reported_intent}
-                />
-              </Col>
+              <Col className="col-9">{this.state.report.reported_intent}</Col>
             </Row>
-            <FormGroup>
+            <Row className="mt-3">
+              <Col className="col-3">Bot version date:</Col>
+              <Col className="col-9">{this.state.report.bot_version_date}</Col>
+            </Row>
+            <Row className="mt-3">
+              <Col className="col-3">Created date:</Col>
+              <Col className="col-9">{this.state.report.cdate}</Col>
+            </Row>
+            <FormGroup className="mt-3">
               <Label>Question: </Label>
               <Input
                 name="question"
@@ -261,25 +253,9 @@ class ReportDetailModal extends Component {
               />
             </FormGroup>
             <FormGroup>
-              <Label>Bot version date: </Label>
-              <Input
-                name="version"
-                type="text"
-                readOnly
-                value={this.state.report.bot_version_date}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Created date: </Label>
-              <Input
-                name="c_date"
-                type="text"
-                readOnly
-                value={this.state.report.cdate}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="knowledge_data_availability">Select</Label>
+              <Label for="knowledge_data_availability">
+                Select knowledge data:
+              </Label>
               <Input
                 type="select"
                 name="select"
@@ -290,7 +266,7 @@ class ReportDetailModal extends Component {
                 {this.state.report.available_knowledge_data &&
                   this.state.report.available_knowledge_data.map(
                     (knowledge_data) => (
-                      <option value={knowledge_data.id}>
+                      <option value={knowledge_data.intent} key={knowledge_data.id}>
                         {knowledge_data.intent_fullname}
                       </option>
                     )
@@ -316,7 +292,7 @@ class ReportDetailModal extends Component {
               to={
                 this.state.knowledge_data_id === 0
                   ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
-                  : CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA
+                  : GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.state.selectedIntent)
               }
               className="link-no-underline"
             >
