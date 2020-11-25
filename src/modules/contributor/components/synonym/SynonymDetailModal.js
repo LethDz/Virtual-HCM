@@ -112,6 +112,7 @@ class SynonymDetailModal extends Component {
   };
 
   handleInput = (event) => handleInputChange(event, this);
+  
   handleItemChange = (event) => handleItemInWordsChange(event, this);
 
   setLoading = (status) => {

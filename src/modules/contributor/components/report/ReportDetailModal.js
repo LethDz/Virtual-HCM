@@ -161,20 +161,22 @@ class ReportDetailModal extends Component {
 
   approveReport = () => {
     const approvalReport = this.state.report;
-    const knowledge_data_id = this.state.knowledge_data_id;
+    const id = this.state.knowledge_data_id;
     const approvalDetail = {
       report: approvalReport,
-      knowledge_data_id: knowledge_data_id,
+      knowledge_data_id: id,
     };
     this.props.approveReport(approvalDetail);
   };
 
   onSelectedChange = (event) => {
+    const index = event.nativeEvent.target.selectedIndex;
+    const id = event.nativeEvent.target[index].getAttribute('id');
+    const intent = event.target.value
     this.setState({
-      knowledge_data_id: event.target.key,
-      selectedIntent: event.target.value,
+      knowledge_data_id: id,
+      selectedIntent: intent,
     });
-    console.log(event.target.value);
   };
 
   toggle = () => {
@@ -260,11 +262,12 @@ class ReportDetailModal extends Component {
                 id="exampleSelect"
                 onChange={this.onSelectedChange.bind(this)}
               >
-                <option value={0}>Create new knowledge data</option>
+                <option value={0} id={0}>Create new knowledge data</option>
                 {this.state.report.available_knowledge_data &&
                   this.state.report.available_knowledge_data.map(
                     (knowledge_data) => (
                       <option
+                        id={knowledge_data.id}
                         value={knowledge_data.intent}
                         key={knowledge_data.id}
                       >
@@ -293,9 +296,7 @@ class ReportDetailModal extends Component {
               to={
                 this.state.knowledge_data_id === 0
                   ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
-                  : GET_KNOWLEDGE_DATA_BY_INTENT(
-                      this.state.selectedIntent
-                    )
+                  : GET_KNOWLEDGE_DATA_BY_INTENT(this.state.selectedIntent)
               }
               className="link-no-underline"
             >
@@ -331,7 +332,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   rejectReport: (reportDetail) => dispatch(rejectReport(reportDetail)),
-  approveReport: (approvalReportDetail) => dispatch(approveReport(approvalReportDetail)),
+  approveReport: (approvalReportDetail) =>
+    dispatch(approveReport(approvalReportDetail)),
   pullReportDetail: (report) => dispatch(pullReportDetail(report)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ReportDetailModal);
