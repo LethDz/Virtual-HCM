@@ -53,7 +53,6 @@ export default class ViewDetailReviewModal extends Component {
     componentDidMount = () => {
         this._isMounted = true;
         this.setState({ data: this.props.data })
-        console.log(this.state.data)
     };
 
     componentWillUnmount = () => {
