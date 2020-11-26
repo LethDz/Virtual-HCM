@@ -21,6 +21,15 @@ export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
 
+//report
+export const GET_ALL_PENDING_REPORT = '/report/all-pending';
+export const GET_ALL_ACCEPTED_REPORT = '/report/all-accepted';
+export const GET_ALL_REJECTED_REPORT = '/report/all-rejected';
+export const REJECT_REPORT = '/report/reject-report';
+export const GET_PENDING_REPORT = (id) => `/report/get-pending?id=${id}`;
+export const GET_ACCEPTED_REPORT = (id) => `/report/get-accepted?id=${id}`;
+export const GET_REJECTED_REPORT = (id) => `/report/get-rejected?id=${id}`;
+
 export const ADD = '/add';
 
 export const GENERATE_SIMILARIES = '/generate-similaries';
@@ -29,10 +38,10 @@ export const EDIT = '/edit';
 export const REVIEW = '/review'
 export const ALL_REVIEW = (id) => `/all-reviews?knowledge_data=${id}`
 
-export const EDIT_COMMENT = `/edit-comment`
-export const POST_COMMENT = '/post-comment'
-export const GET_ALL_COMMENT = (id) => `/all-comment?knowledge_data=${id}`
-export const DELETE_COMMENT = (id) => `/delete-comment?id=${id}`
+export const EDIT_COMMENT = `/edit-comment`;
+export const POST_COMMENT = '/post-comment';
+export const GET_ALL_COMMENT = (id) => `/all-comment?knowledge_data=${id}`;
+export const DELETE_COMMENT = (id) => `/delete-comment?id=${id}`;
 
 export const DELETE_REFERENCE = (id) => `/delete?reference_document_id=${id}`;
 export const GET_REFERENCE = (id) => `/get?reference_document_id=${id}`;
@@ -92,6 +101,7 @@ export const CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA = `${CONTRIBUTOR_PAGE}${KNOWLE
 export const CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM = `${CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}/create`;
 export const SYNONYM_LIST_PAGE = `${CONTRIBUTOR_PAGE}/synonyms`;
 export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
+export const REPORT_LIST_PAGE = `${CONTRIBUTOR_PAGE}/reports`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
   intent

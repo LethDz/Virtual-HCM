@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Launcher } from 'react-chat-window';
 import { connect } from 'react-redux';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import {
   agentProfile,
   updateStatusOfChatSocket,
   getStatusOfChatSocket,
 } from 'src/modules/chat';
 import 'src/static/stylesheets/chat.css';
+import ReactDOM from 'react-dom';
 
 class ChatWidget extends Component {
   constructor() {
@@ -15,15 +17,14 @@ class ChatWidget extends Component {
       messageList: [],
       newMessagesCount: 0,
       isOpen: false,
+      loading: false,
     };
     this.chatSocket = null;
     this.current_command = null;
     this.commands = {
       START_NEW_SESSION: 'newsession',
       REQUEST_LAST_SESSION_DATA: 'getlastsession',
-      CHAT: 'chat',
-      REPORT: 'report',
-      END_SESSION: 'endsession',
+      CHAT: 'chat'
     };
     this.response_types = {
       LAST_SESSION_MESSAGES: 'last_session_messages',
@@ -35,31 +36,10 @@ class ChatWidget extends Component {
   }
 
   _onMessageWasSent = (message) => {
-    let _self = this;
     let text = message.data.text;
     if (text) {
-      if (text.startsWith('!')) {
-        // Command handle
-        let command = text.substring(1);
-        switch (command) {
-          case _self.commands.START_NEW_SESSION:
-            _self.current_command = _self.commands.START_NEW_SESSION;
-            _self.send_websocket_command(_self.commands.END_SESSION, null);
-            break;
-          case _self.commands.REPORT:
-            break;
-          case _self.commands.END_SESSION:
-            _self.send_websocket_command(_self.commands.END_SESSION, null);
-            break;
-          default:
-            console.log(
-              'What is meaning of default block missing warning when it doesnt do anything'
-            );
-        }
-      } else {
-        // Chat handle
-        this.send_websocket_command(this.commands.CHAT, text);
-      }
+      // Chat handle
+      this.send_websocket_command(this.commands.CHAT, text);
       this.setState({
         messageList: [...this.state.messageList, message],
       });
@@ -92,6 +72,30 @@ class ChatWidget extends Component {
     }
   };
 
+  _sendMessages = (textArr) => {
+    if (textArr && textArr.length > 0) {
+      let messages = [];
+      for (var i = 0, l = textArr.length; i < l; i++) {
+        messages.push({
+          type: 'text',
+          author: 'them',
+          data: {
+            text: textArr[i].text,
+          },
+        });
+      }
+      const newMessagesCount = this.state.isOpen
+        ? this.state.newMessagesCount
+        : this.state.newMessagesCount + textArr.length;
+      this.setState({
+        newMessagesCount: newMessagesCount,
+        messageList: [
+          ...this.state.messageList, ...messages
+        ],
+      });
+    }
+  };
+
   create_websocket_connection = () => {
     let _self = this;
     let ws_url = 'wss://127.0.0.1:8000/ws/chat/';
@@ -113,10 +117,7 @@ class ChatWidget extends Component {
             _self._sendMessage(received.data);
             break;
           case _self.response_types.FORCE_NEW_SESSION:
-            _self._sendMessage(
-              'Hệ thống đã có sự thay đổi dữ liệu, phiên trò chuyện của bạn đã kết thúc'
-            );
-            _self._sendMessage('Bắt đầu phiên trò chuyện mới');
+            _self._sendMessages(received.data);
             _self.send_websocket_command(
               _self.commands.START_NEW_SESSION,
               null
@@ -133,23 +134,22 @@ class ChatWidget extends Component {
             }
             break;
           case _self.response_types.END_SESSION_STATUS:
-            if (received.data) {
-              _self._sendMessage('Phiên trò chuyện của bạn đã kết thúc');
-              if (_self.current_command === _self.commands.START_NEW_SESSION) {
-                _self._sendMessage('Chatbox sẽ được làm mới trong 5s');
-                _self.setState({
-                  messageList: [],
-                });
-                _self.send_websocket_command(
-                  _self.commands.START_NEW_SESSION,
-                  null
-                );
+            if (received.data && received.data.end_status) {
+              _self._sendMessages(received.data.messages);
+              if (received.data.start_new) {
                 _self.current_command = null;
+                setTimeout(function(){
+                  _self.setState({
+                    messageList: [],
+                  });
+                  _self.send_websocket_command(
+                    _self.commands.START_NEW_SESSION,
+                    null
+                  );
+                }, 3000);
               }
             } else {
-              _self._sendMessage(
-                'Đã có sự cố khi kết thúc phiên trò chuyện, hãy liên lạc với admin'
-              );
+              _self._sendMessages(received.data.messages);
             }
             break;
           default:
@@ -214,7 +214,7 @@ class ChatWidget extends Component {
   };
 
   componentDidMount() {
-    let _self = this;
+    let _self = this; 
     this._isMounted = true;
     this.chatSocket = this.create_websocket_connection();
     let wait_connecting = setInterval(function () {
@@ -239,15 +239,22 @@ class ChatWidget extends Component {
 
   render() {
     return (
-      <Launcher
-        agentProfile={agentProfile}
-        onMessageWasSent={this._onMessageWasSent.bind(this)}
-        messageList={this.state.messageList}
-        newMessagesCount={this.state.newMessagesCount}
-        showEmoji={false}
-        handleClick={this._handleClick.bind(this)}
-        isOpen={this.state.isOpen}
-      />
+      <Fragment>
+        <Launcher
+          agentProfile={agentProfile}
+          onMessageWasSent={this._onMessageWasSent.bind(this)}
+          messageList={this.state.messageList}
+          newMessagesCount={this.state.newMessagesCount}
+          showEmoji={false}
+          handleClick={this._handleClick.bind(this)}
+          isOpen={this.state.isOpen}
+        />
+        {this.state.loading &&
+          ReactDOM.createPortal(
+            <LoadingSpinner loading={this.state.isOpen} text="loading" type="MODAL"/>,
+            document.getElementsByClassName('sc-chat-window')[0]
+          )}
+      </Fragment>
     );
   }
 }
