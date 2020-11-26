@@ -11,6 +11,7 @@ import {
   ModalFooter,
   Row,
   Col,
+  Badge,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,6 +36,8 @@ import {
   getAllPendingReport,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/report.detail.css';
+import { reportType } from 'src/modules/contributor';
+
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -172,7 +175,7 @@ class ReportDetailModal extends Component {
   onSelectedChange = (event) => {
     const index = event.nativeEvent.target.selectedIndex;
     const id = event.nativeEvent.target[index].getAttribute('id');
-    const intent = event.target.value
+    const intent = event.target.value;
     this.setState({
       knowledge_data_id: id,
       selectedIntent: intent,
@@ -196,7 +199,11 @@ class ReportDetailModal extends Component {
         </ModalHeader>
         <Form>
           <ModalBody className="report-container">
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL" />
+            <LoadingSpinner
+              loading={this.state.loading}
+              text={'Loading'}
+              type="MODAL"
+            />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
@@ -214,9 +221,18 @@ class ReportDetailModal extends Component {
             <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Report type: </Col>
               <Col className="col-9">
-                {this.state.report.report_type === 1
-                  ? 'Wrong answer'
-                  : 'Contribute data'}
+                <h5>
+                  <Badge
+                    color={`${
+                      reportType[this.state.report.report_type] ===
+                      reportType[1]
+                        ? 'primary'
+                        : 'success'
+                    }`}
+                  >
+                    {reportType[this.state.report.report_type]}
+                  </Badge>
+                </h5>
               </Col>
             </Row>
             <Row className="custom-border">
@@ -262,7 +278,9 @@ class ReportDetailModal extends Component {
                 id="exampleSelect"
                 onChange={this.onSelectedChange.bind(this)}
               >
-                <option value={0} id={0}>Create new knowledge data</option>
+                <option value={0} id={0}>
+                  Create new knowledge data
+                </option>
                 {this.state.report.available_knowledge_data &&
                   this.state.report.available_knowledge_data.map(
                     (knowledge_data) => (
