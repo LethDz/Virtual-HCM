@@ -1,5 +1,5 @@
-import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
-import { dateComparator } from 'src/common/getDate'
+import { dateComparator } from 'src/common/getDate';
+import { StatusBar, ReportType } from 'src/modules/contributor';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
 
@@ -18,6 +18,12 @@ export const ADD_REFERENCE_TO_LIST = 'ADD_REFERENCE_TO_LIST';
 export const GET_REFERENCE_DETAIL = 'GET_REFERENCE_DETAIL';
 export const DELETE_REFERENCE = 'DELETE_REFERENCE';
 
+export const GET_ALL_PENDING_REPORT = 'GET_ALL_PENDING_REPORT';
+export const GET_ALL_ACCEPTED_REPORT = 'GET_ALL_PENDING_ACCEPTED_REPORT';
+export const GET_ALL_REJECTED_REPORT = 'GET_ALL_PENDING_REJECTED_REPORT';
+export const REJECT_REPORT = 'REJECT_REPORT';
+export const APPROVE_REPORT = 'APPROVE_REPORT';
+
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
 export const AVAILABLE = 'AVAILABLE';
@@ -31,9 +37,9 @@ export const REPLY_COMMENT = 'REPLY_COMMENT';
 
 export const MAXIMUM_COMMENT_PER_PAGE = 5;
 
-export const ACCEPT = 1
-export const DECLINE = 2
-export const DRAFT = 3
+export const ACCEPT = 1;
+export const DECLINE = 2;
+export const DRAFT = 3;
 
 export const criticalType = ['PER', 'LOC', 'ORG', 'MISC'];
 export const questionType = [
@@ -45,14 +51,7 @@ export const questionType = [
   'HOW',
   'YES/NO',
 ];
-export const coresponseType = [
-  'WHAT',
-  'WHEN',
-  'WHERE',
-  'WHO',
-  'WHY',
-  'HOW',
-];
+export const coresponseType = ['WHAT', 'WHEN', 'WHERE', 'WHO', 'WHY', 'HOW'];
 export const GET_ALL_DATA_APPROVAL = 'GET_ALL_DATA_APPROVAL';
 export const GET_DATA_APPROVAL = 'GET_DATA_APPROVAL';
 export const POSTags = [
@@ -100,35 +99,35 @@ export const columnFieldDef = [
     headerName: 'ID',
     sortable: true,
     filter: true,
-    width: 70
+    width: 70,
   },
   {
     field: 'intent',
     headerName: 'Intent',
     sortable: true,
     filter: true,
-    resizable: true
+    resizable: true,
   },
   {
     field: 'intent_fullname',
     headerName: 'Intent fullname',
     sortable: true,
     filter: true,
-    resizable: true
+    resizable: true,
   },
   {
     field: 'create_user',
     headerName: 'Created by',
     sortable: true,
     filter: true,
-    resizable: true
+    resizable: true,
   },
   {
     field: 'edit_user',
     headerName: 'Modified by',
     sortable: true,
     filter: true,
-    resizable: true
+    resizable: true,
   },
   {
     field: 'mdate',
@@ -137,14 +136,14 @@ export const columnFieldDef = [
     filter: true,
     sort: 'desc',
     comparator: dateComparator,
-    resizable: true
+    resizable: true,
   },
   {
     field: 'status',
     headerName: 'Status',
     sortable: true,
     filter: true,
-    resizable: true
+    resizable: true,
     // cellRenderer: 'statusBar',
   },
 ];
@@ -269,3 +268,190 @@ export const columnSynonymFieldDef = [
     resizable: true,
   },
 ];
+
+//Column Pending Report Field Definition
+export const columnPendingReportFieldDef = [
+  {
+    field: 'report_id',
+    headerName: 'ID',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_type',
+    headerName: 'Type',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'reportType',
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reported_intent',
+    headerName: 'Reported Intent',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'cdate',
+    headerName: 'Created Date',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+  {
+    field: 'bot_version',
+    headerName: 'Bot Version',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+];
+
+//Column Accepted Report Field Definition
+export const columnAcceptedReportFieldDef = [
+  {
+    field: 'report_id',
+    headerName: 'ID',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_type',
+    headerName: 'Type',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'reportType',
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'processor',
+    headerName: 'Processor',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reported_intent',
+    headerName: 'Reported Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'forward_intent',
+    headerName: 'Forward Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified Date',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+];
+
+//Column Rejected Report Field Definition
+export const columnRejectedReportFieldDef = [
+  {
+    field: 'report_id',
+    headerName: 'ID',
+    width: 30,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'report_type',
+    headerName: 'Type',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'reportType',
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'processor',
+    headerName: 'Processor',
+    width: 80,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'reported_intent',
+    headerName: 'Reported Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'bot_version',
+    headerName: 'Bot Version',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified Date',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+];
+
+export const frameworkComponentsForReport = {
+  reportType: ReportType,
+};
+
+export const reportType = {
+  1: 'Wrong answer',
+  2: 'Contribute data',
+};

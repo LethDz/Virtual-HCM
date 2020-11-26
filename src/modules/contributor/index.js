@@ -9,7 +9,13 @@ import SynonymDetailModal from 'src/modules/contributor/components/synonym/Synon
 import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/GenSynonymSentenceModal';
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
+import ReportDetailModal from 'src/modules/contributor/components/report/ReportDetailModal';
 import ReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReviewModal';
+import ReportType from 'src/modules/contributor/components/report/ReportType';
+import ReportDetailModalAccepted from 'src/modules/contributor/components/report/ReportDetailModalAccepted';
+import ReportDetailModalRejected from 'src/modules/contributor/components/report/ReportDetailModalRejected';
+import DetailModalViewOnly from 'src/modules/contributor/components/report/DetailModalViewOnly';
+import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -29,6 +35,10 @@ import Comment from 'src/modules/contributor/components/knowledgeDataComponent/C
 import ReferenceList from 'src/modules/contributor/components/reference/ReferenceList';
 import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataList';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
+import ReportList from 'src/modules/contributor/components/report/ReportList';
+import ReportAcceptedList from 'src/modules/contributor/components/report/ReportAcceptedList';
+import ReportRejectedList from 'src/modules/contributor/components/report/ReportRejectedList';
+import Report from 'src/modules/contributor/components/report/Report';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -60,5 +70,15 @@ export {
   SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,
+  ReportList,
+  ReportDetailModal,
+  ReportAcceptedList,
+  ReportRejectedList,
+  Report,
   ReviewModal,
+  ReportType,
+  ReportDetailModalAccepted,
+  ReportDetailModalRejected,
+  DetailModalViewOnly,
+  StatusBar,
 };

@@ -1,0 +1,23 @@
+.report-container {
+  width: 90%;
+  margin: auto;
+}
+
+.intent {
+  color: white;
+  padding: 5px;
+  border-radius: 12px;
+  background-color: #79bd7a;
+}
+
+.message {
+  border-radius: 3px;
+  background: aliceblue;
+  padding: 10px 20px;
+}
+
+.custom-border {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d5dadb;
+}

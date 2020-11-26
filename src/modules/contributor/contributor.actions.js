@@ -11,10 +11,14 @@ import {
   DELETE_REFERENCE,
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
-  RESET_DATA_APPROVAL_DETAIL
+  RESET_DATA_APPROVAL_DETAIL,
+  GET_ALL_PENDING_REPORT,
+  REJECT_REPORT,
+  APPROVE_REPORT,
+  GET_ALL_ACCEPTED_REPORT,
+  GET_ALL_REJECTED_REPORT,
 } from 'src/modules/contributor/index';
 
-//Synonym
 export const fetchAllDataApproval = (dataApprovalList) => ({
   type: GET_ALL_DATA_APPROVAL,
   payload: {
@@ -25,15 +29,16 @@ export const fetchAllDataApproval = (dataApprovalList) => ({
 export const pullDataApproval = (dataApproval) => ({
   type: GET_DATA_APPROVAL,
   payload: {
-    dataApproval
-  }
-})
+    dataApproval,
+  },
+});
 
 export const resetDataApprovalDetail = () => ({
   type: RESET_DATA_APPROVAL_DETAIL,
-  payload: {}
-})
+  payload: {},
+});
 
+//Synonym
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,
   payload: {
@@ -102,5 +107,41 @@ export const deleteReference = (id) => ({
   type: DELETE_REFERENCE,
   payload: {
     id,
+  },
+});
+
+//Report
+export const fetchAllPendingReport = (reportList) => ({
+  type: GET_ALL_PENDING_REPORT,
+  payload: {
+    reportList,
+  },
+});
+
+export const pullAllAcceptedReport = (acceptedReportList) => ({
+  type: GET_ALL_ACCEPTED_REPORT,
+  payload: {
+    acceptedReportList,
+  },
+});
+
+export const pullAllRejectedReport = (rejectedReportList) => ({
+  type: GET_ALL_REJECTED_REPORT,
+  payload: {
+    rejectedReportList,
+  },
+});
+
+export const rejectReport = (report_id) => ({
+  type: REJECT_REPORT,
+  payload: {
+    report_id,
+  },
+});
+
+export const approveReport = (approvalReportDetail) => ({
+  type: APPROVE_REPORT,
+  payload: {
+    approvalReportDetail,
   },
 });

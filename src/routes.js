@@ -15,6 +15,7 @@ import {
   ReferenceListPage,
   SynonymListPage,
   KnowledgeDataDetailPage,
+  ReportPage,
   TrainDataPage,
 } from 'src/pages';
 import {
@@ -32,6 +33,7 @@ import {
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
   GET_KNOWLEDGE_DATA_BY_INTENT,
+  REPORT_LIST_PAGE,
   ADMIN_TRAIN_DATA_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
@@ -108,6 +110,11 @@ const Routes = () => (
         exact
         path={SYNONYM_LIST_PAGE}
         component={SynonymListPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={REPORT_LIST_PAGE}
+        component={ReportPage}
       />
     </Switch>
   </Fragment>
