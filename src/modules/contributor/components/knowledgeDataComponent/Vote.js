@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Row, Col, Badge, ButtonGroup } from 'reactstrap';
-import { ReviewModal, PROCESSING, getDataApprovalDetail } from 'src/modules/contributor/index';
+import { ReviewModal, ViewAllReviewsModal, PROCESSING, getDataApprovalDetail } from 'src/modules/contributor/index';
 import { connect } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +11,8 @@ class Vote extends Component {
   constructor(props) {
     super();
     this.state = {
-      isOpenReviewModal: false,
+      isOpenReviewModal: false, 
+      isOpenViewAllReviewsModal: false,
       accept: 0,
       decline: 0
     };
@@ -33,7 +34,8 @@ class Vote extends Component {
   };
 
   toggleViewReviewModal = () => {
-
+    this._isMounted &&
+      this.setState({ isOpenViewAllReviewsModal: !this.state.isOpenViewAllReviewsModal });
   }
 
   render() {
@@ -48,6 +50,13 @@ class Vote extends Component {
             knowledgeDataId={this.props.knowledgeDataId}
             setSuccessAlert={this.props.setSuccessAlert}
             setErrorAlert={this.props.setErrorAlert}
+          />
+        }
+        {this.state.isOpenViewAllReviewsModal &&
+          <ViewAllReviewsModal
+            toggle={this.toggleViewReviewModal}
+            isOpen={this.state.isOpenViewAllReviewsModal}
+            knowledgeDataId={this.props.knowledgeDataId}
           />
         }
         <Row>

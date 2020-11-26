@@ -10,6 +10,9 @@ import CreateSynonymModal from 'src/modules/contributor/components/synonym/Creat
 import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/GenSynonymSentenceModal';
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
 import ReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReviewModal';
+import ViewAllReviewsModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ViewAllReviewsModal';
+import ViewDetailReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ViewDetailReviewModal';
+import ReportModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReportModal';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -37,7 +40,6 @@ export * from 'src/modules/contributor/contributor.selectors.js';
 
 export {
   FormSectionTitle,
-  GenSynonymSentenceModal,
   CreateKnowledgeDataForm,
   Synonyms,
   Question,
@@ -46,19 +48,23 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
-  Vote,
   Comment,
+  Vote,
+  MetaData,
   Contributor,
+  KnowledgeDataList,
+  SynonymList,
   ReferenceList,
   KnowledgeDataDetail,
   CreateReferenceModal,
   DocumentReferenceModal,
-  KnowledgeDataList,
   SynonymsModal,
   ReferenceModal,
-  MetaData,
-  SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,
   ReviewModal,
+  ReportModal,
+  ViewAllReviewsModal,
+  ViewDetailReviewModal,
+  GenSynonymSentenceModal,
 };

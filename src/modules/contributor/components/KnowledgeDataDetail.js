@@ -18,6 +18,7 @@ import {
   CriticalData,
   Vote,
   Comment,
+  ReportModal,
   PROCESSING,
   DONE,
   DISABLE,
@@ -54,7 +55,8 @@ class KnowledgeDataDetail extends Component {
         synonyms: [],
         baseResponse: '',
         documentReference: [],
-        id: null
+        id: null,
+        report_processing: null
       },
       comments: [],
       userList: [],
@@ -492,6 +494,13 @@ class KnowledgeDataDetail extends Component {
                 </Col>
               </Row>
 
+              {this.state.form.report_processing &&
+                <div className="d-flex justify-content-end">
+                  <ReportModal buttonId="report-button" isOpen={this.state.isOpenReport} toggle={this.toggleReport} />
+                  <Button id="report-button" color="info" onClick={this.toggleReport}>Report</Button>
+                </div>
+              }
+
               <FormSectionTitle title="Meta data" />
               <MetaData
                 disable={this.state.disable}
@@ -581,6 +590,7 @@ class KnowledgeDataDetail extends Component {
                 setSuccessAlert={this.setSuccessAlert}
                 setErrorAlert={this.setErrorAlert}
                 setAlertMessage={this.setAlertMessage}
+                scrollToTop={this.scrollToTop}
               />
               <Comment
                 formStatus={this.state.formStatus}

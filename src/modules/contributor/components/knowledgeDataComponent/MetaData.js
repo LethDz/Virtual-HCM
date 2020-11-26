@@ -84,6 +84,29 @@ class MetaData extends Component {
     this.props.setReference(referenceList);
   };
 
+  renderReferenceName = (name) => {
+    return <Col>Name: {name}</Col>
+  }
+
+  renderPage = (page) => {
+    if (page && (page.trim() !== "" || page !== 0)) {
+      let processedPage = page 
+      while(processedPage.charAt(0) === '0')
+      {
+        processedPage = processedPage.substring(1);
+      }
+      return <Col xs="auto">Page: {processedPage}</Col>
+    }
+    else return ''
+  }
+
+  renderExtraInfo = (extraInfo) => {
+    if (extraInfo && extraInfo.trim() !== "") {
+      return <Col xs="auto">Extra info: {extraInfo}</Col>
+    }
+    else return ''
+  }
+
   render() {
     return (
       <Fragment>
@@ -153,36 +176,36 @@ class MetaData extends Component {
 
           </Col>
         </Row>
-        <Row className="col">
-          <ListGroup>
-            {this.state.referenceList &&
-              this.state.referenceList.map((reference, index) => {
-                return (
-                  <ListGroupItem key={index}>
-                    <Row>
-                      <Col>
-                        <Row>
-                          {reference.reference_name}; Page: {reference.page}
-                        </Row>
-                      </Col>
-                      <Col xs="auto">
-                        {!this.props.disable &&
-                          <Button
-                            disabled={this.props.disable}
-                            color="danger"
-                            onClick={() => {
-                              this.removeReference(index);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </Button>}
-                      </Col>
-                    </Row>
-                  </ListGroupItem>
-                );
-              })}
-          </ListGroup>
-        </Row>
+        <ListGroup>
+          {this.state.referenceList &&
+            this.state.referenceList.map((reference, index) => {
+              return (
+                <ListGroupItem key={index}>
+                  <Row>
+                    <Col>
+                      <Row>
+                        {this.renderReferenceName(reference.reference_name)}
+                        {this.renderPage(reference.page)}
+                        {this.renderExtraInfo(reference.extra_info)}
+                      </Row>
+                    </Col>
+                    <Col xs="auto">
+                      {!this.props.disable &&
+                        <Button
+                          disabled={this.props.disable}
+                          color="danger"
+                          onClick={() => {
+                            this.removeReference(index);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </Button>}
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              );
+            })}
+        </ListGroup>
       </Fragment>
     );
   }

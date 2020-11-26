@@ -146,3 +146,7 @@
 .width-50 {
   width: 50%;
 }
+
+.min-height-400 {
+  min-height: 400px;
+}

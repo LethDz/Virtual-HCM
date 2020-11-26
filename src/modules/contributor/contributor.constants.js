@@ -1,5 +1,7 @@
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 import StatusBadge from 'src/modules/contributor/components/knowLedgeListComponent/StatusBadge';
+import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
+import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
 import { dateComparator } from 'src/common/getDate'
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
@@ -94,7 +96,9 @@ export const context = (component) => ({
 
 export const frameworkComponents = {
   statusBar: StatusBar,
-  statusBadge: StatusBadge
+  statusBadge: StatusBadge,
+  reviewStatusBadge: ReviewStatusBadge,
+  selfReviewStatus: SelfReviewStatus
 };
 
 export const columnFieldDef = [
@@ -145,6 +149,7 @@ export const columnFieldDef = [
   {
     field: 'status',
     headerName: 'Status',
+    width: 100,
     sortable: true,
     filter: true,
     resizable: true,
@@ -155,6 +160,15 @@ export const columnFieldDef = [
     headerName: 'Progress',
     resizable: true,
     cellRenderer: "statusBar",
+  },
+  {
+    field: 'user_review',
+    headerName: 'Self action',
+    width: 130,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: "selfReviewStatus"
   },
 ];
 
@@ -274,5 +288,43 @@ export const columnSynonymFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+  },
+];
+
+export const columnReviewListRef = [
+  {
+    width: 150,
+    field: 'user_id',
+    headerName: 'User Id',
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'username',
+    headerName: 'Username',
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'review',
+    headerName: 'Review',
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified date',
+    comparator: dateComparator,
+    sortable: true,
+    filter: true,
+    sort: 'desc',
+  },
+  {
+    width: 100,
+    field: 'status',
+    headerName: 'Status',
+    sortable: true,
+    filter: true,
+    cellRenderer: 'reviewStatusBadge'
   },
 ];

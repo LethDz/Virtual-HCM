@@ -120,22 +120,22 @@ class Coresponse extends Component {
               let type;
               switch (coresponse.type.toUpperCase()) {
                 case coresponseType[0]:
-                  type = <Badge color="primary">{coresponse.type.toUpperCase()}</Badge>;
+                  type = <h6><Badge color="primary">{coresponse.type.toUpperCase()}</Badge></h6>;
                   break;
                 case coresponseType[1]:
-                  type = <Badge color="secondary">{coresponse.type.toUpperCase()}</Badge>;
+                  type = <h6><Badge color="secondary">{coresponse.type.toUpperCase()}</Badge></h6>;
                   break;
                 case coresponseType[2]:
-                  type = <Badge color="success">{coresponse.type.toUpperCase()}</Badge>;
+                  type = <h6><Badge color="success">{coresponse.type.toUpperCase()}</Badge></h6>;
                   break;
                 case coresponseType[3]:
-                  type = <Badge color="danger">{coresponse.type.toUpperCase()}</Badge>;
+                  type = <h6><Badge color="danger">{coresponse.type.toUpperCase()}</Badge></h6>;
                   break;
                 case coresponseType[4]:
-                  type = <Badge color="warning">{coresponse.type.toUpperCase()}</Badge>;
+                  type = <h6><Badge color="warning">{coresponse.type.toUpperCase()}</Badge></h6>;
                   break;
                 case coresponseType[5]:
-                  type = <Badge color="info">{coresponse.type.toUpperCase()}</Badge>;
+                  type = <h6><Badge color="info">{coresponse.type.toUpperCase()}</Badge></h6>;
                   break;
                 default:
               }

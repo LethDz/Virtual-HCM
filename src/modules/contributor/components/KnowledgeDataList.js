@@ -18,7 +18,7 @@ import {
   AVAILABLE,
   PROCESSING,
   DONE,
-  DISABLE
+  DISABLE,
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
@@ -27,7 +27,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import axiosClient from 'src/common/axiosClient';
 import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { history } from 'src/common/history';
 
@@ -194,6 +194,7 @@ class KnowledgeDataList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
+
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
             <Link
@@ -223,12 +224,6 @@ class KnowledgeDataList extends Component {
                   &nbsp; Edit
                 </Button>
               )}
-          </Col>
-          <Col xs="auto" className="mr-auto">
-            <Button color="info" onClick={this.sizeToFit}>
-              <FontAwesomeIcon icon={faWrench} color="white" />
-                &nbsp; Size column to Fit
-              </Button>
           </Col>
         </Row>
         <div

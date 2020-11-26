@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, Container, Row, Col, Form } from 'reactstrap';
 import {
   Question,
@@ -9,6 +10,8 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  ReportModal,
+  getDataApprovalDetail
 } from 'src/modules/contributor/index';
 import 'src/static/stylesheets/contributor.css';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -42,6 +45,7 @@ class CreateKnowledgeDataForm extends Component {
         synonyms: [],
         baseResponse: '',
         documentReference: [],
+        report_processing: null
       },
       tokenizedWord: [],
       ner: [],
@@ -51,6 +55,7 @@ class CreateKnowledgeDataForm extends Component {
       errorAlert: false,
       errorList: [],
       hoverWord: '',
+      isOpenReport: false
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -319,6 +324,10 @@ class CreateKnowledgeDataForm extends Component {
     this.questionRef.current.resetGeneratedQuestion();
   };
 
+  toggleReport = () => {
+    this._isMounted && this.setState({ isOpenReport: !this.state.isOpenReport })
+  }
+
   render() {
     const wordArray = this.getWordArray();
     return (
@@ -349,6 +358,14 @@ class CreateKnowledgeDataForm extends Component {
                 </h4>
               </Col>
             </Row>
+            
+            {this.state.form.report_processing &&
+              <div className="d-flex justify-content-end">
+                <ReportModal buttonId="report-button" isOpen={this.state.isOpenReport} toggle={this.toggleReport} />
+                <Button id="report-button" color="info" onClick={this.toggleReport}>Report</Button>
+              </div>
+            }
+
             <FormSectionTitle title="Meta data" />
             <MetaData
               onChange={this.handleInputForm}
@@ -419,4 +436,8 @@ class CreateKnowledgeDataForm extends Component {
   }
 }
 
-export default CreateKnowledgeDataForm;
+const mapStateToProps = (state) => ({
+  dataApprovalDetail: getDataApprovalDetail(state),
+});
+
+export default connect(mapStateToProps)(CreateKnowledgeDataForm);
