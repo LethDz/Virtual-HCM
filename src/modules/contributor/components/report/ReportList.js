@@ -24,7 +24,6 @@ class ReportList extends Component {
       reportList: [],
       modalReportDetail: false,
       containerHeight: 0,
-      containerWidth: 0,
       loading: false,
       selectedId: '',
       errorAlert: false,
@@ -50,7 +49,7 @@ class ReportList extends Component {
         this.setLoading(false);
       })
       .then(() => {
-        this.setStyleForGrid();
+        this.gridApi.sizeColumnsToFit();
       })
       .catch((error) => {
         this.setLoading(false);

@@ -13,14 +13,12 @@ import {
   GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
   GET_ALL_PENDING_REPORT,
-  GET_REPORT_DETAIL,
   REJECT_REPORT,
   APPROVE_REPORT,
   GET_ALL_ACCEPTED_REPORT,
   GET_ALL_REJECTED_REPORT,
 } from 'src/modules/contributor/index';
 
-//Synonym
 export const fetchAllDataApproval = (dataApprovalList) => ({
   type: GET_ALL_DATA_APPROVAL,
   payload: {
@@ -40,6 +38,7 @@ export const resetDataApprovalDetail = () => ({
   payload: {},
 });
 
+//Synonym
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,
   payload: {

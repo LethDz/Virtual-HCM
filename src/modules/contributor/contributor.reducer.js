@@ -14,7 +14,6 @@ import {
   GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
   GET_ALL_PENDING_REPORT,
-  GET_REPORT_DETAIL,
   REJECT_REPORT,
   APPROVE_REPORT 
 } from 'src/modules/contributor/index';

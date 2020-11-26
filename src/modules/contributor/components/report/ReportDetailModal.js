@@ -42,7 +42,7 @@ class ReportDetailModal extends Component {
     super();
     this.state = {
       report: {},
-      reporter_note: '',
+      processor_note: '',
       loading: false,
       errorAlert: false,
       successAlert: false,
@@ -122,7 +122,7 @@ class ReportDetailModal extends Component {
   };
 
   rejectReport = () => {
-    const reason = this.state.reporter_note.trim();
+    const reason = this.state.processor_note.trim();
     const report_id = this.state.report.id;
     if (reason) {
       this.setLoading(true);
@@ -235,6 +235,12 @@ class ReportDetailModal extends Component {
               <Col className="col-3 font-weight-bold">Reporter:</Col>
               <Col className="col-9">{this.state.report.reporter}</Col>
             </Row>
+            {this.state.report.reporter_note && (
+              <Row className="custom-border">
+                <Col className="col-3 font-weight-bold">Reporter note:</Col>
+                <Col className="col-9">{this.state.report.reporter_note}</Col>
+              </Row>
+            )}
             {this.state.report.reported_intent && (
               <Row className="custom-border">
                 <Col className="col-3 font-weight-bold">Reported Intent:</Col>
@@ -297,7 +303,7 @@ class ReportDetailModal extends Component {
                 <Input
                   name="reporter_note"
                   type="textarea"
-                  value={this.state.reporter_note}
+                  value={this.state.processor_note}
                   onChange={this.handleInput}
                   autoFocus
                   placeholder="Please input the reason why you want to reject..."

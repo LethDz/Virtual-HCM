@@ -431,7 +431,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'bot_version',
     headerName: 'Bot Version',
-    width: 50,
+    width: 100,
     sortable: true,
     filter: true,
     resizable: true,
