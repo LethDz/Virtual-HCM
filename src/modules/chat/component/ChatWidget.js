@@ -267,7 +267,7 @@ class ChatWidget extends Component {
         />
         {this.state.loading &&
           ReactDOM.createPortal(
-            <LoadingSpinner loading={this.state.isOpen} text="loading" type="MODAL"/>,
+            <LoadingSpinner loading={this.state.isOpen} text="Loading" type="MODAL"/>,
             document.getElementsByClassName('sc-chat-window')[0]
           )}
       </Fragment>
