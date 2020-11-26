@@ -11,6 +11,7 @@ import {
   ModalFooter,
   Row,
   Col,
+  Badge,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,13 +29,12 @@ import {
 import { handleInputChange } from 'src/common/handleInputChange';
 import { connect } from 'react-redux';
 import {
-  pullReportDetail,
-  getReportDetail,
   rejectReport,
   approveReport,
   getAllPendingReport,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/report.detail.css';
+import { reportType } from 'src/modules/contributor';
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -42,7 +42,7 @@ class ReportDetailModal extends Component {
     super();
     this.state = {
       report: {},
-      reporter_note: '',
+      processor_note: '',
       loading: false,
       errorAlert: false,
       successAlert: false,
@@ -69,7 +69,6 @@ class ReportDetailModal extends Component {
       .then((response) => {
         if (response.data.status) {
           const report = response.data.result_data;
-          this.props.pullReportDetail(report);
           this.setState({
             report: report,
           });
@@ -123,7 +122,7 @@ class ReportDetailModal extends Component {
   };
 
   rejectReport = () => {
-    const reason = this.state.reporter_note.trim();
+    const reason = this.state.processor_note.trim();
     const report_id = this.state.report.id;
     if (reason) {
       this.setLoading(true);
@@ -171,7 +170,7 @@ class ReportDetailModal extends Component {
   onSelectedChange = (event) => {
     const index = event.nativeEvent.target.selectedIndex;
     const id = event.nativeEvent.target[index].getAttribute('id');
-    const intent = event.target.value
+    const intent = event.target.value;
     this.setState({
       knowledge_data_id: id,
       selectedIntent: intent,
@@ -195,7 +194,11 @@ class ReportDetailModal extends Component {
         </ModalHeader>
         <Form>
           <ModalBody className="report-container">
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL" />
+            <LoadingSpinner
+              loading={this.state.loading}
+              text={'Loading'}
+              type="MODAL"
+            />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
@@ -213,15 +216,30 @@ class ReportDetailModal extends Component {
             <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Report type: </Col>
               <Col className="col-9">
-                {this.state.report.report_type === 1
-                  ? 'Wrong answer'
-                  : 'Contribute data'}
+                <h5>
+                  <Badge
+                    color={`${
+                      reportType[this.state.report.report_type] ===
+                      reportType[1]
+                        ? 'primary'
+                        : 'success'
+                    }`}
+                  >
+                    {reportType[this.state.report.report_type]}
+                  </Badge>
+                </h5>
               </Col>
             </Row>
             <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Reporter:</Col>
               <Col className="col-9">{this.state.report.reporter}</Col>
             </Row>
+            {this.state.report.reporter_note && (
+              <Row className="custom-border">
+                <Col className="col-3 font-weight-bold">Reporter note:</Col>
+                <Col className="col-9">{this.state.report.reporter_note}</Col>
+              </Row>
+            )}
             {this.state.report.reported_intent && (
               <Row className="custom-border">
                 <Col className="col-3 font-weight-bold">Reported Intent:</Col>
@@ -261,7 +279,9 @@ class ReportDetailModal extends Component {
                 id="exampleSelect"
                 onChange={this.onSelectedChange.bind(this)}
               >
-                <option value={0} id={0}>Create new knowledge data</option>
+                <option value={0} id={0}>
+                  Create new knowledge data
+                </option>
                 {this.state.report.available_knowledge_data &&
                   this.state.report.available_knowledge_data.map(
                     (knowledge_data) => (
@@ -282,7 +302,7 @@ class ReportDetailModal extends Component {
                 <Input
                   name="reporter_note"
                   type="textarea"
-                  value={this.state.reporter_note}
+                  value={this.state.processor_note}
                   onChange={this.handleInput}
                   autoFocus
                   placeholder="Please input the reason why you want to reject..."
@@ -325,7 +345,6 @@ class ReportDetailModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  reportDetail: getReportDetail(state),
   reportList: getAllPendingReport(state),
 });
 
@@ -333,6 +352,5 @@ const mapDispatchToProps = (dispatch) => ({
   rejectReport: (reportDetail) => dispatch(rejectReport(reportDetail)),
   approveReport: (approvalReportDetail) =>
     dispatch(approveReport(approvalReportDetail)),
-  pullReportDetail: (report) => dispatch(pullReportDetail(report)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ReportDetailModal);

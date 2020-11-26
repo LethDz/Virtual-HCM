@@ -15,7 +15,6 @@ import {
   RESET_DATA_APPROVAL_DETAIL,
   GET_KNOWLEDGE_DATA_SETTINGS,
   GET_ALL_PENDING_REPORT,
-  GET_REPORT_DETAIL,
   REJECT_REPORT,
   APPROVE_REPORT,
   RESET_APPROVAL_DETAIL_REPORT,
@@ -30,7 +29,6 @@ const initialState = {
   dataApprovalDetail: null,
   knowledgeDataSettings: null,
   reportList: [],
-  reportDetail: null,
   approvalReportDetail: null,
 };
 
@@ -183,13 +181,6 @@ export const contributorReducer = (state = initialState, action) => {
       return {
         ...state,
         reportList: reportsList,
-      };
-
-    case GET_REPORT_DETAIL:
-      const detailReport = action.payload.report;
-      return {
-        ...state,
-        reportDetail: detailReport,
       };
 
     case REJECT_REPORT:

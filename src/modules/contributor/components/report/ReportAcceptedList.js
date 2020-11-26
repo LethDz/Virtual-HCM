@@ -26,7 +26,6 @@ class ReportAcceptedList extends Component {
       acceptedReportList: [],
       modalReportDetail: false,
       containerHeight: 0,
-      containerWidth: 0,
       loading: false,
       selectedId: '',
       errorAlert: false,
@@ -52,7 +51,7 @@ class ReportAcceptedList extends Component {
         this.setLoading(false);
       })
       .then(() => {
-        this.setStyleForGrid();
+        this.gridApi.sizeColumnsToFit();
       })
       .catch((error) => {
         this.setLoading(false);

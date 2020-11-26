@@ -26,7 +26,6 @@ export const GET_KNOWLEDGE_DATA_SETTINGS = 'GET_KNOWLEDGE_DATA_SETTINGS';
 export const GET_ALL_PENDING_REPORT = 'GET_ALL_PENDING_REPORT';
 export const GET_ALL_ACCEPTED_REPORT = 'GET_ALL_PENDING_ACCEPTED_REPORT';
 export const GET_ALL_REJECTED_REPORT = 'GET_ALL_PENDING_REJECTED_REPORT';
-export const GET_REPORT_DETAIL = 'GET_REPORT_DETAIL';
 export const REJECT_REPORT = 'REJECT_REPORT';
 export const APPROVE_REPORT = 'APPROVE_REPORT';
 
@@ -491,7 +490,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'bot_version',
     headerName: 'Bot Version',
-    width: 50,
+    width: 100,
     sortable: true,
     filter: true,
     resizable: true,

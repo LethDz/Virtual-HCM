@@ -14,7 +14,6 @@ import {
   RESET_DATA_APPROVAL_DETAIL,
   GET_KNOWLEDGE_DATA_SETTINGS,
   GET_ALL_PENDING_REPORT,
-  GET_REPORT_DETAIL,
   REJECT_REPORT,
   APPROVE_REPORT,
   GET_ALL_ACCEPTED_REPORT,
@@ -49,6 +48,7 @@ export const resetDataApprovalDetail = () => ({
   payload: {},
 });
 
+//Synonym
 export const addSynonymToList = (synonym) => ({
   type: ADD_SYNONYM,
   payload: {
@@ -139,13 +139,6 @@ export const pullAllRejectedReport = (rejectedReportList) => ({
   type: GET_ALL_REJECTED_REPORT,
   payload: {
     rejectedReportList,
-  },
-});
-
-export const pullReportDetail = (report) => ({
-  type: GET_REPORT_DETAIL,
-  payload: {
-    report,
   },
 });
 

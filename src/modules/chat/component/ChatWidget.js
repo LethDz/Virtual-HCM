@@ -80,7 +80,7 @@ class ChatWidget extends Component {
           type: 'text',
           author: 'them',
           data: {
-            text: textArr[i].text,
+            text: textArr[i],
           },
         });
       }
@@ -98,6 +98,9 @@ class ChatWidget extends Component {
 
   create_websocket_connection = () => {
     let _self = this;
+    _self.setState({
+      loading: true
+    })
     let ws_url = 'wss://127.0.0.1:8000/ws/chat/';
     let chatSocket;
     try {
@@ -126,6 +129,9 @@ class ChatWidget extends Component {
           case _self.response_types.LAST_SESSION_MESSAGES:
             if (received.data && received.data.length > 0) {
               _self.setChatboxMessages(received.data);
+              _self.setState({
+                loading: false
+              });
             } else {
               _self.send_websocket_command(
                 _self.commands.START_NEW_SESSION,
@@ -146,6 +152,9 @@ class ChatWidget extends Component {
                     _self.commands.START_NEW_SESSION,
                     null
                   );
+                  _self.setState({
+                    loading: false
+                  });
                 }, 3000);
               }
             } else {
@@ -217,19 +226,26 @@ class ChatWidget extends Component {
     let _self = this; 
     this._isMounted = true;
     this.chatSocket = this.create_websocket_connection();
-    let wait_connecting = setInterval(function () {
-      if (_self.chatSocket.readyState !== WebSocket.CONNECTING) {
-        clearInterval(wait_connecting);
-        if (_self.connected()) {
-          _self.send_websocket_command(
-            _self.commands.REQUEST_LAST_SESSION_DATA,
-            null
-          );
-        } else {
-          // TODO: Disable chatbox input and send button
+    if (!this.chatSocket) {
+      // TODO: Disable chat input
+    } else {
+      let wait_connecting = setInterval(function () {
+        if (_self.chatSocket.readyState !== WebSocket.CONNECTING) {
+          clearInterval(wait_connecting);
+          if (_self.connected()) {
+            _self.send_websocket_command(
+              _self.commands.REQUEST_LAST_SESSION_DATA,
+              null
+            );
+          } else {
+            _self.setState({
+              loading: true
+            })
+          }
         }
-      }
-    }, 1000);
+      }, 1000);
+    }
+    
   }
 
   componentWillUnmount() {
@@ -251,7 +267,7 @@ class ChatWidget extends Component {
         />
         {this.state.loading &&
           ReactDOM.createPortal(
-            <LoadingSpinner loading={this.state.isOpen} text="loading" type="MODAL"/>,
+            <LoadingSpinner loading={this.state.isOpen} text="Loading" type="MODAL"/>,
             document.getElementsByClassName('sc-chat-window')[0]
           )}
       </Fragment>
