@@ -27,7 +27,6 @@ const initialState = {
   synonymDetail: null,
   dataApprovalDetail: null,
   reportList: [],
-  reportDetail: null,
   approvalReportDetail: null,
 };
 
@@ -175,13 +174,6 @@ export const contributorReducer = (state = initialState, action) => {
       return {
         ...state,
         reportList: reportsList,
-      };
-
-    case GET_REPORT_DETAIL:
-      const detailReport = action.payload.report;
-      return {
-        ...state,
-        reportDetail: detailReport,
       };
 
     case REJECT_REPORT:

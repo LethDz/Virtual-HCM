@@ -133,13 +133,6 @@ export const pullAllRejectedReport = (rejectedReportList) => ({
   },
 });
 
-export const pullReportDetail = (report) => ({
-  type: GET_REPORT_DETAIL,
-  payload: {
-    report,
-  },
-});
-
 export const rejectReport = (report_id) => ({
   type: REJECT_REPORT,
   payload: {

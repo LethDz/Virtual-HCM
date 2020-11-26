@@ -29,15 +29,12 @@ import {
 import { handleInputChange } from 'src/common/handleInputChange';
 import { connect } from 'react-redux';
 import {
-  pullReportDetail,
-  getReportDetail,
   rejectReport,
   approveReport,
   getAllPendingReport,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/report.detail.css';
 import { reportType } from 'src/modules/contributor';
-
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -72,7 +69,6 @@ class ReportDetailModal extends Component {
       .then((response) => {
         if (response.data.status) {
           const report = response.data.result_data;
-          this.props.pullReportDetail(report);
           this.setState({
             report: report,
           });
@@ -344,7 +340,6 @@ class ReportDetailModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  reportDetail: getReportDetail(state),
   reportList: getAllPendingReport(state),
 });
 
@@ -352,6 +347,5 @@ const mapDispatchToProps = (dispatch) => ({
   rejectReport: (reportDetail) => dispatch(rejectReport(reportDetail)),
   approveReport: (approvalReportDetail) =>
     dispatch(approveReport(approvalReportDetail)),
-  pullReportDetail: (report) => dispatch(pullReportDetail(report)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ReportDetailModal);
