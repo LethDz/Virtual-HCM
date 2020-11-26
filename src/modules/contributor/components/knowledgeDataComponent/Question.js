@@ -415,6 +415,7 @@ export default class Question extends Component {
             rowData={this.state.generated_sentences}
             isOpen={this.state.isOpenGenerateModal}
             setSelectedSentence={this.setSelectedSentence}
+            disable={this.props.disable}
           />
         )}
 
