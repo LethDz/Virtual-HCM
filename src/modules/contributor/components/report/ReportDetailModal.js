@@ -252,6 +252,12 @@ class ReportDetailModal extends Component {
               </Row>
             )}
             <Row className="custom-border">
+              <Col className="col-3 font-weight-bold">Reporter Data:</Col>
+              <Col className="col-9 text-break">
+                {this.state.report.report_data}
+              </Col>
+            </Row>
+            <Row className="custom-border">
               <Col className="col-3 font-weight-bold">Bot version date:</Col>
               <Col className="col-9">{this.state.report.bot_version_date}</Col>
             </Row>
@@ -259,14 +265,18 @@ class ReportDetailModal extends Component {
               <Col className="col-3 font-weight-bold">Created date:</Col>
               <Col className="col-9">{this.state.report.cdate}</Col>
             </Row>
-            <FormGroup className="mt-3">
-              <Label className="font-weight-bold">Question: </Label>
-              <div className="message">{this.state.report.question}</div>
-            </FormGroup>
-            <FormGroup>
-              <Label className="font-weight-bold">Bot answer: </Label>
-              <div className="message">{this.state.report.bot_answer}</div>
-            </FormGroup>
+            {this.state.report.report_type === 1 && (
+              <div>
+                <FormGroup className="mt-3">
+                  <Label className="font-weight-bold">Question: </Label>
+                  <div className="message">{this.state.report.question}</div>
+                </FormGroup>
+                <FormGroup>
+                  <Label className="font-weight-bold">Bot answer: </Label>
+                  <div className="message">{this.state.report.bot_answer}</div>
+                </FormGroup>
+              </div>
+            )}
             <FormGroup>
               <Label
                 for="knowledge_data_availability"

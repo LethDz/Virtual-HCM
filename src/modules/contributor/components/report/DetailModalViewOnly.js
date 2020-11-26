@@ -42,14 +42,18 @@ const DetailModalViewOnly = (props) => {
         <Col className="col-3 font-weight-bold">Reporter Data:</Col>
         <Col className="col-9 text-break">{props.report.report_data}</Col>
       </Row>
-      <FormGroup className="mt-3">
-        <Label className="font-weight-bold">Question: </Label>
-        <div className="message">{props.report.question}</div>
-      </FormGroup>
-      <FormGroup>
-        <Label className="font-weight-bold">Bot answer: </Label>
-        <div className="message">{props.report.bot_answer}</div>
-      </FormGroup>
+      {props.report.report_type === 1 && (
+        <div>
+          <FormGroup className="mt-3">
+            <Label className="font-weight-bold">Question: </Label>
+            <div className="message">{props.report.question}</div>
+          </FormGroup>
+          <FormGroup>
+            <Label className="font-weight-bold">Bot answer: </Label>
+            <div className="message">{props.report.bot_answer}</div>
+          </FormGroup>
+        </div>
+      )}
       <Row className="custom-border">
         <Col className="col-3 font-weight-bold">Bot version date:</Col>
         <Col className="col-9">{props.report.bot_version_date}</Col>
