@@ -660,6 +660,8 @@ class KnowledgeDataDetail extends Component {
                 {!this.state.disable &&
                   (this.state.formStatus === AVAILABLE ||
                     (this.state.formStatus === PROCESSING &&
+                      this.state.owner) ||
+                    (this.state.formStatus === DONE &&
                       this.state.owner)) && (
                     <Button
                       disabled={this.state.disable}
