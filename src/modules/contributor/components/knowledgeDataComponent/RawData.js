@@ -117,9 +117,9 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  onMouseOver = (event, data) => { };
+  onMouseOver = (event, data) => {};
 
-  onMouseLeave = (event) => { };
+  onMouseLeave = (event) => {};
 
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
@@ -163,7 +163,7 @@ class RawData extends Component {
             </div>
           </Col>
           <Col xs="auto">
-            {!this.props.disable &&
+            {!this.props.disable && (
               <Button
                 disabled={this.props.disable}
                 type="button"
@@ -171,8 +171,8 @@ class RawData extends Component {
                 onClick={this.stateCancelTokenize}
               >
                 <FontAwesomeIcon icon={faBan} /> Cancel
-            </Button>}
-
+              </Button>
+            )}
           </Col>
         </Row>
       );
@@ -201,7 +201,7 @@ class RawData extends Component {
                   onClick={this.stateTokenizeRawData}
                 >
                   <FontAwesomeIcon icon={faHammer} /> Tokenize
-              </Button>
+                </Button>
               </Col>
             </Fragment>
           )}

@@ -145,7 +145,7 @@ class Synonyms extends Component {
           <Label className="label">Synonyms:</Label>
           <Row>
             <Col>
-              {!this.props.disable &&
+              {!this.props.disable && (
                 <Input
                   disabled={this.props.disable}
                   name="synonymWord"
@@ -153,7 +153,7 @@ class Synonyms extends Component {
                   value={this.state.synonymWord}
                   onChange={this.handleInput}
                 ></Input>
-              }
+              )}
               <ListGroup>
                 {this.state.synonyms.map((word, index) => {
                   return (
@@ -180,7 +180,7 @@ class Synonyms extends Component {
                                           );
                                         })}
                                       </Col>
-                                      {!this.props.disable &&
+                                      {!this.props.disable && (
                                         <Col xs="auto">
                                           <Button
                                             disabled={this.props.disable}
@@ -192,10 +192,12 @@ class Synonyms extends Component {
                                               );
                                             }}
                                           >
-                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                            <FontAwesomeIcon
+                                              icon={faTrashAlt}
+                                            />
                                           </Button>
                                         </Col>
-                                      }
+                                      )}
                                     </Row>
                                   </ListGroupItem>
                                 );
@@ -214,8 +216,8 @@ class Synonyms extends Component {
                                 }}
                               >
                                 <FontAwesomeIcon icon={faTasks} /> Apply synonym
-                            sets
-                          </Button>
+                                sets
+                              </Button>
                             </Col>
                             <Col xs="auto">
                               <Button
@@ -230,14 +232,13 @@ class Synonyms extends Component {
                             </Col>
                           </Fragment>
                         )}
-
                       </Row>
                     </ListGroupItem>
                   );
                 })}
               </ListGroup>
             </Col>
-            {!this.props.disable &&
+            {!this.props.disable && (
               <Col xs="auto">
                 <Button
                   disabled={this.props.disable}
@@ -247,7 +248,7 @@ class Synonyms extends Component {
                   <FontAwesomeIcon icon={faPlusCircle} /> Add
                 </Button>
               </Col>
-            }
+            )}
           </Row>
         </Col>
       </Row>

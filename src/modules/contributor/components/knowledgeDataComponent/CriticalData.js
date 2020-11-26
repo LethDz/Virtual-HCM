@@ -177,7 +177,7 @@ class CriticalData extends Component {
                       </Row>
                     </Col>
                     <Col xs="auto">
-                      {!this.props.disable &&
+                      {!this.props.disable && (
                         <Button
                           disabled={this.props.disable}
                           color="danger"
@@ -186,13 +186,14 @@ class CriticalData extends Component {
                           }}
                         >
                           <FontAwesomeIcon icon={faTrashAlt} />
-                        </Button>}
+                        </Button>
+                      )}
                     </Col>
                   </Row>
                   <Row>
                     <Col className="border-right-solid">
                       <Label>Subject component: </Label>
-                      {!this.props.disable &&
+                      {!this.props.disable && (
                         <CriticalDataItem
                           disable={this.props.disable}
                           checkSubjectType={
@@ -204,7 +205,7 @@ class CriticalData extends Component {
                           wordArray={this.props.wordArray}
                           setCriticalData={this.setCriticalData}
                         />
-                      }
+                      )}
 
                       <ListGroup>
                         {this.state.criticalData[index].word.map(
@@ -216,7 +217,7 @@ class CriticalData extends Component {
                                     {word.type}: {word.word}
                                   </Col>
                                   <Col xs="auto">
-                                    {!this.props.disable &&
+                                    {!this.props.disable && (
                                       <Button
                                         disabled={this.props.disable}
                                         color="danger"
@@ -230,7 +231,7 @@ class CriticalData extends Component {
                                       >
                                         <FontAwesomeIcon icon={faTrashAlt} />
                                       </Button>
-                                    }
+                                    )}
                                   </Col>
                                 </Row>
                               </ListGroupItem>
@@ -241,7 +242,7 @@ class CriticalData extends Component {
                     </Col>
                     <Col>
                       <Label>Verb: </Label>
-                      {!this.props.disable &&
+                      {!this.props.disable && (
                         <CriticalDataItem
                           disable={this.props.disable}
                           checkSubjectType={this.checkSubjectType}
@@ -249,7 +250,8 @@ class CriticalData extends Component {
                           index={index}
                           wordArray={this.props.wordArray}
                           setVerb={this.setVerb}
-                        />}
+                        />
+                      )}
 
                       <ListGroup>
                         {this.state.criticalData[index].verb.map(
@@ -261,7 +263,7 @@ class CriticalData extends Component {
                                     {verb.type}: {verb.word}
                                   </Col>
                                   <Col xs="auto">
-                                    {!this.props.disable &&
+                                    {!this.props.disable && (
                                       <Button
                                         disabled={this.props.disable}
                                         color="danger"
@@ -275,7 +277,7 @@ class CriticalData extends Component {
                                       >
                                         <FontAwesomeIcon icon={faTrashAlt} />
                                       </Button>
-                                    }
+                                    )}
                                   </Col>
                                 </Row>
                               </ListGroupItem>
@@ -289,7 +291,7 @@ class CriticalData extends Component {
               );
             })}
           </ListGroup>
-          {!this.props.disable &&
+          {!this.props.disable && (
             <div className="mt-2">
               <Button
                 block
@@ -298,10 +300,9 @@ class CriticalData extends Component {
                 onClick={this.addCriticalData}
               >
                 <FontAwesomeIcon icon={faPlusCircle} /> Subject
-          </Button>
+              </Button>
             </div>
-          }
-
+          )}
         </Col>
       </Row>
     );

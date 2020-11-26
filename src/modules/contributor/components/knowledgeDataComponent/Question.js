@@ -18,7 +18,13 @@ import {
 } from 'src/modules/contributor/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt, faTasks, faListAlt, faEye } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faTrashAlt,
+  faTasks,
+  faListAlt,
+  faEye,
+} from '@fortawesome/free-solid-svg-icons';
 import { NLP, TOKENIZE, GENERATE_SIMILARIES } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
@@ -111,7 +117,7 @@ export default class Question extends Component {
       if (type.isChecked === true) hasType = true;
     });
     if (!hasType) {
-      this.openTypeToolTip()
+      this.openTypeToolTip();
       return;
     }
 
@@ -225,13 +231,14 @@ export default class Question extends Component {
   };
 
   openToolTip = () => {
-    this._isMounted && this.setState({ tooltipTypeOpen: false })
+    this._isMounted && this.setState({ tooltipTypeOpen: false });
     this._isMounted && this.setState({ tooltipOpen: !this.state.tooltipOpen });
   };
 
   openTypeToolTip = () => {
-    this._isMounted && this.setState({ tooltipTypeOpen: !this.state.tooltipTypeOpen })
-  }
+    this._isMounted &&
+      this.setState({ tooltipTypeOpen: !this.state.tooltipTypeOpen });
+  };
 
   setGeneratedSentences = (generatedSentences, index) => {
     let questions = this.state.questions;
@@ -258,9 +265,9 @@ export default class Question extends Component {
       });
   };
 
-  onMouseOver = (event, value) => { };
+  onMouseOver = (event, value) => {};
 
-  onMouseLeave = (event) => { };
+  onMouseLeave = (event) => {};
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index;
@@ -462,7 +469,7 @@ export default class Question extends Component {
                           target="DisabledAutoHide"
                         >
                           <div className="row coresponse-tool-tip">
-                            <Col xs='auto'>
+                            <Col xs="auto">
                               <CustomInput
                                 className="check-box-tag"
                                 type="checkbox"
@@ -496,7 +503,7 @@ export default class Question extends Component {
                                 onChange={this.handleCheck}
                               />
                             </Col>
-                            <Col xs='auto'>
+                            <Col xs="auto">
                               <CustomInput
                                 className="check-box-tag"
                                 type="checkbox"

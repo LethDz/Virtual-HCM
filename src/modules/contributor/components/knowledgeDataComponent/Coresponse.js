@@ -80,7 +80,7 @@ class Coresponse extends Component {
       <Row>
         <Col>
           <Label className="label">Coresponse answer:</Label>
-          {!this.props.disable &&
+          {!this.props.disable && (
             <Row>
               <Col xs="auto">
                 <Input
@@ -111,42 +111,76 @@ class Coresponse extends Component {
                   onClick={this.addCoresponse}
                 >
                   <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
-            </Button>
+                </Button>
               </Col>
             </Row>
-          }
+          )}
           <ListGroup className="mt-1">
             {this.state.coresponse.map((coresponse, index) => {
               let type;
               switch (coresponse.type.toUpperCase()) {
                 case coresponseType[0]:
-                  type = <h6><Badge color="primary">{coresponse.type.toUpperCase()}</Badge></h6>;
+                  type = (
+                    <h6>
+                      <Badge color="primary">
+                        {coresponse.type.toUpperCase()}
+                      </Badge>
+                    </h6>
+                  );
                   break;
                 case coresponseType[1]:
-                  type = <h6><Badge color="secondary">{coresponse.type.toUpperCase()}</Badge></h6>;
+                  type = (
+                    <h6>
+                      <Badge color="secondary">
+                        {coresponse.type.toUpperCase()}
+                      </Badge>
+                    </h6>
+                  );
                   break;
                 case coresponseType[2]:
-                  type = <h6><Badge color="success">{coresponse.type.toUpperCase()}</Badge></h6>;
+                  type = (
+                    <h6>
+                      <Badge color="success">
+                        {coresponse.type.toUpperCase()}
+                      </Badge>
+                    </h6>
+                  );
                   break;
                 case coresponseType[3]:
-                  type = <h6><Badge color="danger">{coresponse.type.toUpperCase()}</Badge></h6>;
+                  type = (
+                    <h6>
+                      <Badge color="danger">
+                        {coresponse.type.toUpperCase()}
+                      </Badge>
+                    </h6>
+                  );
                   break;
                 case coresponseType[4]:
-                  type = <h6><Badge color="warning">{coresponse.type.toUpperCase()}</Badge></h6>;
+                  type = (
+                    <h6>
+                      <Badge color="warning">
+                        {coresponse.type.toUpperCase()}
+                      </Badge>
+                    </h6>
+                  );
                   break;
                 case coresponseType[5]:
-                  type = <h6><Badge color="info">{coresponse.type.toUpperCase()}</Badge></h6>;
+                  type = (
+                    <h6>
+                      <Badge color="info">
+                        {coresponse.type.toUpperCase()}
+                      </Badge>
+                    </h6>
+                  );
                   break;
                 default:
               }
               return (
                 <ListGroupItem key={index}>
                   <Row>
-                    <Col>
-                      {coresponse.answer}
-                    </Col>
-                    <Col xs='auto'>{type}</Col>
-                    {!this.props.disable &&
+                    <Col>{coresponse.answer}</Col>
+                    <Col xs="auto">{type}</Col>
+                    {!this.props.disable && (
                       <Col xs="auto">
                         <Button
                           disabled={this.props.disable}
@@ -158,8 +192,7 @@ class Coresponse extends Component {
                           <FontAwesomeIcon icon={faTrashAlt} />
                         </Button>
                       </Col>
-                    }
-
+                    )}
                   </Row>
                 </ListGroupItem>
               );

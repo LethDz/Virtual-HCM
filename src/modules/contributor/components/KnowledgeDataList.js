@@ -101,8 +101,12 @@ class KnowledgeDataList extends Component {
         this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
-          this.props.fetchAllDataApproval(response.data.result_data.knowledge_datas);
-          this.props.fetchKnowledgeDataSetting(response.data.result_data.review_settings);
+          this.props.fetchAllDataApproval(
+            response.data.result_data.knowledge_datas
+          );
+          this.props.fetchKnowledgeDataSetting(
+            response.data.result_data.review_settings
+          );
           this.setAlertMessage('Load successful');
           this.setSuccessAlert(true);
         } else {
@@ -129,14 +133,15 @@ class KnowledgeDataList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let intent = selectedRows.length === 1 ? selectedRows[0].intent : '';
-    this._isMounted && this.setState({
-      intent,
-    });
+    this._isMounted &&
+      this.setState({
+        intent,
+      });
   };
 
   onRowDoubleClicked = (row) => {
     history.push(GET_KNOWLEDGE_DATA_BY_INTENT(row.data.intent));
-  }
+  };
 
   sizeToFit = () => {
     this.gridApi.sizeColumnsToFit();
@@ -144,29 +149,29 @@ class KnowledgeDataList extends Component {
 
   onFirstDataRendered = () => {
     this.sizeToFit();
-  }
+  };
 
   setRowData = () => {
-    let data = this.props.dataApprovalList
+    let data = this.props.dataApprovalList;
     data.forEach((item, index) => {
       switch (item.status) {
         case 0:
-          data[index].status = AVAILABLE
+          data[index].status = AVAILABLE;
           break;
         case 1:
-          data[index].status = PROCESSING
+          data[index].status = PROCESSING;
           break;
         case 2:
-          data[index].status = DONE
+          data[index].status = DONE;
           break;
         case 3:
-          data[index].status = DISABLE
+          data[index].status = DISABLE;
           break;
         default:
       }
-    })
-    return data
-  }
+    });
+    return data;
+  };
 
   render() {
     return (
@@ -215,15 +220,15 @@ class KnowledgeDataList extends Component {
               >
                 <Button color="success">
                   <FontAwesomeIcon icon={faEdit} color="white" />
-                    &nbsp; Edit
-                  </Button>
-              </Link>
-            ) : (
-                <Button color="success" disabled={this.state.intent === ''}>
-                  <FontAwesomeIcon icon={faEdit} color="white" />
                   &nbsp; Edit
                 </Button>
-              )}
+              </Link>
+            ) : (
+              <Button color="success" disabled={this.state.intent === ''}>
+                <FontAwesomeIcon icon={faEdit} color="white" />
+                &nbsp; Edit
+              </Button>
+            )}
           </Col>
         </Row>
         <div
@@ -262,8 +267,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(fetchAllDataApproval(dataApprovalList));
   },
   fetchKnowledgeDataSetting: (knowledgeDataSettings) => {
-    dispatch(fetchKnowledgeDataSetting(knowledgeDataSettings))
-  }
+    dispatch(fetchKnowledgeDataSetting(knowledgeDataSettings));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeDataList);

@@ -9,7 +9,9 @@ class BaseResponse extends Component {
           <Label className="label" for="baseResponse">
             Base response:
           </Label>
-          {this.props.disable ? (<h5>{this.props.baseResponseValue}</h5>) :
+          {this.props.disable ? (
+            <h5>{this.props.baseResponseValue}</h5>
+          ) : (
             <Input
               disabled={this.props.disable}
               placeholder="Enter base response here"
@@ -18,8 +20,8 @@ class BaseResponse extends Component {
               name="baseResponse"
               value={this.props.baseResponseValue}
               onChange={this.props.onChange}
-            />}
-
+            />
+          )}
         </Col>
       </Row>
     );

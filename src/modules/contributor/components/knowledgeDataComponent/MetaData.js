@@ -85,27 +85,24 @@ class MetaData extends Component {
   };
 
   renderReferenceName = (name) => {
-    return <Col>Name: {name}</Col>
-  }
+    return <Col>Name: {name}</Col>;
+  };
 
   renderPage = (page) => {
-    if (page && (page.trim() !== "" || page !== 0)) {
-      let processedPage = page 
-      while(processedPage.charAt(0) === '0')
-      {
+    if (page && (page.trim() !== '' || page !== 0)) {
+      let processedPage = page;
+      while (processedPage.charAt(0) === '0') {
         processedPage = processedPage.substring(1);
       }
-      return <Col xs="auto">Page: {processedPage}</Col>
-    }
-    else return ''
-  }
+      return <Col xs="auto">Page: {processedPage}</Col>;
+    } else return '';
+  };
 
   renderExtraInfo = (extraInfo) => {
-    if (extraInfo && extraInfo.trim() !== "") {
-      return <Col xs="auto">Extra info: {extraInfo}</Col>
-    }
-    else return ''
-  }
+    if (extraInfo && extraInfo.trim() !== '') {
+      return <Col xs="auto">Extra info: {extraInfo}</Col>;
+    } else return '';
+  };
 
   render() {
     return (
@@ -132,30 +129,36 @@ class MetaData extends Component {
           </Col>
           <Col xs="6">
             <Row className="mb-1">
-              {this.props.disable ? (<h5 className="mt-1">{this.props.intentValue}</h5>) : (<Input
-                disabled={this.props.disable}
-                placeholder="Enter intent here"
-                required
-                type="text"
-                name="intent"
-                id="intent"
-                value={this.props.intentValue}
-                onChange={this.props.onChange}
-              />)}
-
+              {this.props.disable ? (
+                <h5 className="mt-1">{this.props.intentValue}</h5>
+              ) : (
+                <Input
+                  disabled={this.props.disable}
+                  placeholder="Enter intent here"
+                  required
+                  type="text"
+                  name="intent"
+                  id="intent"
+                  value={this.props.intentValue}
+                  onChange={this.props.onChange}
+                />
+              )}
             </Row>
             <Row className="mb-1">
-              {this.props.disable ? (<h5 className="mt-1">{this.props.intentFullNameValue}</h5>) : (<Input
-                disabled={this.props.disable}
-                placeholder="Enter intent fullname here"
-                required
-                type="text"
-                name="intentFullName"
-                id="intentFullName"
-                value={this.props.intentFullNameValue}
-                onChange={this.props.onChange}
-              />)}
-
+              {this.props.disable ? (
+                <h5 className="mt-1">{this.props.intentFullNameValue}</h5>
+              ) : (
+                <Input
+                  disabled={this.props.disable}
+                  placeholder="Enter intent fullname here"
+                  required
+                  type="text"
+                  name="intentFullName"
+                  id="intentFullName"
+                  value={this.props.intentFullNameValue}
+                  onChange={this.props.onChange}
+                />
+              )}
             </Row>
           </Col>
         </Row>
@@ -164,7 +167,7 @@ class MetaData extends Component {
         <Row className="col">
           <FormSectionTitle title="Reference" />
           <Col xs="auto" className="m-1">
-            {!this.props.disable &&
+            {!this.props.disable && (
               <Button
                 disabled={this.props.disable}
                 type="button"
@@ -172,8 +175,8 @@ class MetaData extends Component {
                 color="success"
               >
                 <FontAwesomeIcon icon={faBookOpen} /> Add reference
-            </Button>}
-
+              </Button>
+            )}
           </Col>
         </Row>
         <ListGroup>
@@ -190,7 +193,7 @@ class MetaData extends Component {
                       </Row>
                     </Col>
                     <Col xs="auto">
-                      {!this.props.disable &&
+                      {!this.props.disable && (
                         <Button
                           disabled={this.props.disable}
                           color="danger"
@@ -199,7 +202,8 @@ class MetaData extends Component {
                           }}
                         >
                           <FontAwesomeIcon icon={faTrashAlt} />
-                        </Button>}
+                        </Button>
+                      )}
                     </Col>
                   </Row>
                 </ListGroupItem>
