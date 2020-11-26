@@ -29,7 +29,7 @@ class SelfReviewStatus extends Component {
     }
 
     render() {
-        const className = "mt-2"
+        const className = "mt-2 badge-width"
         switch (this.state.user_review) {
             case ACCEPT:
                 return <h6><Badge className={className} color="success">Accept</Badge></h6>

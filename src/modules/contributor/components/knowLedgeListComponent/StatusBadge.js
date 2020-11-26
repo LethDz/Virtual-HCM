@@ -30,7 +30,7 @@ class StatusBadge extends Component {
     }
 
     render() {
-        const className = "mt-2"
+        const className = "mt-2 badge-width"
         switch (this.state.status) {
             case PROCESSING:
                 return <Badge className={className} color="warning">Processing</Badge>

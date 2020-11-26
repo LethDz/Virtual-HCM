@@ -150,3 +150,7 @@
 .min-height-400 {
   min-height: 400px;
 }
+
+.badge-width {
+  width: 70px !important;
+}

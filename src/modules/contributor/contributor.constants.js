@@ -149,7 +149,6 @@ export const columnFieldDef = [
   {
     field: 'status',
     headerName: 'Status',
-    width: 100,
     sortable: true,
     filter: true,
     resizable: true,
@@ -164,7 +163,6 @@ export const columnFieldDef = [
   {
     field: 'user_review',
     headerName: 'Self action',
-    width: 130,
     sortable: true,
     filter: true,
     resizable: true,
