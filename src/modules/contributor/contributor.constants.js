@@ -30,6 +30,8 @@ export const GET_REPORT_DETAIL = 'GET_REPORT_DETAIL';
 export const REJECT_REPORT = 'REJECT_REPORT';
 export const APPROVE_REPORT = 'APPROVE_REPORT';
 
+export const RESET_APPROVAL_DETAIL_REPORT = 'RESET_APPROVAL_DETAIL_REPORT'
+
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
 export const AVAILABLE = 'AVAILABLE';
@@ -108,7 +110,7 @@ export const columnFieldDef = [
     headerName: 'ID',
     sortable: true,
     filter: true,
-    width: 70,
+    width: "100px",
   },
   {
     field: 'intent',

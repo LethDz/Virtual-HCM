@@ -19,6 +19,7 @@ import {
   APPROVE_REPORT,
   GET_ALL_ACCEPTED_REPORT,
   GET_ALL_REJECTED_REPORT,
+  RESET_APPROVAL_DETAIL_REPORT
 } from 'src/modules/contributor/index';
 
 export const fetchKnowledgeDataSetting = (knowledgeDataSettings) => ({
@@ -161,3 +162,9 @@ export const approveReport = (approvalReportDetail) => ({
     approvalReportDetail,
   },
 });
+
+export const resetApprovalReportDetail = () => ({
+  type: RESET_APPROVAL_DETAIL_REPORT,
+  payload: {},
+});
+
