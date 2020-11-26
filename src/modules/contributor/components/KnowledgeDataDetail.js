@@ -380,6 +380,9 @@ class KnowledgeDataDetail extends Component {
       case DONE:
         this._isMounted && this.setState({ formStatus: DONE, disable: true });
         this.state.reportDetail && this.setState({ disable: false });
+        if (this.props.dataApprovalDetail.edit_user_id === user.user_id) {
+          this._isMounted && this.setState({ owner: true, disable: false });
+        }
         break;
       case DISABLE:
         this._isMounted &&

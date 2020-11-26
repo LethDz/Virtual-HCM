@@ -394,7 +394,6 @@ export default class Question extends Component {
           <div className="d-flex justify-content-end mt-2">
             <Button
               block
-              disabled={this.props.disable}
               onClick={this.viewGeneratedSentences}
             >
               <FontAwesomeIcon icon={faEye} /> View
@@ -665,7 +664,7 @@ export default class Question extends Component {
               })}
             </ListGroup>
           </div>
-          {!this.props.disable && this.renderGenerateButton()}
+          {this.renderGenerateButton()}
         </LoadingSpinner>
       </Fragment>
     );
