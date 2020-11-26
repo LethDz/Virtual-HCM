@@ -36,6 +36,7 @@ export const GENERATE_SIMILARIES = '/generate-similaries';
 export const ALL = '/all';
 export const EDIT = '/edit';
 export const REVIEW = '/review';
+export const ALL_REVIEW = (id) => `/all-reviews?knowledge_data=${id}`;
 
 export const EDIT_COMMENT = `/edit-comment`;
 export const POST_COMMENT = '/post-comment';

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, Input, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { KNOWLEDGE_DATA, REVIEW } from 'src/constants';
@@ -78,7 +78,7 @@ class ReviewModal extends Component {
       case 3:
         return <Alert color="warning">{message('to re-review or finish')}</Alert>
       default:
-        return null
+        return <Fragment></Fragment>
     }
   }
 

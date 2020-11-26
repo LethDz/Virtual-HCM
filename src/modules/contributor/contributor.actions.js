@@ -12,13 +12,23 @@ import {
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
+  GET_KNOWLEDGE_DATA_SETTINGS,
   GET_ALL_PENDING_REPORT,
   REJECT_REPORT,
   APPROVE_REPORT,
   GET_ALL_ACCEPTED_REPORT,
   GET_ALL_REJECTED_REPORT,
+  RESET_APPROVAL_DETAIL_REPORT
 } from 'src/modules/contributor/index';
 
+export const fetchKnowledgeDataSetting = (knowledgeDataSettings) => ({
+  type: GET_KNOWLEDGE_DATA_SETTINGS,
+  payload: {
+    knowledgeDataSettings
+  }
+})
+
+//Synonym
 export const fetchAllDataApproval = (dataApprovalList) => ({
   type: GET_ALL_DATA_APPROVAL,
   payload: {
@@ -145,3 +155,9 @@ export const approveReport = (approvalReportDetail) => ({
     approvalReportDetail,
   },
 });
+
+export const resetApprovalReportDetail = () => ({
+  type: RESET_APPROVAL_DETAIL_REPORT,
+  payload: {},
+});
+

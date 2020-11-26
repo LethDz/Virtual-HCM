@@ -170,80 +170,80 @@ class CreateReferenceModal extends Component {
         <Form onSubmit={this.addReference} className="m-0">
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'}>
-                {this.state.successAlert && (
-                  <SuccessAlert
-                    successAlert={this.state.successAlert}
-                    text="Adding reference is successfully"
-                    onDismiss={() => this.onDismiss('successAlert')}
-                  />
-                )}
-                {this.state.errorAlert && (
-                  <ErrorAlert
-                    errorAlert={this.state.errorAlert}
-                    errorList={this.state.errorList}
-                    onDismiss={() => this.onDismiss('errorAlert')}
-                  />
-                )}
-                <Row>
-                  <Col className="col-3">
-                    <Row className="justify-content-center mb-3">
-                      <img
-                        type="image"
-                        name="coverImage"
-                        alt="book cover"
-                        className="cover-image"
-                        src={this.state.imageSrc ? this.state.imageSrc : cover}
-                      ></img>
-                    </Row>
-                    <Row className="justify-content-center upload-btn-wrapper-reference-modal">
-                      <Button color="warning">
-                        <FontAwesomeIcon icon={faFolderOpen} color="white" />
-                      </Button>
-                      <Input
-                        className="upload-hidden"
-                        type="file"
-                        name="coverFile"
-                        id="coverFile"
-                        accept="image/*"
-                        onChange={this.onUploadImage}
-                      />
-                    </Row>
-                  </Col>
-                  <Col className="col-9">
-                    <FormGroup>
-                      <Label>Reference name</Label>
-                      <Input
-                        required
-                        type="text"
-                        name="reference_name"
-                        placeholder="Reference name"
-                        value={this.state.reference_name}
-                        onChange={this.handleInput}
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Author</Label>
-                      <Input
-                        required
-                        type="text"
-                        name="author"
-                        placeholder="Author"
-                        value={this.state.author}
-                        onChange={this.handleInput}
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Link</Label>
-                      <Input
-                        type="url"
-                        name="link"
-                        placeholder="Link"
-                        value={this.state.link}
-                        onChange={this.handleInput}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
+              {this.state.successAlert && (
+                <SuccessAlert
+                  successAlert={this.state.successAlert}
+                  text="Adding reference is successfully"
+                  onDismiss={() => this.onDismiss('successAlert')}
+                />
+              )}
+              {this.state.errorAlert && (
+                <ErrorAlert
+                  errorAlert={this.state.errorAlert}
+                  errorList={this.state.errorList}
+                  onDismiss={() => this.onDismiss('errorAlert')}
+                />
+              )}
+              <Row>
+                <Col className="col-3">
+                  <Row className="justify-content-center mb-3">
+                    <img
+                      type="image"
+                      name="coverImage"
+                      alt="book cover"
+                      className="cover-image"
+                      src={this.state.imageSrc ? this.state.imageSrc : cover}
+                    ></img>
+                  </Row>
+                  <Row className="justify-content-center upload-btn-wrapper-reference-modal">
+                    <Button color="warning">
+                      <FontAwesomeIcon icon={faFolderOpen} color="white" />
+                    </Button>
+                    <Input
+                      className="upload-hidden"
+                      type="file"
+                      name="coverFile"
+                      id="coverFile"
+                      accept="image/*"
+                      onChange={this.onUploadImage}
+                    />
+                  </Row>
+                </Col>
+                <Col className="col-9">
+                  <FormGroup>
+                    <Label>Reference name</Label>
+                    <Input
+                      required
+                      type="text"
+                      name="reference_name"
+                      placeholder="Reference name"
+                      value={this.state.reference_name}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Author</Label>
+                    <Input
+                      required
+                      type="text"
+                      name="author"
+                      placeholder="Author"
+                      value={this.state.author}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Link</Label>
+                    <Input
+                      type="url"
+                      name="link"
+                      placeholder="Link"
+                      value={this.state.link}
+                      onChange={this.handleInput}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
             </LoadingSpinner>
           </ModalBody>
           <ModalFooter>

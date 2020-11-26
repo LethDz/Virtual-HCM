@@ -13,9 +13,11 @@ import {
   GET_ALL_DATA_APPROVAL,
   GET_DATA_APPROVAL,
   RESET_DATA_APPROVAL_DETAIL,
+  GET_KNOWLEDGE_DATA_SETTINGS,
   GET_ALL_PENDING_REPORT,
   REJECT_REPORT,
-  APPROVE_REPORT 
+  APPROVE_REPORT,
+  RESET_APPROVAL_DETAIL_REPORT,
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -25,12 +27,18 @@ const initialState = {
   referenceDetail: null,
   synonymDetail: null,
   dataApprovalDetail: null,
+  knowledgeDataSettings: null,
   reportList: [],
   approvalReportDetail: null,
 };
 
 export const contributorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_KNOWLEDGE_DATA_SETTINGS:
+      return {
+        ...state,
+        knowledgeDataSettings: action.payload.knowledgeDataSettings,
+      };
     case RESET_DATA_APPROVAL_DETAIL:
       return {
         ...state,
@@ -178,28 +186,31 @@ export const contributorReducer = (state = initialState, action) => {
     case REJECT_REPORT:
       const report_id = action.payload.report_id;
       let position = -1;
-      let reportsAfterRejecting = state.reportList.map(
-        (report, index) => {
-          if (report.report_id === report_id) {
-            position = index;
-          }
-
-          return report;
+      let reportsAfterRejecting = state.reportList.map((report, index) => {
+        if (report.report_id === report_id) {
+          position = index;
         }
-      );
+
+        return report;
+      });
       reportsAfterRejecting.splice(position, 1);
       return {
         ...state,
         reportList: reportsAfterRejecting,
       };
 
-      case APPROVE_REPORT:
-        const approvalDetail = action.payload.approvalReportDetail;
-        return {
-          ...state,
-          approvalReportDetail: approvalDetail,
-        };
+    case APPROVE_REPORT:
+      const approvalDetail = action.payload.approvalReportDetail;
+      return {
+        ...state,
+        approvalReportDetail: approvalDetail,
+      };
 
+    case RESET_APPROVAL_DETAIL_REPORT:
+      return {
+        ...state,
+        approvalReportDetail: null,
+      };
     case LOGOUT: {
       return initialState;
     }

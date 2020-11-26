@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, Container, Row, Col, Form } from 'reactstrap';
 import {
   Question,
@@ -9,6 +10,10 @@ import {
   BaseResponse,
   Coresponse,
   CriticalData,
+  ReportModal,
+  getDataApprovalDetail,
+  getNewApprovalReport,
+  resetApprovalReportDetail,
 } from 'src/modules/contributor/index';
 import 'src/static/stylesheets/contributor.css';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
@@ -25,7 +30,7 @@ import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, ADD } from 'src/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faBug } from '@fortawesome/free-solid-svg-icons';
 
 class CreateKnowledgeDataForm extends Component {
   _isMounted = false;
@@ -42,6 +47,7 @@ class CreateKnowledgeDataForm extends Component {
         synonyms: [],
         baseResponse: '',
         documentReference: [],
+        report_processing: null,
       },
       tokenizedWord: [],
       ner: [],
@@ -51,6 +57,9 @@ class CreateKnowledgeDataForm extends Component {
       errorAlert: false,
       errorList: [],
       hoverWord: '',
+      isOpenReport: false,
+      reportDetail: null,
+      feedBackCheck: false,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -59,6 +68,23 @@ class CreateKnowledgeDataForm extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
+    this.setReport();
+  };
+
+  setReport = () => {
+    let form = this.state.form;
+    let reportDetail = null;
+    if (this.props.approvalReportDetail) {
+      reportDetail = this.props.approvalReportDetail.report;
+      form.report_processing = {
+        id: reportDetail.id,
+      };
+      this._isMounted && this.setState({ reportDetail: reportDetail });
+    } else {
+      form.report_processing = null;
+    }
+    this.props.resetApprovalReportDetail();
+    this.setState({ form: form });
   };
 
   componentWillUnmount = () => {
@@ -142,22 +168,31 @@ class CreateKnowledgeDataForm extends Component {
         errorList.push(`Subject ${index} need at least 1 component`);
       }
     });
+
+    if (this.state.form.report_processing) {
+      if (!this.state.form.report_processing.processor_note) {
+        errorFlag = true;
+        this._isMounted &&
+          this.setState({ isOpenReport: true, feedBackCheck: true });
+      }
+    }
+
     this._isMounted && this.setState({ errorList: errorList });
     return errorFlag;
   };
 
   reformatForm = () => {
-    let form = this.state.form
-    let references = []
-    form.documentReference.forEach(reference => {
+    let form = this.state.form;
+    let references = [];
+    form.documentReference.forEach((reference) => {
       references.push({
         ...reference,
-        page: parseInt(reference.page)
-      })
-    })
-    form.documentReference = references
-    return form
-  }
+        page: parseInt(reference.page),
+      });
+    });
+    form.documentReference = references;
+    return form;
+  };
 
   submitForm = (event) => {
     this._isMounted &&
@@ -319,6 +354,17 @@ class CreateKnowledgeDataForm extends Component {
     this.questionRef.current.resetGeneratedQuestion();
   };
 
+  toggleReport = () => {
+    this._isMounted &&
+      this.setState({ isOpenReport: !this.state.isOpenReport });
+  };
+
+  saveNote = (note) => {
+    let form = this.state.form;
+    form.report_processing['processor_note'] = note;
+    this._isMounted && this.setState({ form: form });
+  };
+
   render() {
     const wordArray = this.getWordArray();
     return (
@@ -349,6 +395,32 @@ class CreateKnowledgeDataForm extends Component {
                 </h4>
               </Col>
             </Row>
+
+            {this.state.form.report_processing && (
+              <div className="d-flex justify-content-end">
+                <ReportModal
+                  buttonId="report-button"
+                  isOpen={this.state.isOpenReport}
+                  toggle={this.toggleReport}
+                  reportDetail={this.state.reportDetail}
+                  saveNote={this.saveNote}
+                  noteValue={
+                    this.state.form.report_processing.processor_note
+                      ? this.state.form.report_processing.processor_note
+                      : ''
+                  }
+                  feedBackCheck={this.state.feedBackCheck}
+                />
+                <Button
+                  id="report-button"
+                  color="info"
+                  onClick={this.toggleReport}
+                >
+                  <FontAwesomeIcon icon={faBug} /> Report
+                </Button>
+              </div>
+            )}
+
             <FormSectionTitle title="Meta data" />
             <MetaData
               onChange={this.handleInputForm}
@@ -419,4 +491,16 @@ class CreateKnowledgeDataForm extends Component {
   }
 }
 
-export default CreateKnowledgeDataForm;
+const mapStateToProps = (state) => ({
+  dataApprovalDetail: getDataApprovalDetail(state),
+  approvalReportDetail: getNewApprovalReport(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  resetApprovalReportDetail: () => dispatch(resetApprovalReportDetail()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateKnowledgeDataForm);
