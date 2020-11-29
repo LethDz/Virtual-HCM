@@ -84,11 +84,11 @@ export default class ViewDetailReviewModal extends Component {
         const className = ""
         switch (this.state.data.status) {
             case ACCEPT:
-                return <h3><Badge className={className} color="success" pill>Accept</Badge></h3>
+                return <h5><Badge className={className} color="success" pill>Accept</Badge></h5>
             case DECLINE:
-                return <h3><Badge className={className} color="danger" pill>Decline</Badge></h3>
+                return <h5><Badge className={className} color="danger" pill>Decline</Badge></h5>
             case DRAFT:
-                return <h3><Badge className={className} color="warning" pill>Draft</Badge></h3>
+                return <h5><Badge className={className} color="warning" pill>Draft</Badge></h5>
             default:
                 return <Fragment></Fragment>
         }
@@ -102,7 +102,7 @@ export default class ViewDetailReviewModal extends Component {
                     <ModalHeader toggle={this.toggleThisModal}>
                         Review detail
                     </ModalHeader>
-                    <ModalBody className="min-height-400">
+                    <ModalBody className="min-height-400 report-container">
                         {this.state.successAlert && (
                             <SuccessAlert
                                 successAlert={this.state.successAlert}
@@ -117,15 +117,22 @@ export default class ViewDetailReviewModal extends Component {
                                 onDismiss={() => this.onDismiss('errorAlert')}
                             />
                         )}
-                        <Row>
-                            <Col>
-                                <h3>{this.state.data.username}</h3>
-                            </Col>
-                            <Col xs="auto">
+                        <Row className="custom-border">
+                            <Col className="col-3 font-weight-bold">Review type:</Col>
+                            <Col className="col-9 text-break">
                                 {this.returnStatusBadge()}
                             </Col>
                         </Row>
-                        <div className="mt-2">{this.state.data.review}</div>
+                        <Row className="custom-border">
+                            <Col className="col-3 font-weight-bold">Reporter user:</Col>
+                            <Col className="col-9 text-break">
+                                {this.state.data.username}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="col-3 font-weight-bold">Review:</Col>
+                            <Col className="col-9">{this.state.data.review}</Col>
+                        </Row>
                     </ModalBody>
                 </Modal>
             );

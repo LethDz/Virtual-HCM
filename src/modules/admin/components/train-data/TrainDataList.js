@@ -2,6 +2,7 @@ import {
   faEdit,
   faPlus,
   faTrash,
+  faSync
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
@@ -46,11 +47,8 @@ class TrainDataList extends Component {
     this._isMounted = false;
   }
 
-  onGridReady = (params) => {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-    this._isMounted && this.props.setErrorAlert(false);
-    this._isMounted && this.props.setSuccessAlert(false);
+  refreshTable = () => {
+    this.setLoading(true);
     axiosClient
       .get(ADMIN_GET_ALL_TRAIN_DATA)
       .then((response) => {
@@ -58,7 +56,6 @@ class TrainDataList extends Component {
           const data = response.data.result_data;
           this._isMounted && this.props.pullTrainDataList(data);
           this._isMounted && this.props.setErrorAlert(false);
-          this._isMounted && this.props.setSuccessAlert(true);
         } else {
           this._isMounted && this.props.setErrorAlert(true);
           this._isMounted && this.props.setSuccessAlert(false);
@@ -70,6 +67,14 @@ class TrainDataList extends Component {
         this.setLoading(false);
         this._isMounted && this.props.setErrorAlert(true);
       });
+  }
+
+  onGridReady = async (params) => {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    this._isMounted && this.props.setErrorAlert(false);
+    this._isMounted && this.props.setSuccessAlert(false);
+    await this.refreshTable()
   };
 
   setStyleForGrid = () => {
@@ -133,12 +138,20 @@ class TrainDataList extends Component {
       });
   };
 
+  onRowDoubleClicked = () => {
+    this.setOpenEditModal(true);
+  }
+
   setOpenDeleteModal = (status) => {
     this._isMounted &&
       this.setState({
         openDeleteModal: status,
       });
   };
+
+  resetSelection = () => {
+    this._isMounted && this.setState({ id: '' })
+  }
 
   render() {
     return (
@@ -154,6 +167,7 @@ class TrainDataList extends Component {
           <TrainDataEdit
             openEditModal={this.state.openEditModal}
             setOpenEditModal={this.setOpenEditModal}
+            resetSelection={this.resetSelection}
           />
         )}
         {this.state.openDeleteModal && (
@@ -163,14 +177,18 @@ class TrainDataList extends Component {
             setOpenDeleteModal={this.setOpenDeleteModal}
           />
         )}
-        <Row className="d-flex flex-row-reverse">
+        <Row>
+          <Col>
+            <Button type="button" color="success" onClick={this.refreshTable}><FontAwesomeIcon icon={faSync} color="white" /></Button>
+          </Col>
           <Col xs="auto">
             <Button
-              color="primary"
-              onClick={() => this.setOpenCreateModal(true)}
+              color="danger"
+              onClick={() => this.setOpenDeleteModal(true)}
+              disabled={this.state.id === ''}
             >
-              <FontAwesomeIcon icon={faPlus} color="white" />
-              &nbsp; Create
+              <FontAwesomeIcon icon={faTrash} />
+              &nbsp; Delete
             </Button>
           </Col>
           <Col xs="auto">
@@ -185,12 +203,11 @@ class TrainDataList extends Component {
           </Col>
           <Col xs="auto">
             <Button
-              color="danger"
-              onClick={() => this.setOpenDeleteModal(true)}
-              disabled={this.state.id === ''}
+              color="primary"
+              onClick={() => this.setOpenCreateModal(true)}
             >
-              <FontAwesomeIcon icon={faTrash} />
-              &nbsp; Delete
+              <FontAwesomeIcon icon={faPlus} color="white" />
+              &nbsp; Create
             </Button>
           </Col>
         </Row>
@@ -208,6 +225,7 @@ class TrainDataList extends Component {
             animateRows={true}
             onGridReady={this.onGridReady}
             onSelectionChanged={this.onRowSelected.bind(this)}
+            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={trainDataCol}
             context={context(this)}
             frameworkComponents={frameworkComponentsData}

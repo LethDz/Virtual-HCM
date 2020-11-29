@@ -15,7 +15,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEdit,
+  faSave,
   faTrash,
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
@@ -88,7 +88,7 @@ class DocumentReferenceModal extends Component {
     if (
       this.props.referenceDetail &&
       this.props.referenceDetail.reference_document_id ===
-        parseInt(this.props.id)
+      parseInt(this.props.id)
     ) {
       this.setState({
         ...this.props.referenceDetail,
@@ -181,6 +181,8 @@ class DocumentReferenceModal extends Component {
           });
           this.props.updateReferenceList([]);
           this.setSuccessAlert(true);
+          this.props.resetSelection();
+          this.props.toggle();
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -324,8 +326,8 @@ class DocumentReferenceModal extends Component {
                 type="submit"
                 disabled={this.state.loading}
               >
-                <FontAwesomeIcon icon={faEdit} color="white" />
-                &nbsp;Edit
+                <FontAwesomeIcon icon={faSave} color="white" />
+                &nbsp;Save
               </Button>
               <Button
                 color="danger"

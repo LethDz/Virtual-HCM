@@ -21,7 +21,6 @@ import {
   DISABLE,
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 
 import axiosClient from 'src/common/axiosClient';
@@ -70,15 +69,8 @@ class KnowledgeDataList extends Component {
       this.setState({
         errorList: list,
       });
-  };
-
-  setSuccessAlert = (status) => {
-    this._isMounted &&
-      this.setState({
-        successAlert: status,
-      });
-  };
-
+  };  
+  
   setAlertMessage = (message) => {
     this._isMounted &&
       this.setState({
@@ -108,17 +100,14 @@ class KnowledgeDataList extends Component {
             response.data.result_data.review_settings
           );
           this.setAlertMessage('Load successful');
-          this.setSuccessAlert(true);
         } else {
           this.setErrorList(response.data.messages);
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
           this.scrollToTop();
         }
       })
       .catch((error) => {
         this.setErrorAlert(true);
-        this.setSuccessAlert(false);
         this._isMounted && this.setState({ loading: false });
       });
   };
@@ -185,13 +174,6 @@ class KnowledgeDataList extends Component {
             <h5 className="mt-2 mb-2">Knowledge data</h5>
           </Col>
         </Row>
-        {this.state.successAlert && (
-          <SuccessAlert
-            successAlert={this.state.successAlert}
-            text={this.state.alertMessage}
-            onDismiss={() => this.onDismiss('successAlert')}
-          />
-        )}
         {this.state.errorAlert && (
           <ErrorAlert
             errorAlert={this.state.errorAlert}

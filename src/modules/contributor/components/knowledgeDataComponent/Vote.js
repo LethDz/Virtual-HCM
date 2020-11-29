@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Button, Row, Col, Badge, ButtonGroup } from 'reactstrap';
 import {
   ReviewModal,
@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 
 class Vote extends Component {
   _isMounted = false;
@@ -92,31 +92,26 @@ class Vote extends Component {
                   View all review <FontAwesomeIcon icon={faAngleDown} />
                 </Button>
               ) : (
-                <Fragment>
-                  <Col xs="auto">
+                  <ButtonGroup>
                     {this.props.formStatus === PROCESSING ? (
                       <Button
                         color="success"
                         id="button-review"
                         onClick={this.toggleReviewModal}
                       >
-                        Review <FontAwesomeIcon icon={faAngleDown} />
+                         <FontAwesomeIcon icon={faAngleDown} /> Review
                       </Button>
                     ) : (
-                      <Button hidden id="button-review"></Button>
-                    )}
-                  </Col>
-                  <Col xs="auto">
+                        <Button hidden id="button-review"></Button>
+                      )}
                     <Button
-                      className="ml-2"
-                      color="success"
+                      color="info"
                       onClick={this.toggleViewReviewModal}
                     >
-                      View all reviews <FontAwesomeIcon icon={faAngleDown} />
+                      <FontAwesomeIcon icon={faClipboardList} /> View all reviews
                     </Button>
-                  </Col>
-                </Fragment>
-              )}
+                  </ButtonGroup>
+                )}
             </Row>
           </Col>
         </Row>

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Input, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
+import { Button, Input, Popover, PopoverHeader, PopoverBody, Alert, ButtonGroup } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { KNOWLEDGE_DATA, REVIEW } from 'src/constants';
 import { ACCEPT, DECLINE, DRAFT, getDataApprovalDetail } from 'src/modules/contributor/index';
@@ -9,6 +9,9 @@ import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { history } from 'src/common/history';
 import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faTimesCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 class ReviewModal extends Component {
   _isMounted = false;
@@ -113,32 +116,33 @@ class ReviewModal extends Component {
               name="comment"
             />
             <div className="d-flex justify-content-end mt-2">
-              <Button
-                size="sm"
-                className="mr-3"
-                color="warning"
-                onClick={() => {
-                  this.sendReview(DRAFT)
-                }}
-              >
-                Draft
+              <ButtonGroup>
+                <Button size="sm" color="success" onClick={() => {
+                  this.sendReview(ACCEPT)
+                }}>
+                  <FontAwesomeIcon icon={faCheckCircle} /> Approve
               </Button>
-              <Button
-                size="sm"
-                className="mr-3"
-                color="danger"
-                onClick={() => {
-                  this.sendReview(DECLINE)
-                }}
-              >
-                Decline
+                <Button
+                  size="sm"
+                  color="danger"
+                  onClick={() => {
+                    this.sendReview(DECLINE)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTimesCircle} /> Decline
               </Button>
-              <Button size="sm" color="success" onClick={() => {
-                this.sendReview(ACCEPT)
-              }}>
-                Approve
+                <Button
+                  size="sm"
+                  color="warning"
+                  onClick={() => {
+                    this.sendReview(DRAFT)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faEdit} /> Draft
               </Button>
+              </ButtonGroup>
             </div>
+
           </div>
         </PopoverBody>
       </Popover>

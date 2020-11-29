@@ -37,6 +37,7 @@ import {
 import BackButton from 'src/common/BackButton';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import { history } from 'src/common/history';
 
 class ContributorEdit extends Component {
   _isMounted = false;
@@ -174,13 +175,12 @@ class ContributorEdit extends Component {
             date_of_birth: isoFormatDate(user.date_of_birth),
             email: user.email ? user.email : '',
           });
-          this.setSuccessAlert(true);
+          history.push(ADMIN_CONTRIBUTOR_LIST_PAGE)
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
+          this.setLoading(false);
         }
-        this.setLoading(false);
-        this.scrollToRef();
       })
       .catch(() => {
         this.setLoading(false);

@@ -67,6 +67,8 @@ const TrainDataEdit = (props) => {
           };
           mounted.current && props.editTrainDataDescription(data);
           mounted.current && setSuccessAlert(true);
+          props.resetSelection()
+          toggle()
         } else {
           mounted.current && setErrorAlert(true);
           mounted.current && setErrorList(response.data.messages);
@@ -110,7 +112,7 @@ const TrainDataEdit = (props) => {
 
   return (
     <Modal isOpen={props.openEditModal} toggle={toggle} unmountOnClose={true}>
-      <ModalHeader toggle={toggle}>Train Data Detail</ModalHeader>
+      <ModalHeader toggle={toggle}>Training Data Detail</ModalHeader>
       <LoadingSpinner loading={loading} text="Loading" type="MODAL">
         <Form onSubmit={onEdit}>
           <ModalBody>
@@ -124,7 +126,7 @@ const TrainDataEdit = (props) => {
             {successAlert && (
               <SuccessAlert
                 successAlert={successAlert}
-                text="Edit train data successfully."
+                text="Edit training data successfully."
                 onDismiss={() => setSuccessAlert(false)}
               />
             )}

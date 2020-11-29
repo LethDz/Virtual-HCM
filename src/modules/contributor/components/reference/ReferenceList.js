@@ -183,6 +183,10 @@ class ReferenceList extends Component {
     this.sizeToFit();
   };
 
+  resetSelection = () => {
+    this._isMounted && this.setState({ selectedId: '' })
+  }
+
   render() {
     return (
       <div
@@ -234,6 +238,7 @@ class ReferenceList extends Component {
             </Button>
             {this.state.modalReferenceDetail && (
               <DocumentReferenceModal
+                resetSelection={this.resetSelection}
                 isOpen={this.state.modalReferenceDetail}
                 id={this.state.selectedId}
                 toggle={this.toggleReferenceDetail}
