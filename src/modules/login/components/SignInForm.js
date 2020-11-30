@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
-import { Form, Input, Button, FormGroup, FormFeedback } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import {
+  Form,
+  Input,
+  Button,
+  FormGroup,
+  FormFeedback,
+  Label,
+} from 'reactstrap';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
 import { ADMIN_PAGE, CONTRIBUTOR_PAGE, LOGIN } from 'src/constants';
 import { showLoginError } from 'src/modules/login';
-import lockIcon from 'src/static/icons/lockIcon';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 
 class SignInForm extends Component {
@@ -82,43 +88,60 @@ class SignInForm extends Component {
 
   render() {
     return (
-      <div className="login-form-background">
-        <LoadingSpinner loading={this.state.loading} text="Signing In">
-          <Form className="login-form-m align-center" onSubmit={this.login}>
-            <h5 className="login-form-title">Hồ Chí Minh Virtual Chatbot</h5>
-            <div className="icon-lock align-center">{lockIcon}</div>
-            <FormGroup className="w-100">
-              <Input
-                type="text"
-                name="username"
-                id="username"
-                placeholder="Username"
-                value={this.state.username}
-                onChange={this.handleInput}
-                required
-                invalid={this.state.usernameInvalid}
-              />
-              <FormFeedback>Invalid Username</FormFeedback>
-            </FormGroup>
-            <FormGroup className="w-100">
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                value={this.state.password}
-                onChange={this.handleInput}
-                required
-                invalid={this.state.passwordInvalid}
-              />
-              <FormFeedback>Invalid Password</FormFeedback>
-            </FormGroup>
-            <Button color="primary" block>
-              Sign in
-            </Button>
-          </Form>
-        </LoadingSpinner>
-      </div>
+      <Fragment>
+        <div className="icon-bot"></div>
+        <h1 className="login-form-title">
+          Sign in to Hồ Chí Minh Virtual Chatbot
+        </h1>
+        <div>
+          <LoadingSpinner loading={this.state.loading} text="Signing In">
+            <Form className="login-form-m align-center" onSubmit={this.login}>
+              <FormGroup>
+                <Label for="password" className="form-login-title">
+                  Username
+                </Label>
+                <Input
+                  className="input-width"
+                  type="text"
+                  name="username"
+                  id="username"
+                  value={this.state.username}
+                  onChange={this.handleInput}
+                  required
+                  invalid={this.state.usernameInvalid}
+                  size="sm"
+                  block
+                />
+                <FormFeedback>Invalid Username</FormFeedback>
+              </FormGroup>
+              <FormGroup>
+                <Label for="password" className="form-login-title">
+                  Password
+                </Label>
+                <Input
+                  className="input-width"
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={this.state.password}
+                  onChange={this.handleInput}
+                  required
+                  invalid={this.state.passwordInvalid}
+                  size="sm"
+                  block
+                />
+                <FormFeedback>Invalid Password</FormFeedback>
+              </FormGroup>
+              <Button color="success" block size="sm">
+                Sign in
+              </Button>
+            </Form>
+            <div className="login-callout mt-3">
+              New to Hồ Chí Minh Virtual chatbot? Contact our <a href="#admin">admin</a>.
+            </div>
+          </LoadingSpinner>
+        </div>
+      </Fragment>
     );
   }
 }

@@ -310,7 +310,7 @@ class ReportDetailModal extends Component {
               <FormGroup>
                 <Label className="font-weight-bold">Reporter note: </Label>
                 <Input
-                  name="reporter_note"
+                  name="processor_note"
                   type="textarea"
                   value={this.state.processor_note}
                   onChange={this.handleInput}
@@ -341,7 +341,10 @@ class ReportDetailModal extends Component {
             </Link>
             <Button
               color="danger"
-              disabled={this.state.loading}
+              disabled={
+                this.state.loading ||
+                (this.state.reject && this.state.processor_note.trim() === '')
+              }
               onClick={this.rejectReport}
             >
               <FontAwesomeIcon icon={faBan} color="white" />
