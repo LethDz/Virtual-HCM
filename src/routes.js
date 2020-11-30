@@ -17,6 +17,7 @@ import {
   KnowledgeDataDetailPage,
   ReportPage,
   TrainDataPage,
+  UserDetailPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -35,6 +36,7 @@ import {
   GET_KNOWLEDGE_DATA_BY_INTENT,
   REPORT_LIST_PAGE,
   ADMIN_TRAIN_DATA_PAGE,
+  USER_DETAIL_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -115,6 +117,11 @@ const Routes = () => (
         exact
         path={REPORT_LIST_PAGE}
         component={ReportPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={USER_DETAIL_PAGE()}
+        component={UserDetailPage}
       />
     </Switch>
   </Fragment>
