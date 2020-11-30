@@ -9,6 +9,16 @@ import SynonymDetailModal from 'src/modules/contributor/components/synonym/Synon
 import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
 import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/GenSynonymSentenceModal';
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
+import ReportDetailModal from 'src/modules/contributor/components/report/ReportDetailModal';
+import ReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReviewModal';
+import ViewAllReviewsModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ViewAllReviewsModal';
+import ViewDetailReviewModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ViewDetailReviewModal';
+import ReportModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReportModal';
+import ReportType from 'src/modules/contributor/components/report/ReportType';
+import ReportDetailModalAccepted from 'src/modules/contributor/components/report/ReportDetailModalAccepted';
+import ReportDetailModalRejected from 'src/modules/contributor/components/report/ReportDetailModalRejected';
+import DetailModalViewOnly from 'src/modules/contributor/components/report/DetailModalViewOnly';
+import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -21,11 +31,17 @@ import RawData from 'src/modules/contributor/components/knowledgeDataComponent/R
 import BaseResponse from 'src/modules/contributor/components/knowledgeDataComponent/BaseResponse';
 import Coresponse from 'src/modules/contributor/components/knowledgeDataComponent/Coresponse';
 import CriticalData from 'src/modules/contributor/components/knowledgeDataComponent/CriticalData';
+import Vote from 'src/modules/contributor/components/knowledgeDataComponent/Vote';
+import Comment from 'src/modules/contributor/components/knowledgeDataComponent/Comment';
 
 // List component
 import ReferenceList from 'src/modules/contributor/components/reference/ReferenceList';
 import KnowledgeDataList from 'src/modules/contributor/components/KnowledgeDataList';
 import SynonymList from 'src/modules/contributor/components/synonym/SynonymList';
+import ReportList from 'src/modules/contributor/components/report/ReportList';
+import ReportAcceptedList from 'src/modules/contributor/components/report/ReportAcceptedList';
+import ReportRejectedList from 'src/modules/contributor/components/report/ReportRejectedList';
+import Report from 'src/modules/contributor/components/report/Report';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -34,7 +50,6 @@ export * from 'src/modules/contributor/contributor.selectors.js';
 
 export {
   FormSectionTitle,
-  GenSynonymSentenceModal,
   CreateKnowledgeDataForm,
   Synonyms,
   Question,
@@ -43,16 +58,33 @@ export {
   BaseResponse,
   Coresponse,
   CriticalData,
+  Comment,
+  Vote,
+  MetaData,
   Contributor,
+  KnowledgeDataList,
+  SynonymList,
   ReferenceList,
   KnowledgeDataDetail,
   CreateReferenceModal,
   DocumentReferenceModal,
-  KnowledgeDataList,
   SynonymsModal,
   ReferenceModal,
-  MetaData,
-  SynonymList,
   SynonymDetailModal,
   CreateSynonymModal,
+  ReportList,
+  ReportDetailModal,
+  ReportAcceptedList,
+  ReportRejectedList,
+  Report,
+  ReviewModal,
+  ReportModal,
+  ViewAllReviewsModal,
+  ViewDetailReviewModal,
+  GenSynonymSentenceModal,
+  ReportType,
+  ReportDetailModalAccepted,
+  ReportDetailModalRejected,
+  DetailModalViewOnly,
+  StatusBar,
 };

@@ -37,6 +37,7 @@ import { connect } from 'react-redux';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import DeleteConfirmationModal from 'src/common/DeleteConfirmationModal';
 import {
   getAllSynonyms,
   pullSynonymDetail,
@@ -62,6 +63,7 @@ class SynonymDetailModal extends Component {
       errorList: [],
       paragraph: '',
       tokenizedWords: [],
+      isOpenDeleteConfirmation: false,
     };
     this.conRef = React.createRef();
   }
@@ -112,6 +114,7 @@ class SynonymDetailModal extends Component {
   };
 
   handleInput = (event) => handleInputChange(event, this);
+
   handleItemChange = (event) => handleItemInWordsChange(event, this);
 
   setLoading = (status) => {
@@ -190,7 +193,8 @@ class SynonymDetailModal extends Component {
             ...synonym,
           });
           this.props.updateSynonymList([]);
-          this.setSuccessAlert(true);
+          this.props.resetSelection();
+          this.props.toggle();
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -208,6 +212,10 @@ class SynonymDetailModal extends Component {
   };
 
   deleteSynonym = () => {
+    this.toggleDeleteConfirmation();
+  };
+
+  confirmDelete = () => {
     this.setLoading(true);
     axiosClient
       .get(SYNONYM + DELETE_SYNONYM(this.props.id))
@@ -314,6 +322,13 @@ class SynonymDetailModal extends Component {
     !this.state.loading && this.props.toggle();
   };
 
+  toggleDeleteConfirmation = () => {
+    this._isMounted &&
+      this.setState({
+        isOpenDeleteConfirmation: !this.state.isOpenDeleteConfirmation,
+      });
+  };
+
   render() {
     return (
       <Modal
@@ -321,7 +336,16 @@ class SynonymDetailModal extends Component {
         toggle={this.toggle}
         unmountOnClose={true}
       >
-        <ModalHeader toggle={this.toggle}>Synonym</ModalHeader>
+        {this.state.isOpenDeleteConfirmation && (
+          <DeleteConfirmationModal
+            type="DELETE"
+            isOpen={this.state.isOpenDeleteConfirmation}
+            toggle={this.toggleDeleteConfirmation}
+            value={this.state.meaning}
+            confirmDelete={this.confirmDelete}
+          />
+        )}
+        <ModalHeader toggle={this.toggle}>Synonym detail</ModalHeader>
         <Form onSubmit={this.editSynonym}>
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -413,7 +437,7 @@ class SynonymDetailModal extends Component {
                 </Col>
                 <Col className="col-2">
                   <Button
-                    color="success"
+                    color="primary"
                     onClick={this.tokenizeWord}
                     disabled={this.state.loading}
                   >

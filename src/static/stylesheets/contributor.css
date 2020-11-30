@@ -102,10 +102,55 @@
   background-color: aliceblue;
 }
 
+.list-group .comment {
+  background-color: white;
+}
+
 .list-group .synonym:hover {
   background-color: rgb(175, 233, 68) !important;
 }
 
 .hover-word {
   background-color: rgb(175, 233, 68) !important;
+}
+
+.popover-width .popover {
+  max-width: 600px;
+}
+
+.w-600px {
+  width: 550px;
+}
+
+.h-170px {
+  height: 170px !important;
+}
+
+.comment-area {
+  resize: none;
+}
+
+.check-box-tag {
+  padding-left: 0 !important
+}
+
+.check-box-tag label {
+  position: unset
+}
+
+.coresponse-tool-tip {
+  margin-right: 0 !important;
+  margin-left: 15px !important
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.min-height-400 {
+  min-height: 400px;
+}
+
+.badge-width {
+  width: 70px !important;
 }

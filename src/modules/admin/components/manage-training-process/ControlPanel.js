@@ -2,7 +2,6 @@ import {
   faFileCode,
   faPlayCircle,
   faStopCircle,
-  faSyncAlt,
   faUndoAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,8 +29,6 @@ const ControlPanel = (props) => {
   const onDefault = () => {
     props.setSettingToDefault();
   };
-
-  const onReloadModal = () => {};
 
   return (
     <Fragment>
@@ -209,12 +206,6 @@ const ControlPanel = (props) => {
             <Button size="sm" color="secondary" onClick={onDefault}>
               <FontAwesomeIcon icon={faUndoAlt} />
               &nbsp; Reset to default
-            </Button>
-          </Col>
-          <Col xs="auto">
-            <Button size="sm" color="warning" onClick={onReloadModal}>
-              <FontAwesomeIcon icon={faSyncAlt} />
-              &nbsp; Reload Model
             </Button>
           </Col>
         </FormGroup>

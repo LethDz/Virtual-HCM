@@ -5,12 +5,3 @@
   border-top: 2px solid #3c8dbc;
   max-width: 100% !important;
 }
-
-.link-no-underline {
-  color: white;
-}
-
-.link-no-underline:hover {
-  color: white;
-  text-decoration: none;
-}

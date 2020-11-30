@@ -2,7 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import 'src/static/stylesheets/contributor.list.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUserPlus,
+  faUserEdit,
+  faSync,
+} from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
 import {
   columnFieldDef,
@@ -19,8 +23,9 @@ import axiosClient from 'src/common/axiosClient';
 import { connect } from 'react-redux';
 import { getContributorsList, pullContributorsList } from 'src/modules/admin';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import { history } from 'src/common/history';
 
 class ContributorsList extends Component {
   _isMounted = false;
@@ -48,9 +53,14 @@ class ContributorsList extends Component {
     this._isMounted = false;
   }
 
-  onGridReady = (params) => {
+  onGridReady = async (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
+    await this.refreshTable();
+  };
+
+  refreshTable = () => {
+    this.setLoading(true);
     axiosClient
       .get(ADMIN_GET_USER_ALL)
       .then((response) => {
@@ -59,10 +69,8 @@ class ContributorsList extends Component {
           this.props.pullContributorsList(users);
           this.setContributorsList(users);
           this.setErrorAlert(false);
-          this.setSuccessAlert(true);
         } else {
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
         }
         this.setLoading(false);
       })
@@ -135,6 +143,10 @@ class ContributorsList extends Component {
     this.gridApi.sizeColumnsToFit();
   };
 
+  onRowDoubleClicked = () => {
+    history.push(ADMIN_CONTRIBUTOR_EDIT_PAGE(this.state.id));
+  };
+
   render() {
     return (
       <Fragment>
@@ -163,17 +175,11 @@ class ContributorsList extends Component {
               <h5 className="mt-2 mb-2">Account List</h5>
             </Col>
           </Row>
-          <Row className="d-flex flex-row-reverse">
-            <Col xs="auto">
-              <Link
-                to={ADMIN_CONTRIBUTOR_CREATE_PAGE}
-                className="link-no-underline"
-              >
-                <Button color="primary">
-                  <FontAwesomeIcon icon={faUserPlus} color="white" />
-                  &nbsp; Create
-                </Button>
-              </Link>
+          <Row>
+            <Col>
+              <Button type="button" color="success" onClick={this.refreshTable}>
+                <FontAwesomeIcon icon={faSync} color="white" />
+              </Button>
             </Col>
             <Col xs="auto">
               {this.state.id !== '' ? (
@@ -193,6 +199,17 @@ class ContributorsList extends Component {
                 </Button>
               )}
             </Col>
+            <Col xs="auto">
+              <Link
+                to={ADMIN_CONTRIBUTOR_CREATE_PAGE}
+                className="link-no-underline"
+              >
+                <Button color="primary">
+                  <FontAwesomeIcon icon={faUserPlus} color="white" />
+                  &nbsp; Create
+                </Button>
+              </Link>
+            </Col>
           </Row>
           <div
             className="ag-theme-alpine"
@@ -204,6 +221,7 @@ class ContributorsList extends Component {
             <AgGridReact
               onFirstDataRendered={this.onFirstDataRendered}
               rowData={this.state.contributorsList}
+              onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
               rowSelection="single"
               animateRows={true}
               onGridReady={this.onGridReady}

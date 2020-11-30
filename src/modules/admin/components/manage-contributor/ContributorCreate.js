@@ -53,6 +53,7 @@ class ContributorCreate extends Component {
     };
 
     this.titleRef = React.createRef();
+    this.imgRef = React.createRef();
   }
 
   onUploadImage = (event) => {
@@ -100,7 +101,7 @@ class ContributorCreate extends Component {
     userData.append('id_number', this.state.idNumber);
     userData.append('phone_number', this.state.phoneNumber);
     userData.append('email', this.state.email);
-    userData.append('avatar', this.state.imagePath);
+    this.state.imagePath && userData.append('avatar', this.state.imagePath);
     userData.append('gender', parseInt(this.state.gender));
 
     const config = {
@@ -176,6 +177,10 @@ class ContributorCreate extends Component {
   };
 
   resetFormAfterSubmit = () => {
+    this.onReset();
+  };
+
+  onReset = () => {
     this._isMounted &&
       this.setState({
         imageSrc: null,
@@ -191,6 +196,7 @@ class ContributorCreate extends Component {
         imagePath: '',
         email: '',
       });
+    this.imgRef.current.value = null;
   };
 
   render() {
@@ -430,6 +436,7 @@ class ContributorCreate extends Component {
                     </Button>
                     <Input
                       className="h-100 upload-hidden"
+                      innerRef={this.imgRef}
                       type="file"
                       name="avatar"
                       id="avatar"
@@ -443,7 +450,7 @@ class ContributorCreate extends Component {
             <Row className="mt-4">
               <Col>
                 <Row className="justify-content-end mr-1">
-                  <Button type="reset">
+                  <Button type="reset" onClick={this.onReset}>
                     <FontAwesomeIcon icon={faSync} />
                     &nbsp; Reset
                   </Button>

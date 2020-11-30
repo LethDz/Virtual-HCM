@@ -35,7 +35,7 @@ class ReferenceModal extends Component {
     super();
     this.state = {
       modal: false,
-      selectedReference: '',
+      selectedReference: null,
       gridApi: '',
       gridColumnApi: '',
       loading: false,
@@ -113,6 +113,7 @@ class ReferenceModal extends Component {
     });
     let currentState = this.state;
     currentState.selectedReference = selectedRow[0];
+    this.setErrorAlert(false);
     if (this._isMounted) this.setState(currentState);
   };
 
@@ -258,7 +259,7 @@ class ReferenceModal extends Component {
           <Button color="warning" onClick={this.toggleNewReferenceModal}>
             <FontAwesomeIcon icon={faPlus} /> New reference
           </Button>
-          <Button color="success" onClick={this.addReference}>
+          <Button color="success" onClick={this.addReference} disabled={!this.state.selectedReference}>
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </ModalFooter>

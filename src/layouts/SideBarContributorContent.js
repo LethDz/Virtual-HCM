@@ -16,6 +16,7 @@ import {
   CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
+  REPORT_LIST_PAGE,
 } from 'src/constants';
 
 const SideBarContributorContent = () => {
@@ -54,7 +55,8 @@ const SideBarContributorContent = () => {
       <SideBarItem
         name="Reports"
         icon={<FontAwesomeIcon icon={faNewspaper} />}
-        link="reports"
+        link={REPORT_LIST_PAGE}
+        active={location.includes(REPORT_LIST_PAGE)}
       />
     </ListGroup>
   );
