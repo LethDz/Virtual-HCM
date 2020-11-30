@@ -308,7 +308,7 @@ class ReportDetailModal extends Component {
             </FormGroup>
             {this.state.reject && (
               <FormGroup>
-                <Label className="font-weight-bold">Reporter note: </Label>
+                <Label className="font-weight-bold">Processor note: </Label>
                 <Input
                   name="processor_note"
                   type="textarea"
