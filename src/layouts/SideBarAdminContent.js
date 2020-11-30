@@ -43,7 +43,7 @@ const SideBarAdminContent = () => {
         active={location.includes(ADMIN_CONTRIBUTOR_LIST_PAGE)}
       />
       <SideBarItem
-        name="Train Data"
+        name="Training Data"
         icon={<FontAwesomeIcon icon={faFileCode} />}
         link={ADMIN_TRAIN_DATA_PAGE}
         active={location.includes(ADMIN_TRAIN_DATA_PAGE)}

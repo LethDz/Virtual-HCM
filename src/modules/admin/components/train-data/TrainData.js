@@ -58,7 +58,7 @@ const TrainData = () => {
       )}
       <Row>
         <Col className="justify-content-center d-flex">
-          <h5 className="mt-2 mb-2">Train Data List</h5>
+          <h5 className="mt-2 mb-2">Training Data List</h5>
         </Col>
       </Row>
       <Nav tabs>

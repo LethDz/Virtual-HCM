@@ -125,7 +125,7 @@ class RawData extends Component {
     if (this.state.mode === 'TOKENIZE') {
       return (
         <Row>
-          <Col xs="auto">
+          <Col>
             <div className="d-flex flex-wrap">
               {this.state.tokenizeData.map((data, index) => {
                 let flag = false;

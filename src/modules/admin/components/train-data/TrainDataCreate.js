@@ -57,7 +57,7 @@ const TrainDataCreate = (props) => {
           const data = response.data.result_data;
           props.addNewTrainData(data);
           mounted.current && resetForm();
-          mounted.current && setSuccessAlert(true);
+          mounted.current && toggle();
         } else {
           mounted.current && setErrorAlert(true);
           mounted.current && setErrorList(response.data.messages);
@@ -134,7 +134,7 @@ const TrainDataCreate = (props) => {
       unmountOnClose={true}
       size="lg"
     >
-      <ModalHeader toggle={toggle}>Create Train Data File</ModalHeader>
+      <ModalHeader toggle={toggle}>Create Training Data File</ModalHeader>
       <LoadingSpinner loading={loading} text="Loading" type="MODAL">
         <Form onSubmit={onCreate}>
           <ModalBody>
@@ -148,7 +148,7 @@ const TrainDataCreate = (props) => {
             {successAlert && (
               <SuccessAlert
                 successAlert={successAlert}
-                text="Add new train data successfully"
+                text="Add new training data successfully"
                 onDismiss={() => setSuccessAlert(false)}
               />
             )}

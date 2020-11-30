@@ -165,7 +165,7 @@ class UserDetail extends Component {
     userData.append('address', this.state.address);
     userData.append('phone_number', this.state.phone_number);
     userData.append('email', this.state.email);
-    userData.append('avatar', this.state.imagePath);
+    this.state.imagePath && userData.append('avatar', this.state.imagePath);
     userData.append('avatar_edit', this.state.avatar_edit);
 
     const config = {
@@ -190,7 +190,9 @@ class UserDetail extends Component {
             phone_number: user.phone_number ? user.phone_number : '',
             date_of_birth: isoFormatDate(user.date_of_birth),
             email: user.email ? user.email : '',
+            avatar_edit: 0,
           });
+          this.imgRef.current.value = null;
           this.setSuccessAlert(true);
           if (this.currentUser.user_id === user.user_id) {
             localStorage.setItem('user', JSON.stringify(user));

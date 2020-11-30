@@ -42,6 +42,7 @@ import {
 import BackButton from 'src/common/BackButton';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import { history } from 'src/common/history';
 
 class ContributorEdit extends Component {
   _isMounted = false;
@@ -161,7 +162,7 @@ class ContributorEdit extends Component {
     userData.append('id_number', this.state.id_number);
     userData.append('phone_number', this.state.phone_number);
     userData.append('email', this.state.email);
-    userData.append('avatar', this.state.imagePath);
+    this.state.imagePath && userData.append('avatar', this.state.imagePath);
     userData.append('gender', parseInt(this.state.gender));
     userData.append('avatar_edit', this.state.avatar_edit);
 
@@ -182,14 +183,15 @@ class ContributorEdit extends Component {
             phone_number: user.phone_number ? user.phone_number : '',
             date_of_birth: isoFormatDate(user.date_of_birth),
             email: user.email ? user.email : '',
+            avatar_edit: 0,
           });
-          this.setSuccessAlert(true);
+          this.imgRef.current.value = null;
+          history.push(ADMIN_CONTRIBUTOR_LIST_PAGE);
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
+          this.setLoading(false);
         }
-        this.setLoading(false);
-        this.scrollToRef();
       })
       .catch(() => {
         this.setLoading(false);

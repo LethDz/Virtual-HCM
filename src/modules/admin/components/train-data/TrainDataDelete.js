@@ -51,7 +51,7 @@ const TrainDataDelete = (props) => {
       .then((response) => {
         if (response.data && response.data.status) {
           props.deleteTrainData(props.id);
-          addToast('Deleted Train Data Successfully', {
+          addToast('Deleted Training Data Successfully', {
             appearance: 'success',
           });
           mounted.current && toggle();
@@ -77,7 +77,7 @@ const TrainDataDelete = (props) => {
 
   return (
     <Modal isOpen={props.openDeleteModal} toggle={toggle} unmountOnClose={true}>
-      <ModalHeader toggle={toggle}>Delete Train Data</ModalHeader>
+      <ModalHeader toggle={toggle}>Delete Training Data</ModalHeader>
       <LoadingSpinner loading={loading} text="Loading" type="MODAL">
         <Form onSubmit={onDelete}>
           <ModalBody>
@@ -91,7 +91,7 @@ const TrainDataDelete = (props) => {
             <FormGroup row>
               <Col>
                 <Label for="reason" className="text-danger">
-                  Are you sure to delete this Train Data ? Enter reason please
+                  Are you sure to delete this Training Data ? Enter reason please
                 </Label>
                 <Input
                   id="reason"

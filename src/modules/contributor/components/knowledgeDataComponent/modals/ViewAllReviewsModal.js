@@ -13,7 +13,6 @@ import {
 
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
@@ -25,7 +24,6 @@ export default class ViewAllReviewsModal extends Component {
         this.state = {
             reviews: [],
             loading: false,
-            successAlert: false,
             errorAlert: false,
             alertMessage: '',
             isOpenDetailReview: false,
@@ -36,13 +34,6 @@ export default class ViewAllReviewsModal extends Component {
     toggleDetailReview = () => {
         this._isMounted && this.setState({ isOpenDetailReview: !this.state.isOpenDetailReview })
     }
-
-    setSuccessAlert = (status) => {
-        this._isMounted &&
-            this.setState({
-                successAlert: status,
-            });
-    };
 
     setAlertMessage = (message) => {
         this._isMounted &&
@@ -81,18 +72,14 @@ export default class ViewAllReviewsModal extends Component {
                 this.setLoading(false)
                 if (response.data.status) {
                     this._isMounted && this.setState({ reviews: response.data.result_data })
-                    this.setAlertMessage("Load successful");
-                    this.setSuccessAlert(true);
                     this.setErrorAlert(false);
                 }
                 else {
-                    this.setSuccessAlert(false);
                     this.setErrorAlert(true);
                 }
             })
             .catch(err => {
                 this.setLoading(false)
-                this.setSuccessAlert(false);
                 this.setErrorAlert(true);
             })
     }
@@ -142,13 +129,6 @@ export default class ViewAllReviewsModal extends Component {
                 <LoadingSpinner type="MODAL" text="Loading reviews" loading={this.state.loading} />
                 <ModalHeader toggle={this.toggleThisModal}>Reviews</ModalHeader>
                 <ModalBody>
-                    {this.state.successAlert && (
-                        <SuccessAlert
-                            successAlert={this.state.successAlert}
-                            text={this.state.alertMessage}
-                            onDismiss={() => this.onDismiss('successAlert')}
-                        />
-                    )}
                     {this.state.errorAlert && (
                         <ErrorAlert
                             errorAlert={this.state.errorAlert}
@@ -157,7 +137,10 @@ export default class ViewAllReviewsModal extends Component {
                         />
                     )}
                     <div className="d-flex justify-content-end mb-2">
-                        <Button type="button" onClick={this.state.data && this.toggleDetailReview}><FontAwesomeIcon icon={faEye} /> View detail</Button>
+                        <Button type="button" color="primary" disabled={this.state.data === null}
+                            onClick={this.state.data && this.toggleDetailReview}>
+                            <FontAwesomeIcon icon={faEye} /> View detail
+                        </Button>
                     </div>
                     <div
                         className="ag-theme-alpine"

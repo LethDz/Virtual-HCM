@@ -191,7 +191,8 @@ class SynonymDetailModal extends Component {
             ...synonym,
           });
           this.props.updateSynonymList([]);
-          this.setSuccessAlert(true);
+          this.props.resetSelection();
+          this.props.toggle()
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -322,7 +323,7 @@ class SynonymDetailModal extends Component {
         toggle={this.toggle}
         unmountOnClose={true}
       >
-        <ModalHeader toggle={this.toggle}>Synonym</ModalHeader>
+        <ModalHeader toggle={this.toggle}>Synonym detail</ModalHeader>
         <Form onSubmit={this.editSynonym}>
           <ModalBody>
             <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -414,7 +415,7 @@ class SynonymDetailModal extends Component {
                 </Col>
                 <Col className="col-2">
                   <Button
-                    color="success"
+                    color="primary"
                     onClick={this.tokenizeWord}
                     disabled={this.state.loading}
                   >

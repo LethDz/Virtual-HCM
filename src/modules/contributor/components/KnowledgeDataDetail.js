@@ -40,7 +40,7 @@ import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faBug } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faBug } from '@fortawesome/free-solid-svg-icons';
 
 class KnowledgeDataDetail extends Component {
   _isMounted = false;
@@ -648,15 +648,7 @@ class KnowledgeDataDetail extends Component {
                 setAlertMessage={this.setAlertMessage}
                 scrollToTop={this.scrollToTop}
               />
-              <Comment
-                formStatus={this.state.formStatus}
-                knowledgeDataId={this.state.form.id}
-                comments={this.state.comments}
-                userList={this.state.userList}
-                setErrorAlert={this.setErrorAlert}
-              />
-
-              <Row className="d-flex justify-content-around pt-3 pb-3">
+              <Row className="d-flex justify-content-around mt-3 pb-3">
                 {!this.state.disable &&
                   (this.state.formStatus === AVAILABLE ||
                     (this.state.formStatus === PROCESSING &&
@@ -669,10 +661,20 @@ class KnowledgeDataDetail extends Component {
                       color="info"
                       onClick={this.submitForm}
                     >
-                      <FontAwesomeIcon icon={faEdit} /> Edit knowledge data
+                      <FontAwesomeIcon icon={faSave} /> Save knowledge data
                     </Button>
                   )}
               </Row>
+
+              <Comment
+                formStatus={this.state.formStatus}
+                knowledgeDataId={this.state.form.id}
+                comments={this.state.comments}
+                userList={this.state.userList}
+                setErrorAlert={this.setErrorAlert}
+              />
+
+
             </div>
           </Form>
         )}

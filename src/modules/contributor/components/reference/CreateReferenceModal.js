@@ -247,7 +247,7 @@ class CreateReferenceModal extends Component {
             </LoadingSpinner>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" type="submit" disabled={this.state.loading}>
+            <Button color="info" type="submit" disabled={this.state.loading}>
               <FontAwesomeIcon icon={faPlus} color="white" />
               &nbsp; Create
             </Button>

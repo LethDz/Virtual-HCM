@@ -42,7 +42,6 @@ class TrainDataList extends Component {
           const data = response.data.result_data;
           this._isMounted && this.props.pullTrainDataDeleted(data);
           this._isMounted && this.props.setErrorAlert(false);
-          this._isMounted && this.props.setSuccessAlert(true);
         } else {
           this._isMounted && this.props.setErrorAlert(true);
           this._isMounted && this.props.setSuccessAlert(false);
