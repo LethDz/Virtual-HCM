@@ -4,9 +4,7 @@ import {
   CardBody,
   Modal,
   ModalBody,
-  ModalFooter,
   ModalHeader,
-  Button,
 } from "reactstrap";
 import "src/static/stylesheets/chat.history.css";
 import { CHAT_HISTORY_DETAIL } from "src/constants";

@@ -8,7 +8,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { ChatHistoryDetailModal } from 'src/modules/contributor/index';
 import { columnChatHistoryFieldDef } from 'src/modules/contributor';
-import { CHAT_HISTORY, ALL, ADMIN_GET_USER } from 'src/constants';
+import { CHAT_HISTORY, ALL } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 
 class ChatHistoryList extends Component {
