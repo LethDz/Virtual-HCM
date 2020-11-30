@@ -2,8 +2,9 @@ import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent
 import StatusBadge from 'src/modules/contributor/components/knowLedgeListComponent/StatusBadge';
 import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
 import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
-import { dateComparator } from 'src/common/getDate'
+import { dateComparator } from 'src/common/getDate';
 import { ReportType } from 'src/modules/contributor';
+import { UserLink } from 'src/common/UserLink';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
 
@@ -29,7 +30,7 @@ export const GET_ALL_REJECTED_REPORT = 'GET_ALL_PENDING_REJECTED_REPORT';
 export const REJECT_REPORT = 'REJECT_REPORT';
 export const APPROVE_REPORT = 'APPROVE_REPORT';
 
-export const RESET_APPROVAL_DETAIL_REPORT = 'RESET_APPROVAL_DETAIL_REPORT'
+export const RESET_APPROVAL_DETAIL_REPORT = 'RESET_APPROVAL_DETAIL_REPORT';
 
 export const PROCESSING = 'PROCESSING';
 export const DONE = 'DONE';
@@ -100,7 +101,8 @@ export const frameworkComponents = {
   statusBar: StatusBar,
   statusBadge: StatusBadge,
   reviewStatusBadge: ReviewStatusBadge,
-  selfReviewStatus: SelfReviewStatus
+  selfReviewStatus: SelfReviewStatus,
+  userLink: UserLink,
 };
 
 export const columnFieldDef = [
@@ -109,7 +111,7 @@ export const columnFieldDef = [
     headerName: 'ID',
     sortable: true,
     filter: true,
-    width: "100px",
+    width: '100px',
   },
   {
     field: 'intent',
@@ -131,6 +133,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'edit_user',
@@ -138,6 +141,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'mdate',
@@ -154,13 +158,13 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
-    cellRenderer: "statusBadge"
+    cellRenderer: 'statusBadge',
   },
   {
     field: 'reviews',
     headerName: 'Progress',
     resizable: true,
-    cellRenderer: "statusBar",
+    cellRenderer: 'statusBar',
   },
   {
     field: 'user_review',
@@ -168,7 +172,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
-    cellRenderer: "selfReviewStatus"
+    cellRenderer: 'selfReviewStatus',
   },
 ];
 
@@ -291,6 +295,7 @@ export const columnSynonymFieldDef = [
   },
 ];
 
+// Column Review List Field Definition
 export const columnReviewListRef = [
   {
     width: 150,
@@ -304,6 +309,7 @@ export const columnReviewListRef = [
     headerName: 'Username',
     sortable: true,
     filter: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'review',
@@ -325,9 +331,10 @@ export const columnReviewListRef = [
     headerName: 'Status',
     sortable: true,
     filter: true,
-    cellRenderer: 'reviewStatusBadge'
+    cellRenderer: 'reviewStatusBadge',
   },
 ];
+
 //Column Pending Report Field Definition
 export const columnPendingReportFieldDef = [
   {
@@ -354,6 +361,7 @@ export const columnPendingReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'reported_intent',
@@ -408,6 +416,7 @@ export const columnAcceptedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'processor',
@@ -416,6 +425,7 @@ export const columnAcceptedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'reported_intent',
@@ -470,6 +480,7 @@ export const columnRejectedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'processor',
@@ -478,6 +489,7 @@ export const columnRejectedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'reported_intent',
@@ -508,6 +520,7 @@ export const columnRejectedReportFieldDef = [
 
 export const frameworkComponentsForReport = {
   reportType: ReportType,
+  userLink: UserLink,
 };
 
 export const reportType = {

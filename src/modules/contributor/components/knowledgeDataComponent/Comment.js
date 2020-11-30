@@ -28,6 +28,7 @@ import Pagination from 'react-js-pagination';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSync } from '@fortawesome/free-solid-svg-icons';
+import { UserLink } from 'src/common/UserLink';
 
 export default class Comment extends Component {
   _isMounted = false;
@@ -311,7 +312,12 @@ export default class Comment extends Component {
                         <Col>
                           <Row>
                             <Col>
-                              <h6>{user.username}</h6>
+                              <h6>
+                                <UserLink
+                                  data={comment}
+                                  value={user.username}
+                                />
+                              </h6>
                             </Col>
                             <Col xs="auto">{comment.mdate}</Col>
                           </Row>

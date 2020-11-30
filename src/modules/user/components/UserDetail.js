@@ -1,7 +1,9 @@
 import {
+  faCheck,
   faEraser,
   faSave,
   faSync,
+  faTimes,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,10 +21,10 @@ import {
 import 'src/static/stylesheets/contributor.create.css';
 import avatar from 'src/static/images/img_avatar.png';
 import {
-  ADMIN_CONTRIBUTOR_LIST_PAGE,
   ADMIN_EDIT_USER,
   ADMIN_GET_USER,
   imgBase64,
+  USER_EDIT_PROFILE,
 } from 'src/constants';
 import { connect } from 'react-redux';
 import {
@@ -39,12 +41,13 @@ import {
   getDateNowToString,
   isoFormatDate,
 } from 'src/common/getDate';
-import BackButton from 'src/common/BackButton';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import { getUserData } from 'src/common/authorizationChecking';
 
-class ContributorEdit extends Component {
+class UserDetail extends Component {
   _isMounted = false;
+  currentUser = getUserData();
   constructor() {
     super();
     this.state = {
@@ -87,54 +90,51 @@ class ContributorEdit extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    if (
-      this.props.contributorDetail &&
-      this.props.contributorDetail.user_id === parseInt(this.props.id)
-    ) {
-      this.setState({
-        ...this.props.contributorDetail,
-        phone_number: this.props.contributorDetail.phone_number
-          ? this.props.contributorDetail.phone_number
-          : '',
-        email: this.props.contributorDetail.email
-          ? this.props.contributorDetail.email
-          : '',
-        date_of_birth: isoFormatDate(
-          this.props.contributorDetail.date_of_birth
-        ),
-      });
-    } else {
-      this.setLoading(true);
-      axiosClient
-        .get(ADMIN_GET_USER(this.props.id))
-        .then((response) => {
-          if (response.data.status) {
-            const user = response.data.result_data;
-            this.props.pullContributor(user);
-            this.setState({
-              ...user,
-              phone_number: user.phone_number ? user.phone_number : '',
-              date_of_birth: isoFormatDate(user.date_of_birth),
-              email: user.email ? user.email : '',
-            });
-          } else {
-            this.setErrorAlert(true);
-            this.setErrorList(response.data.messages);
-          }
-          this.setLoading(false);
-        })
-        .catch((error) => {
-          this.setLoading(false);
-          this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    }
+    this.loadData();
   }
+
+  loadData = () => {
+    this.setLoading(true);
+    axiosClient
+      .get(ADMIN_GET_USER(this.props.id))
+      .then((response) => {
+        if (response.data.status) {
+          const user = response.data.result_data;
+          this.props.pullContributor(user);
+          this.setState({
+            ...user,
+            phone_number: user.phone_number ? user.phone_number : '',
+            date_of_birth: isoFormatDate(user.date_of_birth),
+            email: user.email ? user.email : '',
+          });
+        } else {
+          this.setErrorAlert(true);
+          this.setErrorList(response.data.messages);
+        }
+        this.setLoading(false);
+      })
+      .catch((error) => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
+  };
 
   componentWillUnmount() {
     this._isMounted = false;
     if (this.state.imageSrc) {
       URL.revokeObjectURL(this.state.imageSrc);
+    }
+  }
+
+  componentDidUpdate() {
+    if (
+      this._isMounted &&
+      !this.state.loading &&
+      this.props.contributorDetail &&
+      parseInt(this.props.id) !== this.props.contributorDetail.user_id
+    ) {
+      this.loadData();
     }
   }
 
@@ -149,20 +149,23 @@ class ContributorEdit extends Component {
     this.setSuccessAlert(false);
 
     let userData = new FormData();
-    userData.append('id', this.props.contributorDetail.user_id);
-    userData.append('fullname', this.state.fullname);
-    userData.append('nationality', this.state.nationality);
-    userData.append('place_of_birth', this.state.place_of_birth);
-    userData.append(
-      'date_of_birth',
-      changeToFormatDateVN(this.state.date_of_birth, '/')
-    );
+    if (this.currentUser.admin) {
+      userData.append('id', this.props.contributorDetail.user_id);
+      userData.append('fullname', this.state.fullname);
+      userData.append('nationality', this.state.nationality);
+      userData.append('place_of_birth', this.state.place_of_birth);
+      userData.append(
+        'date_of_birth',
+        changeToFormatDateVN(this.state.date_of_birth, '/')
+      );
+      userData.append('id_number', this.state.id_number);
+      userData.append('gender', parseInt(this.state.gender));
+    }
+
     userData.append('address', this.state.address);
-    userData.append('id_number', this.state.id_number);
     userData.append('phone_number', this.state.phone_number);
     userData.append('email', this.state.email);
     userData.append('avatar', this.state.imagePath);
-    userData.append('gender', parseInt(this.state.gender));
     userData.append('avatar_edit', this.state.avatar_edit);
 
     const config = {
@@ -171,8 +174,13 @@ class ContributorEdit extends Component {
       },
     };
 
+    // If current user is admin use Admin edit API or else.
     axiosClient
-      .post(ADMIN_EDIT_USER, userData, config)
+      .post(
+        this.currentUser.admin ? ADMIN_EDIT_USER : USER_EDIT_PROFILE,
+        userData,
+        config
+      )
       .then((response) => {
         if (response.data.status) {
           const user = response.data.result_data;
@@ -184,6 +192,9 @@ class ContributorEdit extends Component {
             email: user.email ? user.email : '',
           });
           this.setSuccessAlert(true);
+          if (this.currentUser.user_id === user.user_id) {
+            localStorage.setItem('user', JSON.stringify(user));
+          }
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -268,6 +279,13 @@ class ContributorEdit extends Component {
     });
   };
 
+  isEditable = () => {
+    return (
+      this.currentUser.admin ||
+      parseInt(this.props.id) === this.currentUser.user_id
+    );
+  };
+
   eraseAvatar = () => {
     this._isMounted &&
       this.setState({
@@ -298,15 +316,9 @@ class ContributorEdit extends Component {
             />
           )}
           <Row>
-            <Col xs="auto" className="mt-2">
-              <BackButton
-                text={'Back to List'}
-                link={ADMIN_CONTRIBUTOR_LIST_PAGE}
-              />
-            </Col>
             <Col className="justify-content-center d-flex">
               <h5 className="mt-2 mb-2" ref={this.titleRef}>
-                Edit Account
+                User Detail
               </h5>
             </Col>
           </Row>
@@ -343,6 +355,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.fullname}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                   </Col>
                 </FormGroup>
@@ -359,6 +372,7 @@ class ContributorEdit extends Component {
                       value={0}
                       checked={parseInt(this.state.gender) === 0}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                     &nbsp;Male
                   </Col>
@@ -370,6 +384,7 @@ class ContributorEdit extends Component {
                       value={1}
                       checked={parseInt(this.state.gender) === 1}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                     &nbsp;Female
                   </Col>
@@ -381,6 +396,7 @@ class ContributorEdit extends Component {
                       value={2}
                       checked={parseInt(this.state.gender) === 2}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                     &nbsp;Unknown
                   </Col>
@@ -397,6 +413,7 @@ class ContributorEdit extends Component {
                       placeholder="Enter phone number"
                       value={this.state.phone_number}
                       onChange={this.inputChange}
+                      disabled={!this.isEditable()}
                     />
                   </Col>
                 </FormGroup>
@@ -412,6 +429,7 @@ class ContributorEdit extends Component {
                       placeholder="Enter an email"
                       value={this.state.email}
                       onChange={this.inputChange}
+                      disabled={!this.isEditable()}
                     />
                   </Col>
                 </FormGroup>
@@ -428,6 +446,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.address}
                       onChange={this.inputChange}
+                      disabled={!this.isEditable()}
                     />
                   </Col>
                 </FormGroup>
@@ -445,6 +464,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.date_of_birth}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                   </Col>
                 </FormGroup>
@@ -461,6 +481,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.place_of_birth}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                   </Col>
                 </FormGroup>
@@ -477,6 +498,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.nationality}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                   </Col>
                 </FormGroup>
@@ -493,6 +515,7 @@ class ContributorEdit extends Component {
                       required
                       value={this.state.id_number}
                       onChange={this.inputChange}
+                      disabled={!this.currentUser.admin}
                     />
                   </Col>
                 </FormGroup>
@@ -500,15 +523,31 @@ class ContributorEdit extends Component {
                   <Label for="status" sm={2}>
                     Status:
                   </Label>
-                  <Col sm={10}>
-                    <BtnChangeStatus
-                      id="status"
-                      data={this.props.contributorDetail}
-                      context={this}
-                      value={this.state.active}
-                      editPage={true}
-                    />
-                  </Col>
+                  {!this.currentUser.admin ? (
+                    <div id="status">
+                      <span
+                        className={`${
+                          this.state.active ? 'text-success' : 'text-danger'
+                        } mr-1`}
+                      >
+                        <FontAwesomeIcon
+                          icon={this.state.active ? faCheck : faTimes}
+                          color={this.state.active ? 'green' : 'red'}
+                        />{' '}
+                        {this.state.active ? 'Active' : 'Disabled'}
+                      </span>
+                    </div>
+                  ) : (
+                    <Col sm={10}>
+                      <BtnChangeStatus
+                        id="status"
+                        data={this.props.contributorDetail}
+                        context={this}
+                        value={this.state.active}
+                        editPage={true}
+                      />
+                    </Col>
+                  )}
                 </FormGroup>
               </Col>
               <Col>
@@ -529,55 +568,61 @@ class ContributorEdit extends Component {
                     }
                   ></img>
                 </Row>
-                <Row className="justify-content-center">
-                  <div className="upload-btn-wrapper">
-                    <Button color="primary" className="btn-upload-custom">
-                      <FontAwesomeIcon icon={faUpload} />
-                      &nbsp; Upload avatar
+                {this.isEditable() && (
+                  <Fragment>
+                    <Row className="justify-content-center">
+                      <div className="upload-btn-wrapper">
+                        <Button color="primary" className="btn-upload-custom">
+                          <FontAwesomeIcon icon={faUpload} />
+                          &nbsp; Upload avatar
+                        </Button>
+                        <Input
+                          innerRef={this.imgRef}
+                          className="h-100 upload-hidden"
+                          type="file"
+                          name="avatar"
+                          id="avatar"
+                          accept="image/*"
+                          onChange={this.onUploadImage}
+                        />
+                      </div>
+                      {this.props.contributorDetail &&
+                        this.props.contributorDetail.avatar && (
+                          <Button
+                            color="danger"
+                            onClick={this.eraseAvatar}
+                            className="ml-1"
+                            disabled={!this.state.avatar}
+                          >
+                            <FontAwesomeIcon icon={faEraser} />
+                            &nbsp; Erase Avatar
+                          </Button>
+                        )}
+                    </Row>
+                  </Fragment>
+                )}
+              </Col>
+            </Row>
+            {this.isEditable() && (
+              <Row className="mt-4">
+                <Col>
+                  <Row className="justify-content-end mr-1">
+                    <Button onClick={this.onReset}>
+                      <FontAwesomeIcon icon={faSync} />
+                      &nbsp; Reset
                     </Button>
-                    <Input
-                      innerRef={this.imgRef}
-                      className="h-100 upload-hidden"
-                      type="file"
-                      name="avatar"
-                      id="avatar"
-                      accept="image/*"
-                      onChange={this.onUploadImage}
-                    />
-                  </div>
-                  {this.props.contributorDetail &&
-                    this.props.contributorDetail.avatar && (
-                      <Button
-                        color="danger"
-                        onClick={this.eraseAvatar}
-                        className="ml-1"
-                        disabled={!this.state.avatar}
-                      >
-                        <FontAwesomeIcon icon={faEraser} />
-                        &nbsp; Erase Avatar
-                      </Button>
-                    )}
-                </Row>
-              </Col>
-            </Row>
-            <Row className="mt-4">
-              <Col>
-                <Row className="justify-content-end mr-1">
-                  <Button onClick={this.onReset}>
-                    <FontAwesomeIcon icon={faSync} />
-                    &nbsp; Reset
-                  </Button>
-                </Row>
-              </Col>
-              <Col>
-                <Row className="justify-content-start mr-1">
-                  <Button color="info" type="submit">
-                    <FontAwesomeIcon icon={faSave} />
-                    &nbsp; Save
-                  </Button>
-                </Row>
-              </Col>
-            </Row>
+                  </Row>
+                </Col>
+                <Col>
+                  <Row className="justify-content-start mr-1">
+                    <Button color="info" type="submit">
+                      <FontAwesomeIcon icon={faSave} />
+                      &nbsp; Save
+                    </Button>
+                  </Row>
+                </Col>
+              </Row>
+            )}
           </Form>
         </Container>
       </Fragment>
@@ -595,4 +640,4 @@ const mapDispatchToProps = (dispatch) => ({
   pullContributor: (contributor) => dispatch(pullContributor(contributor)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributorEdit);
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetail);

@@ -14,6 +14,7 @@ import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
 import ReportPage from 'src/pages/contributor/report/ReportPage';
+import UserDetailPage from 'src/pages/user/UserDetailPage';
 
 export {
   HomePage,
@@ -32,4 +33,5 @@ export {
   KnowledgeDataDetailPage,
   ReportPage,
   TrainDataPage,
+  UserDetailPage,
 };
