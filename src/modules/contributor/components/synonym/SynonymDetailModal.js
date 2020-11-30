@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Form,
   Input,
@@ -11,15 +11,15 @@ import {
   ModalFooter,
   Col,
   Row,
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+} from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
   faMinus,
   faPlus,
   faSave,
   faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 import {
   SYNONYM,
   GET_SYNONYM,
@@ -27,7 +27,7 @@ import {
   DELETE_SYNONYM,
   NLP,
   TOKENIZE,
-} from 'src/constants';
+} from "src/constants";
 import {
   handleInputChange,
   handleItemInWordsChange,
@@ -45,23 +45,23 @@ import {
   editSynonymDetail,
   deleteSynonym,
   POSTags,
-} from 'src/modules/contributor';
-import 'src/static/stylesheets/synonym.css';
+} from "src/modules/contributor";
+import "src/static/stylesheets/synonym.css";
 
 class SynonymDetailModal extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      synonym_id: '',
-      meaning: '',
+      synonym_id: "",
+      meaning: "",
       words: [],
-      newWord: '',
+      newWord: "",
       loading: false,
       errorAlert: false,
       successAlert: false,
       errorList: [],
-      paragraph: '',
+      paragraph: "",
       tokenizedWords: [],
       isOpenDeleteConfirmation: false,
     };
@@ -168,7 +168,7 @@ class SynonymDetailModal extends Component {
       if (word === newWord) {
         duplicate = true;
         let error = this.state.errorList;
-        error.push('This word existed!');
+        error.push("This word existed!");
         this.setErrorList(error);
       }
       return duplicate;
@@ -242,7 +242,7 @@ class SynonymDetailModal extends Component {
     let newWord = this.state.newWord.trim();
     if (
       !this.checkDuplicateWord(newWord) &&
-      this.checkInputEmpty(newWord, 'Input cannot be empty')
+      this.checkInputEmpty(newWord, "Input cannot be empty")
     ) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
@@ -250,7 +250,7 @@ class SynonymDetailModal extends Component {
       this._isMounted &&
         this.setState({
           words: listWord,
-          newWord: '',
+          newWord: "",
         });
     } else {
       this.setErrorAlert(true);
@@ -260,7 +260,7 @@ class SynonymDetailModal extends Component {
   tokenizeWord = async () => {
     await this.setErrorList([]);
     const paragraph = this.state.paragraph;
-    if (this.checkInputEmpty(paragraph, 'Nothing to check!')) {
+    if (this.checkInputEmpty(paragraph, "Nothing to check!")) {
       if (paragraph !== this.state.oldParagraph) {
         this.setLoading(true);
         this.setErrorAlert(false);
@@ -315,7 +315,7 @@ class SynonymDetailModal extends Component {
   };
 
   scrollToBottom = () => {
-    this.conRef.current.scrollIntoView({ behavior: 'smooth' });
+    this.conRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
   toggle = () => {
@@ -345,29 +345,26 @@ class SynonymDetailModal extends Component {
             confirmDelete={this.confirmDelete}
           />
         )}
-        <ModalHeader toggle={this.toggle}>Synonym detail</ModalHeader>
+        <ModalHeader toggle={this.toggle}>Synonym ID: {this.state.synonym_id}</ModalHeader>
         <Form onSubmit={this.editSynonym}>
           <ModalBody>
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} />
+            <LoadingSpinner loading={this.state.loading} text={"Loading"} />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
                 text="Editing synonym is successfully"
-                onDismiss={() => this.onDismiss('successAlert')}
+                onDismiss={() => this.onDismiss("successAlert")}
               />
             )}
             {this.state.errorAlert && (
               <ErrorAlert
                 errorAlert={this.state.errorAlert}
                 errorList={this.state.errorList}
-                onDismiss={() => this.onDismiss('errorAlert')}
+                onDismiss={() => this.onDismiss("errorAlert")}
               />
             )}
-            <Label>
-              <h6>ID: {this.state.synonym_id}</h6>
-            </Label>
             <FormGroup>
-              <Label>Meaning: </Label>
+              <Label className="font-weight-bold">Meaning: </Label>
               <Input
                 name="meaning"
                 type="text"
@@ -377,7 +374,7 @@ class SynonymDetailModal extends Component {
                 disabled={this.state.loading}
               />
             </FormGroup>
-            <Label>Words: </Label>
+            <Label className="font-weight-bold">Words: </Label>
             <div className="container justify-content-center">
               <div className="border border-light p-3 list-word">
                 {this._isMounted &&
@@ -424,12 +421,13 @@ class SynonymDetailModal extends Component {
                 </Row>
                 <div ref={this.conRef}></div>
               </div>
-              <Label className="mt-2">Check tokenizing word:</Label>
+              <Label className="mt-3 title">Check tokenizing word:</Label>
               <Row>
                 <Col className="col-10">
                   <Input
                     type="textarea"
                     name="paragraph"
+                    placeholder="Please enter words you want to tokenize..."
                     onChange={this.handleInput}
                     value={this.state.paragraph}
                     disabled={this.state.loading}
@@ -445,14 +443,16 @@ class SynonymDetailModal extends Component {
                   </Button>
                 </Col>
               </Row>
-              <Label className="mt-2">Tokenized words: </Label>
+              <Label className="mt-3 title">Tokenized words: </Label>
               <Row>
-                <Col className="col-10">
-                  <Input
-                    type="textarea"
-                    value={this.state.tokenizedWords}
-                    readOnly
-                  />
+                <Col>
+                  <div className="tokenized-word-list">
+                    <div className="list-content">
+                      {this.state.tokenizedWords.map((word) => (
+                        <span className="tokenized-word">{word}</span>
+                      ))}
+                    </div>
+                  </div>
                 </Col>
               </Row>
             </div>
@@ -465,7 +465,7 @@ class SynonymDetailModal extends Component {
             <Button
               color="danger"
               disabled={this.state.loading}
-              style={{ color: 'white' }}
+              style={{ color: "white" }}
               onClick={this.deleteSynonym}
             >
               <FontAwesomeIcon icon={faTrash} color="white" />
