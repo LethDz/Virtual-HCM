@@ -19,7 +19,6 @@ class ChatHistoryList extends Component {
       chatHistoryList: [],
       modalChatHistoryDetail: false,
       containerHeight: 0,
-      containerWidth: 0,
       loading: false,
       selectedId: '',
       errorAlert: false,
@@ -37,11 +36,6 @@ class ChatHistoryList extends Component {
       .then((response) => {
         if (response.data.status) {
           const chatLogs = response.data.result_data;
-          // chatLogs.map((chatLog) => {
-          //   const user_id = chatLog.user;
-          //   const user_name = this.getUserName(user_id);
-          //   chatLog.push({user_name: user_name});
-          // });
           this.setState({ chatHistoryList: chatLogs });
         } else {
           this.setErrorAlert(true);
@@ -57,25 +51,6 @@ class ChatHistoryList extends Component {
         this.setErrorAlert(true);
         this.setSuccessAlert(false);
       });
-  };
-
-  getUserName = (user_id) => {
-    const username = '';
-    axiosClient
-      .get(ADMIN_GET_USER(user_id))
-      .then((response) => {
-        if (response.data.status) {
-          const user = response.data.result_data;
-          username = user.username;
-          return username;
-        }
-      })
-      .catch((error) => {
-        this.setLoading(false);
-        this.setErrorAlert(true);
-        this.setSuccessAlert(false);
-      });
-    return username;
   };
 
   componentDidMount() {
@@ -97,12 +72,9 @@ class ChatHistoryList extends Component {
   setStyleForGrid = () => {
     const containerHeight =
       this.conRef.current && this.conRef.current.clientHeight;
-    const containerWidth =
-      this.conRef.current && this.conRef.current.clientWidth;
     this._isMounted &&
       this.setState({
         containerHeight,
-        containerWidth,
       });
   };
 

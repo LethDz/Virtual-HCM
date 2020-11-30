@@ -252,8 +252,8 @@ export const columnChatHistoryFieldDef = [
     resizable: true,
   },
   {
-    field: 'user',
-    headerName: 'User ID',
+    field: 'username',
+    headerName: 'Username',
     width: 100,
     sortable: true,
     filter: true,
