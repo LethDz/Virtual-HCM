@@ -349,13 +349,15 @@ class CreateSynonymModal extends Component {
               </Row>
               <Label className="mt-3 title">Tokenized words: </Label>
               <Row>
-                <div className="tokenized-word-list">
-                  <div className="list-content">
-                    {this.state.tokenizedWords.map((word) => (
-                      <span className="tokenized-word">{word}</span>
-                    ))}
+                <Col>
+                  <div className="tokenized-word-list">
+                    <div className="list-content">
+                      {this.state.tokenizedWords.map((word) => (
+                        <span className="tokenized-word">{word}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                </Col>
               </Row>
             </div>
           </ModalBody>
