@@ -15,7 +15,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEdit,
+  faSave,
   faTrash,
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
@@ -231,7 +231,7 @@ class DocumentReferenceModal extends Component {
           toggle={this.toggle}
           unmountOnClose={true}
         >
-          <ModalHeader toggle={this.toggle}>Document Reference</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Document Reference ID: {this.state.reference_document_id}</ModalHeader>
           <Form onSubmit={this.editReference}>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -283,9 +283,6 @@ class DocumentReferenceModal extends Component {
                   </Row>
                 </Col>
                 <Col className="col-9">
-                  <Label>
-                    <h5>ID: {this.state.reference_document_id}</h5>
-                  </Label>
                   <FormGroup>
                     <Label>Reference name: </Label>
                     <Input
@@ -324,8 +321,8 @@ class DocumentReferenceModal extends Component {
                 type="submit"
                 disabled={this.state.loading}
               >
-                <FontAwesomeIcon icon={faEdit} color="white" />
-                &nbsp;Edit
+                <FontAwesomeIcon icon={faSave} color="white" />
+                &nbsp;Save
               </Button>
               <Button
                 color="danger"
