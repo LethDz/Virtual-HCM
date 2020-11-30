@@ -95,8 +95,3 @@
   background-color: #1e282c !important;
   border-left: 3px solid #007bff;
 }
-
-.link-no-underline:hover {
-  color: white;
-  text-decoration: none;
-}

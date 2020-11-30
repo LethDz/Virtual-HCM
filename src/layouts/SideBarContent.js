@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import avatar from 'src/static/images/img_avatar.png';
+import { UserLink } from 'src/common/UserLink';
 
 const switchLayout = (role) => {
   if (role === ROLE_ADMIN) {
@@ -37,7 +38,9 @@ const SideBarContent = () => {
           ></img>
         </div>
         <div className="user-name">
-          <p>{user.username}</p>
+          <p>
+            <UserLink data={user} value={user.username} />
+          </p>
           <p>
             <FontAwesomeIcon icon={faCircle} color="green" />
             &nbsp;Online
