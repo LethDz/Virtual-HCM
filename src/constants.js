@@ -20,6 +20,8 @@ export const GET_SYNONYM = (id) => `/get?id=${id}`;
 export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
+export const CHAT_HISTORY = '/chat-history';
+export const CHAT_HISTORY_DETAIL = (id) =>`/chat-history/get?log_id=${id}`;
 export const USER_EDIT_PROFILE = '/user/edit';
 
 //report
@@ -108,6 +110,7 @@ export const CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA = `${CONTRIBUTOR_PAGE}${KNOWLE
 export const CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM = `${CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA}/create`;
 export const SYNONYM_LIST_PAGE = `${CONTRIBUTOR_PAGE}/synonyms`;
 export const REFERENCE_LIST_PAGE = `${CONTRIBUTOR_PAGE}/references`;
+export const CHAT_HISTORY_LIST_PAGE = `${CONTRIBUTOR_PAGE}/chat-history`;
 export const REPORT_LIST_PAGE = `${CONTRIBUTOR_PAGE}/reports`;
 
 export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>

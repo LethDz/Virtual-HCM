@@ -1,8 +1,8 @@
+import { dateComparator } from 'src/common/getDate';
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 import StatusBadge from 'src/modules/contributor/components/knowLedgeListComponent/StatusBadge';
 import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
 import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
-import { dateComparator } from 'src/common/getDate';
 import { progressBarComparator } from 'src/modules/contributor/components/knowLedgeListComponent/progressBarComparator';
 import { ReportType } from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
@@ -521,6 +521,44 @@ export const columnRejectedReportFieldDef = [
   },
 ];
 
+//Column chat history field definition
+export const columnChatHistoryFieldDef = [
+  {
+    field: 'log_id',
+    headerName: 'ID',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'username',
+    headerName: 'Username',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'session_start',
+    headerName: 'Session Start',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+  {
+    field: 'session_end',
+    headerName: 'Session End',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    comparator: dateComparator,
+  },
+];
+
 export const frameworkComponentsForReport = {
   reportType: ReportType,
   userLink: UserLink,
@@ -530,3 +568,5 @@ export const reportType = {
   1: 'Wrong answer',
   2: 'Contribute data',
 };
+
+

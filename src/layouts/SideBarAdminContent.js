@@ -9,10 +9,10 @@ import {
   faTachometerAlt,
   faFileCode,
   faClipboardList,
-  faComments,
   faFileAlt,
   faBookOpen,
   faNewspaper,
+  faHistory,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   ADMIN_CONFIGURE_SYSTEM_PAGE,
@@ -20,6 +20,7 @@ import {
   ADMIN_MANAGE_TRAINING_PROCESS_PAGE,
   ADMIN_PAGE,
   ADMIN_TRAIN_DATA_PAGE,
+  CHAT_HISTORY_LIST_PAGE,
   CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
   REPORT_LIST_PAGE,
@@ -67,9 +68,10 @@ const SideBarAdminContent = () => {
         active={location.includes(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA)}
       />
       <SideBarItem
-        name="Chat Log"
-        icon={<FontAwesomeIcon icon={faComments} />}
-        link="chat-log"
+        name="Chat History"
+        icon={<FontAwesomeIcon icon={faHistory} />}
+        link={CHAT_HISTORY_LIST_PAGE}
+        active={location.includes(CHAT_HISTORY_LIST_PAGE)}
       />
       <SideBarItem
         name="Document Reference"

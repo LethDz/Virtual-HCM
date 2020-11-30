@@ -12,6 +12,7 @@ import KnowledgeDataListPage from 'src/pages/contributor/manage-knowledge-data/K
 import TrainDataPage from 'src/pages/admin/train-data/TrainDataPage';
 import ReferenceListPage from 'src/pages/contributor/reference/ReferenceListPage';
 import SynonymListPage from 'src/pages/contributor/synonym/SynonymListPage';
+import ChatHistoryListPage from 'src/pages/contributor/chat-history/ChatHistoryListPage';
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
 import ReportPage from 'src/pages/contributor/report/ReportPage';
 import UserDetailPage from 'src/pages/user/UserDetailPage';
@@ -30,6 +31,7 @@ export {
   ConfigureSystemPage,
   ReferenceListPage,
   SynonymListPage,
+  ChatHistoryListPage,
   KnowledgeDataDetailPage,
   ReportPage,
   TrainDataPage,
