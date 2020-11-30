@@ -82,7 +82,7 @@ class Vote extends Component {
             </div>
           </Col>
           <Col xs="auto">
-            <Row className="mr-3">
+            <Row>
               {this.props.owner ? (
                 <Button
                   color="success"

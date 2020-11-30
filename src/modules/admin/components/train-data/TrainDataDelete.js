@@ -109,7 +109,7 @@ const TrainDataDelete = (props) => {
           <ModalFooter>
             <Button color="danger" type="submit">
               <FontAwesomeIcon icon={faVoteYea} />
-              &nbsp; Accept
+              &nbsp; Confirm
             </Button>{' '}
             <Button color="secondary" onClick={toggle}>
               Cancel
