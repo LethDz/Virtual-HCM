@@ -20,6 +20,7 @@ export const GET_SYNONYM = (id) => `/get?id=${id}`;
 export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
+export const USER_EDIT_PROFILE = '/user/edit';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';
@@ -50,7 +51,7 @@ export const GET_REFERENCE = (id) => `/get?reference_document_id=${id}`;
 export const ADMIN_GET_USER_ALL = '/user/all';
 export const ADMIN_GET_USER = (id) => `/user/get?id=${id}`;
 export const ADMIN_ADD_USER = '/user/add';
-export const ADMIN_EDIT_USER = '/user/edit';
+export const ADMIN_EDIT_USER = '/user/admin-edit';
 export const ADMIN_CHANGE_STATUS_USER = (id) => `/user/change-status?id=${id}`;
 export const ADMIN_GET_ALL_TRAINABLE_DATA = `/train-data/all-trainable`;
 export const ADMIN_GET_ALL_TRAIN_DATA = `/train-data/all`;
@@ -82,6 +83,12 @@ export const HOME_PAGE = '/';
 
 // Login Page
 export const LOGIN_PAGE = '/login';
+
+// Common Page
+export const USER_DETAIL_PAGE = (id) =>
+  id
+    ? `${CONTRIBUTOR_PAGE}/user-detail/${id}`
+    : `${CONTRIBUTOR_PAGE}/user-detail/:id`;
 
 // Admin Page
 export const ADMIN_PAGE = '/admin';

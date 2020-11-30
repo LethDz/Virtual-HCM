@@ -1,4 +1,9 @@
-import { faSave, faSync, faUpload } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEraser,
+  faSave,
+  faSync,
+  faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, Fragment } from 'react';
 import {
@@ -44,6 +49,7 @@ class ContributorEdit extends Component {
   constructor() {
     super();
     this.state = {
+      avatar_edit: 0,
       avatar: null,
       username: '',
       fullname: '',
@@ -64,6 +70,7 @@ class ContributorEdit extends Component {
     };
 
     this.titleRef = React.createRef();
+    this.imgRef = React.createRef();
   }
 
   onUploadImage = (event) => {
@@ -75,7 +82,8 @@ class ContributorEdit extends Component {
 
     const src = event.target.files[0];
     const objectURL = URL.createObjectURL(src);
-    this._isMounted && this.setState({ avatar: objectURL, imagePath: src });
+    this._isMounted &&
+      this.setState({ avatar: objectURL, imagePath: src, avatar_edit: 1 });
   };
 
   componentDidMount() {
@@ -156,6 +164,7 @@ class ContributorEdit extends Component {
     userData.append('email', this.state.email);
     this.state.imagePath && userData.append('avatar', this.state.imagePath);
     userData.append('gender', parseInt(this.state.gender));
+    userData.append('avatar_edit', this.state.avatar_edit);
 
     const config = {
       headers: {
@@ -174,8 +183,10 @@ class ContributorEdit extends Component {
             phone_number: user.phone_number ? user.phone_number : '',
             date_of_birth: isoFormatDate(user.date_of_birth),
             email: user.email ? user.email : '',
+            avatar_edit: 0,
           });
-          history.push(ADMIN_CONTRIBUTOR_LIST_PAGE)
+          this.imgRef.current.value = null;
+          history.push(ADMIN_CONTRIBUTOR_LIST_PAGE);
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -232,7 +243,9 @@ class ContributorEdit extends Component {
         email: this.props.contributorDetail.email
           ? this.props.contributorDetail.email
           : '',
+        avatar_edit: 0,
       });
+    this.imgRef.current.value = null;
     this.scrollToRef();
   };
 
@@ -255,6 +268,16 @@ class ContributorEdit extends Component {
       behavior: 'smooth',
       block: 'end',
     });
+  };
+
+  eraseAvatar = () => {
+    this._isMounted &&
+      this.setState({
+        imagePath: null,
+        avatar: null,
+        avatar_edit: 1,
+      });
+    this.imgRef.current.value = null;
   };
 
   render() {
@@ -512,10 +535,10 @@ class ContributorEdit extends Component {
                   <div className="upload-btn-wrapper">
                     <Button color="primary" className="btn-upload-custom">
                       <FontAwesomeIcon icon={faUpload} />
-                      &nbsp;
-                      Upload avatar
+                      &nbsp; Upload avatar
                     </Button>
                     <Input
+                      innerRef={this.imgRef}
                       className="h-100 upload-hidden"
                       type="file"
                       name="avatar"
@@ -524,6 +547,18 @@ class ContributorEdit extends Component {
                       onChange={this.onUploadImage}
                     />
                   </div>
+                  {this.props.contributorDetail &&
+                    this.props.contributorDetail.avatar && (
+                      <Button
+                        color="danger"
+                        onClick={this.eraseAvatar}
+                        className="ml-1"
+                        disabled={!this.state.avatar}
+                      >
+                        <FontAwesomeIcon icon={faEraser} />
+                        &nbsp; Erase Avatar
+                      </Button>
+                    )}
                 </Row>
               </Col>
             </Row>
