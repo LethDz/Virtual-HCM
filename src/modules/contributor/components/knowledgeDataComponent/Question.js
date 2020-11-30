@@ -203,9 +203,6 @@ export default class Question extends Component {
           this.props.scrollToTop();
         }
       })
-      .then(() => {
-        this.props.setTokenizeWord(this.state.tokenizeData, this.state.ner);
-      })
       .catch((err) => {
         if (this._isMounted)
           this.setState({

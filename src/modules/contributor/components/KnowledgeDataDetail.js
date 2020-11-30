@@ -90,7 +90,7 @@ class KnowledgeDataDetail extends Component {
   handleInput = (event) => handleInputChange(event, this);
 
   setTokenizeWord = (tokenizedWordArray, ner) => {
-    let tokenizedWord = this.state.tokenizedWord;
+    let tokenizedWord = [];
     let nerArray = this.state.ner;
 
     tokenizedWordArray.forEach((word) => {
@@ -611,7 +611,6 @@ class KnowledgeDataDetail extends Component {
                 setErrorAlert={this.setErrorAlert}
                 setErrorList={this.setErrorList}
                 setQuestions={this.setQuestions}
-                setTokenizeWord={this.setTokenizeWord}
                 synonymsArray={this.state.form.synonyms}
                 synonymIds={this.state.synonymIdList}
                 className="mt-3"
