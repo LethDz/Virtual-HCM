@@ -7,7 +7,7 @@ import {
   CreateSynonymModal,
 } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faSync } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
@@ -245,10 +245,15 @@ class SynonymList extends Component {
               />
             )}
           </Col>
+          <Col>
+            <Button type="button" color="success" onClick={this.setRowData}>
+              <FontAwesomeIcon icon={faSync} color="white" />
+            </Button>
+          </Col>
         </Row>
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading"
+          text="Loading synonyms"
         ></LoadingSpinner>
         <div
           className="ag-theme-alpine"

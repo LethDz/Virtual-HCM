@@ -16,7 +16,7 @@ import {
 } from 'src/modules/contributor';
 import { Button, Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faSync } from '@fortawesome/free-solid-svg-icons';
 
 class ReportAcceptedList extends Component {
   _isMounted = false;
@@ -164,10 +164,15 @@ class ReportAcceptedList extends Component {
               />
             )}
           </Col>
+          <Col>
+            <Button type="button" color="success" onClick={this.setRowData}>
+              <FontAwesomeIcon icon={faSync} color="white" />
+            </Button>
+          </Col>
         </Row>
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading"
+          text="Loading accepted reports"
         ></LoadingSpinner>
         <div
           className="ag-theme-alpine"
