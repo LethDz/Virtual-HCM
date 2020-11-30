@@ -6,9 +6,9 @@ import {
   faFileAlt,
   faNewspaper,
   faClipboardList,
-  faComments,
   faTachometerAlt,
   faBookOpen,
+  faHistory,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -16,6 +16,7 @@ import {
   CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
+  CHAT_HISTORY_LIST_PAGE,
   REPORT_LIST_PAGE,
 } from 'src/constants';
 
@@ -36,9 +37,10 @@ const SideBarContributorContent = () => {
         active={location.includes(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA)}
       />
       <SideBarItem
-        name="Chat Log"
-        icon={<FontAwesomeIcon icon={faComments} />}
-        link="chat-log"
+        name="Chat History"
+        icon={<FontAwesomeIcon icon={faHistory} />}
+        link={CHAT_HISTORY_LIST_PAGE}
+        active={location.includes(CHAT_HISTORY_LIST_PAGE)}
       />
       <SideBarItem
         name="Document Reference"
