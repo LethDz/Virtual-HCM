@@ -20,29 +20,6 @@ const BtnChangeStatus = (props) => {
       ? props.context.componentParent
       : props.context);
   const changeStatus = () => {
-    // context.setLoading(true);
-    // context.setErrorAlert(false);
-    // context.setSuccessAlert(false);
-    // axiosClient
-    //   .get(ADMIN_CHANGE_STATUS_USER(rowData.user_id))
-    //   .then((response) => {
-    //     if (response.data.status) {
-    //       props.editStatusOfUser(rowData.user_id);
-    //       context.setSuccessAlert(true);
-    //       context.setAccountStatus && context.setAccountStatus(!props.value);
-    //     } else {
-    //       context.setErrorAlert(true);
-    //     }
-    //   })
-    //   .then(() => {
-    //     context.setLoading(false);
-    //     props.api && props.api.refreshCells();
-    //   })
-    //   .catch(() => {
-    //     context.setSuccessAlert(false);
-    //     context.setErrorAlert(true);
-    //     context.setLoading(false);
-    //   });
     if (props.value) {
       openModal();
     } else {
