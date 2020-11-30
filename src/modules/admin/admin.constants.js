@@ -33,6 +33,7 @@ const fields = (width) => [
     sortable: true,
     filter: true,
     width: 100,
+    sort: 'asc',
   },
   {
     headerName: 'Username',

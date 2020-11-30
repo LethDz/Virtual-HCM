@@ -15,7 +15,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEdit,
+  faSave,
   faTrash,
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
@@ -39,6 +39,7 @@ import { connect } from 'react-redux';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import DeleteConfirmationModal from 'src/common/DeleteConfirmationModal';
 import cover from 'src/static/images/cover.png';
 
 class DocumentReferenceModal extends Component {
@@ -56,6 +57,7 @@ class DocumentReferenceModal extends Component {
       errorAlert: false,
       successAlert: false,
       errorList: [],
+      isOpenDeleteConfirmation: false,
     };
   }
 
@@ -181,6 +183,8 @@ class DocumentReferenceModal extends Component {
           });
           this.props.updateReferenceList([]);
           this.setSuccessAlert(true);
+          this.props.resetSelection();
+          this.props.toggle();
         } else {
           this.setErrorAlert(true);
           this.setErrorList(response.data.messages);
@@ -198,7 +202,12 @@ class DocumentReferenceModal extends Component {
   };
 
   deleteReference = () => {
+    this.toggleDeleteConfirmation();
+  };
+
+  confirmDelete = () => {
     this.setLoading(true);
+    this.toggleDeleteConfirmation();
     axiosClient
       .get(REFERENCE + DELETE_REFERENCE(this.props.id))
       .then((response) => {
@@ -223,6 +232,13 @@ class DocumentReferenceModal extends Component {
     !this.state.loading && this.props.toggle();
   };
 
+  toggleDeleteConfirmation = () => {
+    this._isMounted &&
+      this.setState({
+        isOpenDeleteConfirmation: !this.state.isOpenDeleteConfirmation,
+      });
+  };
+
   render() {
     return (
       <Container>
@@ -231,6 +247,15 @@ class DocumentReferenceModal extends Component {
           toggle={this.toggle}
           unmountOnClose={true}
         >
+          {this.state.isOpenDeleteConfirmation && (
+            <DeleteConfirmationModal
+              type="DELETE"
+              isOpen={this.state.isOpenDeleteConfirmation}
+              toggle={this.toggleDeleteConfirmation}
+              value={this.state.meaning}
+              confirmDelete={this.confirmDelete}
+            />
+          )}
           <ModalHeader toggle={this.toggle}>Document Reference</ModalHeader>
           <Form onSubmit={this.editReference}>
             <ModalBody>
@@ -268,7 +293,7 @@ class DocumentReferenceModal extends Component {
                       }
                     ></img>
                   </Row>
-                  <Row className="justify-content-center upload-btn-wrapper">
+                  <Row className="justify-content-center upload-btn-wrapper-reference-modal">
                     <Button color="warning">
                       <FontAwesomeIcon icon={faFolderOpen} color="white" />
                     </Button>
@@ -324,8 +349,8 @@ class DocumentReferenceModal extends Component {
                 type="submit"
                 disabled={this.state.loading}
               >
-                <FontAwesomeIcon icon={faEdit} color="white" />
-                &nbsp;Edit
+                <FontAwesomeIcon icon={faSave} color="white" />
+                &nbsp;Save
               </Button>
               <Button
                 color="danger"

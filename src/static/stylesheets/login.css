@@ -1,6 +1,5 @@
 .login-body {
   min-height: 100vh;
-  background-image: url("../images/background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -19,21 +18,21 @@
 }
 
 .login-form-m {
-  min-width: 300px;
-  margin: 1em;
+  width: 340px;
+  margin: 14px;
+  padding: 20px;
+  font-size: 14px;
+  background-color: #f6f8fa;
+  border: 1px solid #eaecef;
+  border-radius: 6px;
 }
 
-.icon-lock {
-  width: 50px;
-  height: 50px;
+.icon-bot {
+  background-image: url('../icons/botIcon.svg');
+  width: 70px;
+  height: 70px;
   margin: 1em;
-  border-radius: 50%;
-  background-color: #283593;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  justify-content: center;
 }
 
 .lock-image {
@@ -43,5 +42,27 @@
 }
 
 .login-form-title {
-  margin-bottom: 0px;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+}
+
+.form-login-title {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 7px;
+  text-align: left;
+}
+
+.login-callout {
+  margin: 14px;
+  width: 340px;
+  padding: 15px 20px;
+  text-align: center;
+  border: 1px solid #d8dee2;
+  border-radius: 5px;
+}
+
+.input-width {
+  width: 300px !important;
 }

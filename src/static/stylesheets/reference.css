@@ -3,13 +3,13 @@
   width: '80%' !important;
 }
 
-.upload-btn-wrapper {
+.upload-btn-wrapper-reference-modal {
+  margin: 0;
   position: relative;
   overflow: hidden;
-  display: inline-block;
 }
 
-.upload-btn-wrapper input[type='file'] {
+.upload-btn-wrapper-reference-modal input[type='file'] {
   position: absolute;
   left: 0;
   top: 0;

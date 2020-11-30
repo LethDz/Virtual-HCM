@@ -23,6 +23,7 @@ import {
   CHAT_HISTORY_LIST_PAGE,
   CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA,
   REFERENCE_LIST_PAGE,
+  REPORT_LIST_PAGE,
   SYNONYM_LIST_PAGE,
 } from 'src/constants';
 
@@ -43,7 +44,7 @@ const SideBarAdminContent = () => {
         active={location.includes(ADMIN_CONTRIBUTOR_LIST_PAGE)}
       />
       <SideBarItem
-        name="Train Data"
+        name="Training Data"
         icon={<FontAwesomeIcon icon={faFileCode} />}
         link={ADMIN_TRAIN_DATA_PAGE}
         active={location.includes(ADMIN_TRAIN_DATA_PAGE)}
@@ -87,7 +88,8 @@ const SideBarAdminContent = () => {
       <SideBarItem
         name="Reports"
         icon={<FontAwesomeIcon icon={faNewspaper} />}
-        link="reports"
+        link={REPORT_LIST_PAGE}
+        active={location.includes(REPORT_LIST_PAGE)}
       />
     </ListGroup>
   );

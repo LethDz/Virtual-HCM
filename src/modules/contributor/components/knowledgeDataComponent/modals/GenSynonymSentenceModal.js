@@ -68,11 +68,19 @@ class GenSynonymSentenceModal extends Component {
           isSelected = true;
         }
       });
-      
+
       if (isSelected) {
-        results.push({ question: sentence.question, sentence: sentence.sentence, accept: 1 });
+        results.push({
+          question: sentence.question,
+          sentence: sentence.sentence,
+          accept: 1,
+        });
       } else {
-        results.push({ question: sentence.question, sentence: sentence.sentence, accept: 0 });
+        results.push({
+          question: sentence.question,
+          sentence: sentence.sentence,
+          accept: 0,
+        });
       }
     });
     this._isMounted && this.setState({ selectedSentence: results });
@@ -86,15 +94,23 @@ class GenSynonymSentenceModal extends Component {
   discard = () => {
     this.props.saveGeneratedSentences(false);
     this.props.toggle();
-  }
+  };
 
   toggleThisModal = () => {
     !this.state.loading && this.props.toggle();
   };
 
+  onFirstDataRendered = () => {
+    this.sizeToFit();
+  };
+
+  sizeToFit = () => {
+    this.gridApi.sizeColumnsToFit();
+  };
+
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal}>
+      <Modal isOpen={this.props.isOpen} toggle={this.toggleThisModal} size="lg">
         <LoadingSpinner
           type="MODAL"
           loading={this.state.loading}
@@ -107,9 +123,10 @@ class GenSynonymSentenceModal extends Component {
             <ModalBody>
               <div
                 className="ag-theme-alpine"
-                style={{ height: 400, width: 465 }}
+                style={{ height: 700, width: '100%' }}
               >
                 <AgGridReact
+                  onFirstDataRendered={this.onFirstDataRendered}
                   onGridReady={this.onGridReady}
                   rowData={this.state.rowData}
                   rowSelection="multiple"
@@ -121,14 +138,16 @@ class GenSynonymSentenceModal extends Component {
                 />
               </div>
             </ModalBody>
-            <ModalFooter>
-              <Button color="danger" onClick={this.discard}>
-                <FontAwesomeIcon icon={faBan} /> Discard
-              </Button>
-              <Button color="success" onClick={this.setSelectedSentence}>
-                <FontAwesomeIcon icon={faSave} /> Save
-              </Button>
-            </ModalFooter>
+            {!this.props.disable && (
+              <ModalFooter>
+                <Button color="danger" onClick={this.discard}>
+                  <FontAwesomeIcon icon={faBan} /> Discard
+                </Button>
+                <Button color="success" onClick={this.setSelectedSentence}>
+                  <FontAwesomeIcon icon={faSave} /> Save
+                </Button>
+              </ModalFooter>
+            )}
           </Form>
         </LoadingSpinner>
       </Modal>

@@ -16,6 +16,10 @@
   text-decoration: none;
 }
 
+.link-no-underline-black {
+  color: black;
+}
+
 .upload-btn-wrapper {
   position: relative;
   overflow: hidden;
@@ -34,7 +38,7 @@
   width: 100%;
   max-width: 400px;
   height: 400px;
-  border: 1px solid #4391BE;
+  border: 1px solid #4391be;
   border-radius: 50%;
   object-fit: cover;
 }

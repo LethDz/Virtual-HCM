@@ -9,3 +9,9 @@ export const getAllDataApproval = (store) =>
   store.contributorReducer.dataApprovalList;
 export const getDataApprovalDetail = (store) =>
   store.contributorReducer.dataApprovalDetail;
+export const getKnowledgeDataSettings = (store) =>
+  store.contributorReducer.knowledgeDataSettings;
+export const getAllPendingReport = (store) => store.contributorReducer.reportList;
+export const getAllAcceptedReport = (store) => store.contributorReducer.acceptedReportList;
+export const getAllRejectedReport = (store) => store.contributorReducer.rejectedReportList;
+export const getNewApprovalReport = (store) => store.contributorReducer.approvalReportDetail;

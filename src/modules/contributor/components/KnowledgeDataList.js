@@ -10,19 +10,23 @@ import {
 } from 'src/constants';
 import {
   columnFieldDef,
-  // context,
-  // frameworkComponents,
+  context,
+  frameworkComponents,
   getAllDataApproval,
-  fetchAllDataApproval
+  fetchAllDataApproval,
+  fetchKnowledgeDataSetting,
+  AVAILABLE,
+  PROCESSING,
+  DONE,
+  DISABLE,
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 
 import axiosClient from 'src/common/axiosClient';
 import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { history } from 'src/common/history';
 
@@ -65,15 +69,8 @@ class KnowledgeDataList extends Component {
       this.setState({
         errorList: list,
       });
-  };
-
-  setSuccessAlert = (status) => {
-    this._isMounted &&
-      this.setState({
-        successAlert: status,
-      });
-  };
-
+  };  
+  
   setAlertMessage = (message) => {
     this._isMounted &&
       this.setState({
@@ -96,19 +93,21 @@ class KnowledgeDataList extends Component {
         this.sizeToFit();
         this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
-          this.props.fetchAllDataApproval(response.data.result_data.knowledges);
+          this.props.fetchAllDataApproval(
+            response.data.result_data.knowledge_datas
+          );
+          this.props.fetchKnowledgeDataSetting(
+            response.data.result_data.review_settings
+          );
           this.setAlertMessage('Load successful');
-          this.setSuccessAlert(true);
         } else {
           this.setErrorList(response.data.messages);
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
           this.scrollToTop();
         }
       })
       .catch((error) => {
         this.setErrorAlert(true);
-        this.setSuccessAlert(false);
         this._isMounted && this.setState({ loading: false });
       });
   };
@@ -123,14 +122,15 @@ class KnowledgeDataList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let intent = selectedRows.length === 1 ? selectedRows[0].intent : '';
-    this._isMounted && this.setState({
-      intent,
-    });
+    this._isMounted &&
+      this.setState({
+        intent,
+      });
   };
 
   onRowDoubleClicked = (row) => {
     history.push(GET_KNOWLEDGE_DATA_BY_INTENT(row.data.intent));
-  }
+  };
 
   sizeToFit = () => {
     this.gridApi.sizeColumnsToFit();
@@ -138,7 +138,29 @@ class KnowledgeDataList extends Component {
 
   onFirstDataRendered = () => {
     this.sizeToFit();
-  }
+  };
+
+  setRowData = () => {
+    let data = this.props.dataApprovalList;
+    data.forEach((item, index) => {
+      switch (item.status) {
+        case 0:
+          data[index].status = AVAILABLE;
+          break;
+        case 1:
+          data[index].status = PROCESSING;
+          break;
+        case 2:
+          data[index].status = DONE;
+          break;
+        case 3:
+          data[index].status = DISABLE;
+          break;
+        default:
+      }
+    });
+    return data;
+  };
 
   render() {
     return (
@@ -152,13 +174,6 @@ class KnowledgeDataList extends Component {
             <h5 className="mt-2 mb-2">Knowledge data</h5>
           </Col>
         </Row>
-        {this.state.successAlert && (
-          <SuccessAlert
-            successAlert={this.state.successAlert}
-            text={this.state.alertMessage}
-            onDismiss={() => this.onDismiss('successAlert')}
-          />
-        )}
         {this.state.errorAlert && (
           <ErrorAlert
             errorAlert={this.state.errorAlert}
@@ -166,6 +181,7 @@ class KnowledgeDataList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
+
         <Row className="d-flex flex-row-reverse">
           <Col xs="auto">
             <Link
@@ -186,21 +202,15 @@ class KnowledgeDataList extends Component {
               >
                 <Button color="success">
                   <FontAwesomeIcon icon={faEdit} color="white" />
-                    &nbsp; Edit
-                  </Button>
-              </Link>
-            ) : (
-                <Button color="success" disabled={this.state.intent === ''}>
-                  <FontAwesomeIcon icon={faEdit} color="white" />
                   &nbsp; Edit
                 </Button>
-              )}
-          </Col>
-          <Col xs="auto" className="mr-auto">
-            <Button color="info" onClick={this.sizeToFit}>
-              <FontAwesomeIcon icon={faWrench} color="white" />
-                &nbsp; Size column to Fit
+              </Link>
+            ) : (
+              <Button color="success" disabled={this.state.intent === ''}>
+                <FontAwesomeIcon icon={faEdit} color="white" />
+                &nbsp; Edit
               </Button>
+            )}
           </Col>
         </Row>
         <div
@@ -212,15 +222,15 @@ class KnowledgeDataList extends Component {
         >
           <AgGridReact
             onFirstDataRendered={this.onFirstDataRendered}
-            rowData={this.props.dataApprovalList}
+            rowData={this.setRowData()}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}
             onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnFieldDef}
-            // frameworkComponents={frameworkComponents}
-            // context={context(this)}
+            frameworkComponents={frameworkComponents}
+            context={context(this)}
             pagination={true}
             paginationAutoPageSize={true}
           ></AgGridReact>
@@ -237,6 +247,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   fetchAllDataApproval: (dataApprovalList) => {
     dispatch(fetchAllDataApproval(dataApprovalList));
+  },
+  fetchKnowledgeDataSetting: (knowledgeDataSettings) => {
+    dispatch(fetchKnowledgeDataSetting(knowledgeDataSettings));
   },
 });
 

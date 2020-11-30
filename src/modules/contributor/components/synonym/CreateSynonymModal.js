@@ -338,7 +338,7 @@ class CreateSynonymModal extends Component {
                 </Col>
                 <Col className="col-2">
                   <Button
-                    color="success"
+                    color="primary"
                     onClick={this.tokenizeWord}
                     disabled={this.state.loading}
                   >
