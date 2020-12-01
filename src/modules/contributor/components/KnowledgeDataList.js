@@ -26,7 +26,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import axiosClient from 'src/common/axiosClient';
 import 'src/static/stylesheets/contributor.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faSync } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { history } from 'src/common/history';
 
@@ -69,8 +69,8 @@ class KnowledgeDataList extends Component {
       this.setState({
         errorList: list,
       });
-  };  
-  
+  };
+
   setAlertMessage = (message) => {
     this._isMounted &&
       this.setState({
@@ -182,17 +182,11 @@ class KnowledgeDataList extends Component {
           />
         )}
 
-        <Row className="d-flex flex-row-reverse">
-          <Col xs="auto">
-            <Link
-              to={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
-              className="link-no-underline"
-            >
-              <Button color="primary">
-                <FontAwesomeIcon icon={faPlus} color="white" />
-                &nbsp; Create
-              </Button>
-            </Link>
+        <Row>
+          <Col>
+            <Button type="button" color="success" onClick={this.setData}>
+              <FontAwesomeIcon icon={faSync} color="white" />
+            </Button>
           </Col>
           <Col xs="auto">
             {this.state.intent !== '' ? (
@@ -211,6 +205,17 @@ class KnowledgeDataList extends Component {
                 &nbsp; Edit
               </Button>
             )}
+          </Col>
+          <Col xs="auto">
+            <Link
+              to={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
+              className="link-no-underline"
+            >
+              <Button color="primary">
+                <FontAwesomeIcon icon={faPlus} color="white" />
+                &nbsp; Create
+              </Button>
+            </Link>
           </Col>
         </Row>
         <div

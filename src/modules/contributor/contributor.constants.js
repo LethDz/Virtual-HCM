@@ -3,6 +3,7 @@ import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent
 import StatusBadge from 'src/modules/contributor/components/knowLedgeListComponent/StatusBadge';
 import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
 import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
+import { progressBarComparator } from 'src/modules/contributor/components/knowLedgeListComponent/progressBarComparator';
 import { ReportType } from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
 
@@ -165,6 +166,8 @@ export const columnFieldDef = [
     headerName: 'Progress',
     resizable: true,
     cellRenderer: 'statusBar',
+    sortable: true,
+    comparator: progressBarComparator,
   },
   {
     field: 'user_review',

@@ -109,8 +109,8 @@ class SignInForm extends Component {
                   onChange={this.handleInput}
                   required
                   invalid={this.state.usernameInvalid}
-                  size="sm"
-                  block
+                  bsSize="sm"
+                  block="true"
                 />
                 <FormFeedback>Invalid Username</FormFeedback>
               </FormGroup>
@@ -127,8 +127,8 @@ class SignInForm extends Component {
                   onChange={this.handleInput}
                   required
                   invalid={this.state.passwordInvalid}
-                  size="sm"
-                  block
+                  bsSize="sm"
+                  block="true"
                 />
                 <FormFeedback>Invalid Password</FormFeedback>
               </FormGroup>

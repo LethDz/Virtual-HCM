@@ -7,6 +7,8 @@ import {
   ListGroup,
   ListGroupItem,
   Label,
+  InputGroup,
+  InputGroupAddon,
 } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 
@@ -144,112 +146,108 @@ class Synonyms extends Component {
         <Col>
           <Label className="label">Synonyms:</Label>
           <Row>
-            <Col>
-              {!this.props.disable && (
-                <Input
-                  disabled={this.props.disable}
-                  name="synonymWord"
-                  placeholder="Enter tokenized word here"
-                  value={this.state.synonymWord}
-                  onChange={this.handleInput}
-                ></Input>
-              )}
-              <ListGroup>
-                {this.state.synonyms.map((word, index) => {
-                  return (
-                    <ListGroupItem
-                      key={index}
-                      className="mt-1 bound-group synonym"
-                      onMouseOver={() => this.onMouseOver(word.word)}
-                      onMouseLeave={this.onMouseLeave}
-                    >
-                      <Row>
-                        <Col>
-                          {word.word}
-                          <ListGroup>
-                            {this.state.synonyms[index].synonyms.map(
-                              (synonym, indexs) => {
-                                return (
-                                  <ListGroupItem key={indexs}>
-                                    <Row>
-                                      <Col>
-                                        {synonym.meaning}:&nbsp;
-                                        {synonym.words.map((key, index) => {
-                                          return (
-                                            <span key={index}>{key} </span>
-                                          );
-                                        })}
-                                      </Col>
-                                      {!this.props.disable && (
-                                        <Col xs="auto">
-                                          <Button
-                                            disabled={this.props.disable}
-                                            color="danger"
-                                            onClick={() => {
-                                              this.removeSynonymInWord(
-                                                index,
-                                                indexs
-                                              );
-                                            }}
-                                          >
-                                            <FontAwesomeIcon
-                                              icon={faTrashAlt}
-                                            />
-                                          </Button>
-                                        </Col>
-                                      )}
-                                    </Row>
-                                  </ListGroupItem>
-                                );
-                              }
-                            )}
-                          </ListGroup>
-                        </Col>
-                        {!this.props.disable && (
-                          <Fragment>
-                            <Col xs="auto">
-                              <Button
-                                disabled={this.props.disable}
-                                color="success"
-                                onClick={() => {
-                                  this.toggleSynonymModal(index);
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faTasks} /> Apply synonym
-                                sets
-                              </Button>
-                            </Col>
-                            <Col xs="auto">
-                              <Button
-                                disabled={this.props.disable}
-                                color="danger"
-                                onClick={() => {
-                                  this.removeSynonym(index);
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faTrashAlt} />
-                              </Button>
-                            </Col>
-                          </Fragment>
-                        )}
-                      </Row>
-                    </ListGroupItem>
-                  );
-                })}
-              </ListGroup>
-            </Col>
             {!this.props.disable && (
-              <Col xs="auto">
-                <Button
-                  disabled={this.props.disable}
-                  color="success"
-                  onClick={this.setSynonym}
-                >
-                  <FontAwesomeIcon icon={faPlusCircle} /> Add
-                </Button>
+              <Col>
+                <InputGroup>
+                  <Input
+                    disabled={this.props.disable}
+                    name="synonymWord"
+                    placeholder="Enter tokenized word here"
+                    value={this.state.synonymWord}
+                    onChange={this.handleInput}
+                  ></Input>
+                  <InputGroupAddon addonType="append">
+                    <Button
+                      disabled={this.props.disable}
+                      color="success"
+                      onClick={this.setSynonym}
+                    >
+                      <FontAwesomeIcon icon={faPlusCircle} /> Add
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
               </Col>
             )}
           </Row>
+          <ListGroup>
+            {this.state.synonyms.map((word, index) => {
+              return (
+                <ListGroupItem
+                  key={index}
+                  className="mt-1 bound-group synonym"
+                  onMouseOver={() => this.onMouseOver(word.word)}
+                  onMouseLeave={this.onMouseLeave}
+                >
+                  <Row>
+                    <Col>
+                      {word.word}
+                      <ListGroup>
+                        {this.state.synonyms[index].synonyms.map(
+                          (synonym, indexs) => {
+                            return (
+                              <ListGroupItem key={indexs}>
+                                <Row>
+                                  <Col>
+                                    {synonym.meaning}:&nbsp;
+                                    {synonym.words.map((key, index) => {
+                                      return <span key={index}>{key} </span>;
+                                    })}
+                                  </Col>
+                                  {!this.props.disable && (
+                                    <Col xs="auto">
+                                      <Button
+                                        disabled={this.props.disable}
+                                        color="danger"
+                                        onClick={() => {
+                                          this.removeSynonymInWord(
+                                            index,
+                                            indexs
+                                          );
+                                        }}
+                                      >
+                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                      </Button>
+                                    </Col>
+                                  )}
+                                </Row>
+                              </ListGroupItem>
+                            );
+                          }
+                        )}
+                      </ListGroup>
+                    </Col>
+                    {!this.props.disable && (
+                      <Fragment>
+                        <Col xs="auto">
+                          <Button
+                            disabled={this.props.disable}
+                            color="success"
+                            onClick={() => {
+                              this.toggleSynonymModal(index);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTasks} /> Apply synonym
+                            sets
+                          </Button>
+                        </Col>
+                        <Col xs="auto">
+                          <Button
+                            disabled={this.props.disable}
+                            color="danger"
+                            onClick={() => {
+                              this.removeSynonym(index);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </Button>
+                        </Col>
+                      </Fragment>
+                    )}
+                  </Row>
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
         </Col>
       </Row>
     );

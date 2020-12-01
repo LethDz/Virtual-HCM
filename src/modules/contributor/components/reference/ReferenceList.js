@@ -7,16 +7,16 @@ import {
   getAllDocumentReference,
   fetchAllDocumentReference,
   DocumentReferenceModal,
-} from "src/modules/contributor/index";
-import { REFERENCE, ALL } from "src/constants";
-import { columnRefFieldDef } from "src/modules/contributor";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
-import axiosClient from "src/common/axiosClient";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
-import "src/static/stylesheets/reference.css";
-import ErrorAlert from "src/common/alertComponent/ErrorAlert";
-import SuccessAlert from "src/common/alertComponent/SuccessAlert";
+} from 'src/modules/contributor/index';
+import { REFERENCE, ALL } from 'src/constants';
+import { columnRefFieldDef } from 'src/modules/contributor';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faEdit, faSync } from '@fortawesome/free-solid-svg-icons';
+import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import 'src/static/stylesheets/reference.css';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 
 class ReferenceList extends Component {
   _isMounted = false;
@@ -180,8 +180,8 @@ class ReferenceList extends Component {
   };
 
   resetSelection = () => {
-    this._isMounted && this.setState({ selectedId: '' })
-  }
+    this._isMounted && this.setState({ selectedId: '' });
+  };
 
   render() {
     return (
@@ -241,6 +241,11 @@ class ReferenceList extends Component {
                 updateReferenceList={this.setReferenceList}
               />
             )}
+          </Col>
+          <Col>
+            <Button type="button" color="success" onClick={this.setRowData}>
+              <FontAwesomeIcon icon={faSync} color="white" />
+            </Button>
           </Col>
         </Row>
         <LoadingSpinner

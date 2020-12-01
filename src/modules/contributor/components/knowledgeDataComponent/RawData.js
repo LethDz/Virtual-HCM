@@ -113,6 +113,7 @@ class RawData extends Component {
   };
 
   stateCancelTokenize = () => {
+    this.props.setTokenizeWord([], []);
     this._isMounted && this.setState({ mode: 'NORMAL' });
     this.props.cancelCriticalData();
   };

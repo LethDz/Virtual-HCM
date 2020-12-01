@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Input, Button } from 'reactstrap';
+import {
+  Row,
+  Col,
+  Input,
+  Button,
+  InputGroup,
+  InputGroupAddon,
+} from 'reactstrap';
 
 import { handleInputChange } from 'src/common/handleInputChange';
 
@@ -65,29 +72,31 @@ class CriticalDataItem extends Component {
           <h2>{this.state.verbType}</h2>
         </Col>
         <Col xs="auto">
-          <Input
-            disabled={this.props.disable}
-            defaultValue={''}
-            type="select"
-            name="word"
-            onChange={this.handleInput}
-          >
-            <option value="" disabled>
-              None
-            </option>
-            {this.props.wordArray.map((data, index) => {
-              return <option key={index}>{data.value}</option>;
-            })}
-          </Input>
-        </Col>
-        <Col xs="auto" className="p-0">
-          <Button
-            disabled={this.props.disable}
-            color="success"
-            onClick={this.setVerb}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          <InputGroup>
+            <Input
+              disabled={this.props.disable}
+              defaultValue={''}
+              type="select"
+              name="word"
+              onChange={this.handleInput}
+            >
+              <option value="" disabled>
+                None
+              </option>
+              {this.props.wordArray.map((data, index) => {
+                return <option key={index}>{data.value}</option>;
+              })}
+            </Input>
+            <InputGroupAddon addonType="append">
+              <Button
+                disabled={this.props.disable}
+                color="success"
+                onClick={this.setVerb}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </Button>
+            </InputGroupAddon>
+          </InputGroup>
         </Col>
       </Row>
     );

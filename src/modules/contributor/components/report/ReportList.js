@@ -10,7 +10,7 @@ import {
 import { GET_ALL_PENDING_REPORT } from 'src/constants';
 import { columnPendingReportFieldDef } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faSync } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
@@ -183,10 +183,15 @@ class ReportList extends Component {
               />
             )}
           </Col>
+          <Col>
+            <Button type="button" color="success" onClick={this.setRowData}>
+              <FontAwesomeIcon icon={faSync} color="white" />
+            </Button>
+          </Col>
         </Row>
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading report"
+          text="Loading pending reports"
         ></LoadingSpinner>
         <div
           className="ag-theme-alpine"
