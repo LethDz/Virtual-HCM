@@ -5,6 +5,17 @@ export const API_URL =
     : process.env.REACT_APP_API_URL_DEV;
 export const API_PREFIX = '/api';
 
+// Base 64 Image generate
+export const imgBase64 = (image) => `${API_URL}${image}`;
+
+// Web-socket URL:
+export const WEB_SOCKET_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_WEB_SOCKET_DEPLOY
+    : process.env.REACT_APP_WEB_SOCKET_DEV;
+export const WEB_SOCKET_TRAINING = `${WEB_SOCKET_URL}/ws/train-classifier/`;
+export const WEB_SOCKET_CHAT = `${WEB_SOCKET_URL}/ws/chat/`;
+
 // API Common Route Path
 export const LOGIN = '/auth';
 export const LOGOUT = '/logout';
@@ -65,6 +76,8 @@ export const ADMIN_TOGGLE_STATUS_TRAIN_DATA = (id) =>
 export const ADMIN_DELETE_TRAIN_DATA = `/train-data/delete`;
 export const ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA = `/train-data/change-description`;
 export const ADMIN_ADD_TRAIN_DATA = `/train-data/add`;
+export const ADMIN_CHANGE_SETTING = `/setting/update`;
+export const ADMIN_GET_ALL_SETTING = `/setting/all`;
 
 // API status code:
 export const FORBIDDEN = 403;
@@ -129,5 +142,5 @@ export const ROLE_CONTRIBUTOR = 'Contributor';
 // Cookie Name
 export const CSRF_TOKEN = 'csrftoken';
 
-// Base 64 Image generate
-export const imgBase64 = (image) => `https://127.0.0.1:8000${image}`;
+// General Error Message
+export const generalError = 'An error has occured';

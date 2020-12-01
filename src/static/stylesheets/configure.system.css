@@ -1,0 +1,42 @@
+.cl-config-container {
+  background-color: white;
+  margin: 10px !important;
+  border-radius: 5px;
+  border-top: 2px solid #3c8dbc;
+  height: fit-content;
+  width: 100% !important;
+  padding-bottom: 15px;
+}
+
+.cl-config-container-system {
+  background-color: white;
+  margin: 10px !important;
+  border-radius: 5px;
+  border-top: 2px solid green;
+  height: fit-content;
+  width: 100% !important;
+  padding-bottom: 15px;
+}
+
+.cl-config-container-review {
+  background-color: white;
+  margin: 10px !important;
+  border-radius: 5px;
+  border-top: 2px solid red;
+  height: fit-content;
+  width: 100% !important;
+  padding-bottom: 15px;
+}
+
+.font-sm {
+  font-size: 0.875rem;
+}
+
+.postag-tool-tip {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.input-group-prepend {
+  z-index: 0;
+}

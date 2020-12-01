@@ -196,6 +196,7 @@ export const frameworkComponentsData = {
 export const classifierTypes = {
   1: 'Intent',
   2: 'Question',
+  3: 'Dialog Intent Recognizer',
 };
 
 // Default Setting
@@ -316,3 +317,51 @@ export const trainDataDeleted = [
     comparator: dateComparator,
   },
 ];
+
+export const settingIDType2 = {
+  vncorenlp: 'vncorenlp',
+  classifier_train_script: 'classifier_train_script',
+  exclude_pos_tag: 'exclude_pos_tag',
+  named_entity_types: 'named_entity_types',
+  subject_data_ng_pattern: 'subject_data_ng_pattern',
+  exclude_word: 'exclude_word',
+  predict_threshold: 'predict_threshold',
+};
+
+export const settingStateType2 = {
+  vncorenlp: '',
+  classifier_train_script: '',
+  exclude_pos_tag: '',
+  named_entity_types: '',
+  subject_data_ng_pattern: '',
+  exclude_word: '',
+  predict_threshold: '',
+};
+
+export const settingIDType1 = {
+  accept_image_format: 'accept_image_format',
+  default_password: 'default_password',
+  login_expiration_limit: 'login_expiration_limit',
+};
+
+export const settingStateType1 = {
+  accept_image_format: '',
+  default_password: '',
+  login_expiration_limit: '',
+};
+
+export const settingIDType3 = {
+  maximum_reject: 'maximum_reject',
+  minimum_accept: 'minimum_accept',
+};
+
+export const settingStateType3 = {
+  maximum_reject: '',
+  minimum_accept: '',
+};
+
+export const SETTING_TYPES = {
+  SYSTEM: 1,
+  NLP: 2,
+  REVIEW_PROCESS: 3,
+};
