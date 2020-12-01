@@ -9,6 +9,7 @@ import {
 } from 'src/modules/chat';
 import 'src/static/stylesheets/chat.css';
 import ReactDOM from 'react-dom';
+import { WEB_SOCKET_CHAT } from 'src/constants';
 
 class ChatWidget extends Component {
   constructor() {
@@ -24,7 +25,7 @@ class ChatWidget extends Component {
     this.commands = {
       START_NEW_SESSION: 'newsession',
       REQUEST_LAST_SESSION_DATA: 'getlastsession',
-      CHAT: 'chat'
+      CHAT: 'chat',
     };
     this.response_types = {
       LAST_SESSION_MESSAGES: 'last_session_messages',
@@ -89,9 +90,7 @@ class ChatWidget extends Component {
         : this.state.newMessagesCount + textArr.length;
       this.setState({
         newMessagesCount: newMessagesCount,
-        messageList: [
-          ...this.state.messageList, ...messages
-        ],
+        messageList: [...this.state.messageList, ...messages],
       });
     }
   };
@@ -99,12 +98,11 @@ class ChatWidget extends Component {
   create_websocket_connection = () => {
     let _self = this;
     _self.setState({
-      loading: true
-    })
-    let ws_url = 'wss://127.0.0.1:8000/ws/chat/';
+      loading: true,
+    });
     let chatSocket;
     try {
-      chatSocket = new WebSocket(ws_url);
+      chatSocket = new WebSocket(WEB_SOCKET_CHAT);
     } catch (err) {
       return null;
     }
@@ -130,7 +128,7 @@ class ChatWidget extends Component {
             if (received.data && received.data.length > 0) {
               _self.setChatboxMessages(received.data);
               _self.setState({
-                loading: false
+                loading: false,
               });
             } else {
               _self.send_websocket_command(
@@ -144,7 +142,7 @@ class ChatWidget extends Component {
               _self._sendMessages(received.data.messages);
               if (received.data.start_new) {
                 _self.current_command = null;
-                setTimeout(function(){
+                setTimeout(function () {
                   _self.setState({
                     messageList: [],
                   });
@@ -153,7 +151,7 @@ class ChatWidget extends Component {
                     null
                   );
                   _self.setState({
-                    loading: false
+                    loading: false,
                   });
                 }, 3000);
               }
@@ -223,7 +221,7 @@ class ChatWidget extends Component {
   };
 
   componentDidMount() {
-    let _self = this; 
+    let _self = this;
     this._isMounted = true;
     this.chatSocket = this.create_websocket_connection();
     if (!this.chatSocket) {
@@ -239,13 +237,12 @@ class ChatWidget extends Component {
             );
           } else {
             _self.setState({
-              loading: true
-            })
+              loading: true,
+            });
           }
         }
       }, 1000);
     }
-    
   }
 
   componentWillUnmount() {
@@ -267,7 +264,11 @@ class ChatWidget extends Component {
         />
         {this.state.loading &&
           ReactDOM.createPortal(
-            <LoadingSpinner loading={this.state.isOpen} text="Loading" type="MODAL"/>,
+            <LoadingSpinner
+              loading={this.state.isOpen}
+              text="Loading"
+              type="MODAL"
+            />,
             document.getElementsByClassName('sc-chat-window')[0]
           )}
       </Fragment>

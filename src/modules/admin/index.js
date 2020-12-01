@@ -15,7 +15,12 @@ import TrainDataDelete from 'src/modules/admin/components/train-data/TrainDataDe
 import TrainDataDeletedList from 'src/modules/admin/components/train-data/TrainDataDeletedList';
 import TrainData from 'src/modules/admin/components/train-data/TrainData';
 import AccountRole from 'src/modules/admin/components/manage-contributor/AccountRole';
+import NlpSetting from 'src/modules/admin/components/configure-system/NlpSetting';
+import ReviewProcessSetting from 'src/modules/admin/components/configure-system/ReviewProcessSetting';
+import SystemSetting from 'src/modules/admin/components/configure-system/SystemSetting';
+import ConfigureSystemHook from 'src/modules/admin/components/configure-system/ConfigureSystemHook';
 
+export * from 'src/modules/admin/components/configure-system/axiosCall';
 export * from 'src/modules/admin/admin.actions';
 export * from 'src/modules/admin/admin.constants.js';
 export * from 'src/modules/admin/admin.reducer.js';
@@ -39,4 +44,8 @@ export {
   TrainDataEdit,
   TrainData,
   AccountRole,
+  NlpSetting,
+  ReviewProcessSetting,
+  SystemSetting,
+  ConfigureSystemHook,
 };
