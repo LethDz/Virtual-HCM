@@ -17,6 +17,7 @@ import {
   KnowledgeDataDetailPage,
   ReportPage,
   TrainDataPage,
+  ChatHistoryListPage,
   UserDetailPage,
 } from 'src/pages';
 import {
@@ -34,6 +35,7 @@ import {
   REFERENCE_LIST_PAGE,
   SYNONYM_LIST_PAGE,
   GET_KNOWLEDGE_DATA_BY_INTENT,
+  CHAT_HISTORY_LIST_PAGE,
   REPORT_LIST_PAGE,
   ADMIN_TRAIN_DATA_PAGE,
   USER_DETAIL_PAGE,
@@ -117,6 +119,11 @@ const Routes = () => (
         exact
         path={REPORT_LIST_PAGE}
         component={ReportPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={CHAT_HISTORY_LIST_PAGE}
+        component={ChatHistoryListPage}
       />
       <PrivateRouteContributor
         exact

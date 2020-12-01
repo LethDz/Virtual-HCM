@@ -39,6 +39,7 @@ import { connect } from 'react-redux';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import DeleteConfirmationModal from 'src/common/DeleteConfirmationModal';
 import cover from 'src/static/images/cover.png';
 
 class DocumentReferenceModal extends Component {
@@ -56,6 +57,7 @@ class DocumentReferenceModal extends Component {
       errorAlert: false,
       successAlert: false,
       errorList: [],
+      isOpenDeleteConfirmation: false,
     };
   }
 
@@ -88,7 +90,7 @@ class DocumentReferenceModal extends Component {
     if (
       this.props.referenceDetail &&
       this.props.referenceDetail.reference_document_id ===
-      parseInt(this.props.id)
+        parseInt(this.props.id)
     ) {
       this.setState({
         ...this.props.referenceDetail,
@@ -200,7 +202,12 @@ class DocumentReferenceModal extends Component {
   };
 
   deleteReference = () => {
+    this.toggleDeleteConfirmation();
+  };
+
+  confirmDelete = () => {
     this.setLoading(true);
+    this.toggleDeleteConfirmation();
     axiosClient
       .get(REFERENCE + DELETE_REFERENCE(this.props.id))
       .then((response) => {
@@ -225,6 +232,13 @@ class DocumentReferenceModal extends Component {
     !this.state.loading && this.props.toggle();
   };
 
+  toggleDeleteConfirmation = () => {
+    this._isMounted &&
+      this.setState({
+        isOpenDeleteConfirmation: !this.state.isOpenDeleteConfirmation,
+      });
+  };
+
   render() {
     return (
       <Container>
@@ -233,7 +247,16 @@ class DocumentReferenceModal extends Component {
           toggle={this.toggle}
           unmountOnClose={true}
         >
-          <ModalHeader toggle={this.toggle}>Document Reference</ModalHeader>
+          {this.state.isOpenDeleteConfirmation && (
+            <DeleteConfirmationModal
+              type="DELETE"
+              isOpen={this.state.isOpenDeleteConfirmation}
+              toggle={this.toggleDeleteConfirmation}
+              value={this.state.meaning}
+              confirmDelete={this.confirmDelete}
+            />
+          )}
+          <ModalHeader toggle={this.toggle}>Document Reference ID: {this.state.reference_document_id}</ModalHeader>
           <Form onSubmit={this.editReference}>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
@@ -285,9 +308,6 @@ class DocumentReferenceModal extends Component {
                   </Row>
                 </Col>
                 <Col className="col-9">
-                  <Label>
-                    <h5>ID: {this.state.reference_document_id}</h5>
-                  </Label>
                   <FormGroup>
                     <Label>Reference name: </Label>
                     <Input

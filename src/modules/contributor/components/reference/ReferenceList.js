@@ -1,22 +1,22 @@
-import { AgGridReact } from 'ag-grid-react';
-import React, { Component } from 'react';
-import { Button, Col, Row } from 'reactstrap';
-import { connect } from 'react-redux';
+import { AgGridReact } from "ag-grid-react";
+import React, { Component } from "react";
+import { Button, Col, Row } from "reactstrap";
+import { connect } from "react-redux";
 import {
   CreateReferenceModal,
   getAllDocumentReference,
   fetchAllDocumentReference,
   DocumentReferenceModal,
-} from 'src/modules/contributor/index';
-import { REFERENCE, ALL } from 'src/constants';
-import { columnRefFieldDef } from 'src/modules/contributor';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
-import axiosClient from 'src/common/axiosClient';
-import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-import 'src/static/stylesheets/reference.css';
-import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
-import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+} from "src/modules/contributor/index";
+import { REFERENCE, ALL } from "src/constants";
+import { columnRefFieldDef } from "src/modules/contributor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
+import axiosClient from "src/common/axiosClient";
+import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
+import "src/static/stylesheets/reference.css";
+import ErrorAlert from "src/common/alertComponent/ErrorAlert";
+import SuccessAlert from "src/common/alertComponent/SuccessAlert";
 
 class ReferenceList extends Component {
   _isMounted = false;
@@ -27,9 +27,8 @@ class ReferenceList extends Component {
       modalReferenceCreate: false,
       modalReferenceDetail: false,
       containerHeight: 0,
-      containerWidth: 0,
       loading: false,
-      selectedId: '',
+      selectedId: "",
       errorAlert: false,
       successAlert: false,
       errorList: [],
@@ -89,7 +88,7 @@ class ReferenceList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let id =
-      selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
+      selectedRows.length === 1 ? selectedRows[0].reference_document_id : "";
     this._isMounted &&
       this.setState({
         selectedId: id,
@@ -131,12 +130,9 @@ class ReferenceList extends Component {
   setStyleForGrid = () => {
     const containerHeight =
       this.conRef.current && this.conRef.current.clientHeight;
-    const containerWidth =
-      this.conRef.current && this.conRef.current.clientWidth;
     this._isMounted &&
       this.setState({
         containerHeight,
-        containerWidth,
       });
   };
 
@@ -203,14 +199,14 @@ class ReferenceList extends Component {
           <SuccessAlert
             successAlert={this.state.successAlert}
             text="Loading reference is successfully"
-            onDismiss={() => this.onDismiss('successAlert')}
+            onDismiss={() => this.onDismiss("successAlert")}
           />
         )}
         {this.state.errorAlert && (
           <ErrorAlert
             errorAlert={this.state.errorAlert}
             errorList={this.state.errorList}
-            onDismiss={() => this.onDismiss('errorAlert')}
+            onDismiss={() => this.onDismiss("errorAlert")}
           />
         )}
         <Row className="d-flex flex-row-reverse">
@@ -230,7 +226,7 @@ class ReferenceList extends Component {
           <Col xs="auto">
             <Button
               color="success"
-              disabled={this.state.selectedId === ''}
+              disabled={this.state.selectedId === ""}
               onClick={this.toggleReferenceDetail}
             >
               <FontAwesomeIcon icon={faEdit} color="white" />
@@ -255,7 +251,7 @@ class ReferenceList extends Component {
           className="ag-theme-alpine"
           style={{
             height: `${this.state.containerHeight - 200}px`,
-            marginTop: '10px',
+            marginTop: "10px",
           }}
         >
           <AgGridReact

@@ -2,7 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import 'src/static/stylesheets/contributor.list.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faUserEdit, faSync } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUserPlus,
+  faUserEdit,
+  faSync,
+} from '@fortawesome/free-solid-svg-icons';
 import { AgGridReact } from 'ag-grid-react';
 import {
   columnFieldDef,
@@ -20,6 +24,7 @@ import { connect } from 'react-redux';
 import { getContributorsList, pullContributorsList } from 'src/modules/admin';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { history } from 'src/common/history';
 
 class ContributorsList extends Component {
@@ -32,6 +37,7 @@ class ContributorsList extends Component {
       containerHeight: 0,
       containerWidth: 0,
       errorAlert: false,
+      successAlert: false,
       contributorsList: [],
       errorList: [],
     };
@@ -50,7 +56,7 @@ class ContributorsList extends Component {
   onGridReady = async (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    await this.refreshTable()
+    await this.refreshTable();
   };
 
   refreshTable = () => {
@@ -72,7 +78,7 @@ class ContributorsList extends Component {
         this.setLoading(false);
         this.setErrorAlert(true);
       });
-  }
+  };
 
   setContributorsList = (list) => {
     this._isMounted &&
@@ -119,6 +125,13 @@ class ContributorsList extends Component {
       });
   };
 
+  setSuccessAlert = (status) => {
+    this._isMounted &&
+      this.setState({
+        successAlert: status,
+      });
+  };
+
   setErrorAlert = (status) => {
     this._isMounted &&
       this.setState({
@@ -143,6 +156,13 @@ class ContributorsList extends Component {
           className="cl-container container min-vh-100"
           ref={this.conRef}
         >
+          {this.state.successAlert && (
+            <SuccessAlert
+              successAlert={this.state.successAlert}
+              text="Request is successfully"
+              onDismiss={() => this.onDismiss('successAlert')}
+            />
+          )}
           {this.state.errorAlert && (
             <ErrorAlert
               errorAlert={this.state.errorAlert}
@@ -157,7 +177,9 @@ class ContributorsList extends Component {
           </Row>
           <Row>
             <Col>
-              <Button type="button" color="success" onClick={this.refreshTable}><FontAwesomeIcon icon={faSync} color="white" /></Button>
+              <Button type="button" color="success" onClick={this.refreshTable}>
+                <FontAwesomeIcon icon={faSync} color="white" />
+              </Button>
             </Col>
             <Col xs="auto">
               {this.state.id !== '' ? (
@@ -171,11 +193,11 @@ class ContributorsList extends Component {
                   </Button>
                 </Link>
               ) : (
-                  <Button color="success" disabled={this.state.id === ''}>
-                    <FontAwesomeIcon icon={faUserEdit} color="white" />
+                <Button color="success" disabled={this.state.id === ''}>
+                  <FontAwesomeIcon icon={faUserEdit} color="white" />
                   &nbsp; Edit
-                  </Button>
-                )}
+                </Button>
+              )}
             </Col>
             <Col xs="auto">
               <Link

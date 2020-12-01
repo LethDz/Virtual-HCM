@@ -7,6 +7,8 @@ import DocumentReferenceModal from 'src/modules/contributor/components/reference
 import FormSectionTitle from 'src/modules/contributor/components/knowledgeDataComponent/FormSectionTitle';
 import SynonymDetailModal from 'src/modules/contributor/components/synonym/SynonymDetailModal';
 import CreateSynonymModal from 'src/modules/contributor/components/synonym/CreateSynonymModal';
+import ChatHistoryList from 'src/modules/contributor/components/chatHistory/ChatHistoryList';
+import ChatHistoryDetailModal from 'src/modules/contributor/components/chatHistory/ChatHistoryDetailModal';
 import GenSynonymSentenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/GenSynonymSentenceModal';
 import ReferenceModal from 'src/modules/contributor/components/knowledgeDataComponent/modals/ReferenceModal';
 import ReportDetailModal from 'src/modules/contributor/components/report/ReportDetailModal';
@@ -72,6 +74,8 @@ export {
   ReferenceModal,
   SynonymDetailModal,
   CreateSynonymModal,
+  ChatHistoryList,
+  ChatHistoryDetailModal,
   ReportList,
   ReportDetailModal,
   ReportAcceptedList,

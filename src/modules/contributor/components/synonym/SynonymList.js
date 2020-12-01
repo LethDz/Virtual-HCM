@@ -25,7 +25,6 @@ class SynonymList extends Component {
       modalSynonymCreate: false,
       modalSynonymDetail: false,
       containerHeight: 0,
-      containerWidth: 0,
       loading: false,
       selectedId: '',
       errorAlert: false,
@@ -130,12 +129,9 @@ class SynonymList extends Component {
   setStyleForGrid = () => {
     const containerHeight =
       this.conRef.current && this.conRef.current.clientHeight;
-    const containerWidth =
-      this.conRef.current && this.conRef.current.clientWidth;
     this._isMounted &&
       this.setState({
         containerHeight,
-        containerWidth,
       });
   };
 

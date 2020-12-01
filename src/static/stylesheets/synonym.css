@@ -1,13 +1,37 @@
 .list-word {
   height: 200px;
-  background-color: #F5F5F5;
+  overflow-y: scroll;
+  background: aliceblue;
+}
+
+.tokenized-word-list {
+  height: 100px;
+  background: aliceblue;
   overflow-y: scroll;
 }
 
-.tokenize-word {
-  height: 100px;
-  background-color: #F5F5F5;
-  overflow-y: scroll;
+.tokenized-word-list::-webkit-scrollbar {
+  display: none;
+}
+
+.tokenized-word-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.list-content {
+  margin: 10px 10px 10px 10px;
+  max-width: inherit;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tokenized-word {
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: #4795dd;
+  margin: 5px 5px 5px 0;
 }
 
 .badge-box {
@@ -25,4 +49,8 @@
 
 .badge-box:checked + .badge {
   text-indent: 0;
+}
+
+.title{
+  color: #1b88ee;
 }
