@@ -1,8 +1,23 @@
-import React, { Component, Fragment } from 'react';
-import { Button, Input, Popover, PopoverHeader, PopoverBody, Alert, ButtonGroup } from 'reactstrap';
+import React, { Component } from 'react';
+import {
+  Button,
+  Input,
+  Popover,
+  PopoverHeader,
+  PopoverBody,
+  Alert,
+  ButtonGroup,
+  Row,
+  Col,
+} from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { KNOWLEDGE_DATA, REVIEW } from 'src/constants';
-import { ACCEPT, DECLINE, DRAFT, getDataApprovalDetail } from 'src/modules/contributor/index';
+import {
+  ACCEPT,
+  DECLINE,
+  DRAFT,
+  getDataApprovalDetail,
+} from 'src/modules/contributor/index';
 import { connect } from 'react-redux';
 
 import axiosClient from 'src/common/axiosClient';
@@ -11,7 +26,12 @@ import { history } from 'src/common/history';
 import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faTimesCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheckCircle,
+  faTimesCircle,
+  faEdit,
+  faWindowMinimize,
+} from '@fortawesome/free-solid-svg-icons';
 
 class ReviewModal extends Component {
   _isMounted = false;
@@ -21,7 +41,7 @@ class ReviewModal extends Component {
       buttonId: props.buttonId,
       comment: '',
       loading: false,
-      status: null
+      status: null,
     };
   }
 
@@ -31,9 +51,13 @@ class ReviewModal extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
-    const userReview = this.props.dataApprovalDetail.user_review
+    const userReview = this.props.dataApprovalDetail.user_review;
     userReview &&
-      this._isMounted && this.setState({ comment: userReview.review_detail, status: userReview.status })
+      this._isMounted &&
+      this.setState({
+        comment: userReview.review_detail,
+        status: userReview.status,
+      });
   };
 
   componentWillUnmount = () => {
@@ -41,49 +65,57 @@ class ReviewModal extends Component {
   };
 
   setLoading = (status) => {
-    this._isMounted && this.setState({ loading: status })
-  }
+    this._isMounted && this.setState({ loading: status });
+  };
 
   sendReview = (status) => {
-    this.setLoading(true)
-    this.props.setErrorAlert(false)
+    this._isMounted && this.setState({ status: -1 });
+    this.setLoading(true);
+    this.props.setErrorAlert(false);
     let data = {
       knowledge_data: this.props.knowledgeDataId,
       status: status,
-      review_detail: this.state.comment
-    }
+      review_detail: this.state.comment,
+    };
     axiosClient
       .post(KNOWLEDGE_DATA + REVIEW, data)
-      .then(response => {
-        this.setLoading(false)
+      .then((response) => {
+        this.setLoading(false);
         if (response.data.status) {
-          history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
-        }
-        else {
-          this.props.setSuccessAlert(false)
-          this.props.setErrorAlert(true)
+          if (data.status === DRAFT) {
+            this._isMounted && this.setState({ status: 4 });
+          } else {
+            history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
+          }
+        } else {
+          this.props.setSuccessAlert(false);
+          this.props.setErrorAlert(true);
         }
       })
-      .catch(err => {
-        this.setLoading(false)
-        this.props.setSuccessAlert(false)
-        this.props.setErrorAlert(true)
-      })
-  }
+      .catch((err) => {
+        this.setLoading(false);
+        this.props.setSuccessAlert(false);
+        this.props.setErrorAlert(true);
+      });
+  };
 
   getAlert = () => {
-    let message = (status) => `You have ${status} this knowledge data`
+    let message = (status) => `You have ${status} this knowledge data`;
     switch (this.state.status) {
       case 1:
-        return <Alert color="success">{message('accepted')}</Alert>
+        return <Alert color="success">{message('accepted')}</Alert>;
       case 2:
-        return <Alert color="danger">{message('declined')}</Alert>
+        return <Alert color="danger">{message('declined')}</Alert>;
       case 3:
-        return <Alert color="warning">{message('to re-review or finish')}</Alert>
+        return (
+          <Alert color="warning">{message('to re-review or finish')}</Alert>
+        );
+      case 4:
+        return <Alert color="success">You have save this draft</Alert>;
       default:
-        return <Fragment></Fragment>
+        return '';
     }
-  }
+  };
 
   render() {
     return (
@@ -95,17 +127,21 @@ class ReviewModal extends Component {
         className="popover-width"
         hideArrow={true}
         flip={false}
-        trigger="legacy"
       >
-        <LoadingSpinner
-          loading={this.state.loading}
-          text="Sending review"
-        />
-        <PopoverHeader>Review knowledge data</PopoverHeader>
+        <LoadingSpinner loading={this.state.loading} text="Sending review" />
+        <PopoverHeader>
+          <Row>
+            <Col>Review knowledge data</Col>
+            <Col xs="auto">
+              <FontAwesomeIcon
+                onClick={this.props.toggle}
+                icon={faWindowMinimize}
+              />
+            </Col>
+          </Row>
+        </PopoverHeader>
         <PopoverBody>
-          {this.state.status &&
-            this.getAlert()
-          }
+          {this.state.status && this.getAlert()}
           <div className="w-600px">
             <Input
               onChange={this.handleInput}
@@ -117,32 +153,35 @@ class ReviewModal extends Component {
             />
             <div className="d-flex justify-content-end mt-2">
               <ButtonGroup>
-                <Button size="sm" color="success" onClick={() => {
-                  this.sendReview(ACCEPT)
-                }}>
+                <Button
+                  size="sm"
+                  color="success"
+                  onClick={() => {
+                    this.sendReview(ACCEPT);
+                  }}
+                >
                   <FontAwesomeIcon icon={faCheckCircle} /> Approve
-              </Button>
+                </Button>
                 <Button
                   size="sm"
                   color="danger"
                   onClick={() => {
-                    this.sendReview(DECLINE)
+                    this.sendReview(DECLINE);
                   }}
                 >
                   <FontAwesomeIcon icon={faTimesCircle} /> Decline
-              </Button>
+                </Button>
                 <Button
                   size="sm"
                   color="warning"
                   onClick={() => {
-                    this.sendReview(DRAFT)
+                    this.sendReview(DRAFT);
                   }}
                 >
                   <FontAwesomeIcon icon={faEdit} /> Draft
-              </Button>
+                </Button>
               </ButtonGroup>
             </div>
-
           </div>
         </PopoverBody>
       </Popover>
@@ -154,4 +193,4 @@ const mapStateToProps = (state) => ({
   dataApprovalDetail: getDataApprovalDetail(state),
 });
 
-export default connect(mapStateToProps)(ReviewModal)
+export default connect(mapStateToProps)(ReviewModal);
