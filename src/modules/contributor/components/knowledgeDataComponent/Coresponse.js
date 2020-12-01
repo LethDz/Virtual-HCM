@@ -8,6 +8,8 @@ import {
   ListGroupItem,
   Button,
   Badge,
+  InputGroup,
+  InputGroupAddon,
 } from 'reactstrap';
 import { coresponseType } from 'src/modules/contributor/index';
 
@@ -82,36 +84,38 @@ class Coresponse extends Component {
           <Label className="label">Coresponse answer:</Label>
           {!this.props.disable && (
             <Row>
-              <Col xs="auto">
-                <Input
-                  disabled={this.props.disable}
-                  onChange={this.handleInput}
-                  name="currentCoresponseType"
-                  ref={this.coresponseRef}
-                  type="select"
-                >
-                  {coresponseType.map((value, index) => {
-                    return <option key={index}>{value}</option>;
-                  })}
-                </Input>
-              </Col>
               <Col>
-                <Input
-                  disabled={this.props.disable}
-                  placeholder="Enter coresponse here then press the add button on the right side"
-                  onChange={this.handleInput}
-                  name="currentCoresponse"
-                  value={this.state.currentCoresponse}
-                />
-              </Col>
-              <Col xs="auto">
-                <Button
-                  disabled={this.props.disable}
-                  color="primary"
-                  onClick={this.addCoresponse}
-                >
-                  <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
-                </Button>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <Input
+                      disabled={this.props.disable}
+                      onChange={this.handleInput}
+                      name="currentCoresponseType"
+                      ref={this.coresponseRef}
+                      type="select"
+                    >
+                      {coresponseType.map((value, index) => {
+                        return <option key={index}>{value}</option>;
+                      })}
+                    </Input>
+                  </InputGroupAddon>
+                  <Input
+                    disabled={this.props.disable}
+                    placeholder="Enter coresponse here then press the add button on the right side"
+                    onChange={this.handleInput}
+                    name="currentCoresponse"
+                    value={this.state.currentCoresponse}
+                  />
+                  <InputGroupAddon addonType="append">
+                    <Button
+                      disabled={this.props.disable}
+                      color="primary"
+                      onClick={this.addCoresponse}
+                    >
+                      <FontAwesomeIcon icon={faPlusCircle} /> Coresponse
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
               </Col>
             </Row>
           )}

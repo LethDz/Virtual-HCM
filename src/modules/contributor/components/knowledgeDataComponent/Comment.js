@@ -7,7 +7,8 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
-  ButtonGroup,
+  InputGroup,
+  InputGroupAddon,
 } from 'reactstrap';
 import {
   MAXIMUM_COMMENT_PER_PAGE,
@@ -273,27 +274,29 @@ export default class Comment extends Component {
           {this.state.formStatus !== DONE && this.formStatus !== DISABLE && (
             <Row>
               <Col>
-                <Input
-                  ref={this.commentRef}
-                  onChange={this.handleInput}
-                  name="comment"
-                  value={this.state.comment}
-                  placeholder="Enter comment here"
-                />
-              </Col>
-              <Col xs="auto">
-                <ButtonGroup>
-                  <Button size="lg" color="primary" onClick={this.addComment}>
-                    <FontAwesomeIcon icon={faPaperPlane} />{' '}
-                  </Button>
-                  <Button
-                    size="lg"
-                    color="success"
-                    onClick={this.refreshComment}
-                  >
-                    <FontAwesomeIcon icon={faSync} />
-                  </Button>
-                </ButtonGroup>
+                <InputGroup>
+                  <Input
+                    ref={this.commentRef}
+                    onChange={this.handleInput}
+                    name="comment"
+                    value={this.state.comment}
+                    placeholder="Enter comment here"
+                  />
+                  <InputGroupAddon addonType="append">
+                    <Button size="lg" color="primary" onClick={this.addComment}>
+                      <FontAwesomeIcon icon={faPaperPlane} />{' '}
+                    </Button>
+                  </InputGroupAddon>
+                  <InputGroupAddon addonType="append">
+                    <Button
+                      size="lg"
+                      color="success"
+                      onClick={this.refreshComment}
+                    >
+                      <FontAwesomeIcon icon={faSync} />
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
               </Col>
             </Row>
           )}

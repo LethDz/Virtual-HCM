@@ -11,6 +11,8 @@ import {
   Tooltip,
   Badge,
   Label,
+  InputGroup,
+  InputGroupAddon,
 } from 'reactstrap';
 import {
   questionType,
@@ -389,10 +391,7 @@ export default class Question extends Component {
       } else {
         return (
           <div className="d-flex justify-content-end mt-2">
-            <Button
-              block
-              onClick={this.viewGeneratedSentences}
-            >
+            <Button block onClick={this.viewGeneratedSentences}>
               <FontAwesomeIcon icon={faEye} /> View
             </Button>
           </div>
@@ -427,8 +426,8 @@ export default class Question extends Component {
             </Col>
             {!this.props.disable && (
               <Col>
-                <Row>
-                  <Col>
+                <FormGroup>
+                  <InputGroup>
                     <Input
                       disabled={this.props.disable}
                       placeholder="Enter question then choose type then press the add button :3"
@@ -438,113 +437,109 @@ export default class Question extends Component {
                       value={this.state.question}
                       onChange={this.handleInput}
                     />
-                  </Col>
-                  <FormGroup>
-                    <Row>
-                      <Col>
-                        <Button
-                          disabled={this.props.disable}
-                          type="button"
-                          color="warning"
-                          id="DisabledAutoHide"
-                          onClick={this.openToolTip}
-                        >
-                          <FontAwesomeIcon icon={faTasks} /> Choose Type
-                        </Button>
-                        <Tooltip
-                          placement="top"
-                          isOpen={this.state.tooltipTypeOpen}
-                          autohide={true}
-                          target="DisabledAutoHide"
-                        >
-                          Choose type before add type
-                        </Tooltip>
-                        <Tooltip
-                          placement="top"
-                          isOpen={this.state.tooltipOpen}
-                          autohide={false}
-                          target="DisabledAutoHide"
-                        >
-                          <div className="row coresponse-tool-tip">
-                            <Col xs="auto">
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                id="1"
-                                label="What"
-                                checked={this.state.type[0].isChecked}
-                                onChange={this.handleCheck}
-                              />
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                id="2"
-                                label="When"
-                                checked={this.state.type[1].isChecked}
-                                onChange={this.handleCheck}
-                              />
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                checked={this.state.type[2].isChecked}
-                                id="3"
-                                label="Where"
-                                onChange={this.handleCheck}
-                              />
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                label="Yes/No"
-                                checked={this.state.type[6].isChecked}
-                                id="7"
-                                onChange={this.handleCheck}
-                              />
-                            </Col>
-                            <Col xs="auto">
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                checked={this.state.type[3].isChecked}
-                                id="4"
-                                label="Who"
-                                onChange={this.handleCheck}
-                              />
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                checked={this.state.type[4].isChecked}
-                                id="5"
-                                label="Why"
-                                onChange={this.handleCheck}
-                              />
-                              <CustomInput
-                                className="check-box-tag"
-                                type="checkbox"
-                                checked={this.state.type[5].isChecked}
-                                id="6"
-                                label="How"
-                                onChange={this.handleCheck}
-                              />
-                            </Col>
-                          </div>
-                        </Tooltip>
-                      </Col>
-                    </Row>
-                  </FormGroup>
-                  <Col xs="auto">
-                    <Button
-                      disabled={this.props.disable}
-                      color="success"
-                      onClick={() => {
-                        if (this.getQuestion().trim() !== '') {
-                          this.addQuestion(this.getQuestion());
-                        }
-                      }}
+                    <Tooltip
+                      placement="top"
+                      isOpen={this.state.tooltipTypeOpen}
+                      autohide={true}
+                      target="DisabledAutoHide"
                     >
-                      <FontAwesomeIcon icon={faPlus} />
-                    </Button>
-                  </Col>
-                </Row>
+                      Choose type before add type
+                    </Tooltip>
+                    <Tooltip
+                      placement="top"
+                      isOpen={this.state.tooltipOpen}
+                      autohide={false}
+                      target="DisabledAutoHide"
+                    >
+                      <div className="row coresponse-tool-tip">
+                        <Col xs="auto">
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            id="1"
+                            label="What"
+                            checked={this.state.type[0].isChecked}
+                            onChange={this.handleCheck}
+                          />
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            id="2"
+                            label="When"
+                            checked={this.state.type[1].isChecked}
+                            onChange={this.handleCheck}
+                          />
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            checked={this.state.type[2].isChecked}
+                            id="3"
+                            label="Where"
+                            onChange={this.handleCheck}
+                          />
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            label="Yes/No"
+                            checked={this.state.type[6].isChecked}
+                            id="7"
+                            onChange={this.handleCheck}
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            checked={this.state.type[3].isChecked}
+                            id="4"
+                            label="Who"
+                            onChange={this.handleCheck}
+                          />
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            checked={this.state.type[4].isChecked}
+                            id="5"
+                            label="Why"
+                            onChange={this.handleCheck}
+                          />
+                          <CustomInput
+                            className="check-box-tag"
+                            type="checkbox"
+                            checked={this.state.type[5].isChecked}
+                            id="6"
+                            label="How"
+                            onChange={this.handleCheck}
+                          />
+                        </Col>
+                      </div>
+                    </Tooltip>
+                    <InputGroupAddon addonType="append">
+                      <Button
+                        disabled={this.props.disable}
+                        type="button"
+                        color="warning"
+                        id="DisabledAutoHide"
+                        onClick={this.openToolTip}
+                      >
+                        <FontAwesomeIcon icon={faTasks} /> Choose Type
+                      </Button>
+                    </InputGroupAddon>
+                    <InputGroupAddon addonType="append">
+                      <Button
+                        disabled={this.props.disable}
+                        color="success"
+                        onClick={() => {
+                          if (this.getQuestion().trim() !== '') {
+                            this.addQuestion(this.getQuestion());
+                          }
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPlus} />
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </FormGroup>
               </Col>
             )}
           </Row>

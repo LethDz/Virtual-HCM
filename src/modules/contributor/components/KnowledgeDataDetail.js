@@ -635,7 +635,22 @@ class KnowledgeDataDetail extends Component {
                 synonymsValue={this.state.form.synonyms}
                 setHoverWord={this.setHoverWord}
               />
-
+              <Row className="d-flex justify-content-around mt-3 pb-3">
+                {!this.state.disable &&
+                  (this.state.formStatus === AVAILABLE ||
+                    (this.state.formStatus === PROCESSING &&
+                      this.state.owner) ||
+                    (this.state.formStatus === DONE && this.state.owner)) && (
+                    <Button
+                      disabled={this.state.disable}
+                      type="submit"
+                      color="info"
+                      onClick={this.submitForm}
+                    >
+                      <FontAwesomeIcon icon={faSave} /> Save knowledge data
+                    </Button>
+                  )}
+              </Row>
               <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="User review" />
               <Vote
@@ -647,23 +662,6 @@ class KnowledgeDataDetail extends Component {
                 setAlertMessage={this.setAlertMessage}
                 scrollToTop={this.scrollToTop}
               />
-              <Row className="d-flex justify-content-around mt-3 pb-3">
-                {!this.state.disable &&
-                  (this.state.formStatus === AVAILABLE ||
-                    (this.state.formStatus === PROCESSING &&
-                      this.state.owner) ||
-                    (this.state.formStatus === DONE &&
-                      this.state.owner)) && (
-                    <Button
-                      disabled={this.state.disable}
-                      type="submit"
-                      color="info"
-                      onClick={this.submitForm}
-                    >
-                      <FontAwesomeIcon icon={faSave} /> Save knowledge data
-                    </Button>
-                  )}
-              </Row>
 
               <Comment
                 formStatus={this.state.formStatus}
@@ -672,8 +670,6 @@ class KnowledgeDataDetail extends Component {
                 userList={this.state.userList}
                 setErrorAlert={this.setErrorAlert}
               />
-
-
             </div>
           </Form>
         )}
