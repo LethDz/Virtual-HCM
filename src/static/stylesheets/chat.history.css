@@ -20,12 +20,12 @@
 }
 
 .chat-list .chat-body {
-  max-width: 95%;
+  max-width: 55%;
   float: left;
 }
 
 .chat-body .chat-message{
-  max-width: inherit;
+  max-width: 100%;
 }
 
 .chat-list li {

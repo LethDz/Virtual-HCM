@@ -6,7 +6,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Fragment, useState } from 'react';
-import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
 import {
   activations,
   SelectFileModal,
@@ -189,16 +197,16 @@ const ControlPanel = (props) => {
         </FormGroup>
         <FormGroup row>
           <Col xs="auto" className="pr-0">
-            <Button size="sm" color="success" type="submit">
-              <FontAwesomeIcon icon={faPlayCircle} />
-              &nbsp; Start
-            </Button>
-          </Col>
-          <Col xs="auto" className="pr-0">
-            <Button size="sm" color="danger" onClick={onStop}>
-              <FontAwesomeIcon icon={faStopCircle} />
-              &nbsp; Stop
-            </Button>
+            <ButtonGroup>
+              <Button size="sm" color="success" type="submit">
+                <FontAwesomeIcon icon={faPlayCircle} />
+                &nbsp; Start
+              </Button>
+              <Button size="sm" color="danger" onClick={onStop}>
+                <FontAwesomeIcon icon={faStopCircle} />
+                &nbsp; Stop
+              </Button>
+            </ButtonGroup>
           </Col>
         </FormGroup>
         <FormGroup row>

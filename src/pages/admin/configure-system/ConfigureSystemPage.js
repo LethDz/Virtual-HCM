@@ -1,11 +1,16 @@
 import React from 'react';
+import { ToastProvider } from 'react-toast-notifications';
 import LayoutWrapper from 'src/layouts/LayoutWrapper';
-import { ConfigureSystem } from 'src/modules/admin';
+import { ConfigureSystemHook } from 'src/modules/admin';
 
-const ConfigureSystemPage = () => (
-  <LayoutWrapper>
-    <ConfigureSystem />
-  </LayoutWrapper>
-);
+const ConfigureSystemPage = () => {
+  return (
+    <LayoutWrapper>
+      <ToastProvider placement="top-center" autoDismiss={true}>
+        <ConfigureSystemHook />
+      </ToastProvider>
+    </LayoutWrapper>
+  );
+};
 
 export default ConfigureSystemPage;

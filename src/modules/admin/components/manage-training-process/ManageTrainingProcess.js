@@ -15,6 +15,7 @@ import {
 } from 'src/modules/admin';
 import { connect } from 'react-redux';
 import { getStatusOfChatSocket } from 'src/modules/chat';
+import { WEB_SOCKET_TRAINING } from 'src/constants';
 
 class ManageTrainingProcess extends Component {
   constructor() {
@@ -87,10 +88,9 @@ class ManageTrainingProcess extends Component {
 
   create_websocket_connection = (terminal) => {
     let _self = this;
-    let ws_url = 'wss://127.0.0.1:8000/ws/train-classifier/';
     let trainSocket = this.props.trainSocket
       ? this.props.trainSocket
-      : new WebSocket(ws_url);
+      : new WebSocket(WEB_SOCKET_TRAINING);
     trainSocket.onopen = function (e) {
       terminal('[open] Connected to training service');
     };
@@ -295,7 +295,7 @@ class ManageTrainingProcess extends Component {
                 stop: 'Stop training process',
                 connect: 'Connect to training service',
               }}
-              msg="Welcome to training process center. Command 'help' for display list of command."
+              msg="Welcome to training process center !!!"
               hideTopBar={true}
               allowTabs={false}
             />
