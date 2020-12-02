@@ -113,11 +113,11 @@ export default class DashBoard extends Component {
                       <img src={botIcon} alt="Bot Icon" className="icon" />
                     </span>
                     <div className="info-box-content">
-                      <span className="info-box-text">Bot Version</span>
+                      <span className="info-box-text">Bot Status</span>
                       <span className="info-box-number">
                         {this.state.bot_version !== null
                           ? this.state.bot_version.name
-                          : 'None'}
+                          : 'Not Available'}
                       </span>
                     </div>
                   </div>
@@ -129,7 +129,6 @@ export default class DashBoard extends Component {
                         icon={faLaughSquint}
                         className="icon"
                         color="white"
-                        pulse
                       />
                     </span>
                     <div className="info-box-content">
@@ -169,7 +168,6 @@ export default class DashBoard extends Component {
                         icon={faSadCry}
                         className="icon"
                         color="white"
-                        pulse
                       />
                     </span>
                     <div className="info-box-content">
