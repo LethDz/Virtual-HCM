@@ -1,7 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Production Build
-- ```serve -s build --listen 3000 --ssl-cert "./.cert/cert.pem" --ssl-key "./.cert/key.pem"```
+- `serve -s build --listen 443 --ssl-cert "./.cert/vhcm.crt" --ssl-key "./.cert/vhcm.key"`
 
 ## Tech Stack
 
