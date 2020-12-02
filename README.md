@@ -112,7 +112,7 @@ import LogoutButton from '../../../modules/userAuthentication/LogoutButton';
 import { LogoutButton } from '../../../modules/userAuthentication';
 ```
 
-### Using `index.ts` to export public interface, ...etc...
+### Using `index.js` to export public interface, ...etc...
 Following [Concept and Model](#Concept-and-Model), Recommend to use index.js in order to export
 
 ### Folder `pages` is distributed by routes.js
