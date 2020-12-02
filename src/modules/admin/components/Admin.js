@@ -1,14 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useToasts } from 'react-toast-notifications';
+import { DashBoard } from 'src/modules/contributor';
 
-class Admin extends Component {
-  render() {
-    return <div></div>;
-  }
-}
+const Admin = () => {
+  const { addToast } = useToasts();
+  return <DashBoard addToast={addToast} />;
+};
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = (dispatch) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Admin);
+export default Admin;

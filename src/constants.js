@@ -32,8 +32,10 @@ export const DELETE_SYNONYM = (id) => `/delete?id=${id}`;
 
 export const REFERENCE = '/reference-document';
 export const CHAT_HISTORY = '/chat-history';
-export const CHAT_HISTORY_DETAIL = (id) =>`/chat-history/get?log_id=${id}`;
+export const CHAT_HISTORY_DETAIL = (id) => `/chat-history/get?log_id=${id}`;
 export const USER_EDIT_PROFILE = '/user/edit';
+
+export const DASHBOARD = '/dashboard';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';

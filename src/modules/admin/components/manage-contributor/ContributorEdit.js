@@ -43,9 +43,11 @@ import BackButton from 'src/common/BackButton';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import { history } from 'src/common/history';
+import { getUserData } from 'src/common/authorizationChecking';
 
 class ContributorEdit extends Component {
   _isMounted = false;
+  currentUser = getUserData();
   constructor() {
     super();
     this.state = {
@@ -185,6 +187,9 @@ class ContributorEdit extends Component {
             email: user.email ? user.email : '',
             avatar_edit: 0,
           });
+          if (this.currentUser.user_id === user.user_id) {
+            localStorage.setItem('user', JSON.stringify(user));
+          }
           this.imgRef.current.value = null;
           history.push(ADMIN_CONTRIBUTOR_LIST_PAGE);
         } else {
