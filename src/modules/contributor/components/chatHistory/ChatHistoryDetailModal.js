@@ -1,16 +1,10 @@
-import React, { Component } from "react";
-import {
-  Card,
-  CardBody,
-  Modal,
-  ModalBody,
-  ModalHeader,
-} from "reactstrap";
-import "src/static/stylesheets/chat.history.css";
-import { CHAT_HISTORY_DETAIL } from "src/constants";
-import axiosClient from "src/common/axiosClient";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
-import ErrorAlert from "src/common/alertComponent/ErrorAlert";
+import React, { Component } from 'react';
+import { Card, CardBody, Modal, ModalBody, ModalHeader } from 'reactstrap';
+import 'src/static/stylesheets/chat.history.css';
+import { CHAT_HISTORY_DETAIL } from 'src/constants';
+import axiosClient from 'src/common/axiosClient';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 
 class ChatHistoryDetailModal extends Component {
   _isMounted = false;
@@ -92,26 +86,26 @@ class ChatHistoryDetailModal extends Component {
   };
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size="lg">
+      <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='lg'>
         <ModalHeader toggle={this.props.toggle}>Chat Message</ModalHeader>
         <ModalBody>
-          <LoadingSpinner loading={this.state.loading} text={"Loading"} />
+          <LoadingSpinner loading={this.state.loading} text={'Loading'} />
           {this.state.errorAlert && (
             <ErrorAlert
               errorAlert={this.state.errorAlert}
               errorList={this.state.errorList}
-              onDismiss={() => this.onDismiss("errorAlert")}
+              onDismiss={() => this.onDismiss('errorAlert')}
             />
           )}
           <Card>
-            <CardBody className="chat-container">
-              <ul className="chat-list">
+            <CardBody className='chat-container'>
+              <ul className='chat-list'>
                 {this.state.chatLog &&
                   this.state.chatLog.map((chat) => (
-                    <li className={chat.from === 1 ? "in" : "out"}>
-                      <div className="chat-body">
-                        <span className="time_date">{chat.time}</span>
-                        <div className="chat-message">
+                    <li className={chat.from === 1 ? 'out' : 'out'}>
+                      <div className='chat-body'>
+                        <span className='time_date'>{chat.time}</span>
+                        <div className='chat-message'>
                           <p>{chat.message}</p>
                         </div>
                       </div>

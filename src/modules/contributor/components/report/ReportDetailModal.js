@@ -187,22 +187,22 @@ class ReportDetailModal extends Component {
         isOpen={this.props.isOpen}
         toggle={this.toggle}
         unmountOnClose={true}
-        size="lg"
+        size='lg'
       >
         <ModalHeader toggle={this.toggle}>
           Report ID: {this.state.report.id}
         </ModalHeader>
         <Form>
-          <ModalBody className="report-container">
+          <ModalBody className='report-container'>
             <LoadingSpinner
               loading={this.state.loading}
               text={'Loading'}
-              type="MODAL"
+              type='MODAL'
             />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
-                text="Rejecting is successfully"
+                text='Rejecting is successfully'
                 onDismiss={() => this.onDismiss('successAlert')}
               />
             )}
@@ -213,16 +213,16 @@ class ReportDetailModal extends Component {
                 onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Report type: </Col>
-              <Col className="col-9">
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Report type: </Col>
+              <Col className='col-9'>
                 <h5>
                   <Badge
                     color={`${
                       reportType[this.state.report.report_type] ===
                       reportType[1]
-                        ? 'primary'
-                        : 'success'
+                        ? 'danger'
+                        : 'primary'
                     }`}
                   >
                     {reportType[this.state.report.report_type]}
@@ -230,63 +230,63 @@ class ReportDetailModal extends Component {
                 </h5>
               </Col>
             </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Reporter:</Col>
-              <Col className="col-9">{this.state.report.reporter}</Col>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Reporter:</Col>
+              <Col className='col-9'>{this.state.report.reporter}</Col>
             </Row>
-            {this.state.report.reporter_note && (
-              <Row className="custom-border">
-                <Col className="col-3 font-weight-bold">Reporter note:</Col>
-                <Col className="col-9">{this.state.report.reporter_note}</Col>
-              </Row>
-            )}
-            {this.state.report.reported_intent && (
-              <Row className="custom-border">
-                <Col className="col-3 font-weight-bold">Reported Intent:</Col>
-                <Col className="col-9">
-                  <span className="intent">
-                    {this.state.report.reported_intent}
-                  </span>
-                </Col>
-              </Row>
-            )}
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Reporter Data:</Col>
-              <Col className="col-9 text-break">
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Reporter note:</Col>
+              <Col className='col-9'>{this.state.report.reporter_note}</Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Reported Intent:</Col>
+              <Col className='col-9'>
+                {this.state.report.reported_intent && (
+                  <h5>
+                    <Badge color='success'>
+                      {this.state.report.reported_intent}
+                    </Badge>
+                  </h5>
+                )}
+              </Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Report Data:</Col>
+              <Col className='col-9 text-break'>
                 {this.state.report.report_data}
               </Col>
             </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Bot version date:</Col>
-              <Col className="col-9">{this.state.report.bot_version_date}</Col>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Bot version date:</Col>
+              <Col className='col-9'>{this.state.report.bot_version_date}</Col>
             </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Created date:</Col>
-              <Col className="col-9">{this.state.report.cdate}</Col>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Created date:</Col>
+              <Col className='col-9'>{this.state.report.cdate}</Col>
             </Row>
             {this.state.report.report_type === 1 && (
               <div>
-                <FormGroup className="mt-3">
-                  <Label className="font-weight-bold">Question: </Label>
-                  <div className="message">{this.state.report.question}</div>
+                <FormGroup className='mt-3'>
+                  <Label className='font-weight-bold'>Question: </Label>
+                  <div className='message'>{this.state.report.question}</div>
                 </FormGroup>
                 <FormGroup>
-                  <Label className="font-weight-bold">Bot answer: </Label>
-                  <div className="message">{this.state.report.bot_answer}</div>
+                  <Label className='font-weight-bold'>Bot answer: </Label>
+                  <div className='message'>{this.state.report.bot_answer}</div>
                 </FormGroup>
               </div>
             )}
             <FormGroup>
               <Label
-                for="knowledge_data_availability"
-                className="font-weight-bold"
+                for='knowledge_data_availability'
+                className='font-weight-bold'
               >
                 Select knowledge data:
               </Label>
               <Input
-                type="select"
-                name="select"
-                id="exampleSelect"
+                type='select'
+                name='select'
+                id='exampleSelect'
                 onChange={this.onSelectedChange.bind(this)}
               >
                 <option value={0} id={0}>
@@ -308,14 +308,14 @@ class ReportDetailModal extends Component {
             </FormGroup>
             {this.state.reject && (
               <FormGroup>
-                <Label className="font-weight-bold">Processor note: </Label>
+                <Label className='font-weight-bold'>Processor note: </Label>
                 <Input
-                  name="processor_note"
-                  type="textarea"
+                  name='processor_note'
+                  type='textarea'
                   value={this.state.processor_note}
                   onChange={this.handleInput}
                   autoFocus
-                  placeholder="Please input the reason why you want to reject..."
+                  placeholder='Please input the reason why you want to reject...'
                 />
               </FormGroup>
             )}
@@ -327,27 +327,27 @@ class ReportDetailModal extends Component {
                   ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
                   : GET_KNOWLEDGE_DATA_BY_INTENT(this.state.selectedIntent)
               }
-              className="link-no-underline"
+              className='link-no-underline'
             >
               <Button
-                color="primary"
-                type="submit"
+                color='primary'
+                type='submit'
                 disabled={this.state.loading}
                 onClick={this.approveReport}
               >
-                <FontAwesomeIcon icon={faCheck} color="white" />
+                <FontAwesomeIcon icon={faCheck} color='white' />
                 &nbsp;To Knowledge Data Process
               </Button>
             </Link>
             <Button
-              color="danger"
+              color='danger'
               disabled={
                 this.state.loading ||
                 (this.state.reject && this.state.processor_note.trim() === '')
               }
               onClick={this.rejectReport}
             >
-              <FontAwesomeIcon icon={faBan} color="white" />
+              <FontAwesomeIcon icon={faBan} color='white' />
               &nbsp;Reject
             </Button>
           </ModalFooter>

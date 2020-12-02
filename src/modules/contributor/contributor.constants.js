@@ -4,7 +4,7 @@ import StatusBadge from 'src/modules/contributor/components/knowLedgeListCompone
 import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
 import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
 import { progressBarComparator } from 'src/modules/contributor/components/knowLedgeListComponent/progressBarComparator';
-import { ReportType } from 'src/modules/contributor';
+import { ReportType, ReportedIntent } from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
@@ -343,7 +343,7 @@ export const columnPendingReportFieldDef = [
   {
     field: 'report_id',
     headerName: 'ID',
-    width: 30,
+    width: 20,
     sortable: true,
     filter: true,
     resizable: true,
@@ -351,7 +351,7 @@ export const columnPendingReportFieldDef = [
   {
     field: 'report_type',
     headerName: 'Type',
-    width: 30,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -360,7 +360,7 @@ export const columnPendingReportFieldDef = [
   {
     field: 'reporter',
     headerName: 'Reporter',
-    width: 50,
+    width: 25,
     sortable: true,
     filter: true,
     resizable: true,
@@ -369,6 +369,15 @@ export const columnPendingReportFieldDef = [
   {
     field: 'reported_intent',
     headerName: 'Reported Intent',
+    width: 75,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'reportedIntent',
+  },
+  {
+    field: 'report_data',
+    headerName: 'Report Data',
     width: 80,
     sortable: true,
     filter: true,
@@ -377,7 +386,7 @@ export const columnPendingReportFieldDef = [
   {
     field: 'cdate',
     headerName: 'Created Date',
-    width: 50,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -386,7 +395,7 @@ export const columnPendingReportFieldDef = [
   {
     field: 'bot_version',
     headerName: 'Bot Version',
-    width: 50,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -398,7 +407,7 @@ export const columnAcceptedReportFieldDef = [
   {
     field: 'report_id',
     headerName: 'ID',
-    width: 30,
+    width: 20,
     sortable: true,
     filter: true,
     resizable: true,
@@ -406,7 +415,7 @@ export const columnAcceptedReportFieldDef = [
   {
     field: 'report_type',
     headerName: 'Type',
-    width: 80,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -415,7 +424,7 @@ export const columnAcceptedReportFieldDef = [
   {
     field: 'reporter',
     headerName: 'Reporter',
-    width: 80,
+    width: 25,
     sortable: true,
     filter: true,
     resizable: true,
@@ -424,7 +433,7 @@ export const columnAcceptedReportFieldDef = [
   {
     field: 'processor',
     headerName: 'Processor',
-    width: 80,
+    width: 25,
     sortable: true,
     filter: true,
     resizable: true,
@@ -433,7 +442,16 @@ export const columnAcceptedReportFieldDef = [
   {
     field: 'reported_intent',
     headerName: 'Reported Intent',
-    width: 100,
+    width: 75,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: "reportedIntent"
+  },
+  {
+    field: 'report_data',
+    headerName: 'Report Data',
+    width: 60,
     sortable: true,
     filter: true,
     resizable: true,
@@ -441,15 +459,16 @@ export const columnAcceptedReportFieldDef = [
   {
     field: 'forward_intent',
     headerName: 'Forward Intent',
-    width: 100,
+    width: 75,
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: "reportedIntent",
   },
   {
     field: 'mdate',
     headerName: 'Modified Date',
-    width: 100,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -462,7 +481,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'report_id',
     headerName: 'ID',
-    width: 30,
+    width: 20,
     sortable: true,
     filter: true,
     resizable: true,
@@ -470,7 +489,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'report_type',
     headerName: 'Type',
-    width: 80,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -479,7 +498,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'reporter',
     headerName: 'Reporter',
-    width: 80,
+    width: 25,
     sortable: true,
     filter: true,
     resizable: true,
@@ -488,7 +507,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'processor',
     headerName: 'Processor',
-    width: 80,
+    width: 25,
     sortable: true,
     filter: true,
     resizable: true,
@@ -497,15 +516,24 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'reported_intent',
     headerName: 'Reported Intent',
-    width: 100,
+    width: 75,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: "reportedIntent",
+  },
+  {
+    field: 'report_data',
+    headerName: 'Report Data',
+    width: 60,
     sortable: true,
     filter: true,
     resizable: true,
   },
   {
-    field: 'bot_version',
-    headerName: 'Bot Version',
-    width: 100,
+    field: 'reject_reason',
+    headerName: 'Reject Reason',
+    width: 50,
     sortable: true,
     filter: true,
     resizable: true,
@@ -513,7 +541,7 @@ export const columnRejectedReportFieldDef = [
   {
     field: 'mdate',
     headerName: 'Modified Date',
-    width: 100,
+    width: 40,
     sortable: true,
     filter: true,
     resizable: true,
@@ -562,11 +590,10 @@ export const columnChatHistoryFieldDef = [
 export const frameworkComponentsForReport = {
   reportType: ReportType,
   userLink: UserLink,
+  reportedIntent: ReportedIntent,
 };
 
 export const reportType = {
   1: 'Wrong answer',
   2: 'Contribute data',
 };
-
-
