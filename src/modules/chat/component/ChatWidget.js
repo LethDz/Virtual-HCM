@@ -246,7 +246,7 @@ class ChatWidget extends Component {
   }
 
   componentWillUnmount() {
-    this.chatSocket.close(1000);
+    this.chatSocket && this.chatSocket.close(1000);
     this.props.updateStatusOfChatSocket(false);
   }
 
