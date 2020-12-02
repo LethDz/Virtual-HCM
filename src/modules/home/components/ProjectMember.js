@@ -50,7 +50,7 @@ const ProjectMember = () => {
                     <div className="col-md-3">
                       <img
                         alt="avatar"
-                        className={`img-fluid img-fluid-avatar ${member.avatar}`}
+                        className={`img-fluid-avatar ${member.avatar}`}
                       />
                     </div>
                     <div className="col-md-9">
