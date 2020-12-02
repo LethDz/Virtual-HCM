@@ -108,7 +108,7 @@ class ChatHistoryDetailModal extends Component {
               <ul className="chat-list">
                 {this.state.chatLog &&
                   this.state.chatLog.map((chat) => (
-                    <li className={chat.from === 1 ? "in" : "out"}>
+                    <li className={chat.from === 1 ? "out" : "in"}>
                       <div className="chat-body">
                         <span className="time_date">{chat.time}</span>
                         <div className="chat-message">
