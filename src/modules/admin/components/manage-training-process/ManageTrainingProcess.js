@@ -133,6 +133,10 @@ class ManageTrainingProcess extends Component {
               );
             }
             break;
+          case 'start_failed':
+            let server_message = received.data;
+            terminal(server_message);
+            break;
           default:
             terminal('[Websocket] Received data is unknown');
             break;
