@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { memberQuotes } from 'src/modules/home/index';
+import avatarMale from 'src/static/images/img_avatar.png';
+import avatarFemale from 'src/static/images/img_avatar_female.png';
 
 const ProjectMember = () => {
   return (
@@ -24,6 +26,11 @@ const ProjectMember = () => {
                     <div className="col-md-3">
                       <img
                         alt="avatar"
+                        src={
+                          member.avatar === 'avatar-male'
+                            ? avatarMale
+                            : avatarFemale
+                        }
                         className={`img-fluid-avatar ${member.avatar}`}
                       />
                     </div>
@@ -50,6 +57,11 @@ const ProjectMember = () => {
                     <div className="col-md-3">
                       <img
                         alt="avatar"
+                        src={
+                          member.avatar === 'avatar-male'
+                            ? avatarMale
+                            : avatarFemale
+                        }
                         className={`img-fluid-avatar ${member.avatar}`}
                       />
                     </div>

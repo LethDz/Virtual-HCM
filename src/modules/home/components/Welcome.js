@@ -6,7 +6,7 @@ const Welcome = () => {
       <div className="site-section-cover overlay home-welcome-background">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-md-5 welcome-container" data-aos="fade-right">
+            <div className="col-md-6 welcome-container" data-aos="fade-right">
               <h1 className="mb-3 text-white">Virtual Ho Chi Minh</h1>
               <h4 className="text-white">
                 Dự án của chúng tôi với mục tiêu khao khát mô phỏng lại hình
