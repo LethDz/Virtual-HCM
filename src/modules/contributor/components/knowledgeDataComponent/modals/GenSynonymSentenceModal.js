@@ -52,6 +52,7 @@ class GenSynonymSentenceModal extends Component {
       const row = this.props.rowData[index];
       if (row.accept === 1) {
         node.setSelected(true);
+        this.question.push(row)
       }
     });
     this.gridApi = params.api;
@@ -59,6 +60,7 @@ class GenSynonymSentenceModal extends Component {
   };
 
   setSelectedSentence = () => {
+    
     let idx = 0;
     let result = [];
     this.state.rowData.forEach((row) => {
