@@ -150,8 +150,6 @@ class RawData extends Component {
                     title={data.type}
                     key={index}
                     className={className}
-                    onMouseOver={(event) => this.onMouseOver(event, data)}
-                    onMouseLeave={this.onMouseLeave}
                   >
                     {data.value}
                   </span>
