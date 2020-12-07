@@ -117,11 +117,7 @@ class RawData extends Component {
     this._isMounted && this.setState({ mode: 'NORMAL' });
     this.props.cancelCriticalData();
   };
-
-  onMouseOver = (event, data) => {};
-
-  onMouseLeave = (event) => {};
-
+  
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
       return (

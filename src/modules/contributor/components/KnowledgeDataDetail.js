@@ -504,7 +504,7 @@ class KnowledgeDataDetail extends Component {
         <LoadingSpinner loading={this.state.sendLoading} text="Sending form" />
         {!this.state.loading && (
           <Form className="mt-3">
-            <div className="form-item form-item-meta pr-3 pl-3">
+            <div className="form-item form-item-meta pr-3 pl-3 pb-5">
               <div className="mr-3 ml-3">
                 {this.state.successAlert && (
                   <SuccessAlert
@@ -669,6 +669,8 @@ class KnowledgeDataDetail extends Component {
                 comments={this.state.comments}
                 userList={this.state.userList}
                 setErrorAlert={this.setErrorAlert}
+                setSuccessAlert={this.setSuccessAlert}
+                scrollToTop={this.scrollToTop}
               />
             </div>
           </Form>

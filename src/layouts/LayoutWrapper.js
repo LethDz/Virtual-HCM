@@ -11,7 +11,8 @@ const LayoutWrapper = (props) => {
       styles={{
         sidebar: { backgroundColor: '#222D32', width: '230px' },
       }}
-      docked
+      docked={true}
+      transitions={false}
     >
       <Header />
       <div className="contain-body w-100 d-flex min-vh-100 position-relative">

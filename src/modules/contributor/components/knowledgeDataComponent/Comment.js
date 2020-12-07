@@ -111,13 +111,17 @@ export default class Comment extends Component {
           this.props.setErrorAlert(false);
           this.refreshComment();
         } else {
-          this.props.setErrorAlert(true);
           this.setLoading(false, this.message[3]);
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         }
       })
       .catch((err) => {
         this.setLoading(false, this.message[3]);
         this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
       });
   };
 
@@ -137,11 +141,15 @@ export default class Comment extends Component {
           this.refreshComment();
         } else {
           this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         }
       })
       .catch((err) => {
-        this.props.setErrorAlert(true);
         this.setLoading(false, this.message[2]);
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
       });
   };
 
@@ -175,14 +183,20 @@ export default class Comment extends Component {
             this.refreshComment();
           } else {
             this.props.setErrorAlert(true);
+            this.props.setSuccessAlert(false);
+            this.props.scrollToTop();
           }
         })
         .catch((err) => {
           this.setLoading(false, this.message[0]);
           this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         });
     } else {
       this.props.setErrorAlert(true);
+      this.props.setSuccessAlert(false);
+      this.props.scrollToTop();
     }
   };
 
@@ -217,11 +231,15 @@ export default class Comment extends Component {
           this.setShowComment(this.state.activePage);
         } else {
           this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         }
       })
       .catch((err) => {
         this.setLoading(false, this.message[1]);
         this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
       });
   };
 

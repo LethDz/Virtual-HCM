@@ -462,7 +462,6 @@ class CreateKnowledgeDataForm extends Component {
               setQuestions={this.setQuestions}
               synonymsArray={this.state.form.synonyms}
               synonymIds={this.state.synonymIdList}
-              className="mt-3"
             />
 
             <BaseResponse onChange={this.handleInputForm} />
