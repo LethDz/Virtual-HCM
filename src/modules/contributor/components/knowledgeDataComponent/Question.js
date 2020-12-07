@@ -6,7 +6,6 @@ import {
   Col,
   ListGroup,
   ListGroupItem,
-  FormGroup,
   CustomInput,
   Tooltip,
   Badge,
@@ -43,6 +42,7 @@ export default class Question extends Component {
       tokenizeData: [],
       ner: [],
       loading: false,
+      loadingMessage: '',
       generateLoading: false,
       type: [
         { id: 1, value: 1, isChecked: false },
@@ -123,7 +123,7 @@ export default class Question extends Component {
       return;
     }
 
-    if (this._isMounted) this.setState({ loading: true });
+    if (this._isMounted) this.setState({ loading: true, loadingMessage: 'Adding questions' });
     const paragraph = {
       paragraph: question,
     };
@@ -201,6 +201,7 @@ export default class Question extends Component {
           this.props.setQuestions(this.state.questions);
         } else {
           this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
           this.props.setErrorList(response.data.messages);
           this.props.scrollToTop();
         }
@@ -210,8 +211,9 @@ export default class Question extends Component {
           this.setState({
             loading: false,
           });
-        this.props.setErrorAlert(true);
-        this.props.scrollToTop();
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
       });
   };
 
@@ -299,7 +301,8 @@ export default class Question extends Component {
     let data = this.prepareGenerateData();
     this._isMounted &&
       this.setState({
-        generateLoading: true,
+        loading: true,
+        loadingMessage: "Generating questions",
       });
     axiosClient
       .post(NLP + GENERATE_SIMILARIES, data)
@@ -317,22 +320,26 @@ export default class Question extends Component {
           });
           this._isMounted &&
             this.setState({
-              generateLoading: false,
+              loading: false,
               generated_sentences: data,
             });
 
           this.toggleGenerateModal();
         } else {
-          this._isMounted && this.setState({ generateLoading: false });
+          this._isMounted && this.setState({ loading: false });
           this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
         }
       })
       .catch((err) => {
         this._isMounted &&
           this.setState({
-            generateLoading: false,
+            loading: false,
           });
-        this.props.setErrorAlert(true);
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
+          this.props.scrollToTop();
       });
   };
 
@@ -415,131 +422,125 @@ export default class Question extends Component {
           />
         )}
 
-        <LoadingSpinner loading={this.state.loading} text="Tokenizing question">
-          <LoadingSpinner
-            loading={this.state.generateLoading}
-            text="Generating question"
-          />
+        <LoadingSpinner loading={this.state.loading} text={this.state.loadingMessage}>
           <Row xs="1">
             <Col>
               <Label className="label">Question:</Label>
             </Col>
             {!this.props.disable && (
               <Col>
-                <FormGroup>
-                  <InputGroup>
-                    <Input
+                <InputGroup>
+                  <Input
+                    disabled={this.props.disable}
+                    placeholder="Enter question then choose type then press the add button :3"
+                    type="text"
+                    name="question"
+                    id="question"
+                    value={this.state.question}
+                    onChange={this.handleInput}
+                  />
+                  <Tooltip
+                    placement="top"
+                    isOpen={this.state.tooltipTypeOpen}
+                    autohide={true}
+                    target="DisabledAutoHide"
+                  >
+                    Choose type before add type
+                  </Tooltip>
+                  <Tooltip
+                    placement="top"
+                    isOpen={this.state.tooltipOpen}
+                    autohide={false}
+                    target="DisabledAutoHide"
+                  >
+                    <div className="row coresponse-tool-tip">
+                      <Col xs="auto">
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          id="1"
+                          label="What"
+                          checked={this.state.type[0].isChecked}
+                          onChange={this.handleCheck}
+                        />
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          id="2"
+                          label="When"
+                          checked={this.state.type[1].isChecked}
+                          onChange={this.handleCheck}
+                        />
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          checked={this.state.type[2].isChecked}
+                          id="3"
+                          label="Where"
+                          onChange={this.handleCheck}
+                        />
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          label="Yes/No"
+                          checked={this.state.type[6].isChecked}
+                          id="7"
+                          onChange={this.handleCheck}
+                        />
+                      </Col>
+                      <Col xs="auto">
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          checked={this.state.type[3].isChecked}
+                          id="4"
+                          label="Who"
+                          onChange={this.handleCheck}
+                        />
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          checked={this.state.type[4].isChecked}
+                          id="5"
+                          label="Why"
+                          onChange={this.handleCheck}
+                        />
+                        <CustomInput
+                          className="check-box-tag"
+                          type="checkbox"
+                          checked={this.state.type[5].isChecked}
+                          id="6"
+                          label="How"
+                          onChange={this.handleCheck}
+                        />
+                      </Col>
+                    </div>
+                  </Tooltip>
+                  <InputGroupAddon addonType="append">
+                    <Button
                       disabled={this.props.disable}
-                      placeholder="Enter question then choose type then press the add button :3"
-                      type="text"
-                      name="question"
-                      id="question"
-                      value={this.state.question}
-                      onChange={this.handleInput}
-                    />
-                    <Tooltip
-                      placement="top"
-                      isOpen={this.state.tooltipTypeOpen}
-                      autohide={true}
-                      target="DisabledAutoHide"
+                      type="button"
+                      color="warning"
+                      id="DisabledAutoHide"
+                      onClick={this.openToolTip}
                     >
-                      Choose type before add type
-                    </Tooltip>
-                    <Tooltip
-                      placement="top"
-                      isOpen={this.state.tooltipOpen}
-                      autohide={false}
-                      target="DisabledAutoHide"
+                      <FontAwesomeIcon icon={faTasks} /> Choose Type
+                    </Button>
+                  </InputGroupAddon>
+                  <InputGroupAddon addonType="append">
+                    <Button
+                      disabled={this.props.disable}
+                      color="success"
+                      onClick={() => {
+                        if (this.getQuestion().trim() !== '') {
+                          this.addQuestion(this.getQuestion());
+                        }
+                      }}
                     >
-                      <div className="row coresponse-tool-tip">
-                        <Col xs="auto">
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            id="1"
-                            label="What"
-                            checked={this.state.type[0].isChecked}
-                            onChange={this.handleCheck}
-                          />
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            id="2"
-                            label="When"
-                            checked={this.state.type[1].isChecked}
-                            onChange={this.handleCheck}
-                          />
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            checked={this.state.type[2].isChecked}
-                            id="3"
-                            label="Where"
-                            onChange={this.handleCheck}
-                          />
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            label="Yes/No"
-                            checked={this.state.type[6].isChecked}
-                            id="7"
-                            onChange={this.handleCheck}
-                          />
-                        </Col>
-                        <Col xs="auto">
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            checked={this.state.type[3].isChecked}
-                            id="4"
-                            label="Who"
-                            onChange={this.handleCheck}
-                          />
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            checked={this.state.type[4].isChecked}
-                            id="5"
-                            label="Why"
-                            onChange={this.handleCheck}
-                          />
-                          <CustomInput
-                            className="check-box-tag"
-                            type="checkbox"
-                            checked={this.state.type[5].isChecked}
-                            id="6"
-                            label="How"
-                            onChange={this.handleCheck}
-                          />
-                        </Col>
-                      </div>
-                    </Tooltip>
-                    <InputGroupAddon addonType="append">
-                      <Button
-                        disabled={this.props.disable}
-                        type="button"
-                        color="warning"
-                        id="DisabledAutoHide"
-                        onClick={this.openToolTip}
-                      >
-                        <FontAwesomeIcon icon={faTasks} /> Choose Type
-                      </Button>
-                    </InputGroupAddon>
-                    <InputGroupAddon addonType="append">
-                      <Button
-                        disabled={this.props.disable}
-                        color="success"
-                        onClick={() => {
-                          if (this.getQuestion().trim() !== '') {
-                            this.addQuestion(this.getQuestion());
-                          }
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPlus} />
-                      </Button>
-                    </InputGroupAddon>
-                  </InputGroup>
-                </FormGroup>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
               </Col>
             )}
           </Row>

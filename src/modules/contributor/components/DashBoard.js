@@ -54,7 +54,16 @@ export default class DashBoard extends Component {
         );
       }
       this.setLoading(false);
-    });
+    }).catch(err => {
+      this.props.addToast(
+        `Unexpected error has been occurred. Please try again !\n 
+        Please contact to Admin for support`,
+        {
+          appearance: 'error',
+        }
+      );
+      this.setLoading(false);
+    })
   }
 
   componentWillUnmount() {

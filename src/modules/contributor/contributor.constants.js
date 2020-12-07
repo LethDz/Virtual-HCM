@@ -129,22 +129,6 @@ export const columnFieldDef = [
     resizable: true,
   },
   {
-    field: 'create_user',
-    headerName: 'Created by',
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
-    field: 'edit_user',
-    headerName: 'Modified by',
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
     field: 'mdate',
     headerName: 'Last modified date',
     sortable: true,
@@ -160,6 +144,7 @@ export const columnFieldDef = [
     filter: true,
     resizable: true,
     cellRenderer: 'statusBadge',
+    width: '150px',
   },
   {
     field: 'reviews',
@@ -176,6 +161,16 @@ export const columnFieldDef = [
     filter: true,
     resizable: true,
     cellRenderer: 'selfReviewStatus',
+    width: '150px',
+  },
+  {
+    field: 'edit_user',
+    headerName: 'Modified by',
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
+    width: '150px',
   },
 ];
 
@@ -446,7 +441,7 @@ export const columnAcceptedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
-    cellRenderer: "reportedIntent"
+    cellRenderer: 'reportedIntent',
   },
   {
     field: 'report_data',
@@ -463,7 +458,7 @@ export const columnAcceptedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
-    cellRenderer: "reportedIntent",
+    cellRenderer: 'reportedIntent',
   },
   {
     field: 'mdate',
@@ -520,7 +515,7 @@ export const columnRejectedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
-    cellRenderer: "reportedIntent",
+    cellRenderer: 'reportedIntent',
   },
   {
     field: 'report_data',
