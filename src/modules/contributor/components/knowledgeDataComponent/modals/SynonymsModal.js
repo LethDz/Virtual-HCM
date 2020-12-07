@@ -135,6 +135,10 @@ class SynonymsModal extends Component {
     this.sizeToFit();
   }
 
+  resetSelection = () => {
+    this._isMounted && this.setState({ selectedId: '' })
+  }
+
   render() {
     return (
       <div>
@@ -151,6 +155,7 @@ class SynonymsModal extends Component {
             id={this.state.selectedId}
             toggle={this.toggleSynonymDetail}
             updateSynonymList={this.setSynonymList}
+            resetSelection={this.resetSelection}
           />
         )}
         <Modal
