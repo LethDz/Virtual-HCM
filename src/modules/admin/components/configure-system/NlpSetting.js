@@ -30,7 +30,7 @@ export default class NlpSetting extends Component {
     super();
     this.state = {
       errorAlert: false,
-      errorList: false,
+      errorList: [],
       nlpSetting: [],
       posTagsToolTip: false,
       nerTagsToolTip: false,

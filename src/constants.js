@@ -36,6 +36,7 @@ export const CHAT_HISTORY_DETAIL = (id) => `/chat-history/get?log_id=${id}`;
 export const USER_EDIT_PROFILE = '/user/edit';
 
 export const DASHBOARD = '/dashboard';
+export const USER_CHANGE_PASSWORD = '/user/change-password';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';

@@ -24,7 +24,7 @@ export default class SystemSetting extends Component {
     super();
     this.state = {
       errorAlert: false,
-      errorList: false,
+      errorList: [],
       systemSetting: [],
       ...settingStateType1,
     };
