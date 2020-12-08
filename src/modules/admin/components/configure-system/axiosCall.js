@@ -28,10 +28,10 @@ export const axiosCall = (
       } else {
         setErrorAlert(true);
         scrollToRef();
-        if (response.data.messages[0] === generalError) {
-          setErrorList(response.data.result_data.error_detail);
+        if (response?.data?.messages[0] === generalError) {
+          setErrorList([response?.data?.result_data?.error_detail]);
         } else {
-          setErrorList(response.data.messages);
+          setErrorList(response?.data?.messages);
         }
       }
       setLoading(false);
