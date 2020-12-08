@@ -101,13 +101,19 @@ class CreateSynonymModal extends Component {
   handleItemChange = (event) => handleItemInWordsChange(event, this);
 
   deleteWord = (index) => {
-    let list = this.state.words;
-    let pos = Number(index);
-    list.splice(pos, 1);
-    this.setState({
-      words: list,
-    });
+    let pos = parseInt(index);
+    let list = this.removeItemWithSlice(pos, this.state.words);
+    this._isMounted &&
+      this.setState({
+        words: list,
+      });
   };
+
+  removeItemWithSlice = (index, items) => {
+    const firstArr = items.slice(0, index);
+    const secondArr = items.slice(index + 1);
+    return [...firstArr , ...secondArr]
+  }
 
   checkDuplicateWord = (newWord) => {
     let duplicate = false;
