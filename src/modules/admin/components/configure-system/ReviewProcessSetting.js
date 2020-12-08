@@ -24,7 +24,7 @@ export default class ReviewProcessSetting extends Component {
     super();
     this.state = {
       errorAlert: false,
-      errorList: false,
+      errorList: [],
       reviewSetting: [],
       ...settingStateType3,
     };
