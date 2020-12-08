@@ -22,7 +22,7 @@ class ManageTrainingProcess extends Component {
     super();
     this.state = {
       data: null,
-      type: 1,
+      type: '1',
       sentence_length: 30,
       batch: 32,
       epoch: 5,
@@ -169,12 +169,14 @@ class ManageTrainingProcess extends Component {
       `Train data: ${!this.state.data ? 'None' : this.state.data.filename}`
     );
     terminal(`Classifier type: ${classifierTypes[this.state.type]}`);
-    terminal(`Max senquence length: ${this.state.sentence_length}`);
-    terminal(`Batch size: ${this.state.batch}`);
-    terminal(`Number of epoches: ${this.state.epoch}`);
-    terminal(`Learning rate: ${this.state.learning_rate}`);
-    terminal(`Epsilon value: ${this.state.epsilon}`);
-    terminal(`Activation function: ${this.state.activation}`);
+    if (this.state.type === '1' || this.state.type === '2'){
+      terminal(`Max senquence length: ${this.state.sentence_length}`);
+      terminal(`Batch size: ${this.state.batch}`);
+      terminal(`Number of epoches: ${this.state.epoch}`);
+      terminal(`Learning rate: ${this.state.learning_rate}`);
+      terminal(`Epsilon value: ${this.state.epsilon}`);
+      terminal(`Activation function: ${this.state.activation}`);
+    }
     terminal('--------------------------------------------');
     this.trainSocket.send(
       JSON.stringify({
