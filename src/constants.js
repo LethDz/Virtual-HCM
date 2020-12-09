@@ -37,6 +37,9 @@ export const USER_EDIT_PROFILE = '/user/edit';
 
 export const DASHBOARD = '/dashboard';
 export const USER_CHANGE_PASSWORD = '/user/change-password';
+export const USER_REQUEST_CHANGE_PASSWORD = '/user/request-reset-password';
+export const USER_RESET_PASSWORD = '/user/reset-password';
+export const USER_CHECK_RESET_PASSWORD_SESSION = '/user/check-reset-password-session';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';
@@ -107,6 +110,9 @@ export const USER_DETAIL_PAGE = (id) =>
   id
     ? `${CONTRIBUTOR_PAGE}/user-detail/${id}`
     : `${CONTRIBUTOR_PAGE}/user-detail/:id`;
+
+export const FORGOT_PASSWORD_PAGE = '/forgot-password';
+export const RESET_PASSWORD_PAGE = '/reset-password';
 
 // Admin Page
 export const ADMIN_PAGE = '/admin';

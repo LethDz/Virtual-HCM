@@ -16,6 +16,8 @@ import ChatHistoryListPage from 'src/pages/contributor/chat-history/ChatHistoryL
 import KnowledgeDataDetailPage from 'src/pages/contributor/manage-knowledge-data/KnowledgeDataDetailPage';
 import ReportPage from 'src/pages/contributor/report/ReportPage';
 import UserDetailPage from 'src/pages/user/UserDetailPage';
+import ForgotPasswordPage from 'src/pages/user/ForgotPasswordPage';
+import ResetPasswordPage from 'src/pages/user/ResetPasswordPage';
 
 export {
   HomePage,
@@ -36,4 +38,6 @@ export {
   ReportPage,
   TrainDataPage,
   UserDetailPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
 };

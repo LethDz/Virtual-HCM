@@ -50,6 +50,14 @@ export default class ChangePassword extends Component {
 
   inputChange = async (event) => {
     await handleInputChange(event, this);
+    if (
+      this.state.new_password === '' &&
+      this.state.confirm_new_password === ''
+    ) {
+      this.setNewPasswordInvalid(false);
+      this.setNewPasswordValid(false);
+    }
+
     if (this.state.new_password !== this.state.confirm_new_password) {
       this.setNewPasswordInvalid(true);
       this.setNewPasswordValid(false);
