@@ -19,6 +19,8 @@ import {
   TrainDataPage,
   ChatHistoryListPage,
   UserDetailPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -39,6 +41,8 @@ import {
   REPORT_LIST_PAGE,
   ADMIN_TRAIN_DATA_PAGE,
   USER_DETAIL_PAGE,
+  FORGOT_PASSWORD_PAGE,
+  RESET_PASSWORD_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -49,6 +53,16 @@ const Routes = () => (
     <Switch>
       <ErrorBoundaryRoute exact path={HOME_PAGE} component={HomePage} />
       <ErrorBoundaryRoute exact path={LOGIN_PAGE} component={LoginPage} />
+      <ErrorBoundaryRoute
+        exact
+        path={FORGOT_PASSWORD_PAGE}
+        component={ForgotPasswordPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={RESET_PASSWORD_PAGE}
+        component={ResetPasswordPage}
+      />
       <PrivateRouteAdmin exact path={ADMIN_PAGE} component={AdminPage} />
       <PrivateRouteContributor
         exact

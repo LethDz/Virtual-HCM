@@ -81,7 +81,7 @@ class Coresponse extends Component {
     return (
       <Row>
         <Col>
-          <Label className="label">Coresponse answer:</Label>
+          <Label className="label">Corresponding answer:</Label>
           {!this.props.disable && (
             <Row>
               <Col>

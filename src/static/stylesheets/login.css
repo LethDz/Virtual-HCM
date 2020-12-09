@@ -49,7 +49,6 @@
 
 .form-login-title {
   font-weight: 600;
-  display: block;
   margin-bottom: 7px;
   text-align: left;
 }
@@ -65,4 +64,8 @@
 
 .input-width {
   width: 300px !important;
+}
+
+.font-weight-600 {
+  font-weight: 600;
 }

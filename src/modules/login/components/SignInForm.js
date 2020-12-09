@@ -10,9 +10,16 @@ import {
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { history } from 'src/common/history';
-import { ADMIN_PAGE, CONTRIBUTOR_PAGE, LOGIN } from 'src/constants';
+import {
+  ADMIN_PAGE,
+  CONTRIBUTOR_PAGE,
+  FORGOT_PASSWORD_PAGE,
+  HOME_PAGE,
+  LOGIN,
+} from 'src/constants';
 import { showLoginError } from 'src/modules/login';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { Link } from 'react-router-dom';
 
 class SignInForm extends Component {
   _isMounted = false;
@@ -111,6 +118,7 @@ class SignInForm extends Component {
                   invalid={this.state.usernameInvalid}
                   bsSize="sm"
                   block="true"
+                  autoComplete="new-username"
                 />
                 <FormFeedback>Invalid Username</FormFeedback>
               </FormGroup>
@@ -118,6 +126,9 @@ class SignInForm extends Component {
                 <Label for="password" className="form-login-title">
                   Password
                 </Label>
+                <Link className="float-right font-sm" to={FORGOT_PASSWORD_PAGE}>
+                  Forgot password ?
+                </Link>
                 <Input
                   className="input-width"
                   type="password"
@@ -129,6 +140,7 @@ class SignInForm extends Component {
                   invalid={this.state.passwordInvalid}
                   bsSize="sm"
                   block="true"
+                  autoComplete="new-password"
                 />
                 <FormFeedback>Invalid Password</FormFeedback>
               </FormGroup>
@@ -137,7 +149,8 @@ class SignInForm extends Component {
               </Button>
             </Form>
             <div className="login-callout mt-3">
-              New to Hồ Chí Minh Virtual chatbot? Contact our <a href="#admin">admin</a>.
+              New to Hồ Chí Minh Virtual chatbot? Contact our{' '}
+              <a href={`${HOME_PAGE}#Contact-Us`}>admin</a>.
             </div>
           </LoadingSpinner>
         </div>
