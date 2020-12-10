@@ -112,7 +112,7 @@ export const columnFieldDef = [
     headerName: 'ID',
     sortable: true,
     filter: true,
-    width: '100px',
+    width: 70,
   },
   {
     field: 'intent',
@@ -142,9 +142,8 @@ export const columnFieldDef = [
     headerName: 'Status',
     sortable: true,
     filter: true,
-    resizable: true,
     cellRenderer: 'statusBadge',
-    width: '150px',
+    width: 100,
   },
   {
     field: 'reviews',
@@ -159,18 +158,16 @@ export const columnFieldDef = [
     headerName: 'Self action',
     sortable: true,
     filter: true,
-    resizable: true,
     cellRenderer: 'selfReviewStatus',
-    width: '150px',
+    width: 100,
   },
   {
     field: 'edit_user',
     headerName: 'Modified by',
     sortable: true,
     filter: true,
-    resizable: true,
     cellRenderer: 'userLink',
-    width: '150px',
+    width: 100,
   },
 ];
 

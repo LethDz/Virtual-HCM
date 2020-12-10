@@ -40,11 +40,11 @@ export default class DashBoard extends Component {
           this.setState({
             ...data,
           });
-        this.props.addToast(`Load the statistic successfully !!!`, {
+          this._isMounted && this.props.addToast(`Load the statistic successfully !!!`, {
           appearance: 'success',
         });
       } else {
-        this.props.addToast(
+        this._isMounted && this.props.addToast(
           `Unexpected error has been occurred. Please try again !\n 
           ${response.data.result_data.error_detail}.
           Please contact to Admin for support`,
@@ -55,7 +55,7 @@ export default class DashBoard extends Component {
       }
       this.setLoading(false);
     }).catch(err => {
-      this.props.addToast(
+      this._isMounted && this.props.addToast(
         `Unexpected error has been occurred. Please try again !\n 
         Please contact to Admin for support`,
         {
