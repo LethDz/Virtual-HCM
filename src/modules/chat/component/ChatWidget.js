@@ -19,13 +19,14 @@ class ChatWidget extends Component {
       newMessagesCount: 0,
       isOpen: false,
       loading: false,
+      isBotAvailable: true
     };
     this.chatSocket = null;
     this.current_command = null;
     this.commands = {
       START_NEW_SESSION: 'newsession',
       REQUEST_LAST_SESSION_DATA: 'getlastsession',
-      CHAT: 'chat',
+      CHAT: 'chat'
     };
     this.response_types = {
       LAST_SESSION_MESSAGES: 'last_session_messages',
@@ -33,17 +34,20 @@ class ChatWidget extends Component {
       CHAT_RESPONSE: 'chat_response',
       START_NEW_SESSION_FAILED: 'new_session_failed',
       END_SESSION_STATUS: 'end_session_status',
+      ERROR: 'error'
     };
   }
 
   _onMessageWasSent = (message) => {
-    let text = message.data.text;
-    if (text) {
-      // Chat handle
-      this.send_websocket_command(this.commands.CHAT, text);
-      this.setState({
-        messageList: [...this.state.messageList, message],
-      });
+    if (this.state.isBotAvailable) {
+      let text = message.data.text;
+      if (text) {
+        // Chat handle
+        this.send_websocket_command(this.commands.CHAT, text);
+        this.setState({
+          messageList: [...this.state.messageList, message],
+        });
+      }
     }
   };
 
@@ -109,6 +113,9 @@ class ChatWidget extends Component {
     chatSocket.onopen = function (e) {
       console.log('[chat_open] Connected to training service');
       _self.props.updateStatusOfChatSocket(true);
+      _self.setState({
+        loading: false,
+      });
     };
     chatSocket.onmessage = function (e) {
       let received = JSON.parse(e.data);
@@ -123,13 +130,11 @@ class ChatWidget extends Component {
               _self.commands.START_NEW_SESSION,
               null
             );
+            
             break;
           case _self.response_types.LAST_SESSION_MESSAGES:
             if (received.data && received.data.length > 0) {
               _self.setChatboxMessages(received.data);
-              _self.setState({
-                loading: false,
-              });
             } else {
               _self.send_websocket_command(
                 _self.commands.START_NEW_SESSION,
@@ -150,14 +155,19 @@ class ChatWidget extends Component {
                     _self.commands.START_NEW_SESSION,
                     null
                   );
-                  _self.setState({
-                    loading: false,
-                  });
                 }, 3000);
               }
             } else {
               _self._sendMessages(received.data.messages);
             }
+            break;
+          case _self.response_types.ERROR:
+            if (received.data && received.data.length > 0) {
+              _self._sendMessages(received.data);
+            }
+            _self.setState({
+              isBotAvailable: false
+            });
             break;
           default:
             console.log(
@@ -246,7 +256,7 @@ class ChatWidget extends Component {
   }
 
   componentWillUnmount() {
-    this.chatSocket.close(1000);
+    this.chatSocket && this.chatSocket.close(1000);
     this.props.updateStatusOfChatSocket(false);
   }
 

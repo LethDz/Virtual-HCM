@@ -40,3 +40,11 @@
 .input-group-prepend {
   z-index: 0;
 }
+
+.input-group-append {
+  z-index: 0;
+}
+
+.tooltip {
+  z-index: 0 !important;
+}

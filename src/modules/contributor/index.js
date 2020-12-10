@@ -21,6 +21,7 @@ import ReportDetailModalAccepted from 'src/modules/contributor/components/report
 import ReportDetailModalRejected from 'src/modules/contributor/components/report/ReportDetailModalRejected';
 import DetailModalViewOnly from 'src/modules/contributor/components/report/DetailModalViewOnly';
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
+import ReportedIntent from 'src/modules/contributor/components/report/ReportedIntent';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -44,6 +45,7 @@ import ReportList from 'src/modules/contributor/components/report/ReportList';
 import ReportAcceptedList from 'src/modules/contributor/components/report/ReportAcceptedList';
 import ReportRejectedList from 'src/modules/contributor/components/report/ReportRejectedList';
 import Report from 'src/modules/contributor/components/report/Report';
+import DashBoard from 'src/modules/contributor/components/DashBoard';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -91,4 +93,6 @@ export {
   ReportDetailModalRejected,
   DetailModalViewOnly,
   StatusBar,
+  ReportedIntent,
+  DashBoard,
 };

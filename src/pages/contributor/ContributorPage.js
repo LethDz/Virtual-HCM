@@ -1,10 +1,13 @@
-import React from "react";
-import LayoutWrapper from "src/layouts/LayoutWrapper";
-import { Contributor } from "src/modules/contributor/index";
+import React from 'react';
+import { ToastProvider } from 'react-toast-notifications';
+import LayoutWrapper from 'src/layouts/LayoutWrapper';
+import { Contributor } from 'src/modules/contributor/index';
 
 const ContributorPage = () => (
   <LayoutWrapper>
-    <Contributor />
+    <ToastProvider placement="top-center" autoDismiss={true}>
+      <Contributor />
+    </ToastProvider>
   </LayoutWrapper>
 );
 

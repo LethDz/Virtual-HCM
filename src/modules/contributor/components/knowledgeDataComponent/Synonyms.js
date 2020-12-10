@@ -190,7 +190,12 @@ class Synonyms extends Component {
                                   <Col>
                                     {synonym.meaning}:&nbsp;
                                     {synonym.words.map((key, index) => {
-                                      return <span key={index}>{key} </span>;
+                                      if (index + 1 === synonym.words.length) {
+                                        return <span key={index}>{key}. </span>;
+                                      } 
+                                      else {
+                                        return <span key={index}>{key}, </span>;
+                                      }
                                     })}
                                   </Col>
                                   {!this.props.disable && (

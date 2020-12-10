@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import 'src/static/stylesheets/sideBar.css';
 import {
   Navbar,
@@ -11,18 +11,21 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faKey, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { signOut } from 'src/common/authorizationChecking';
+import { ChangePassword } from 'src/modules/user';
 
 const Header = () => {
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+
   return (
-    <Navbar className="d-flex justify-content-end navbar" expand="md">
-      <div>
-        <Nav className="mr-auto" navbar>
+    <Fragment>
+      <Navbar className="d-flex justify-content-end navbar" expand="md">
+        <Nav className="ml-auto" navbar>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggle className="navbar-font" nav caret>
               <FontAwesomeIcon icon={faCog} /> Setting
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem href="#pass">
+              <DropdownItem onClick={() => setOpenChangePassword(true)}>
                 <FontAwesomeIcon icon={faKey} /> Change password
               </DropdownItem>
               <DropdownItem divider />
@@ -32,8 +35,14 @@ const Header = () => {
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
-      </div>
-    </Navbar>
+      </Navbar>
+      {openChangePassword && (
+        <ChangePassword
+          openChangePassword={openChangePassword}
+          setOpenChangePassword={setOpenChangePassword}
+        />
+      )}
+    </Fragment>
   );
 };
 

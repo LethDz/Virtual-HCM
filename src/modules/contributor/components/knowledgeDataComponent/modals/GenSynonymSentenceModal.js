@@ -16,78 +16,70 @@ import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 class GenSynonymSentenceModal extends Component {
   _isMounted = false;
-  constructor(props) {
+  _loadQuestion = false;
+  question = [];
+  constructor() {
     super();
     this.state = {
       gridApi: '',
       gridColumnApi: '',
-      selectedSentence: props.rowData,
-      rowData: [],
+      selectedSentence: [],
       loading: false,
+      rowData: [],
+      rowDataList: [],
     };
   }
 
   componentDidMount = () => {
     this._isMounted = true;
-    let rowData = [];
-    this.props.rowData.forEach((data) => {
-      rowData.push({ sentence: data.sentence, question: data.question });
+    this.setData();
+  };
+
+  setData = () => {
+    this.setState({
+      rowData: this.props.rowData,
+      rowDataList: this.props.rowData,
     });
-    this.setState({ rowData: rowData });
   };
 
   componentWillUnmount = () => {
     this._isMounted = false;
+    this.question = [];
   };
 
   onGridReady = (params) => {
-    params.api.forEachNode((node) => {
-      this.props.rowData.forEach((sentence) => {
-        if (node.data.sentence === sentence.sentence && sentence.accept === 1) {
-          node.setSelected(true);
-        }
-      });
+    params.api.forEachNode((node, index) => {
+      const row = this.props.rowData[index];
+      if (row.accept === 1) {
+        node.setSelected(true);
+        this.question.push(row)
+      }
     });
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
   };
 
-  onSelectionChanged = () => {
-    let nodes = this.gridApi.getSelectedNodes();
-    let selectedRow = [];
-    nodes.forEach((node) => {
-      if (typeof node !== 'undefined') {
-        selectedRow.push(node.data);
-      }
-    });
-    let results = [];
-    this.state.rowData.forEach((sentence) => {
-      let isSelected = false;
-      selectedRow.forEach((row) => {
-        if (sentence.sentence === row.sentence) {
-          isSelected = true;
-        }
-      });
-
-      if (isSelected) {
-        results.push({
-          question: sentence.question,
-          sentence: sentence.sentence,
-          accept: 1,
-        });
-      } else {
-        results.push({
-          question: sentence.question,
-          sentence: sentence.sentence,
-          accept: 0,
-        });
-      }
-    });
-    this._isMounted && this.setState({ selectedSentence: results });
-  };
-
   setSelectedSentence = () => {
-    this.props.setSelectedSentence(this.state.selectedSentence);
+    
+    let idx = 0;
+    let result = [];
+    this.state.rowData.forEach((row) => {
+      if (this.question[idx] && this.question[idx].sentence === row.sentence) {
+        result.push({
+          accept: 1,
+          sentence: row.sentence,
+          question: row.question,
+        });
+        idx++;
+      } else {
+        result.push({
+          accept: 0,
+          sentence: row.sentence,
+          question: row.question,
+        });
+      }
+    });
+    this.props.setSelectedSentence(result);
     this.props.toggle();
   };
 
@@ -102,10 +94,19 @@ class GenSynonymSentenceModal extends Component {
 
   onFirstDataRendered = () => {
     this.sizeToFit();
+    this._loadQuestion = true;
   };
 
   sizeToFit = () => {
     this.gridApi.sizeColumnsToFit();
+  };
+
+  onSelectionChanged = () => {};
+
+  onRowSelected = () => {
+    if (this._loadQuestion) {
+      this.question = this.gridApi.getSelectedRows();
+    }
   };
 
   render() {
@@ -126,12 +127,12 @@ class GenSynonymSentenceModal extends Component {
                 style={{ height: 700, width: '100%' }}
               >
                 <AgGridReact
+                  onRowSelected={this.onRowSelected}
                   onFirstDataRendered={this.onFirstDataRendered}
                   onGridReady={this.onGridReady}
-                  rowData={this.state.rowData}
+                  rowData={this.state.rowDataList}
                   rowSelection="multiple"
                   rowMultiSelectWithClick
-                  onSelectionChanged={this.onSelectionChanged.bind(this)}
                   columnDefs={columnGenSentenceDef}
                   pagination={true}
                   paginationAutoPageSize={true}

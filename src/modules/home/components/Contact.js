@@ -1,3 +1,5 @@
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 const imageList = () => {
@@ -23,8 +25,13 @@ const Contact = () => {
           <div className="row justify-content-center h-100">
             <div className="col-md-7 text-center">
               <h2 className="font-weight-bold text-white">
-                Hãy tham gia cùng chúng tôi
-                <i className="icon-heart" aria-hidden="true"></i>
+                <a
+                  href={`/login`}
+                  className="link-underline-white"
+                >
+                  Hãy tham gia cùng chúng tôi{' '}
+                  <FontAwesomeIcon icon={faHeart} />
+                </a>
               </h2>
               <p className="text-white invite-purposed-text">
                 Để xây dựng hệ thống Chatbot với dữ liệu mang tính chính xác cao
@@ -52,7 +59,8 @@ const Contact = () => {
                 <li className="d-block mb-3">
                   <span className="d-block text-black">Địa chỉ:</span>
                   <span>
-                    Km29, Đại lộ Thăng Long, Thạch Hoà, Thạch Thất, Hà Nội
+                    Đại học FPT, Khu công nghệ cao Hòa Lạc, Km29, Đại lộ Thăng
+                    Long, Thạch Hoà, Thạch Thất, Hà Nội
                   </span>
                 </li>
                 <li className="d-block mb-3">

@@ -1,7 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Production Build
-- ```serve -s build --listen 3000 --ssl-cert "./.cert/cert.pem" --ssl-key "./.cert/key.pem"```
+- `serve -s build --listen 443 --ssl-cert "./.cert/vhcm.crt" --ssl-key "./.cert/vhcm.key"`
 
 ## Tech Stack
 
@@ -112,7 +112,7 @@ import LogoutButton from '../../../modules/userAuthentication/LogoutButton';
 import { LogoutButton } from '../../../modules/userAuthentication';
 ```
 
-### Using `index.ts` to export public interface, ...etc...
+### Using `index.js` to export public interface, ...etc...
 Following [Concept and Model](#Concept-and-Model), Recommend to use index.js in order to export
 
 ### Folder `pages` is distributed by routes.js

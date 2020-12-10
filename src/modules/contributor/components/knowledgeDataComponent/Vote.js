@@ -9,7 +9,10 @@ import {
 import { connect } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDown,
+  faClipboardList,
+} from '@fortawesome/free-solid-svg-icons';
 
 class Vote extends Component {
   _isMounted = false;
@@ -82,37 +85,32 @@ class Vote extends Component {
             </div>
           </Col>
           <Col xs="auto">
-            <Row>
-              {this.props.owner ? (
-                <Button
-                  color="success"
-                  id="button-review"
-                  onClick={this.toggleViewReviewModal}
-                >
-                  View all review <FontAwesomeIcon icon={faAngleDown} />
-                </Button>
-              ) : (
-                  <ButtonGroup>
-                    {this.props.formStatus === PROCESSING ? (
-                      <Button
-                        color="success"
-                        id="button-review"
-                        onClick={this.toggleReviewModal}
-                      >
-                         <FontAwesomeIcon icon={faAngleDown} /> Review
-                      </Button>
-                    ) : (
-                        <Button hidden id="button-review"></Button>
-                      )}
-                    <Button
-                      color="info"
-                      onClick={this.toggleViewReviewModal}
-                    >
-                      <FontAwesomeIcon icon={faClipboardList} /> View all reviews
-                    </Button>
-                  </ButtonGroup>
+            {this.props.owner ? (
+              <Button
+                color="info"
+                id="button-review"
+                onClick={this.toggleViewReviewModal}
+              >
+                <FontAwesomeIcon icon={faClipboardList} /> View all review
+              </Button>
+            ) : (
+              <ButtonGroup>
+                {this.props.formStatus === PROCESSING ? (
+                  <Button
+                    color="success"
+                    id="button-review"
+                    onClick={this.toggleReviewModal}
+                  >
+                    <FontAwesomeIcon icon={faAngleDown} /> Review
+                  </Button>
+                ) : (
+                  <Button hidden id="button-review"></Button>
                 )}
-            </Row>
+                <Button color="info" onClick={this.toggleViewReviewModal}>
+                  <FontAwesomeIcon icon={faClipboardList} /> View all reviews
+                </Button>
+              </ButtonGroup>
+            )}
           </Col>
         </Row>
       </div>

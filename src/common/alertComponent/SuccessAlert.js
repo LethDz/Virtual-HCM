@@ -12,7 +12,7 @@ const SuccessAlert = (props) => {
       <Alert
         color="success"
         isOpen={props.successAlert}
-        toggle={onDismiss}
+        toggle={props.onDismiss ? onDismiss : false}
         className="m-3 w-100"
       >
         <FontAwesomeIcon icon={faSmile} />

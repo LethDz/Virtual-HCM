@@ -1,12 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Label, Button, Input } from 'reactstrap';
-
 import axiosClient from 'src/common/axiosClient';
 import { NLP, TOKENIZE } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
-
-import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
-
 import { V, N } from 'src/modules/contributor/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faHammer } from '@fortawesome/free-solid-svg-icons';
@@ -26,10 +22,9 @@ class RawData extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    this.props.setLoading(false);
     if (this.props.detailPage) {
-      this.stateTokenizeRawData(() => {
-        this.setTokenizedWordArray();
-      });
+      this.stateTokenizeRawData();
     }
   }
 
@@ -43,14 +38,14 @@ class RawData extends Component {
   };
 
   stateTokenizeRawData = () => {
-    if (this._isMounted) this.setState({ loading: true });
+    this.props.setLoading(true, 'Tokenizing data');
     const paragraph = {
       paragraph: this.state.rawData,
     };
     axiosClient
       .post(NLP + TOKENIZE, paragraph)
       .then((response) => {
-        this._isMounted && this.setState({ loading: false });
+        this.props.setLoading(false, 'Tokenizing data');
         if (response.data.status) {
           let fullArray = [];
           response.data.result_data.pos.forEach((array) => {
@@ -118,10 +113,6 @@ class RawData extends Component {
     this.props.cancelCriticalData();
   };
 
-  onMouseOver = (event, data) => {};
-
-  onMouseLeave = (event) => {};
-
   renderRawDataMode = () => {
     if (this.state.mode === 'TOKENIZE') {
       return (
@@ -150,13 +141,7 @@ class RawData extends Component {
                   className += 'name ';
                 }
                 return (
-                  <span
-                    title={data.type}
-                    key={index}
-                    className={className}
-                    onMouseOver={(event) => this.onMouseOver(event, data)}
-                    onMouseLeave={this.onMouseLeave}
-                  >
+                  <span title={data.type} key={index} className={className}>
                     {data.value}
                   </span>
                 );
@@ -218,11 +203,7 @@ class RawData extends Component {
             Raw data:
           </Label>
         </Col>
-        <Col>
-          <LoadingSpinner loading={this.state.loading} text="Tokenizing">
-            {this.renderRawDataMode()}
-          </LoadingSpinner>
-        </Col>
+        <Col>{this.renderRawDataMode()}</Col>
       </Row>
     );
   }

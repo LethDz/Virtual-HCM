@@ -134,6 +134,7 @@ class ReviewModal extends Component {
             <Col>Review knowledge data</Col>
             <Col xs="auto">
               <FontAwesomeIcon
+                className="review-minimize-button"
                 onClick={this.props.toggle}
                 icon={faWindowMinimize}
               />
