@@ -53,26 +53,30 @@
 }
 
 .name {
-  border: solid;
-  border-width: 2px;
-  border-color: #dc3545;
+  border-color: #dc3545 !important;
+  background-color: #df3d4e !important;
+  color: white;
 }
 
 .verb {
-  border: solid;
-  border-width: 2px;
-  border-color: #28a745;
+  border-color: #28a745 !important;
+  background-color: #28a745 !important;
+  color: white;
 }
 
 .noun {
-  border: solid;
-  border-width: 2px;
-  border-color: #ffd23f;
+  border-color: #ffd23f !important;
+  background-color: #f8ca33 !important;
+  color: white;
 }
 
 .word-box {
+  font-weight: 500;
   padding: 2px 2px 2px 2px;
-  border-radius: 10%;
+  border-radius: 10px;
+  border: solid;
+  border-width: 2px;
+  border-color: #000000;
 }
 
 .progress-bar-list {
@@ -131,16 +135,16 @@
 }
 
 .check-box-tag {
-  padding-left: 0 !important
+  padding-left: 0 !important;
 }
 
 .check-box-tag label {
-  position: unset
+  position: unset;
 }
 
 .coresponse-tool-tip {
   margin-right: 0 !important;
-  margin-left: 15px !important
+  margin-left: 15px !important;
 }
 
 .width-50 {

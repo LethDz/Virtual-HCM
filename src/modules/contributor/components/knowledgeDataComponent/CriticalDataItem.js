@@ -22,11 +22,32 @@ class CriticalDataItem extends Component {
     this.state = {
       verbType: '',
       word: '',
+      wordArray: [],
     };
   }
 
   componentDidMount = () => {
     this._isMounted = true;
+    this.setData();
+  };
+
+  setData = () => {
+    const criticalValue = this.props.criticalValue;
+    const wordArray = [...this.props.wordArray];
+    let result = []
+    wordArray.forEach(word => {
+      let isContain = false
+      criticalValue.forEach(item => {
+        if (item.word === word.value) {
+          isContain = true
+        }
+      })
+      if (!isContain) {
+        result.push(word)
+      }
+    })
+
+    this.setState({ wordArray: result });
   };
 
   componentWillUnmount = () => {
@@ -35,7 +56,7 @@ class CriticalDataItem extends Component {
 
   handleInput = (event) => {
     handleInputChange(event, this);
-    this.props.wordArray.forEach((word) => {
+    this.state.wordArray.forEach((word) => {
       if (word.value === event.target.value) {
         this._isMounted && this.setState({ verbType: word.type });
       }
@@ -63,6 +84,24 @@ class CriticalDataItem extends Component {
         );
       }
     }
+    this.removeWord(this.state.word, this.state.verbType);
+  };
+
+  removeWord = (word, verbType) => {
+    let wordArray = [];
+    this.state.wordArray.forEach((item) => {
+      if (!(item.value === word && item.type === verbType)) {
+        wordArray.push(item);
+      }
+    });
+    this._isMounted &&
+      this.setState({ wordArray: wordArray, word: '', verbType: '' });
+  };
+
+  addWordToArray = (word) => {
+    let wordArray = this.state.wordArray;
+    wordArray.push({ type: word.type, value: word.word });
+    this._isMounted && this.setState({ wordArray: wordArray });
   };
 
   render() {
@@ -75,7 +114,7 @@ class CriticalDataItem extends Component {
           <InputGroup>
             <Input
               disabled={this.props.disable}
-              defaultValue={''}
+              value={this.state.word}
               type="select"
               name="word"
               onChange={this.handleInput}
@@ -83,7 +122,7 @@ class CriticalDataItem extends Component {
               <option value="" disabled>
                 None
               </option>
-              {this.props.wordArray.map((data, index) => {
+              {this.state.wordArray.map((data, index) => {
                 return <option key={index}>{data.value}</option>;
               })}
             </Input>

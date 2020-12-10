@@ -27,9 +27,7 @@ class RawData extends Component {
   componentDidMount() {
     this._isMounted = true;
     if (this.props.detailPage) {
-      this.stateTokenizeRawData(() => {
-        this.setTokenizedWordArray();
-      });
+      this.stateTokenizeRawData();
     }
   }
 
