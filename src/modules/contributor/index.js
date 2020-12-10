@@ -22,6 +22,7 @@ import ReportDetailModalRejected from 'src/modules/contributor/components/report
 import DetailModalViewOnly from 'src/modules/contributor/components/report/DetailModalViewOnly';
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 import ReportedIntent from 'src/modules/contributor/components/report/ReportedIntent';
+import ReferenceLink from 'src/modules/contributor/components/reference/ReferenceLink';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -95,4 +96,5 @@ export {
   StatusBar,
   ReportedIntent,
   DashBoard,
+  ReferenceLink,
 };

@@ -4,7 +4,7 @@ import StatusBadge from 'src/modules/contributor/components/knowLedgeListCompone
 import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
 import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
 import { progressBarComparator } from 'src/modules/contributor/components/knowLedgeListComponent/progressBarComparator';
-import { ReportType, ReportedIntent } from 'src/modules/contributor';
+import { ReportType, ReportedIntent, ReferenceLink } from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
@@ -233,7 +233,7 @@ export const columnRefFieldDef = [
   {
     field: 'reference_document_id',
     headerName: 'ID',
-    width: 60,
+    width: 70,
     sortable: true,
     filter: true,
     resizable: true,
@@ -241,7 +241,7 @@ export const columnRefFieldDef = [
   {
     field: 'reference_name',
     headerName: 'Name',
-    width: 230,
+    width: 250,
     sortable: true,
     filter: true,
     resizable: true,
@@ -253,11 +253,12 @@ export const columnRefFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'referenceLink',
   },
   {
     field: 'author',
     headerName: 'Author',
-    width: 350,
+    width: 250,
     sortable: true,
     filter: true,
     resizable: true,
@@ -558,6 +559,7 @@ export const columnChatHistoryFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'session_start',
@@ -578,6 +580,14 @@ export const columnChatHistoryFieldDef = [
     comparator: dateComparator,
   },
 ];
+
+export const frameworkComponentsForChatHistory = {
+  userLink: UserLink,
+};
+
+export const frameworkComponentsForReference = {
+  referenceLink: ReferenceLink,
+};
 
 export const frameworkComponentsForReport = {
   reportType: ReportType,

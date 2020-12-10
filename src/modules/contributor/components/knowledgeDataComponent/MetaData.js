@@ -58,9 +58,26 @@ class MetaData extends Component {
 
   addReference = (reference) => {
     let referenceList = this.state.referenceList;
-    referenceList.push(reference);
-    if (this._isMounted) this.setState({ referenceList: referenceList });
-    this.setReference();
+    if (!this.checkDuplicate(reference)) {
+      referenceList.push(reference);
+      this._isMounted && this.setState({ referenceList: referenceList });
+      this.setReference();
+    }
+  };
+
+  checkDuplicate = (reference) => {
+    const referenceList = this.state.referenceList;
+    let flag = false
+    referenceList.forEach((item) => {
+      if (
+        item.extra_info === reference.extra_info &&
+        item.reference_name === reference.reference_name &&
+        item.page === reference.page
+      ) {
+        flag = true;
+      }
+    });
+    return flag;
   };
 
   removeReference = (index) => {

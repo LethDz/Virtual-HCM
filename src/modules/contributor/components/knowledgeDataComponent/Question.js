@@ -445,7 +445,7 @@ export default class Question extends Component {
                     autohide={true}
                     target="DisabledAutoHide"
                   >
-                    Choose type before add type
+                    Choose type before add question
                   </Tooltip>
                   <Tooltip
                     placement="top"

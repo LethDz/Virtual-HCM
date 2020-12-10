@@ -7,7 +7,10 @@ import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import { ChatHistoryDetailModal } from 'src/modules/contributor/index';
-import { columnChatHistoryFieldDef } from 'src/modules/contributor';
+import {
+  columnChatHistoryFieldDef,
+  frameworkComponentsForChatHistory,
+} from 'src/modules/contributor';
 import { CHAT_HISTORY, ALL } from 'src/constants';
 import axiosClient from 'src/common/axiosClient';
 
@@ -148,19 +151,19 @@ class ChatHistoryList extends Component {
   render() {
     return (
       <div
-        id="cl-container"
-        className="container cl-container min-vh-100"
+        id='cl-container'
+        className='container cl-container min-vh-100'
         ref={this.conRef}
       >
         <Row>
-          <Col className="justify-content-center d-flex">
-            <h5 className="mt-2 mb-2">Chat History</h5>
+          <Col className='justify-content-center d-flex'>
+            <h5 className='mt-2 mb-2'>Chat History</h5>
           </Col>
         </Row>
         {this.state.successAlert && (
           <SuccessAlert
             successAlert={this.state.successAlert}
-            text="Loading reference is successfully"
+            text='Loading reference is successfully'
             onDismiss={() => this.onDismiss('successAlert')}
           />
         )}
@@ -171,14 +174,14 @@ class ChatHistoryList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
-        <Row className="d-flex flex-row-reverse">
-          <Col xs="auto">
+        <Row className='d-flex flex-row-reverse'>
+          <Col xs='auto'>
             <Button
-              color="success"
+              color='success'
               disabled={this.state.selectedId === ''}
               onClick={this.toggleChatHistoryDetail}
             >
-              <FontAwesomeIcon icon={faEye} color="white" />
+              <FontAwesomeIcon icon={faEye} color='white' />
               &nbsp; View chat log
             </Button>
             {this.state.modalChatHistoryDetail && (
@@ -190,17 +193,17 @@ class ChatHistoryList extends Component {
             )}
           </Col>
           <Col>
-            <Button type="button" color="success" onClick={this.setRowData}>
-              <FontAwesomeIcon icon={faSync} color="white" />
+            <Button type='button' color='success' onClick={this.setRowData}>
+              <FontAwesomeIcon icon={faSync} color='white' />
             </Button>
           </Col>
         </Row>
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading chat history"
+          text='Loading chat history'
         ></LoadingSpinner>
         <div
-          className="ag-theme-alpine"
+          className='ag-theme-alpine'
           style={{
             height: `${this.state.containerHeight - 200}px`,
             marginTop: '10px',
@@ -209,13 +212,14 @@ class ChatHistoryList extends Component {
           <AgGridReact
             onGridReady={this.onGridReady}
             rowData={this.state.chatHistoryList}
-            rowSelection="single"
+            rowSelection='single'
             onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnChatHistoryFieldDef}
             pagination={true}
             paginationAutoPageSize={true}
             onFirstDataRendered={this.onFirstDataRendered}
+            frameworkComponents={frameworkComponentsForChatHistory}
           ></AgGridReact>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { Col, Label, Row, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import {
   CriticalDataItem,
@@ -18,6 +18,8 @@ class CriticalData extends Component {
       criticalData: [],
       type: '',
     };
+    this.componentRef = createRef();
+    this.verbRef = createRef();
   }
 
   componentDidMount = () => {
@@ -93,10 +95,20 @@ class CriticalData extends Component {
   removeComponent = (type, criticalIndex, index) => {
     let criticalData = this.state.criticalData;
     if (index > -1) {
-      if (type === VERB) {
-        criticalData[criticalIndex].verb.splice(index, 1);
-      } else if (type === CRITICAL) {
-        criticalData[criticalIndex].word.splice(index, 1);
+      switch (type) {
+        case VERB:
+          this.verbRef.current.addWordToArray(
+            criticalData[criticalIndex].verb[index]
+          );
+          criticalData[criticalIndex].verb.splice(index, 1);
+          break;
+        case CRITICAL:
+          this.componentRef.current.addWordToArray(
+            criticalData[criticalIndex].word[index]
+          );
+          criticalData[criticalIndex].word.splice(index, 1);
+          break;
+        default:
       }
     }
     let listCritical = criticalData[criticalIndex];
@@ -195,6 +207,12 @@ class CriticalData extends Component {
                       <Label>Subject component: </Label>
                       {!this.props.disable && (
                         <CriticalDataItem
+                          criticalValue={
+                            this.props.criticalDataValue
+                              ? this.props.criticalDataValue[index].word
+                              : []
+                          }
+                          ref={this.componentRef}
                           disable={this.props.disable}
                           checkSubjectType={
                             this.state.criticalData[index].word.length === 0 &&
@@ -244,6 +262,12 @@ class CriticalData extends Component {
                       <Label>Verb: </Label>
                       {!this.props.disable && (
                         <CriticalDataItem
+                          criticalValue={
+                            this.props.criticalDataValue
+                              ? this.props.criticalDataValue[index].verb
+                              : []
+                          }
+                          ref={this.verbRef}
                           disable={this.props.disable}
                           checkSubjectType={this.checkSubjectType}
                           type={VERB}

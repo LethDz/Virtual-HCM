@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 /.vscode
-.debug.log
+/.debug.log
 
 
 # testing
