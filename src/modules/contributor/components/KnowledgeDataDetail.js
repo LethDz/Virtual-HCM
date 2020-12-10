@@ -587,15 +587,16 @@ class KnowledgeDataDetail extends Component {
                   setLoading={this.setLoading}
                 />
               )}
-
-              <CriticalData
-                disable={this.state.disable}
-                ref={this.criticalDataRef}
-                criticalDataValue={this.state.form.criticalData}
-                wordArray={wordArray}
-                ner={this.state.ner}
-                setCritical={this.setCriticalData}
-              />
+              {wordArray.length !== 0 && (
+                <CriticalData
+                  disable={this.state.disable}
+                  ref={this.criticalDataRef}
+                  criticalDataValue={this.state.form.criticalData}
+                  wordArray={wordArray}
+                  ner={this.state.ner}
+                  setCritical={this.setCriticalData}
+                />
+              )}
 
               <Coresponse
                 disable={this.state.disable}
