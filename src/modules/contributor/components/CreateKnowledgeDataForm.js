@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Row, Col, Form } from 'reactstrap';
+import { Button, Container, Row, Col } from 'reactstrap';
 import {
   Question,
   FormSectionTitle,
@@ -60,6 +60,7 @@ class CreateKnowledgeDataForm extends Component {
       isOpenReport: false,
       reportDetail: null,
       feedBackCheck: false,
+      spinnerMessage: '',
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -69,6 +70,14 @@ class CreateKnowledgeDataForm extends Component {
   componentDidMount = () => {
     this._isMounted = true;
     this.setReport();
+  };
+  
+  setLoading = (status, message) => {
+    this._isMounted &&
+      this.setState({
+        loading: status,
+        spinnerMessage: message,
+      });
   };
 
   setReport = () => {
@@ -195,19 +204,13 @@ class CreateKnowledgeDataForm extends Component {
   };
 
   submitForm = (event) => {
-    this._isMounted &&
-      this.setState({
-        loading: true,
-      });
+    this.setLoading(true, 'Sending form')
     event.preventDefault();
     if (!this.checkFormSubmit()) {
       axiosClient
         .post(KNOWLEDGE_DATA + ADD, this.reformatForm())
         .then((response) => {
-          this._isMounted &&
-            this.setState({
-              loading: false,
-            });
+          this.setLoading(false, 'Sending form')
           if (response.data.status) {
             history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
           } else {
@@ -218,10 +221,7 @@ class CreateKnowledgeDataForm extends Component {
           }
         })
         .catch((err) => {
-          this._isMounted &&
-            this.setState({
-              loading: false,
-            });
+          this.setLoading(false, 'Sending form')
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
           this.scrollToTop();
@@ -369,9 +369,9 @@ class CreateKnowledgeDataForm extends Component {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
-        <LoadingSpinner loading={this.state.loading} text="Sending form" />
-        <Form className="mt-3">
-          <div className="form-item form-item-meta pr-3 pl-3">
+        <LoadingSpinner loading={this.state.loading} text={this.state.spinnerMessage} />
+        <div className="mt-3">
+          <div className="form-item form-item-meta pr-5 pl-5">
             <div className="mr-3 ml-3">
               {this.state.successAlert && (
                 <SuccessAlert
@@ -439,6 +439,7 @@ class CreateKnowledgeDataForm extends Component {
               setRawData={this.setRawData}
               cancelCriticalData={this.cancelCriticalData}
               onChange={this.handleInputForm}
+              setLoading={this.setLoading}
             />
             <CriticalData
               ref={this.criticalDataRef}
@@ -483,7 +484,7 @@ class CreateKnowledgeDataForm extends Component {
               </Button>
             </Row>
           </div>
-        </Form>
+        </div>
       </Container>
     );
   }

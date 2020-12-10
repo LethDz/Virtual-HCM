@@ -131,16 +131,16 @@
 }
 
 .check-box-tag {
-  padding-left: 0 !important
+  padding-left: 0 !important;
 }
 
 .check-box-tag label {
-  position: unset
+  position: unset;
 }
 
 .coresponse-tool-tip {
   margin-right: 0 !important;
-  margin-left: 15px !important
+  margin-left: 15px !important;
 }
 
 .width-50 {
@@ -157,4 +157,8 @@
 
 .h-38 {
   height: 38px !important;
+}
+
+.review-minimize-button:hover {
+  cursor: pointer;
 }
