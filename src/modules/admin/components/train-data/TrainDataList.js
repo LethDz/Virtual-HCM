@@ -2,7 +2,7 @@ import {
   faEdit,
   faPlus,
   faTrash,
-  faSync
+  faSync,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
@@ -67,14 +67,14 @@ class TrainDataList extends Component {
         this.setLoading(false);
         this._isMounted && this.props.setErrorAlert(true);
       });
-  }
+  };
 
   onGridReady = async (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this._isMounted && this.props.setErrorAlert(false);
     this._isMounted && this.props.setSuccessAlert(false);
-    await this.refreshTable()
+    await this.refreshTable();
   };
 
   setStyleForGrid = () => {
@@ -124,15 +124,8 @@ class TrainDataList extends Component {
       });
   };
 
-  setOpenEditModal = async (status) => {
-    await status && this.props.trainDataList.map((dataDetail) => {
-      if (dataDetail.id === this.state.id) {
-        this.props.pullTrainDataDetail(dataDetail);
-      }
-
-      return dataDetail;
-    });
-    (await this._isMounted) &&
+  setOpenEditModal = (status) => {
+    this._isMounted &&
       this.setState({
         openEditModal: status,
       });
@@ -140,7 +133,7 @@ class TrainDataList extends Component {
 
   onRowDoubleClicked = () => {
     this.setOpenEditModal(true);
-  }
+  };
 
   setOpenDeleteModal = (status) => {
     this._isMounted &&
@@ -150,8 +143,18 @@ class TrainDataList extends Component {
   };
 
   resetSelection = () => {
-    this._isMounted && this.setState({ id: '' })
-  }
+    this._isMounted && this.setState({ id: '' });
+    this.gridApi.deselectAll();
+  };
+
+  modalCreateOnClickToSee = (id) => {
+    this.setState(
+      {
+        id,
+      },
+      () => this.setOpenEditModal(true)
+    );
+  };
 
   render() {
     return (
@@ -161,10 +164,12 @@ class TrainDataList extends Component {
           <TrainDataCreate
             openCreateModal={this.state.openCreateModal}
             setOpenCreateModal={this.setOpenCreateModal}
+            modalCreateOnClickToSee={this.modalCreateOnClickToSee}
           />
         )}
         {this.state.openEditModal && (
           <TrainDataEdit
+            id={this.state.id}
             openEditModal={this.state.openEditModal}
             setOpenEditModal={this.setOpenEditModal}
             resetSelection={this.resetSelection}
@@ -179,7 +184,9 @@ class TrainDataList extends Component {
         )}
         <Row>
           <Col>
-            <Button type="button" color="success" onClick={this.refreshTable}><FontAwesomeIcon icon={faSync} color="white" /></Button>
+            <Button type="button" color="success" onClick={this.refreshTable}>
+              <FontAwesomeIcon icon={faSync} color="white" />
+            </Button>
           </Col>
           <Col xs="auto">
             <Button

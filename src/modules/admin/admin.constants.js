@@ -1,5 +1,10 @@
 import { dateComparator } from 'src/common/getDate';
-import { BtnChangeStatus, TrainDataType, AccountRole } from 'src/modules/admin';
+import {
+  BtnChangeStatus,
+  TrainDataType,
+  AccountRole,
+  TrainDataUsed,
+} from 'src/modules/admin';
 
 // Action Types
 export const GET_CONTRIBUTORS_LIST = 'GET_CONTRIBUTORS_LIST';
@@ -247,6 +252,7 @@ export const trainableKnowledgeCol = [
     field: 'edit_user',
     sortable: true,
     filter: true,
+    width: 100,
   },
   {
     headerName: 'Created Date',
@@ -265,6 +271,47 @@ export const trainableKnowledgeCol = [
     width: 120,
     resizable: true,
     comparator: dateComparator,
+  },
+  {
+    headerName: 'Training Data Used',
+    field: 'training_data_used',
+    showRowGroup: true,
+    cellRenderer: 'trainingDataUsed',
+  },
+];
+
+export const frameworkComponentsTrainingData = {
+  trainingDataUsed: TrainDataUsed,
+};
+
+export const trainDataDetailKDCol = [
+  {
+    headerName: 'ID',
+    field: 'id',
+    sortable: true,
+    filter: true,
+    width: 70,
+  },
+  {
+    headerName: 'Intent',
+    field: 'intent',
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    headerName: 'Intent Fullname',
+    field: 'intent_fullname',
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    headerName: 'Edit User *',
+    field: 'edit_user',
+    sortable: true,
+    filter: true,
+    width: 100,
   },
 ];
 
@@ -342,12 +389,16 @@ export const settingIDType1 = {
   accept_image_format: 'accept_image_format',
   default_password: 'default_password',
   login_expiration_limit: 'login_expiration_limit',
+  system_mail: 'system_mail',
+  system_mail_password: 'system_mail_password',
 };
 
 export const settingStateType1 = {
   accept_image_format: '',
   default_password: '',
   login_expiration_limit: '',
+  system_mail: '',
+  system_mail_password: '',
 };
 
 export const settingIDType3 = {

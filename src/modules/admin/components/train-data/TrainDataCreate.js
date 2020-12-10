@@ -24,7 +24,12 @@ import {
   ADMIN_ADD_TRAIN_DATA,
   KNOWLEDGE_DATA_ALL_TRAINABLE,
 } from 'src/constants';
-import { trainableKnowledgeCol, addNewTrainData } from 'src/modules/admin';
+import {
+  trainableKnowledgeCol,
+  addNewTrainData,
+  frameworkComponentsTrainingData,
+  context,
+} from 'src/modules/admin';
 
 const TrainDataCreate = (props) => {
   const [loading, setLoading] = useState(true);
@@ -80,8 +85,8 @@ const TrainDataCreate = (props) => {
       .get(KNOWLEDGE_DATA_ALL_TRAINABLE)
       .then((response) => {
         if (response.data.status) {
-          const data = response.data.result_data.knowledges;
-          setKnowledgeData(data);
+          const { train_data_info, knowledges } = response.data.result_data;
+          setKnowledgeData(knowledgeDataHandle(train_data_info, knowledges));
           setErrorAlert(false);
         } else {
           setErrorAlert(true);
@@ -120,6 +125,17 @@ const TrainDataCreate = (props) => {
     gridApi.deselectAll();
   };
 
+  const knowledgeDataHandle = (train_data_info, knowledges) => {
+    const trainableData = knowledges.map((data) => {
+      return {
+        ...data,
+        training_data_used: train_data_info[data.id],
+      };
+    });
+
+    return trainableData;
+  };
+
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -132,7 +148,7 @@ const TrainDataCreate = (props) => {
       isOpen={props.openCreateModal}
       toggle={toggle}
       unmountOnClose={true}
-      size="lg"
+      size="xl"
     >
       <ModalHeader toggle={toggle}>Create Training Data File</ModalHeader>
       <LoadingSpinner loading={loading} text="Loading" type="MODAL">
@@ -199,6 +215,9 @@ const TrainDataCreate = (props) => {
                     columnDefs={trainableKnowledgeCol}
                     pagination={true}
                     paginationAutoPageSize={true}
+                    frameworkComponents={frameworkComponentsTrainingData}
+                    suppressRowClickSelection={true}
+                    context={context(props)}
                   ></AgGridReact>
                 </div>
               </Col>

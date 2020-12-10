@@ -156,7 +156,10 @@ export const adminReducer = (state = initialState, action) => {
       const dataNew = action.payload.data;
       const newList = state.trainDataList.map((element) => {
         if (element.id === dataNew.id) {
-          return dataNew;
+          return {
+            ...element,
+            description: dataNew.description,
+          };
         }
 
         return element;

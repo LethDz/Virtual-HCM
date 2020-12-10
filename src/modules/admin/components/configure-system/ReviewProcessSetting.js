@@ -1,5 +1,3 @@
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, Fragment } from 'react';
 import {
   Button,
@@ -16,6 +14,7 @@ import {
   settingStateType3,
   settingIDType3,
   axiosCall,
+  SettingComponent,
 } from 'src/modules/admin';
 
 export default class ReviewProcessSetting extends Component {
@@ -34,24 +33,9 @@ export default class ReviewProcessSetting extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.setState(
-      {
-        reviewSetting: this.props.reviewSetting,
-      },
-      () => {
-        let newState = {
-          ...settingStateType3,
-        };
-        this.state.reviewSetting.map((setting) => {
-          newState[setting.setting_id] = setting.value ? setting.value : '';
-
-          return setting.value;
-        });
-        this.setState({
-          ...newState,
-        });
-      }
-    );
+    this.setState({
+      reviewSetting: this.props.reviewSetting,
+    });
   }
 
   scrollToRef = () => {
@@ -102,36 +86,15 @@ export default class ReviewProcessSetting extends Component {
       });
   };
 
-  onChangeMaximumCount = () => {
+  onChangeSetting = (type, state) => {
     axiosCall(
-      settingIDType3.maximum_reject,
-      this.state[settingIDType3.maximum_reject],
+      type,
+      state,
       this.setErrorAlert,
       this.setErrorList,
       this.props.setLoading,
       () => {
-        this.updateSetting(
-          settingIDType3.maximum_reject,
-          this.state[settingIDType3.maximum_reject]
-        );
-      },
-      this.successToast,
-      this.scrollToRef
-    );
-  };
-
-  onChangeMinimumCount = () => {
-    axiosCall(
-      settingIDType3.minimum_accept,
-      this.state[settingIDType3.minimum_accept],
-      this.setErrorAlert,
-      this.setErrorList,
-      this.props.setLoading,
-      () => {
-        this.updateSetting(
-          settingIDType3.minimum_accept,
-          this.state[settingIDType3.minimum_accept]
-        );
+        this.updateSetting(type, state);
       },
       this.successToast,
       this.scrollToRef
@@ -174,75 +137,41 @@ export default class ReviewProcessSetting extends Component {
               return (
                 <Fragment key={setting.setting_id + index}>
                   {/* --------------------------- Maximum rejects count --------------------------- */}
-                  <Row className="m-2">
-                    <Col className="mt-2 border-bottom p-0">
-                      <h6 className="text-primary">
-                        {setting.setting_name.split(': ')[1]}
-                      </h6>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2">
-                    <Col xs="auto" className="mt-2 p-0 text-muted font-sm">
-                      <FontAwesomeIcon icon={faQuestionCircle} />
-                      &nbsp;
-                      <span>{setting.description}</span>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2 mt-3 mb-3 align-items-center">
-                    <Col xs="auto" className="p-0">
-                      <InputGroup size="sm">
-                        <InputGroupAddon addonType="prepend">
-                          Current Value:
-                        </InputGroupAddon>
-                        <Input
-                          type="number"
-                          placeholder="Enter maximum number of rejects"
-                          value={this.state[settingStateType3.maximum_reject]}
-                          name={settingStateType3.maximum_reject}
-                          id={settingStateType3.maximum_reject}
-                          onChange={this.inputChange}
-                        />
-                        <InputGroupAddon addonType="prepend">
-                          <Button
-                            color="success"
-                            onClick={this.onChangeMaximumCount}
-                          >
-                            Change
-                          </Button>
-                        </InputGroupAddon>
-                      </InputGroup>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2 mb-3">
-                    <Col xs="auto" className="font-sm p-0">
-                      <span className="font-weight-bold">
-                        Current Maximum Rejects:{' '}
-                      </span>
-                      <span
-                        className="text-info text-truncate"
-                        title={setting.value}
-                      >
-                        {setting.value && setting.value !== ''
-                          ? setting.value
-                          : 'None'}
-                      </span>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2 mb-3">
-                    <Col xs="auto" className="mt-2 p-0 text-muted font-sm">
-                      <span className="font-weight-bold">
-                        Default Maximum Rejects:{' '}
-                      </span>
-                      <span
-                        className="text-info text-truncate"
-                        title={setting.default}
-                      >
-                        {setting.default !== '' && setting.default
-                          ? setting.default
-                          : 'None'}
-                      </span>
-                    </Col>
-                  </Row>
+                  <SettingComponent
+                    setting_name={setting.setting_name.split(': ')[1]}
+                    description={setting.description}
+                    valueName={'Maximum Rejects'}
+                    value={setting.value}
+                    default={setting.default}
+                    hidden={setting.hidden}
+                  >
+                    <InputGroup size="sm">
+                      <InputGroupAddon addonType="prepend">
+                        Maximum number of rejects:
+                      </InputGroupAddon>
+                      <Input
+                        type="number"
+                        value={this.state[settingIDType3.maximum_reject]}
+                        name={settingIDType3.maximum_reject}
+                        id={settingIDType3.maximum_reject}
+                        onChange={this.inputChange}
+                        min={1}
+                      />
+                      <InputGroupAddon addonType="prepend">
+                        <Button
+                          color="success"
+                          onClick={() =>
+                            this.onChangeSetting(
+                              settingIDType3.maximum_reject,
+                              this.state[settingIDType3.maximum_reject]
+                            )
+                          }
+                        >
+                          Change
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </SettingComponent>
                 </Fragment>
               );
             }
@@ -251,75 +180,41 @@ export default class ReviewProcessSetting extends Component {
               return (
                 <Fragment key={setting.setting_id + index}>
                   {/* --------------------------- Minimum Accept count --------------------------- */}
-                  <Row className="m-2">
-                    <Col className="mt-2 border-bottom p-0">
-                      <h6 className="text-primary">
-                        {setting.setting_name.split(': ')[1]}
-                      </h6>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2">
-                    <Col xs="auto" className="mt-2 p-0 text-muted font-sm">
-                      <FontAwesomeIcon icon={faQuestionCircle} />
-                      &nbsp;
-                      <span>{setting.description}</span>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2 mt-3 mb-3 align-items-center">
-                    <Col xs="auto" className="p-0">
-                      <InputGroup size="sm">
-                        <InputGroupAddon addonType="prepend">
-                          Current Value:
-                        </InputGroupAddon>
-                        <Input
-                          type="number"
-                          placeholder="Enter minimum number of accept"
-                          value={this.state[settingStateType3.minimum_accept]}
-                          name={settingStateType3.minimum_accept}
-                          id={settingStateType3.minimum_accept}
-                          onChange={this.inputChange}
-                        />
-                        <InputGroupAddon addonType="prepend">
-                          <Button
-                            color="success"
-                            onClick={this.onChangeMinimumCount}
-                          >
-                            Change
-                          </Button>
-                        </InputGroupAddon>
-                      </InputGroup>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2 mb-3">
-                    <Col xs="auto" className="font-sm p-0">
-                      <span className="font-weight-bold">
-                        Current Minimum Accepts:{' '}
-                      </span>
-                      <span
-                        className="text-info text-truncate"
-                        title={setting.value}
-                      >
-                        {setting.value && setting.value !== ''
-                          ? setting.value
-                          : 'None'}
-                      </span>
-                    </Col>
-                  </Row>
-                  <Row className="ml-2 mr-2 mb-3">
-                    <Col xs="auto" className="mt-2 p-0 text-muted font-sm">
-                      <span className="font-weight-bold">
-                        Default Minimum Accepts:{' '}
-                      </span>
-                      <span
-                        className="text-info text-truncate"
-                        title={setting.default}
-                      >
-                        {setting.default !== '' && setting.default
-                          ? setting.default
-                          : 'None'}
-                      </span>
-                    </Col>
-                  </Row>
+                  <SettingComponent
+                    setting_name={setting.setting_name.split(': ')[1]}
+                    description={setting.description}
+                    valueName={'Minimum Accepts'}
+                    value={setting.value}
+                    default={setting.default}
+                    hidden={setting.hidden}
+                  >
+                    <InputGroup size="sm">
+                      <InputGroupAddon addonType="prepend">
+                        Minimum number of accepts:
+                      </InputGroupAddon>
+                      <Input
+                        type="number"
+                        value={this.state[settingIDType3.minimum_accept]}
+                        name={settingIDType3.minimum_accept}
+                        id={settingIDType3.minimum_accept}
+                        onChange={this.inputChange}
+                        min={1}
+                      />
+                      <InputGroupAddon addonType="prepend">
+                        <Button
+                          color="success"
+                          onClick={() =>
+                            this.onChangeSetting(
+                              settingIDType3.minimum_accept,
+                              this.state[settingIDType3.minimum_accept]
+                            )
+                          }
+                        >
+                          Change
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </SettingComponent>
                 </Fragment>
               );
             }

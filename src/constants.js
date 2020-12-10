@@ -39,7 +39,8 @@ export const DASHBOARD = '/dashboard';
 export const USER_CHANGE_PASSWORD = '/user/change-password';
 export const USER_REQUEST_CHANGE_PASSWORD = '/user/request-reset-password';
 export const USER_RESET_PASSWORD = '/user/reset-password';
-export const USER_CHECK_RESET_PASSWORD_SESSION = '/user/check-reset-password-session';
+export const USER_CHECK_RESET_PASSWORD_SESSION =
+  '/user/check-reset-password-session';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';
@@ -84,6 +85,7 @@ export const ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA = `/train-data/change-descripti
 export const ADMIN_ADD_TRAIN_DATA = `/train-data/add`;
 export const ADMIN_CHANGE_SETTING = `/setting/update`;
 export const ADMIN_GET_ALL_SETTING = `/setting/all`;
+export const ADMIN_GET_TRAIN_DATA = '/train-data/get';
 
 // API status code:
 export const FORBIDDEN = 403;

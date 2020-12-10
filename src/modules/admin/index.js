@@ -19,6 +19,8 @@ import NlpSetting from 'src/modules/admin/components/configure-system/NlpSetting
 import ReviewProcessSetting from 'src/modules/admin/components/configure-system/ReviewProcessSetting';
 import SystemSetting from 'src/modules/admin/components/configure-system/SystemSetting';
 import ConfigureSystemHook from 'src/modules/admin/components/configure-system/ConfigureSystemHook';
+import SettingComponent from 'src/modules/admin/components/configure-system/SettingComponent';
+import TrainDataUsed from 'src/modules/admin/components/train-data/TrainDataUsed';
 
 export * from 'src/modules/admin/components/configure-system/axiosCall';
 export * from 'src/modules/admin/admin.actions';
@@ -48,4 +50,6 @@ export {
   ReviewProcessSetting,
   SystemSetting,
   ConfigureSystemHook,
+  TrainDataUsed,
+  SettingComponent,
 };

@@ -1,7 +1,8 @@
 import { faDownload, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import {
+  Badge,
   Button,
   Col,
   Form,
@@ -22,22 +23,26 @@ import {
   getTrainDataDetail,
   editTrainDataDescription,
   pullTrainDataDetail,
+  dataTypes,
+  trainDataDetailKDCol,
 } from 'src/modules/admin';
 import {
   ADMIN_CHANGE_DESCRIPTION_TRAIN_DATA,
   ADMIN_DOWNLOAD_TRAIN_DATA,
+  ADMIN_GET_TRAIN_DATA,
   API_PREFIX,
   API_URL,
 } from 'src/constants';
 import { connect } from 'react-redux';
+import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
+import 'src/static/stylesheets/train.data.detail.css';
 
 const TrainDataEdit = (props) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [gridApi, setGridApi] = useState(null);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorList, setErrorList] = useState([]);
-  const [description, setDescription] = useState(
-    props.trainDataDetail.description
-  );
+  const [description, setDescription] = useState('');
   const mounted = useRef(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const propsRef = useRef(props);
@@ -49,7 +54,7 @@ const TrainDataEdit = (props) => {
     mounted.current && setSuccessAlert(false);
 
     const data = {
-      id: props.trainDataDetail.id,
+      id: props.id,
       description: description,
     };
 
@@ -58,17 +63,13 @@ const TrainDataEdit = (props) => {
       .then((response) => {
         if (response.data.status) {
           const data = {
-            id: props.trainDataDetail.id,
-            filename: props.trainDataDetail.filename,
-            type: props.trainDataDetail.type,
+            ...props.trainDataDetail,
             description: description,
-            cdate: props.trainDataDetail.cdate,
-            mdate: props.trainDataDetail.mdate,
+            id: props.id,
           };
           mounted.current && props.editTrainDataDescription(data);
           mounted.current && setSuccessAlert(true);
-          props.resetSelection()
-          toggle()
+          toggle();
         } else {
           mounted.current && setErrorAlert(true);
           mounted.current && setErrorList(response.data.messages);
@@ -82,6 +83,7 @@ const TrainDataEdit = (props) => {
   };
 
   const toggle = () => {
+    props.resetSelection();
     !loading && props.setOpenEditModal(false);
   };
 
@@ -89,33 +91,60 @@ const TrainDataEdit = (props) => {
     mounted.current && handleInputHook(event, setState);
   };
 
-  const url = `${API_URL}${API_PREFIX}${ADMIN_DOWNLOAD_TRAIN_DATA(
-    props.trainDataDetail.id
-  )}`;
+  const onFirstDataRendered = () => {
+    gridApi.sizeColumnsToFit();
+  };
 
-  useEffect(
-    (props) => {
-      mounted.current = true;
-      const propsReference = propsRef;
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+  };
 
-      return () => {
-        propsReference.current.pullTrainDataDetail(null);
-        mounted.current = false;
-      };
-    },
-    [props.openEditModal]
-  );
+  useEffect(() => {
+    mounted.current = true;
+    const propsReference = propsRef;
+
+    return () => {
+      propsReference.current.pullTrainDataDetail(null);
+      mounted.current = false;
+    };
+  }, [props.openEditModal]);
 
   const onDownload = () => {
     return;
   };
 
+  const onOpened = () => {
+    axiosClient
+      .get(`${ADMIN_GET_TRAIN_DATA}?id=${props.id}`)
+      .then((response) => {
+        if (response.data.status) {
+          const data = response.data.result_data;
+          props.pullTrainDataDetail(data);
+          setDescription(data.description);
+        } else {
+          setErrorAlert(true);
+          setErrorList([]);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setErrorAlert(true);
+        setLoading(false);
+      });
+  };
+
   return (
-    <Modal isOpen={props.openEditModal} toggle={toggle} unmountOnClose={true}>
+    <Modal
+      isOpen={props.openEditModal}
+      toggle={toggle}
+      unmountOnClose={true}
+      size="lg"
+      onOpened={onOpened}
+    >
       <ModalHeader toggle={toggle}>Training Data Detail</ModalHeader>
       <LoadingSpinner loading={loading} text="Loading" type="MODAL">
         <Form onSubmit={onEdit}>
-          <ModalBody>
+          <ModalBody className="train-data-edit-modal">
             {errorAlert && (
               <ErrorAlert
                 errorAlert={errorAlert}
@@ -130,66 +159,127 @@ const TrainDataEdit = (props) => {
                 onDismiss={() => setSuccessAlert(false)}
               />
             )}
-            <FormGroup row>
-              <Col>
-                <Label for="id">ID:</Label>
-                <Input
-                  id="id"
-                  name="id"
-                  type="text"
-                  placeholder="Enter id"
-                  disabled
-                  required
-                  value={props.trainDataDetail.id}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col>
-                <Label for="filename">Filename:</Label>
-                <Input
-                  id="filename"
-                  name="filename"
-                  type="text"
-                  placeholder="Enter filename"
-                  disabled
-                  required
-                  value={props.trainDataDetail.filename}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col>
-                <Label for="description">Description:</Label>
-                <Input
-                  id="description"
-                  name="description"
-                  type="text"
-                  placeholder="Enter description"
-                  required
-                  value={description}
-                  onChange={(event) => onInputChange(event, setDescription)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col>
-                <Label for="btnDownload">Knowledge Data:</Label>
-                <br />
-                <a href={url} download>
-                  <Button color="primary" id="btnDownload" onClick={onDownload}>
-                    <FontAwesomeIcon icon={faDownload} />
-                    &nbsp; Download Training Data File
-                  </Button>
-                </a>
-              </Col>
-            </FormGroup>
+            {props.trainDataDetail && (
+              <Fragment>
+                <FormGroup row>
+                  <Col>
+                    <Label for="filename" className="font-weight-600">
+                      Filename:
+                    </Label>
+                    <Input
+                      id="filename"
+                      name="filename"
+                      type="text"
+                      placeholder="Enter filename"
+                      disabled
+                      required
+                      value={props.trainDataDetail?.filename}
+                    />
+                  </Col>
+                  <Col>
+                    <Label for="description" className="font-weight-600">
+                      Description:
+                    </Label>
+                    <Input
+                      id="description"
+                      name="description"
+                      type="text"
+                      placeholder="Enter description"
+                      required
+                      value={description}
+                      onChange={(event) => onInputChange(event, setDescription)}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col>
+                    <Label for="type" className="font-weight-600">
+                      Type:
+                    </Label>
+                    <Badge
+                      id="type"
+                      color={dataTypes[props.trainDataDetail?.type].badge}
+                      pill
+                      style={{ fontSize: '1rem' }}
+                      className="ml-5"
+                    >
+                      {dataTypes[props.trainDataDetail?.type].value}
+                    </Badge>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col>
+                    <Label for="table" className="font-weight-600">
+                      Knowledge Data:
+                    </Label>
+                    <p className="text-muted font-sm">
+                      * The information of the current knowledge data may be
+                      changed, this information is at the time of training data
+                      creation.
+                    </p>
+                    <div
+                      id="table"
+                      className="ag-theme-alpine"
+                      style={{
+                        height: 500,
+                        width: '100%',
+                      }}
+                    >
+                      <AgGridReact
+                        onFirstDataRendered={onFirstDataRendered}
+                        rowData={props.trainDataDetail?.knowledge_datas}
+                        rowSelection="multiple"
+                        animateRows={true}
+                        onGridReady={onGridReady}
+                        columnDefs={trainDataDetailKDCol}
+                        pagination={true}
+                        paginationAutoPageSize={true}
+                      ></AgGridReact>
+                    </div>
+                    <br />
+                    <a
+                      href={`${API_URL}${API_PREFIX}${ADMIN_DOWNLOAD_TRAIN_DATA(
+                        props.id
+                      )}`}
+                      download
+                    >
+                      <Button
+                        color="primary"
+                        id="btnDownload"
+                        onClick={onDownload}
+                      >
+                        <FontAwesomeIcon icon={faDownload} />
+                        &nbsp; Download Training Data File
+                      </Button>
+                    </a>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col>
+                    <Label for="cdate" className="font-weight-600">
+                      Created Date:
+                    </Label>
+                    <span id="cdate" className="d-flex">
+                      {props.trainDataDetail?.cdate}
+                    </span>
+                  </Col>
+                  <Col>
+                    <Label for="mdate" className="font-weight-600">
+                      Description Modified Date:
+                    </Label>
+                    <span id="mdate" className="d-flex">
+                      {props.trainDataDetail?.cdate}
+                    </span>
+                  </Col>
+                </FormGroup>
+              </Fragment>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button
               color="info"
               type="submit"
-              disabled={description === props.trainDataDetail.description}
+              disabled={description === props.trainDataDetail?.description}
             >
               <FontAwesomeIcon icon={faSave} />
               &nbsp; Save

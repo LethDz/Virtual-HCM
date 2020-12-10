@@ -38,6 +38,8 @@ const ControlPanel = (props) => {
     props.setSettingToDefault();
   };
 
+  const onABC = () => {};
+
   return (
     <Fragment>
       {openModal && (
@@ -208,8 +210,12 @@ const ControlPanel = (props) => {
               </Button>
             </ButtonGroup>
           </Col>
-        </FormGroup>
-        <FormGroup row>
+          <Col xs="auto" className="pr-0">
+            <Button size="sm" color="primary" onClick={onABC}>
+              <FontAwesomeIcon icon={faUndoAlt} />
+              &nbsp; ABC button
+            </Button>
+          </Col>
           <Col xs="auto" className="pr-0">
             <Button size="sm" color="secondary" onClick={onDefault}>
               <FontAwesomeIcon icon={faUndoAlt} />
