@@ -1,7 +1,7 @@
-import { AgGridReact } from "ag-grid-react";
-import React, { Component } from "react";
-import { Button, Col, Row } from "reactstrap";
-import { connect } from "react-redux";
+import { AgGridReact } from 'ag-grid-react';
+import React, { Component } from 'react';
+import { Button, Col, Row } from 'reactstrap';
+import { connect } from 'react-redux';
 import {
   CreateReferenceModal,
   getAllDocumentReference,
@@ -9,7 +9,10 @@ import {
   DocumentReferenceModal,
 } from 'src/modules/contributor/index';
 import { REFERENCE, ALL } from 'src/constants';
-import { columnRefFieldDef } from 'src/modules/contributor';
+import {
+  columnRefFieldDef,
+  frameworkComponentsForReference,
+} from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faSync } from '@fortawesome/free-solid-svg-icons';
 import axiosClient from 'src/common/axiosClient';
@@ -28,7 +31,7 @@ class ReferenceList extends Component {
       modalReferenceDetail: false,
       containerHeight: 0,
       loading: false,
-      selectedId: "",
+      selectedId: '',
       errorAlert: false,
       successAlert: false,
       errorList: [],
@@ -88,7 +91,7 @@ class ReferenceList extends Component {
   onRowSelected = () => {
     let selectedRows = this.gridApi.getSelectedRows();
     let id =
-      selectedRows.length === 1 ? selectedRows[0].reference_document_id : "";
+      selectedRows.length === 1 ? selectedRows[0].reference_document_id : '';
     this._isMounted &&
       this.setState({
         selectedId: id,
@@ -186,33 +189,33 @@ class ReferenceList extends Component {
   render() {
     return (
       <div
-        id="cl-container"
-        className="container cl-container min-vh-100"
+        id='cl-container'
+        className='container cl-container min-vh-100'
         ref={this.conRef}
       >
         <Row>
-          <Col className="justify-content-center d-flex">
-            <h5 className="mt-2 mb-2">Document reference</h5>
+          <Col className='justify-content-center d-flex'>
+            <h5 className='mt-2 mb-2'>Document reference</h5>
           </Col>
         </Row>
         {this.state.successAlert && (
           <SuccessAlert
             successAlert={this.state.successAlert}
-            text="Loading reference is successfully"
-            onDismiss={() => this.onDismiss("successAlert")}
+            text='Loading reference is successfully'
+            onDismiss={() => this.onDismiss('successAlert')}
           />
         )}
         {this.state.errorAlert && (
           <ErrorAlert
             errorAlert={this.state.errorAlert}
             errorList={this.state.errorList}
-            onDismiss={() => this.onDismiss("errorAlert")}
+            onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
-        <Row className="d-flex flex-row-reverse">
-          <Col xs="auto">
-            <Button onClick={this.onReferenceCreateClick} color="primary">
-              <FontAwesomeIcon icon={faPlus} color="white" />
+        <Row className='d-flex flex-row-reverse'>
+          <Col xs='auto'>
+            <Button onClick={this.onReferenceCreateClick} color='primary'>
+              <FontAwesomeIcon icon={faPlus} color='white' />
               &nbsp; Create
             </Button>
             {this.state.modalReferenceCreate && (
@@ -223,13 +226,13 @@ class ReferenceList extends Component {
               />
             )}
           </Col>
-          <Col xs="auto">
+          <Col xs='auto'>
             <Button
-              color="success"
-              disabled={this.state.selectedId === ""}
+              color='success'
+              disabled={this.state.selectedId === ''}
               onClick={this.toggleReferenceDetail}
             >
-              <FontAwesomeIcon icon={faEdit} color="white" />
+              <FontAwesomeIcon icon={faEdit} color='white' />
               &nbsp; Edit
             </Button>
             {this.state.modalReferenceDetail && (
@@ -243,32 +246,33 @@ class ReferenceList extends Component {
             )}
           </Col>
           <Col>
-            <Button type="button" color="success" onClick={this.setRowData}>
-              <FontAwesomeIcon icon={faSync} color="white" />
+            <Button type='button' color='success' onClick={this.setRowData}>
+              <FontAwesomeIcon icon={faSync} color='white' />
             </Button>
           </Col>
         </Row>
         <LoadingSpinner
           loading={this.state.loading}
-          text="Loading reference"
+          text='Loading reference'
         ></LoadingSpinner>
         <div
-          className="ag-theme-alpine"
+          className='ag-theme-alpine'
           style={{
             height: `${this.state.containerHeight - 200}px`,
-            marginTop: "10px",
+            marginTop: '10px',
           }}
         >
           <AgGridReact
             onGridReady={this.onGridReady}
             rowData={this.state.referenceList}
-            rowSelection="single"
+            rowSelection='single'
             onSelectionChanged={this.onRowSelected.bind(this)}
             onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
             columnDefs={columnRefFieldDef}
             pagination={true}
             paginationAutoPageSize={true}
             onFirstDataRendered={this.onFirstDataRendered}
+            frameworkComponents={frameworkComponentsForReference}
           ></AgGridReact>
         </div>
       </div>
