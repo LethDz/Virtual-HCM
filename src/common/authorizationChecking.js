@@ -1,9 +1,7 @@
 import { history } from 'src/common/history';
 import {
   ACCESS_TOKEN_EXPIRED,
-  ADMIN_PAGE,
   AUTHENTICATION_CREDENTIALS_WERE_NOT_PROVIDED,
-  CONTRIBUTOR_PAGE,
   FORBIDDEN,
   LOGIN_PAGE,
   LOGOUT,
@@ -21,12 +19,10 @@ export const checkRoleToRedirect = () => {
   const authData = getUserData();
 
   if (!authData) {
-    return null;
+    return false;
   }
 
-  authData.admin ? history.push(ADMIN_PAGE) : history.push(CONTRIBUTOR_PAGE);
-
-  return authData.admin ? ROLE_ADMIN : ROLE_CONTRIBUTOR;
+  return true;
 };
 
 export const getTheCurrentUserRole = () => {

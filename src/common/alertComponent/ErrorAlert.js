@@ -12,12 +12,12 @@ const ErrorAlert = (props) => {
       <Alert
         color="danger"
         isOpen={props.errorAlert}
-        toggle={onDismiss}
+        toggle={props.onDismiss ? onDismiss : false}
         className="m-3 w-100"
       >
         <p>
           <FontAwesomeIcon icon={faFrown} />
-          &nbsp; Unexpected error has been occurred. Please try again !
+          &nbsp; Error has been occurred. Please try again !
         </p>
         {props.errorList.length !== 0
           ? props.errorList.map((element, index) => (
