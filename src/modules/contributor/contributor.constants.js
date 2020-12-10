@@ -538,6 +538,7 @@ export const columnChatHistoryFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'session_start',
@@ -558,6 +559,10 @@ export const columnChatHistoryFieldDef = [
     comparator: dateComparator,
   },
 ];
+
+export const frameworkComponentsForChatHistory = {
+  userLink: UserLink,
+};
 
 export const frameworkComponentsForReport = {
   reportType: ReportType,
