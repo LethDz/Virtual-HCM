@@ -87,11 +87,11 @@ class Vote extends Component {
           <Col xs="auto">
             {this.props.owner ? (
               <Button
-                color="success"
+                color="info"
                 id="button-review"
                 onClick={this.toggleViewReviewModal}
               >
-                View all review <FontAwesomeIcon icon={faAngleDown} />
+                <FontAwesomeIcon icon={faClipboardList} /> View all review
               </Button>
             ) : (
               <ButtonGroup>

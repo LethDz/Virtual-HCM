@@ -36,19 +36,20 @@ const renderChatWidget = () => {
     );
   }
 
-  history.listen((location) => {
-    if (
-      location.pathname.includes(ADMIN_PAGE) ||
-      location.pathname.includes(CONTRIBUTOR_PAGE)
-    ) {
-      ReactDOM.render(
-        <Provider store={store}>
-          <ChatWidget />
-        </Provider>,
-        document.getElementById('chat-widget')
-      );
+  history.listen(() => {
+    const pathname = window.location.pathname;
+    const scLauncher = document.getElementById('sc-launcher');
+    if (pathname.includes(ADMIN_PAGE) || pathname.includes(CONTRIBUTOR_PAGE)) {
+      !scLauncher &&
+        ReactDOM.render(
+          <Provider store={store}>
+            <ChatWidget />
+          </Provider>,
+          document.getElementById('chat-widget')
+        );
     } else {
-      ReactDOM.unmountComponentAtNode(document.getElementById('chat-widget'));
+      scLauncher &&
+        ReactDOM.unmountComponentAtNode(document.getElementById('chat-widget'));
     }
   });
 };
