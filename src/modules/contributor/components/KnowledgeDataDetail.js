@@ -412,8 +412,6 @@ class KnowledgeDataDetail extends Component {
             });
           this.setFormStatus();
           this.setErrorAlert(false);
-          this.setAlertMessage('Load successful');
-          this.setSuccessAlert(true);
         } else {
           this.setLoading(false);
           this.setErrorAlert(true);
