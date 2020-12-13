@@ -148,7 +148,6 @@ export const columnFieldDef = [
   {
     field: 'reviews',
     headerName: 'Progress',
-    resizable: true,
     cellRenderer: 'statusBar',
     sortable: true,
     comparator: progressBarComparator,
@@ -159,7 +158,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     cellRenderer: 'selfReviewStatus',
-    width: 100,
+    width: 120,
   },
   {
     field: 'edit_user',
@@ -167,7 +166,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     cellRenderer: 'userLink',
-    width: 100,
+    width: 130,
   },
 ];
 

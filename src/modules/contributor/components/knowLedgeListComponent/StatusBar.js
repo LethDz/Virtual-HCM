@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { Progress } from 'reactstrap';
+import { Progress, Row, Col, Badge } from 'reactstrap';
 
 import {
   getKnowledgeDataSettings,
@@ -43,23 +43,32 @@ class StatusBar extends Component {
     if (this.state.status === PROCESSING) {
       if (this.state.reject >= this.state.maxReject) {
         return (
-          <Progress
-            className="mt-2"
-            color="danger"
-            animated
-            value={this.state.accept}
-            max={this.state.minAccept}
-          />
+          <Badge className="mt-2" color="danger">
+            Need to change
+          </Badge>
         );
       } else {
         return (
-          <Progress
-            className="mt-2"
-            color="success"
-            animated
-            value={this.state.accept}
-            max={this.state.minAccept}
-          />
+          <Row>
+            <Col className="pr-0">
+              <Progress
+                className="mt-2"
+                color="success"
+                animated
+                value={this.state.accept}
+                max={this.state.minAccept}
+              />
+            </Col>
+            <Col>
+              <Progress
+                className="mt-2"
+                color="danger"
+                animated
+                value={this.state.reject}
+                max={this.state.maxReject}
+              />
+            </Col>
+          </Row>
         );
       }
     } else {
