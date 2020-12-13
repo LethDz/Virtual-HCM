@@ -325,13 +325,10 @@ export default class Comment extends Component {
             {this.state.showComment.map((comment, index) => {
               if (comment) {
                 let user = this.getUserById(comment.user);
-                console.log(user);
                 return (
                   <ListGroupItem key={index} className="comment">
                     <Row>
-                      <Col xs="auto">
-                        #{comment.index}
-                      </Col>
+                      <Col xs="auto">#{comment.index}</Col>
                       <Col xs="auto">
                         <img
                           type="image"
@@ -376,7 +373,7 @@ export default class Comment extends Component {
                                     {this.state.user &&
                                       this.state.user.username ===
                                         user.username &&
-                                        comment.editable &&
+                                      comment.editable &&
                                       comment.status !== 2 && (
                                         <Fragment>
                                           <Button

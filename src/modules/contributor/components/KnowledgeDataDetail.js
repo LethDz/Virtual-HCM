@@ -127,7 +127,6 @@ class KnowledgeDataDetail extends Component {
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
     form.synonyms = synonym;
-
     this._isMounted && this.setState({ form: form });
   };
 
