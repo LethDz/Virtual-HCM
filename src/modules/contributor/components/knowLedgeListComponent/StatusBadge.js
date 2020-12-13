@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Input } from 'reactstrap';
+import { Badge, Input } from 'reactstrap';
+import { getUserData } from 'src/common/authorizationChecking';
 import axiosClient from 'src/common/axiosClient';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { KNOWLEDGE_DATA_CHANGE_STATUS } from 'src/constants';
@@ -10,6 +11,7 @@ import {
   statusOfKD,
   statusOfKDColor,
   changeStatusOfKnowledgeData,
+  displayStringOfStatusOfKD,
 } from 'src/modules/contributor';
 
 class StatusBadge extends Component {
@@ -78,45 +80,57 @@ class StatusBadge extends Component {
   };
 
   render() {
+    const user = getUserData();
     return (
-      <Input
-        bsSize="sm"
-        type="select"
-        name="status"
-        id="status"
-        value={this.state.status}
-        onChange={this.onChangeStatus}
-        className={`mt-1 btn-${statusOfKDColor[this.state.status]}`}
-      >
-        <option
-          disabled
-          style={{
-            backgroundColor: 'whitesmoke',
-            color: 'gray',
-          }}
-        >
-          Select status
-        </option>
-        {Object.keys(idOfStatusOfKD).map((status, index) => (
-          <option
-            value={idOfStatusOfKD[status]}
-            key={index}
-            disabled={idOfStatusOfKD[status] === idOfStatusOfKD['DONE']}
-            style={{
-              backgroundColor:
-                idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
-                  ? 'whitesmoke'
-                  : 'white',
-              color:
-                idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
-                  ? 'gray'
-                  : 'black',
-            }}
+      <Fragment>
+        {!user.admin ? (
+          <Badge
+            className="mt-2 badge-width"
+            color={statusOfKDColor[this.state.status]}
           >
-            {statusOfKD[status]}
-          </option>
-        ))}
-      </Input>
+            {displayStringOfStatusOfKD[this.state.status]}
+          </Badge>
+        ) : (
+          <Input
+            bsSize="sm"
+            type="select"
+            name="status"
+            id="status"
+            value={this.state.status}
+            onChange={this.onChangeStatus}
+            className={`mt-1 btn-${statusOfKDColor[this.state.status]}`}
+          >
+            <option
+              disabled
+              style={{
+                backgroundColor: 'whitesmoke',
+                color: 'gray',
+              }}
+            >
+              Select status
+            </option>
+            {Object.keys(idOfStatusOfKD).map((status, index) => (
+              <option
+                value={idOfStatusOfKD[status]}
+                key={index}
+                disabled={idOfStatusOfKD[status] === idOfStatusOfKD['DONE']}
+                style={{
+                  backgroundColor:
+                    idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
+                      ? 'whitesmoke'
+                      : 'white',
+                  color:
+                    idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
+                      ? 'gray'
+                      : 'black',
+                }}
+              >
+                {statusOfKD[status]}
+              </option>
+            ))}
+          </Input>
+        )}
+      </Fragment>
     );
   }
 }
