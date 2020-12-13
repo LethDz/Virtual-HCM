@@ -28,10 +28,8 @@ class Vote extends Component {
 
   componentDidMount = () => {
     this._isMounted = true;
-    if (this.props.dataApprovalDetail) {
-      const reviews = this.props.dataApprovalDetail.reviews;
-      this.setState({ accept: reviews.accept, decline: reviews.reject });
-    }
+    const reviews = this.props.review;
+    this.setState({ accept: reviews.accept, decline: reviews.reject });
   };
 
   componentWillUnmount = () => {

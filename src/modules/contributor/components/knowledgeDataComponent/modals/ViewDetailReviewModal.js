@@ -143,7 +143,7 @@ export default class ViewDetailReviewModal extends Component {
               <Col className="col-9 text-break">{this.returnStatusBadge()}</Col>
             </Row>
             <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Reporter user:</Col>
+              <Col className="col-3 font-weight-bold">Reporter:</Col>
               <Col className="col-9 text-break">
                 <UserLink
                   data={{ ...this.state.data, user: this.state.data }}

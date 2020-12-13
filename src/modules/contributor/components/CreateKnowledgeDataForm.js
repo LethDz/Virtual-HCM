@@ -425,6 +425,9 @@ class CreateKnowledgeDataForm extends Component {
             <MetaData
               onChange={this.handleInputForm}
               setReference={this.setReference}
+              setSuccessAlert={this.setSuccessAlert}
+              setErrorAlert={this.setErrorAlert}
+              setErrorList={this.setErrorList}
             />
             <hr className="mr-3 ml-3 divider" />
             <FormSectionTitle title="Data analysis" />
