@@ -39,10 +39,10 @@ export const RESET_APPROVAL_DETAIL_REPORT = 'RESET_APPROVAL_DETAIL_REPORT';
 export const CHANGE_STATUS_OF_KNOWLEDGE_DATA =
   'CHANGE_STATUS_OF_KNOWLEDGE_DATA';
 
-export const PROCESSING = 'PROCESSING';
-export const DONE = 'DONE';
-export const AVAILABLE = 'AVAILABLE';
-export const DISABLE = 'DISABLE';
+export const PROCESSING = 'Processing';
+export const DONE = 'Done';
+export const AVAILABLE = 'Available';
+export const DISABLE = 'Disable';
 
 export const statusOfKD = {
   PROCESSING: 'Processing',
@@ -56,6 +56,13 @@ export const idOfStatusOfKD = {
   DONE: 2,
   AVAILABLE: 0,
   DISABLE: 3,
+};
+
+export const displayStringOfStatusOfKD = {
+  1: PROCESSING,
+  2: DONE,
+  0: AVAILABLE,
+  3: DISABLE,
 };
 
 export const statusOfKDColor = {
