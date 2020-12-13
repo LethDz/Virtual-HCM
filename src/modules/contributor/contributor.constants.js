@@ -154,6 +154,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    width: 120,
   },
   {
     field: 'intent_fullname',
@@ -161,6 +162,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    width: 120,
   },
   {
     field: 'mdate',
@@ -170,7 +172,7 @@ export const columnFieldDef = [
     sort: 'desc',
     comparator: dateComparator,
     resizable: true,
-    width: 100,
+    width: 130,
   },
   {
     field: 'status',
@@ -178,16 +180,15 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     cellRenderer: 'statusBadge',
-    width: 90,
+    width: 120,
   },
   {
     field: 'reviews',
     headerName: 'Progress',
-    resizable: true,
     cellRenderer: 'statusBar',
     sortable: true,
     comparator: progressBarComparator,
-    width: 80,
+    width: 120,
   },
   {
     field: 'user_review',

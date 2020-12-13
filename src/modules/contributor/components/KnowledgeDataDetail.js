@@ -60,7 +60,7 @@ class KnowledgeDataDetail extends Component {
         id: null,
         report_processing: null,
       },
-      comments: [],
+      comments: null,
       userList: [],
       documentList: [],
       tokenizedWord: [],
@@ -80,6 +80,7 @@ class KnowledgeDataDetail extends Component {
       reportDetail: null,
       feedBackCheck: false,
       spinnerMessage: '',
+      reviews: null,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -126,16 +127,6 @@ class KnowledgeDataDetail extends Component {
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
     form.synonyms = synonym;
-
-    let references = [];
-    form.documentReference.forEach((reference) => {
-      references.push({
-        ...reference,
-        page: parseInt(reference.page),
-      });
-    });
-    form.documentReference = references;
-
     this._isMounted && this.setState({ form: form });
   };
 
@@ -399,14 +390,9 @@ class KnowledgeDataDetail extends Component {
           this.props.pullDataApproval(response.data.result_data);
 
           let userList = response.data.result_data.comments.users;
-          const currentUser = getUserData();
-          userList[currentUser.user_id] = {
-            email: currentUser.email,
-            fullname: currentUser.fullname,
-            username: currentUser.username,
-          };
           this._isMounted &&
             this.setState({
+              reviews: response.data.result_data.reviews,
               comments: response.data.result_data.comments.data,
               userList: userList,
             });
@@ -567,6 +553,9 @@ class KnowledgeDataDetail extends Component {
                 referenceValue={this.state.form.documentReference}
                 onChange={this.handleInputForm}
                 setReference={this.setReference}
+                setSuccessAlert={this.setSuccessAlert}
+                setErrorAlert={this.setErrorAlert}
+                setErrorList={this.setErrorList}
               />
               <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="Data analysis" />
@@ -657,25 +646,30 @@ class KnowledgeDataDetail extends Component {
               </Row>
               <hr className="mr-3 ml-3 divider" />
               <FormSectionTitle title="User review" />
-              <Vote
-                formStatus={this.state.formStatus}
-                knowledgeDataId={this.state.form.id}
-                owner={this.state.owner}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setAlertMessage={this.setAlertMessage}
-                scrollToTop={this.scrollToTop}
-              />
 
-              <Comment
-                formStatus={this.state.formStatus}
-                knowledgeDataId={this.state.form.id}
-                comments={this.state.comments}
-                userList={this.state.userList}
-                setErrorAlert={this.setErrorAlert}
-                setSuccessAlert={this.setSuccessAlert}
-                scrollToTop={this.scrollToTop}
-              />
+              {this.state.reviews && (
+                <Vote
+                  review={this.state.reviews}
+                  formStatus={this.state.formStatus}
+                  knowledgeDataId={this.state.form.id}
+                  owner={this.state.owner}
+                  setSuccessAlert={this.setSuccessAlert}
+                  setErrorAlert={this.setErrorAlert}
+                  setAlertMessage={this.setAlertMessage}
+                  scrollToTop={this.scrollToTop}
+                />
+              )}
+              {this.state.comments && (
+                <Comment
+                  formStatus={this.state.formStatus}
+                  knowledgeDataId={this.state.form.id}
+                  comments={this.state.comments}
+                  userList={this.state.userList}
+                  setErrorAlert={this.setErrorAlert}
+                  setSuccessAlert={this.setSuccessAlert}
+                  scrollToTop={this.scrollToTop}
+                />
+              )}
             </div>
           </div>
         )}
