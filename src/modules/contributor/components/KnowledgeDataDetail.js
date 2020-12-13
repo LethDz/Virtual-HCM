@@ -40,7 +40,7 @@ import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, EDIT } from 'src/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faBug } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 
 class KnowledgeDataDetail extends Component {
   _isMounted = false;
@@ -552,7 +552,8 @@ class KnowledgeDataDetail extends Component {
                     color="info"
                     onClick={this.toggleReport}
                   >
-                    <FontAwesomeIcon icon={faBug} />
+                    <FontAwesomeIcon icon={faNewspaper} />
+                    &nbsp;
                     Report
                   </Button>
                 </div>

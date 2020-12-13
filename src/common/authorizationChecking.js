@@ -76,6 +76,7 @@ export const denyAuthorization = (error) => {
       checkMessageIsNotValidUser(resultData) &&
       window.location.pathname !== LOGIN_PAGE
     ) {
+      localStorage.setItem('loginFlag', resultData.error_detail);
       signOut();
     }
   }

@@ -15,10 +15,6 @@ import {
   getAllDataApproval,
   fetchAllDataApproval,
   fetchKnowledgeDataSetting,
-  AVAILABLE,
-  PROCESSING,
-  DONE,
-  DISABLE,
 } from 'src/modules/contributor/index';
 import { AgGridReact } from 'ag-grid-react';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
@@ -32,7 +28,7 @@ import { history } from 'src/common/history';
 
 class KnowledgeDataList extends Component {
   _isMounted = false;
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       containerHeight: 0,
@@ -85,13 +81,11 @@ class KnowledgeDataList extends Component {
       });
   };
 
-  setData = async () => {
-    this._isMounted && this.setState({ loading: true });
+  setData = () => {
+    this.setLoading(true);
     axiosClient
       .get(KNOWLEDGE_DATA + ALL)
       .then((response) => {
-        this.sizeToFit();
-        this._isMounted && this.setState({ loading: false });
         if (response.data.status) {
           this.props.fetchAllDataApproval(
             response.data.result_data.knowledge_datas
@@ -99,24 +93,24 @@ class KnowledgeDataList extends Component {
           this.props.fetchKnowledgeDataSetting(
             response.data.result_data.review_settings
           );
-          this.setAlertMessage('Load successful');
         } else {
           this.setErrorList(response.data.messages);
           this.setErrorAlert(true);
           this.scrollToTop();
         }
+        this.sizeToFit();
+        this.setLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         this.setErrorAlert(true);
-        this._isMounted && this.setState({ loading: false });
+        this.setLoading(false);
       });
   };
 
-  onGridReady = async (params) => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    await this.setData();
-    await this.gridApi.sizeColumnsToFit();
+    this.setData();
   };
 
   onRowSelected = () => {
@@ -140,26 +134,8 @@ class KnowledgeDataList extends Component {
     this.sizeToFit();
   };
 
-  setRowData = () => {
-    let data = this.props.dataApprovalList;
-    data.forEach((item, index) => {
-      switch (item.status) {
-        case 0:
-          data[index].status = AVAILABLE;
-          break;
-        case 1:
-          data[index].status = PROCESSING;
-          break;
-        case 2:
-          data[index].status = DONE;
-          break;
-        case 3:
-          data[index].status = DISABLE;
-          break;
-        default:
-      }
-    });
-    return data;
+  setLoading = (status) => {
+    this._isMounted && this.setState({ loading: status });
   };
 
   render() {
@@ -181,7 +157,6 @@ class KnowledgeDataList extends Component {
             onDismiss={() => this.onDismiss('errorAlert')}
           />
         )}
-
         <Row>
           <Col>
             <Button type="button" color="success" onClick={this.setData}>
@@ -227,7 +202,7 @@ class KnowledgeDataList extends Component {
         >
           <AgGridReact
             onFirstDataRendered={this.onFirstDataRendered}
-            rowData={this.setRowData()}
+            rowData={this.props.dataApprovalList}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}
@@ -238,6 +213,8 @@ class KnowledgeDataList extends Component {
             context={context(this)}
             pagination={true}
             paginationAutoPageSize={true}
+            immutableData={true}
+            getRowNodeId={(data) => data.id}
           ></AgGridReact>
         </div>
       </Container>

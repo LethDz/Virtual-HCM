@@ -5,12 +5,12 @@ import { Progress } from 'reactstrap';
 
 import {
   getKnowledgeDataSettings,
-  PROCESSING,
+  idOfStatusOfKD,
 } from 'src/modules/contributor/index';
 
 class StatusBar extends Component {
   _isMounted = false;
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       accept: 0,
@@ -40,7 +40,7 @@ class StatusBar extends Component {
   };
 
   render() {
-    if (this.state.status === PROCESSING) {
+    if (this.state.status === idOfStatusOfKD['PROCESSING']) {
       if (this.state.reject >= this.state.maxReject) {
         return (
           <Progress

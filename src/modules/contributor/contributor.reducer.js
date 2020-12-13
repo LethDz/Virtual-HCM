@@ -18,6 +18,7 @@ import {
   REJECT_REPORT,
   APPROVE_REPORT,
   RESET_APPROVAL_DETAIL_REPORT,
+  CHANGE_STATUS_OF_KNOWLEDGE_DATA,
 } from 'src/modules/contributor/index';
 
 const initialState = {
@@ -211,6 +212,25 @@ export const contributorReducer = (state = initialState, action) => {
         ...state,
         approvalReportDetail: null,
       };
+
+    case CHANGE_STATUS_OF_KNOWLEDGE_DATA:
+      const data = action.payload.data;
+      const newDataList = state.dataApprovalList.map((element) => {
+        if (data.knowledge_data_id === element.id) {
+          return {
+            ...element,
+            status: data.status,
+          };
+        }
+
+        return element;
+      });
+
+      return {
+        ...state,
+        dataApprovalList: newDataList,
+      };
+
     case LOGOUT: {
       return initialState;
     }

@@ -41,3 +41,13 @@ export const axiosCall = (
       setErrorAlert(true);
     });
 };
+
+export const setDefaultState = (props) => {
+  let defaultState = {};
+  props.map((element) => {
+    defaultState[element.setting_id] = '';
+    return null;
+  });
+
+  return defaultState;
+};
