@@ -15,16 +15,16 @@ import {
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import { criticalType, POSTags } from 'src/modules/contributor';
 import {
-  settingStateType2,
   settingIDType2,
   axiosCall,
   SettingComponent,
+  setDefaultState,
 } from 'src/modules/admin';
 import { handleInputChange } from 'src/common/handleInputChange';
 
 export default class NlpSetting extends Component {
   _isMounted = false;
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       errorAlert: false,
@@ -32,9 +32,8 @@ export default class NlpSetting extends Component {
       nlpSetting: [],
       posTagsToolTip: false,
       nerTagsToolTip: false,
-      ...settingStateType2,
+      ...setDefaultState(props.nlpSetting),
     };
-
     this.titleRef = React.createRef();
   }
 
@@ -169,7 +168,7 @@ export default class NlpSetting extends Component {
                         <InputGroupText>File Path</InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={this.state[settingIDType2.vncorenlp]}
                         name={settingIDType2.vncorenlp}
                         id={settingIDType2.vncorenlp}
@@ -212,7 +211,7 @@ export default class NlpSetting extends Component {
                         <InputGroupText>File Path</InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={
                           this.state[settingIDType2.classifier_train_script]
                         }
@@ -302,7 +301,7 @@ export default class NlpSetting extends Component {
                         </Tooltip>
                       </InputGroupAddon>
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={this.state[settingIDType2.exclude_pos_tag]}
                         name={settingIDType2.exclude_pos_tag}
                         id={settingIDType2.exclude_pos_tag}
@@ -392,7 +391,7 @@ export default class NlpSetting extends Component {
                         </Tooltip>
                       </InputGroupAddon>
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={this.state[settingIDType2.named_entity_types]}
                         name={settingIDType2.named_entity_types}
                         id={settingIDType2.named_entity_types}
@@ -440,7 +439,7 @@ export default class NlpSetting extends Component {
                   >
                     <InputGroup size="sm">
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={
                           this.state[settingIDType2.subject_data_ng_pattern]
                         }
@@ -481,7 +480,7 @@ export default class NlpSetting extends Component {
                   >
                     <InputGroup size="sm">
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={this.state[settingIDType2.exclude_word]}
                         name={settingIDType2.exclude_word}
                         id={settingIDType2.exclude_word}
@@ -524,7 +523,7 @@ export default class NlpSetting extends Component {
                         Threshold value:
                       </InputGroupAddon>
                       <Input
-                        type="number"
+                        type={setting.hidden ? 'password' : 'number'}
                         value={this.state[settingIDType2.predict_threshold]}
                         name={settingIDType2.predict_threshold}
                         id={settingIDType2.predict_threshold}
@@ -552,7 +551,44 @@ export default class NlpSetting extends Component {
               );
             }
 
-            return <Fragment key={setting.setting_id + index}></Fragment>;
+            return (
+              <Fragment key={setting.setting_id + index}>
+                <SettingComponent
+                  setting_name={setting.setting_name.split(': ')[1]}
+                  description={setting.description}
+                  valueName={'Value'}
+                  value={setting.value}
+                  default={setting.default}
+                  hidden={setting.hidden}
+                >
+                  <InputGroup size="sm">
+                    <InputGroupAddon addonType="prepend">
+                      Value:
+                    </InputGroupAddon>
+                    <Input
+                      type={setting.hidden ? 'password' : 'text'}
+                      value={this.state[setting.setting_id]}
+                      name={setting.setting_id}
+                      id={setting.setting_id}
+                      onChange={this.inputChange}
+                    />
+                    <InputGroupAddon addonType="prepend">
+                      <Button
+                        color="success"
+                        onClick={() =>
+                          this.onChangeSetting(
+                            setting.setting_id,
+                            this.state[setting.setting_id]
+                          )
+                        }
+                      >
+                        Change
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </SettingComponent>
+              </Fragment>
+            );
           })}
         </Container>
       </Col>

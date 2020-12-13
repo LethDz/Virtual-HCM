@@ -36,6 +36,15 @@ class SignInForm extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    if (localStorage.getItem('loginFlag')) {
+      this.props.addToast(
+        `${localStorage.getItem('loginFlag')}. Please login again !!!`,
+        {
+          appearance: 'error',
+        }
+      );
+      localStorage.removeItem('loginFlag');
+    }
   }
 
   componentWillUnmount() {

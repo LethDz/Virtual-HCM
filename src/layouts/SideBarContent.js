@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import avatar from 'src/static/images/img_avatar.png';
 import { UserLink } from 'src/common/UserLink';
+import { ListGroup } from 'reactstrap';
 
 const switchLayout = (role) => {
   if (role === ROLE_ADMIN) {
@@ -48,7 +49,9 @@ const SideBarContent = () => {
         </div>
       </div>
       <div className="side-navbar-title">Main Navigation</div>
-      <div className="sidebar">{switchLayout(getTheCurrentUserRole())}</div>
+      <div className="sidebar">
+        <ListGroup flush>{switchLayout(getTheCurrentUserRole())}</ListGroup>
+      </div>
     </div>
   );
 };
