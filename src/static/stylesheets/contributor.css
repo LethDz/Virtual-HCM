@@ -166,3 +166,14 @@
 .review-minimize-button:hover {
   cursor: pointer;
 }
+
+.report-id-title {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.report-id-title:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

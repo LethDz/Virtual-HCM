@@ -10,10 +10,12 @@ import {
   InputGroup,
   InputGroupAddon,
 } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import {
   MAXIMUM_COMMENT_PER_PAGE,
   DONE,
   DISABLE,
+  ReportDetailModal,
 } from 'src/modules/contributor/index';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { getUserData } from 'src/common/authorizationChecking';
@@ -25,11 +27,19 @@ import {
   DELETE_COMMENT,
   EDIT_COMMENT,
   imgBase64,
+  USER_DETAIL_PAGE,
 } from 'src/constants';
 import Pagination from 'react-js-pagination';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faSync } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPaperPlane,
+  faSync,
+  faEdit,
+  faTrash,
+  faSave,
+  faBan,
+} from '@fortawesome/free-solid-svg-icons';
 import { UserLink } from 'src/common/UserLink';
 import avatar from 'src/static/images/img_avatar.png';
 
@@ -52,6 +62,8 @@ export default class Comment extends Component {
       refreshComment: false,
       spinnerMessage: '',
       formStatus: props.formStatus,
+      modalReportDetail: false,
+      selectedId: '',
     };
     this.commentRef = React.createRef();
     this.message = ['Commenting', 'Refreshing', 'Editing', 'Deleting'];
@@ -282,9 +294,34 @@ export default class Comment extends Component {
       });
   };
 
+  setReportList = (list) => {
+    this._isMounted &&
+      this.setState({
+        reportList: list,
+      });
+  };
+
+  toggleReportDetail = () => {
+    this._isMounted &&
+      this.setState({ modalReportDetail: !this.state.modalReportDetail });
+  };
+
+  setIdThenToggle = (id) => {
+    this._isMounted && this.setState({ selectedId: id });
+    this.toggleReportDetail();
+  };
+
   render() {
     return (
       <Row xs="1">
+        {this.state.modalReportDetail && (
+          <ReportDetailModal
+            isOpen={this.state.modalReportDetail}
+            id={this.state.selectedId}
+            toggle={this.toggleReportDetail}
+            updateReportList={this.setReportList}
+          />
+        )}
         <LoadingSpinner
           loading={this.state.loading}
           text={this.state.spinnerMessage}
@@ -303,16 +340,13 @@ export default class Comment extends Component {
                     placeholder="Enter comment here"
                   />
                   <InputGroupAddon addonType="append">
-                    <Button size="lg" color="primary" onClick={this.addComment}>
-                      <FontAwesomeIcon icon={faPaperPlane} />{' '}
+                    <Button color="primary" onClick={this.addComment}>
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                      &nbsp;
                     </Button>
                   </InputGroupAddon>
                   <InputGroupAddon addonType="append">
-                    <Button
-                      size="lg"
-                      color="success"
-                      onClick={this.refreshComment}
-                    >
+                    <Button color="success" onClick={this.refreshComment}>
                       <FontAwesomeIcon icon={faSync} />
                     </Button>
                   </InputGroupAddon>
@@ -350,6 +384,18 @@ export default class Comment extends Component {
                                 />
                               </h6>
                             </Col>
+                            {comment.report.id && (
+                              <Col>
+                                <span
+                                  className="report-id-title"
+                                  onClick={() =>
+                                    this.setIdThenToggle(comment.report.id)
+                                  }
+                                >
+                                  Report id: {comment.report.id}
+                                </span>
+                              </Col>
+                            )}
                             <Col xs="auto">{comment.mdate}</Col>
                           </Row>
                           <Row>
@@ -357,9 +403,20 @@ export default class Comment extends Component {
                               <span>
                                 {comment.reply_to && (
                                   <span>
-                                    #{this.linkIdToIndex(comment.reply_to)}{' '}
+                                    #{this.linkIdToIndex(comment.reply_to)}
+                                    &nbsp;
                                   </span>
                                 )}
+                                {comment.report.id &&
+                                  comment.user !== comment.report.reply_to && (
+                                    <Link
+                                      to={USER_DETAIL_PAGE(
+                                        comment.report.report_to
+                                      )}
+                                    >
+                                      @{comment.report.report_to_username}&nbsp;
+                                    </Link>
+                                  )}
                                 {comment.status === 2 && !comment.comment
                                   ? 'Comment has been deleted'
                                   : comment.comment}
@@ -373,7 +430,7 @@ export default class Comment extends Component {
                                     {this.state.user &&
                                       this.state.user.username ===
                                         user.username &&
-                                      comment.editable &&
+                                      comment.able_to_delete &&
                                       comment.status !== 2 && (
                                         <Fragment>
                                           <Button
@@ -386,7 +443,7 @@ export default class Comment extends Component {
                                               );
                                             }}
                                           >
-                                            Edit
+                                            <FontAwesomeIcon icon={faEdit} />
                                           </Button>
                                           <Button
                                             type="button"
@@ -397,7 +454,7 @@ export default class Comment extends Component {
                                               this.removeComment(comment.index);
                                             }}
                                           >
-                                            Delete
+                                            <FontAwesomeIcon icon={faTrash} />
                                           </Button>
                                         </Fragment>
                                       )}
@@ -447,7 +504,7 @@ export default class Comment extends Component {
                                       this.saveComment(comment.index);
                                     }}
                                   >
-                                    Save
+                                    <FontAwesomeIcon icon={faSave} />
                                   </Button>
                                   <Button
                                     type="button"
@@ -458,7 +515,7 @@ export default class Comment extends Component {
                                       this.cancelEditMode(comment.index)
                                     }
                                   >
-                                    Cancel
+                                    <FontAwesomeIcon icon={faBan} />
                                   </Button>
                                 </Fragment>
                               </Row>
