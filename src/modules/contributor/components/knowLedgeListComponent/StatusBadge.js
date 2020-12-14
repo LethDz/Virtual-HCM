@@ -48,7 +48,7 @@ class StatusBadge extends Component {
     };
     axiosClient
       .post(KNOWLEDGE_DATA_CHANGE_STATUS, data)
-      .then((response) => {
+      .then(async (response) => {
         if (!response?.data?.status) {
           this.props.context.componentParent.setErrorAlert(true);
           this.props.context.componentParent.setErrorList(
@@ -58,10 +58,15 @@ class StatusBadge extends Component {
             this.setState({
               status: this.props.data.status,
             });
+        } else {
+          await this.props.context.componentParent.setDataApprovalList([]);
+          await this.props.changeStatusOfData(data);
+          await this.props.context.componentParent.setDataApprovalList(
+            this.props.context.componentParent.props.dataApprovalList
+          );
         }
         this.props.context.componentParent.setLoading(false);
       })
-      .then(() => {})
       .catch(() => {
         this._isMounted &&
           this.setState({
