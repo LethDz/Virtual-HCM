@@ -11,21 +11,21 @@ import {
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import { handleInputChange } from 'src/common/handleInputChange';
 import {
-  settingStateType1,
   settingIDType1,
   axiosCall,
   SettingComponent,
+  setDefaultState,
 } from 'src/modules/admin';
 
 export default class SystemSetting extends Component {
   _isMounted = false;
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       errorAlert: false,
       errorList: [],
       systemSetting: [],
-      ...settingStateType1,
+      ...setDefaultState(props.systemSetting),
     };
 
     this.titleRef = React.createRef();
@@ -169,7 +169,7 @@ export default class SystemSetting extends Component {
                   >
                     <InputGroup size="sm">
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={this.state[settingIDType1.accept_image_format]}
                         name={settingIDType1.accept_image_format}
                         id={settingIDType1.accept_image_format}
@@ -209,7 +209,7 @@ export default class SystemSetting extends Component {
                   >
                     <InputGroup size="sm">
                       <Input
-                        type="text"
+                        type={setting.hidden ? 'password' : 'text'}
                         value={this.state[settingIDType1.default_password]}
                         name={settingIDType1.default_password}
                         id={settingIDType1.default_password}
@@ -252,7 +252,7 @@ export default class SystemSetting extends Component {
                         Expiration time:
                       </InputGroupAddon>
                       <Input
-                        type="number"
+                        type={setting.hidden ? 'password' : 'number'}
                         value={
                           this.state[settingIDType1.login_expiration_limit]
                         }
@@ -297,7 +297,7 @@ export default class SystemSetting extends Component {
                         System Email:
                       </InputGroupAddon>
                       <Input
-                        type="email"
+                        type={setting.hidden ? 'password' : 'email'}
                         value={this.state[settingIDType1.system_mail]}
                         name={settingIDType1.system_mail}
                         id={settingIDType1.system_mail}
@@ -365,7 +365,44 @@ export default class SystemSetting extends Component {
               );
             }
 
-            return <Fragment key={setting.setting_id + index}></Fragment>;
+            return (
+              <Fragment key={setting.setting_id + index}>
+                <SettingComponent
+                  setting_name={setting.setting_name.split(': ')[1]}
+                  description={setting.description}
+                  valueName={'Value'}
+                  value={setting.value}
+                  default={setting.default}
+                  hidden={setting.hidden}
+                >
+                  <InputGroup size="sm">
+                    <InputGroupAddon addonType="prepend">
+                      Value:
+                    </InputGroupAddon>
+                    <Input
+                      type={setting.hidden ? 'password' : 'text'}
+                      value={this.state[setting.setting_id]}
+                      name={setting.setting_id}
+                      id={setting.setting_id}
+                      onChange={this.inputChange}
+                    />
+                    <InputGroupAddon addonType="prepend">
+                      <Button
+                        color="success"
+                        onClick={() =>
+                          this.onChangeSetting(
+                            setting.setting_id,
+                            this.state[setting.setting_id]
+                          )
+                        }
+                      >
+                        Change
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </SettingComponent>
+              </Fragment>
+            );
           })}
         </Container>
       </Row>

@@ -24,12 +24,14 @@ import {
   GET_ALL_COMMENT,
   DELETE_COMMENT,
   EDIT_COMMENT,
+  imgBase64,
 } from 'src/constants';
 import Pagination from 'react-js-pagination';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSync } from '@fortawesome/free-solid-svg-icons';
 import { UserLink } from 'src/common/UserLink';
+import avatar from 'src/static/images/img_avatar.png';
 
 export default class Comment extends Component {
   _isMounted = false;
@@ -326,8 +328,16 @@ export default class Comment extends Component {
                 return (
                   <ListGroupItem key={index} className="comment">
                     <Row>
-                      <Col xs="1" className="d-flex align-items-center">
-                        #{comment.index}
+                      <Col xs="auto">#{comment.index}</Col>
+                      <Col xs="auto">
+                        <img
+                          type="image"
+                          name="avatarImage"
+                          id="avatarImage"
+                          alt="avatar"
+                          className="img-circle"
+                          src={user.avatar ? imgBase64(user.avatar) : avatar}
+                        ></img>
                       </Col>
                       {this.state.editCommentIndex !== comment.index ? (
                         <Col>
@@ -350,11 +360,12 @@ export default class Comment extends Component {
                                     #{this.linkIdToIndex(comment.reply_to)}{' '}
                                   </span>
                                 )}
-                                {comment.status === 2
+                                {comment.status === 2 && !comment.comment
                                   ? 'Comment has been deleted'
                                   : comment.comment}
                               </span>
                             </Col>
+
                             {this.state.formStatus !== DONE &&
                               this.formStatus !== DISABLE && (
                                 <Col xs="auto">
@@ -362,6 +373,7 @@ export default class Comment extends Component {
                                     {this.state.user &&
                                       this.state.user.username ===
                                         user.username &&
+                                      comment.editable &&
                                       comment.status !== 2 && (
                                         <Fragment>
                                           <Button

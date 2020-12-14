@@ -39,7 +39,7 @@ class ReferenceModal extends Component {
       gridApi: '',
       gridColumnApi: '',
       loading: false,
-      page: 0,
+      page: '',
       extraInfo: '',
       isOpenCreateReferenceModal: false,
       referenceList: [],
@@ -47,10 +47,15 @@ class ReferenceModal extends Component {
       errorAlert: false,
       alertMessage: '',
       errorList: [],
+      error: false,
     };
   }
 
-  handleInput = (event) => handleInputChange(event, this);
+  handleInput = (event) => {
+    this._isMounted && this.setState({ error: false });
+    this.setErrorAlert(false);
+    handleInputChange(event, this);
+  };
 
   componentDidMount = () => {
     this._isMounted = true;
@@ -81,8 +86,6 @@ class ReferenceModal extends Component {
                 loading: false,
                 referenceList: response.data.result_data.references,
               });
-            this.setAlertMessage("Load successful");
-            this.setSuccessAlert(true);
             this.setErrorAlert(false);
           } else {
             this.setErrorAlert(true);
@@ -119,7 +122,10 @@ class ReferenceModal extends Component {
 
   addReference = () => {
     let selectedReference = this.state.selectedReference;
-    if (selectedReference) {
+    if (
+      selectedReference &&
+      (this.state.extraInfo.trim() !== '' || this.state.page.trim() !== '')
+    ) {
       let referenceObject = {
         id: selectedReference.reference_document_id,
         page: this.state.page,
@@ -128,9 +134,12 @@ class ReferenceModal extends Component {
       };
       this.props.addReference(referenceObject);
       this.props.toggle();
-    }
-    else {
+    } else {
       this.setErrorAlert(true);
+      this.setErrorList([
+        'You need to fill at least extra info field or page field before adding',
+      ]);
+      this._isMounted && this.setState({ error: true });
       this.setSuccessAlert(false);
     }
   };
@@ -238,9 +247,8 @@ class ReferenceModal extends Component {
             <FormGroup>
               <Label>Page</Label>
               <Input
-                type="number"
+                invalid={this.state.error}
                 name="page"
-                min="0"
                 value={this.state.page}
                 onChange={this.handleInput}
               />
@@ -248,6 +256,7 @@ class ReferenceModal extends Component {
             <FormGroup>
               <Label>Extra info</Label>
               <Input
+                invalid={this.state.error}
                 name="extraInfo"
                 value={this.state.extraInfo}
                 onChange={this.handleInput}
@@ -259,7 +268,11 @@ class ReferenceModal extends Component {
           <Button color="warning" onClick={this.toggleNewReferenceModal}>
             <FontAwesomeIcon icon={faPlus} /> New reference
           </Button>
-          <Button color="success" onClick={this.addReference} disabled={!this.state.selectedReference}>
+          <Button
+            color="success"
+            onClick={this.addReference}
+            disabled={!this.state.selectedReference}
+          >
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </ModalFooter>

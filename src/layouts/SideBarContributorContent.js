@@ -1,5 +1,4 @@
-import React from 'react';
-import { ListGroup } from 'reactstrap';
+import React, { Fragment } from 'react';
 import SideBarItem from 'src/layouts/SideBarItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -23,7 +22,7 @@ import {
 const SideBarContributorContent = () => {
   const location = window.location.pathname;
   return (
-    <ListGroup flush>
+    <Fragment>
       <SideBarItem
         name="Dashboard"
         icon={<FontAwesomeIcon icon={faTachometerAlt} />}
@@ -60,7 +59,7 @@ const SideBarContributorContent = () => {
         link={REPORT_LIST_PAGE}
         active={location.includes(REPORT_LIST_PAGE)}
       />
-    </ListGroup>
+    </Fragment>
   );
 };
 

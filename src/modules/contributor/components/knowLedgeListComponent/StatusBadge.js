@@ -1,19 +1,25 @@
 import React, { Component, Fragment } from 'react';
-import { Badge } from 'reactstrap';
+import { connect } from 'react-redux';
+import { Badge, Input } from 'reactstrap';
+import { getUserData } from 'src/common/authorizationChecking';
+import axiosClient from 'src/common/axiosClient';
+import { handleInputChange } from 'src/common/handleInputChange';
+import { KNOWLEDGE_DATA_CHANGE_STATUS } from 'src/constants';
 
 import {
-  PROCESSING,
-  AVAILABLE,
-  DONE,
-  DISABLE,
-} from 'src/modules/contributor/index';
+  idOfStatusOfKD,
+  statusOfKD,
+  statusOfKDColor,
+  changeStatusOfKnowledgeData,
+  displayStringOfStatusOfKD,
+} from 'src/modules/contributor';
 
 class StatusBadge extends Component {
   _isMounted = false;
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
-      status: null,
+      status: '',
     };
   }
 
@@ -29,37 +35,108 @@ class StatusBadge extends Component {
     this._isMounted = false;
   };
 
-  render() {
-    const className = 'mt-2 badge-width';
-    switch (this.state.status) {
-      case PROCESSING:
-        return (
-          <Badge className={className} color="warning">
-            Processing
-          </Badge>
-        );
-      case AVAILABLE:
-        return (
-          <Badge className={className} color="primary">
-            Available
-          </Badge>
-        );
-      case DONE:
-        return (
-          <Badge className={className} color="success">
-            Done
-          </Badge>
-        );
-      case DISABLE:
-        return (
-          <Badge className={className} color="secondary">
-            Disable
-          </Badge>
-        );
-      default:
-        return <Fragment></Fragment>;
+  onChangeStatus = async (event) => {
+    await handleInputChange(event, this);
+    if (this.state.status === idOfStatusOfKD['DONE']) {
+      return;
     }
+    this.props.context.componentParent.setLoading(true);
+    this.props.context.componentParent.setErrorAlert(false);
+    const data = {
+      knowledge_data_id: this.props.data.id,
+      status: parseInt(this.state.status),
+    };
+    axiosClient
+      .post(KNOWLEDGE_DATA_CHANGE_STATUS, data)
+      .then((response) => {
+        if (!response?.data?.status) {
+          this.props.context.componentParent.setErrorAlert(true);
+          this.props.context.componentParent.setErrorList(
+            response?.data?.messages
+          );
+          this._isMounted &&
+            this.setState({
+              status: this.props.data.status,
+            });
+        }
+        this.props.context.componentParent.setLoading(false);
+      })
+      .then(() => {})
+      .catch(() => {
+        this._isMounted &&
+          this.setState({
+            status: this.props.data.status,
+          });
+        this.props.context.componentParent.setLoading(false);
+        this.props.context.componentParent.setErrorAlert(true);
+      });
+  };
+
+  toggle = () => {
+    this._isMounted &&
+      this.setState({
+        dropdownOpen: !this.state.dropdownOpen,
+      });
+  };
+
+  render() {
+    const user = getUserData();
+    return (
+      <Fragment>
+        {!user.admin ? (
+          <Badge
+            className="mt-2 badge-width"
+            color={statusOfKDColor[this.state.status]}
+          >
+            {displayStringOfStatusOfKD[this.state.status]}
+          </Badge>
+        ) : (
+          <Input
+            bsSize="sm"
+            type="select"
+            name="status"
+            id="status"
+            value={this.state.status}
+            onChange={this.onChangeStatus}
+            className={`mt-1 btn-${statusOfKDColor[this.state.status]}`}
+          >
+            <option
+              disabled
+              style={{
+                backgroundColor: 'whitesmoke',
+                color: 'gray',
+              }}
+            >
+              Select status
+            </option>
+            {Object.keys(idOfStatusOfKD).map((status, index) => (
+              <option
+                value={idOfStatusOfKD[status]}
+                key={index}
+                disabled={idOfStatusOfKD[status] === idOfStatusOfKD['DONE']}
+                style={{
+                  backgroundColor:
+                    idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
+                      ? 'whitesmoke'
+                      : 'white',
+                  color:
+                    idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
+                      ? 'gray'
+                      : 'black',
+                }}
+              >
+                {statusOfKD[status]}
+              </option>
+            ))}
+          </Input>
+        )}
+      </Fragment>
+    );
   }
 }
 
-export default StatusBadge;
+const mapDispatchToProps = (dispatch) => ({
+  changeStatusOfData: (data) => dispatch(changeStatusOfKnowledgeData(data)),
+});
+
+export default connect(null, mapDispatchToProps)(StatusBadge);

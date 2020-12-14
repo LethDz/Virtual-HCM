@@ -30,7 +30,7 @@ import { CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA } from 'src/constants';
 import { KNOWLEDGE_DATA, ADD } from 'src/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faBug } from '@fortawesome/free-solid-svg-icons';
+import { faNewspaper, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 class CreateKnowledgeDataForm extends Component {
   _isMounted = false;
@@ -416,7 +416,8 @@ class CreateKnowledgeDataForm extends Component {
                   color="info"
                   onClick={this.toggleReport}
                 >
-                  <FontAwesomeIcon icon={faBug} /> Report
+                  <FontAwesomeIcon icon={faNewspaper} />
+                    &nbsp;
                 </Button>
               </div>
             )}
@@ -425,6 +426,9 @@ class CreateKnowledgeDataForm extends Component {
             <MetaData
               onChange={this.handleInputForm}
               setReference={this.setReference}
+              setSuccessAlert={this.setSuccessAlert}
+              setErrorAlert={this.setErrorAlert}
+              setErrorList={this.setErrorList}
             />
             <hr className="mr-3 ml-3 divider" />
             <FormSectionTitle title="Data analysis" />

@@ -18,15 +18,16 @@ import {
   APPROVE_REPORT,
   GET_ALL_ACCEPTED_REPORT,
   GET_ALL_REJECTED_REPORT,
-  RESET_APPROVAL_DETAIL_REPORT
+  RESET_APPROVAL_DETAIL_REPORT,
+  CHANGE_STATUS_OF_KNOWLEDGE_DATA,
 } from 'src/modules/contributor/index';
 
 export const fetchKnowledgeDataSetting = (knowledgeDataSettings) => ({
   type: GET_KNOWLEDGE_DATA_SETTINGS,
   payload: {
-    knowledgeDataSettings
-  }
-})
+    knowledgeDataSettings,
+  },
+});
 
 //Synonym
 export const fetchAllDataApproval = (dataApprovalList) => ({
@@ -161,3 +162,9 @@ export const resetApprovalReportDetail = () => ({
   payload: {},
 });
 
+export const changeStatusOfKnowledgeData = (data) => ({
+  type: CHANGE_STATUS_OF_KNOWLEDGE_DATA,
+  payload: {
+    data,
+  },
+});

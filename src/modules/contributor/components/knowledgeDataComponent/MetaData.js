@@ -62,18 +62,19 @@ class MetaData extends Component {
       referenceList.push(reference);
       this._isMounted && this.setState({ referenceList: referenceList });
       this.setReference();
+      this.props.setErrorAlert(false);
+    } else {
+      this.props.setSuccessAlert(false);
+      this.props.setErrorAlert(true);
+      this.props.setErrorList(['You can not add the same document reference']);
     }
   };
 
   checkDuplicate = (reference) => {
     const referenceList = this.state.referenceList;
-    let flag = false
+    let flag = false;
     referenceList.forEach((item) => {
-      if (
-        item.extra_info === reference.extra_info &&
-        item.reference_name === reference.reference_name &&
-        item.page === reference.page
-      ) {
+      if (item.reference_name === reference.reference_name) {
         flag = true;
       }
     });

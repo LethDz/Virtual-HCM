@@ -4,7 +4,11 @@ import StatusBadge from 'src/modules/contributor/components/knowLedgeListCompone
 import SelfReviewStatus from 'src/modules/contributor/components/knowLedgeListComponent/SelfReviewStatus';
 import ReviewStatusBadge from 'src/modules/contributor/components/knowledgeDataComponent/tableComponents/ReviewStatusBadge';
 import { progressBarComparator } from 'src/modules/contributor/components/knowLedgeListComponent/progressBarComparator';
-import { ReportType, ReportedIntent, ReferenceLink } from 'src/modules/contributor';
+import {
+  ReportType,
+  ReportedIntent,
+  ReferenceLink,
+} from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
 
 export const RESET_DATA_APPROVAL_DETAIL = 'RESET_DATA_APPROVAL_DETAIL';
@@ -32,11 +36,41 @@ export const REJECT_REPORT = 'REJECT_REPORT';
 export const APPROVE_REPORT = 'APPROVE_REPORT';
 
 export const RESET_APPROVAL_DETAIL_REPORT = 'RESET_APPROVAL_DETAIL_REPORT';
+export const CHANGE_STATUS_OF_KNOWLEDGE_DATA =
+  'CHANGE_STATUS_OF_KNOWLEDGE_DATA';
 
-export const PROCESSING = 'PROCESSING';
-export const DONE = 'DONE';
-export const AVAILABLE = 'AVAILABLE';
-export const DISABLE = 'DISABLE';
+export const PROCESSING = 'Processing';
+export const DONE = 'Done';
+export const AVAILABLE = 'Available';
+export const DISABLE = 'Disable';
+
+export const statusOfKD = {
+  PROCESSING: 'Processing',
+  DONE: 'Done',
+  AVAILABLE: 'Available',
+  DISABLE: 'Disable',
+};
+
+export const idOfStatusOfKD = {
+  PROCESSING: 1,
+  DONE: 2,
+  AVAILABLE: 0,
+  DISABLE: 3,
+};
+
+export const displayStringOfStatusOfKD = {
+  1: PROCESSING,
+  2: DONE,
+  0: AVAILABLE,
+  3: DISABLE,
+};
+
+export const statusOfKDColor = {
+  1: 'warning',
+  2: 'success',
+  0: 'primary',
+  3: 'secondary',
+};
 
 export const DELETED = 'DELETED';
 export const VIEWABLE = 'VIEWABLE';
@@ -112,7 +146,7 @@ export const columnFieldDef = [
     headerName: 'ID',
     sortable: true,
     filter: true,
-    width: 70,
+    width: 60,
   },
   {
     field: 'intent',
@@ -120,6 +154,7 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    width: 120,
   },
   {
     field: 'intent_fullname',
@@ -127,15 +162,17 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+    width: 120,
   },
   {
     field: 'mdate',
-    headerName: 'Last modified date',
+    headerName: 'Last modified',
     sortable: true,
     filter: true,
     sort: 'desc',
     comparator: dateComparator,
     resizable: true,
+    width: 130,
   },
   {
     field: 'status',
@@ -143,15 +180,15 @@ export const columnFieldDef = [
     sortable: true,
     filter: true,
     cellRenderer: 'statusBadge',
-    width: 100,
+    width: 120,
   },
   {
     field: 'reviews',
     headerName: 'Progress',
-    resizable: true,
     cellRenderer: 'statusBar',
     sortable: true,
     comparator: progressBarComparator,
+    width: 120,
   },
   {
     field: 'user_review',
@@ -631,24 +668,36 @@ export const chartData = (labels, data, name) => ({
       label: name,
       data: data,
       backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
         'rgba(255, 206, 86, 0.2)',
         'rgba(75, 192, 192, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
         'rgba(153, 102, 255, 0.2)',
         'rgba(255, 159, 64, 0.2)',
         'rgba(210, 214, 222, 0.4)',
       ],
       borderColor: [
-        'rgba(255, 99, 132, 1)',
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
         'rgba(75, 192, 192, 1)',
+        'rgba(255, 99, 132, 1)',
         'rgba(153, 102, 255, 1)',
         'rgba(255, 159, 64, 1)',
         'rgba(210, 214, 222, 1)',
       ],
       borderWidth: 1,
+    },
+  ],
+});
+
+export const lineChartData = (labels, data, name) => ({
+  labels: labels,
+  datasets: [
+    {
+      label: name,
+      data: data,
+      backgroundColor: 'rgb(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 0.7)',
     },
   ],
 });

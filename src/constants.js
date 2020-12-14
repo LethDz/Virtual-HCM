@@ -41,6 +41,7 @@ export const USER_REQUEST_CHANGE_PASSWORD = '/user/request-reset-password';
 export const USER_RESET_PASSWORD = '/user/reset-password';
 export const USER_CHECK_RESET_PASSWORD_SESSION =
   '/user/check-reset-password-session';
+export const KNOWLEDGE_DATA_CHANGE_STATUS = '/knowledge-data/change-status';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';
