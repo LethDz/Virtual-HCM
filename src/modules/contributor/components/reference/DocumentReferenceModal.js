@@ -41,6 +41,7 @@ import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import DeleteConfirmationModal from 'src/common/DeleteConfirmationModal';
 import cover from 'src/static/images/cover.png';
+import 'src/static/stylesheets/reference.css';
 
 class DocumentReferenceModal extends Component {
   _isMounted = false;
@@ -51,6 +52,9 @@ class DocumentReferenceModal extends Component {
       reference_name: '',
       link: '',
       author: '',
+      last_edit_username: '',
+      create_username: '',
+      mdate:'',
       cover: null,
       imagePath: null,
       loading: false,
@@ -246,43 +250,47 @@ class DocumentReferenceModal extends Component {
           isOpen={this.props.isOpen}
           toggle={this.toggle}
           unmountOnClose={true}
+          size='lg'
         >
           {this.state.isOpenDeleteConfirmation && (
             <DeleteConfirmationModal
-              type="DELETE"
+              type='DELETE'
               isOpen={this.state.isOpenDeleteConfirmation}
               toggle={this.toggleDeleteConfirmation}
               value={this.state.meaning}
               confirmDelete={this.confirmDelete}
             />
           )}
-          <ModalHeader toggle={this.toggle}>Document Reference ID: {this.state.reference_document_id}</ModalHeader>
+          <ModalHeader toggle={this.toggle}>
+            Document Reference ID: {this.state.reference_document_id}
+          </ModalHeader>
           <Form onSubmit={this.editReference}>
             <ModalBody>
               <LoadingSpinner loading={this.state.loading} text={'Loading'} />
               {this.state.successAlert && (
                 <SuccessAlert
                   successAlert={this.state.successAlert}
-                  text="Editing reference is successfully"
+                  text='Editing reference is successfully'
                   onDismiss={() => this.onDismiss('successAlert')}
                 />
               )}
               {this.state.errorAlert && (
                 <ErrorAlert
+                  className='error-alert'
                   errorAlert={this.state.errorAlert}
                   errorList={this.state.errorList}
                   onDismiss={() => this.onDismiss('errorAlert')}
                 />
               )}
               <Row>
-                <Col className="col-3">
-                  <Row className="justify-content-center mb-3">
+                <Col className='col-3'>
+                  <Row className='justify-content-center mb-3'>
                     <img
-                      type="image"
-                      name="cover"
-                      id="coverImage"
-                      alt="cover"
-                      className="cover-image"
+                      type='image'
+                      name='cover'
+                      id='coverImage'
+                      alt='cover'
+                      className='cover-image'
                       src={
                         this.state.cover
                           ? this.state.cover ===
@@ -293,26 +301,42 @@ class DocumentReferenceModal extends Component {
                       }
                     ></img>
                   </Row>
-                  <Row className="justify-content-center upload-btn-wrapper-reference-modal">
-                    <Button color="warning">
-                      <FontAwesomeIcon icon={faFolderOpen} color="white" />
+                  <Row className='justify-content-center upload-btn-wrapper-reference-modal'>
+                    <Button color='warning'>
+                      <FontAwesomeIcon icon={faFolderOpen} color='white' />
                     </Button>
                     <Input
-                      className="h-100 upload-hidden"
-                      type="file"
-                      name="avatar"
-                      id="avatar"
-                      accept="image/*"
+                      className='h-100 upload-hidden'
+                      type='file'
+                      name='avatar'
+                      id='avatar'
+                      accept='image/*'
                       onChange={this.onUploadImage}
                     />
                   </Row>
                 </Col>
-                <Col className="col-9">
+                <Col className='col-9'>
+                  <Row className='custom-border'>
+                    <Col className='col-3 font-weight-bold'>Created by:</Col>
+                    <Col className='col-9'>{this.state.create_username}</Col>
+                  </Row>
+                  <Row className='custom-border'>
+                    <Col className='col-3 font-weight-bold'>Last edited by:</Col>
+                    <Col className='col-9'>
+                      {this.state.last_edit_username}
+                    </Col>
+                  </Row>
+                  <Row className='custom-border'>
+                    <Col className='col-3 font-weight-bold'>Modified date:</Col>
+                    <Col className='col-9'>
+                      {this.state.mdate}
+                    </Col>
+                  </Row>
                   <FormGroup>
                     <Label>Reference name: </Label>
                     <Input
-                      name="reference_name"
-                      type="text"
+                      name='reference_name'
+                      type='text'
                       required
                       value={this.state.reference_name}
                       onChange={this.handleInput}
@@ -321,8 +345,8 @@ class DocumentReferenceModal extends Component {
                   <FormGroup>
                     <Label>Link: </Label>
                     <Input
-                      name="link"
-                      type="url"
+                      name='link'
+                      type='url'
                       value={this.state.link}
                       onChange={this.handleInput}
                     />
@@ -330,9 +354,9 @@ class DocumentReferenceModal extends Component {
                   <FormGroup>
                     <Label>Author: </Label>
                     <Input
-                      name="author"
+                      name='author'
                       required
-                      type="text"
+                      type='text'
                       value={this.state.author}
                       onChange={this.handleInput}
                     />
@@ -342,19 +366,19 @@ class DocumentReferenceModal extends Component {
             </ModalBody>
             <ModalFooter>
               <Button
-                color="primary"
-                type="submit"
+                color='primary'
+                type='submit'
                 disabled={this.state.loading}
               >
-                <FontAwesomeIcon icon={faSave} color="white" />
+                <FontAwesomeIcon icon={faSave} color='white' />
                 &nbsp;Save
               </Button>
               <Button
-                color="danger"
+                color='danger'
                 onClick={this.deleteReference}
                 disabled={this.state.loading}
               >
-                <FontAwesomeIcon icon={faTrash} color="white" />
+                <FontAwesomeIcon icon={faTrash} color='white' />
                 &nbsp;Delete
               </Button>
             </ModalFooter>

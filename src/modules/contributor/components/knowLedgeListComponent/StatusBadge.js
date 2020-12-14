@@ -41,7 +41,7 @@ class StatusBadge extends Component {
       case AVAILABLE:
         return (
           <Badge className={className} color="primary">
-            Availble
+            Available
           </Badge>
         );
       case DONE:

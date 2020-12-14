@@ -249,7 +249,7 @@ export const columnRefFieldDef = [
   {
     field: 'link',
     headerName: 'Link',
-    width: 300,
+    width: 150,
     sortable: true,
     filter: true,
     resizable: true,
@@ -258,10 +258,34 @@ export const columnRefFieldDef = [
   {
     field: 'author',
     headerName: 'Author',
-    width: 250,
+    width: 150,
     sortable: true,
     filter: true,
     resizable: true,
+  },
+  {
+    field: 'create_username',
+    headerName: 'Created by',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'last_edit_username',
+    headerName: 'Last modified by',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified date',
+    sortable: true,
+    filter: true,
+    sort: 'desc',
+    comparator: dateComparator,
   },
 ];
 
