@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Col, ListGroupItem, Row } from 'reactstrap';
+import { Col, ListGroupItem, Row } from 'reactstrap';
 import { calculateTheDifferent } from 'src/common/getDate';
 import { UserLink } from 'src/common/UserLink';
 import { GET_KNOWLEDGE_DATA_BY_INTENT } from 'src/constants';
@@ -58,12 +58,10 @@ const NotificationItem = (props) => {
                 <span className="text-muted">
                   <em>"{props.noti.report_comment}"</em>
                 </span>{' '}
-                <span className="blockquote-footer-inline">
+                <span className="blockquote-footer font-sm">
                   to knowledge data:{' '}
                   <Link to={GET_KNOWLEDGE_DATA_BY_INTENT(props.noti.intent)}>
-                    <Badge color="info" style={{ fontSize: '1rem' }}>
-                      {props.noti.intent_fullname}
-                    </Badge>
+                    {props.noti.intent_fullname}
                   </Link>
                 </span>
               </p>
