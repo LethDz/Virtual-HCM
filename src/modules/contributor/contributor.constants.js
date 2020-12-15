@@ -9,6 +9,7 @@ import {
   ReportedIntent,
   ReferenceLink,
   ReportUserLink,
+  ReferenceUserLink,
 } from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
 
@@ -293,7 +294,7 @@ export const columnRefFieldDef = [
   {
     field: 'link',
     headerName: 'Link',
-    width: 300,
+    width: 150,
     sortable: true,
     filter: true,
     resizable: true,
@@ -302,10 +303,36 @@ export const columnRefFieldDef = [
   {
     field: 'author',
     headerName: 'Author',
-    width: 250,
+    width: 150,
     sortable: true,
     filter: true,
     resizable: true,
+  },
+  {
+    field: 'create_username',
+    headerName: 'Created by',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'referenceUserLink',
+  },
+  {
+    field: 'last_edit_username',
+    headerName: 'Last modified by',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'referenceUserLink',
+  },
+  {
+    field: 'mdate',
+    headerName: 'Modified date',
+    sortable: true,
+    filter: true,
+    sort: 'desc',
+    comparator: dateComparator,
   },
 ];
 
@@ -631,6 +658,8 @@ export const frameworkComponentsForChatHistory = {
 
 export const frameworkComponentsForReference = {
   referenceLink: ReferenceLink,
+  userLink: UserLink,
+  referenceUserLink: ReferenceUserLink,
 };
 
 export const frameworkComponentsForReport = {

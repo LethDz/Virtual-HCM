@@ -87,11 +87,13 @@ class RawData extends Component {
         } else {
           this.props.setSuccessAlert(false);
           this.props.setErrorAlert(true);
+          this.props.setLoading(false, 'Tokenizing data');
           this.props.setErrorList(response.data.messages);
           this.props.scrollToTop();
         }
       })
       .catch((err) => {
+        this.props.setLoading(false, 'Tokenizing data');
         if (this._isMounted) this.setState({ loading: false });
         this.props.setErrorAlert(true);
         this.props.setSuccessAlert(false);

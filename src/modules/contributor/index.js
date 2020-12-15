@@ -25,6 +25,7 @@ import ReportedIntent from 'src/modules/contributor/components/report/ReportedIn
 import ReferenceLink from 'src/modules/contributor/components/reference/ReferenceLink';
 import ReportUserLink from 'src/modules/contributor/components/report/ReportUserLink';
 import ReportConfirmModal from 'src/modules/contributor/components/report/ReportConfirmModal';
+import ReferenceUserLink from 'src/modules/contributor/components/reference/ReferenceUserLink';
 
 // Form component
 import CreateKnowledgeDataForm from 'src/modules/contributor/components/CreateKnowledgeDataForm';
@@ -107,4 +108,5 @@ export {
   OtherKnowledgeDataList,
   ReportUserLink,
   ReportConfirmModal,
+  ReferenceUserLink,
 };
