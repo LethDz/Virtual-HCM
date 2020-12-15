@@ -63,3 +63,12 @@ export const dateToMilliseconds = (dateString) => {
 
   return milliseconds;
 };
+
+export const calculateTheDifferent = (date) => {
+  const date1 = new Date(date.split('.')[0]);
+  const date2 = new Date();
+  const timeDifference = date2.getTime() - date1.getTime();
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  return daysDifference;
+};

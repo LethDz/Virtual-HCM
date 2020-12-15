@@ -478,7 +478,7 @@ export default class Comment extends Component {
                 activePage={this.state.activePage}
                 totalItemsCount={this.state.comments.length}
                 itemsCountPerPage={MAXIMUM_COMMENT_PER_PAGE}
-                onChange={this.handlePageChange.bind(this)}
+                onChange={this.handlePageChange}
                 itemClass="page-item"
                 linkClass="page-link"
               />

@@ -14,6 +14,7 @@ import { Line, Pie } from 'react-chartjs-2';
 import axiosClient from 'src/common/axiosClient';
 import { DASHBOARD } from 'src/constants';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import { ReportDashboard } from 'src/modules/report-notification';
 
 export default class DashBoard extends Component {
   _isMounted = false;
@@ -198,9 +199,9 @@ export default class DashBoard extends Component {
                   </div>
                 </Col>
               </Row>
-              <Row className="m-0 height-fit-content w-100">
-                <Col className="pr-1">
-                  <div className="info-box font-sm bg-yellow text-light w-23-5">
+              <Row className="m-0 height-fit-content w-50">
+                <Col className="p-3">
+                  <div className="info-box font-sm bg-yellow text-light">
                     <span className="info-box-icon">
                       <FontAwesomeIcon
                         icon={faPencilAlt}
@@ -217,6 +218,7 @@ export default class DashBoard extends Component {
                     </div>
                   </div>
                 </Col>
+                <ReportDashboard />
               </Row>
               <Row className="m-0 height-fit-content w-100">
                 <Col className="mt-3 ml-3 mr-3 mb-0 border-bottom border-dark">

@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Form,
+  Badge,
+} from 'reactstrap';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import axiosClient from 'src/common/axiosClient';
@@ -89,11 +96,18 @@ class ReportDetailModalAccepted extends Component {
         size="lg"
       >
         <ModalHeader toggle={this.toggle}>
-          Report ID: {this.state.report.id}
+          Report ID: {this.state.report.id}{' '}
+          <Badge color="success" className="ml-2">
+            Accepted
+          </Badge>
         </ModalHeader>
         <Form>
           <ModalBody className="report-container">
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
+            <LoadingSpinner
+              loading={this.state.loading}
+              text={'Loading'}
+              type="MODAL"
+            />
             {this.state.errorAlert && (
               <ErrorAlert
                 errorAlert={this.state.errorAlert}
