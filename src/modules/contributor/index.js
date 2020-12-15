@@ -23,6 +23,8 @@ import DetailModalViewOnly from 'src/modules/contributor/components/report/Detai
 import StatusBar from 'src/modules/contributor/components/knowLedgeListComponent/StatusBar';
 import ReportedIntent from 'src/modules/contributor/components/report/ReportedIntent';
 import ReferenceLink from 'src/modules/contributor/components/reference/ReferenceLink';
+import ReportUserLink from 'src/modules/contributor/components/report/ReportUserLink';
+import ReportConfirmModal from 'src/modules/contributor/components/report/ReportConfirmModal';
 import ReferenceUserLink from 'src/modules/contributor/components/reference/ReferenceUserLink';
 
 // Form component
@@ -48,6 +50,9 @@ import ReportAcceptedList from 'src/modules/contributor/components/report/Report
 import ReportRejectedList from 'src/modules/contributor/components/report/ReportRejectedList';
 import Report from 'src/modules/contributor/components/report/Report';
 import DashBoard from 'src/modules/contributor/components/DashBoard';
+import SelectKnowledgeData from 'src/modules/contributor/components/report/SelectKnowledgeData';
+import AvailableKnowledgeDataList from 'src/modules/contributor/components/report/AvailableKnowledgeDataList';
+import OtherKnowledgeDataList from 'src/modules/contributor/components/report/OtherKnowledgeDataList';
 
 export * from 'src/modules/contributor/contributor.actions';
 export * from 'src/modules/contributor/contributor.constants.js';
@@ -98,5 +103,10 @@ export {
   ReportedIntent,
   DashBoard,
   ReferenceLink,
+  SelectKnowledgeData,
+  AvailableKnowledgeDataList,
+  OtherKnowledgeDataList,
+  ReportUserLink,
+  ReportConfirmModal,
   ReferenceUserLink,
 };

@@ -29,6 +29,7 @@ class ReportList extends Component {
       errorAlert: false,
       successAlert: false,
       errorList: [],
+      isOpenToast: false,
     };
 
     this.conRef = React.createRef();
@@ -154,65 +155,73 @@ class ReportList extends Component {
       });
   };
 
+  setToast = () => {
+      this.props.addToast(`Notified successfully !`, {
+        appearance: 'success',
+      });
+  };
+
   render() {
     return (
-      <Fragment>
-        {this.state.errorAlert && (
-          <ErrorAlert
-            errorAlert={this.state.errorAlert}
-            errorList={this.state.errorList}
-            onDismiss={() => this.onDismiss('errorAlert')}
-          />
-        )}
-        <Row className="d-flex flex-row-reverse">
-          <Col xs="auto">
-            <Button
-              color="success"
-              disabled={this.state.selectedId === ''}
-              onClick={this.toggleReportDetail}
-            >
-              <FontAwesomeIcon icon={faEye} color="white" />
-              &nbsp; View Report
-            </Button>
-            {this.state.modalReportDetail && (
-              <ReportDetailModal
-                isOpen={this.state.modalReportDetail}
-                id={this.state.selectedId}
-                toggle={this.toggleReportDetail}
-                updateReportList={this.setReportList}
-              />
-            )}
-          </Col>
-          <Col>
-            <Button type="button" color="success" onClick={this.setRowData}>
-              <FontAwesomeIcon icon={faSync} color="white" />
-            </Button>
-          </Col>
-        </Row>
-        <LoadingSpinner
-          loading={this.state.loading}
-          text="Loading pending reports"
-        ></LoadingSpinner>
-        <div
-          className="ag-theme-alpine"
-          style={{
-            height: `${this.state.containerHeight - 200}px`,
-            marginTop: '10px',
-          }}
-        >
-          <AgGridReact
-            onGridReady={this.onGridReady}
-            rowData={this.state.reportList}
-            rowSelection="single"
-            onSelectionChanged={this.onRowSelected.bind(this)}
-            onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
-            columnDefs={columnPendingReportFieldDef}
-            pagination={true}
-            paginationAutoPageSize={true}
-            frameworkComponents={frameworkComponentsForReport}
-          ></AgGridReact>
-        </div>
-      </Fragment>
+        <Fragment>
+          {this.state.errorAlert && (
+            <ErrorAlert
+              errorAlert={this.state.errorAlert}
+              errorList={this.state.errorList}
+              onDismiss={() => this.onDismiss('errorAlert')}
+            />
+          )}
+
+          <Row className='d-flex flex-row-reverse'>
+            <Col xs='auto'>
+              <Button
+                color='success'
+                disabled={this.state.selectedId === ''}
+                onClick={this.toggleReportDetail}
+              >
+                <FontAwesomeIcon icon={faEye} color='white' />
+                &nbsp; View Report
+              </Button>
+              {this.state.modalReportDetail && (
+                <ReportDetailModal
+                  isOpen={this.state.modalReportDetail}
+                  id={this.state.selectedId}
+                  toggle={this.toggleReportDetail}
+                  updateReportList={this.setReportList}
+                  setToast={this.setToast}
+                />
+              )}
+            </Col>
+            <Col>
+              <Button type='button' color='success' onClick={this.setRowData}>
+                <FontAwesomeIcon icon={faSync} color='white' />
+              </Button>
+            </Col>
+          </Row>
+          <LoadingSpinner
+            loading={this.state.loading}
+            text='Loading pending reports'
+          ></LoadingSpinner>
+          <div
+            className='ag-theme-alpine'
+            style={{
+              height: `${this.state.containerHeight - 200}px`,
+              marginTop: '10px',
+            }}
+          >
+            <AgGridReact
+              onGridReady={this.onGridReady}
+              rowData={this.state.reportList}
+              rowSelection='single'
+              onSelectionChanged={this.onRowSelected.bind(this)}
+              onRowDoubleClicked={this.onRowDoubleClicked.bind(this)}
+              columnDefs={columnPendingReportFieldDef}
+              pagination={true}
+              paginationAutoPageSize={true}
+              frameworkComponents={frameworkComponentsForReport}
+            ></AgGridReact>
+          </div>
+        </Fragment>
     );
   }
 }
