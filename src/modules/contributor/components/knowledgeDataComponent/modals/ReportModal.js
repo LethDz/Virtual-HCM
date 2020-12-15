@@ -137,7 +137,7 @@ class ReportModal extends Component {
       >
         <PopoverHeader>
           <Row>
-            <Col>Review knowledge data</Col>
+            <Col>Report</Col>
             <Col xs="auto" onClick={this.toggleThisModal}>
               <FontAwesomeIcon icon={faWindowMinimize} />
             </Col>

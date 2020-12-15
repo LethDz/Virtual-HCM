@@ -23,3 +23,13 @@
   border: 1px solid #4391be;
   border-radius: 4%;
 }
+
+.custom-border {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d5dadb;
+}
+
+.error-alert{
+  padding-right: 0rem!important;
+}
