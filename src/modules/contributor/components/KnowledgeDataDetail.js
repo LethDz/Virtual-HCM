@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import axiosClient from 'src/common/axiosClient';
 import { Button, Container, Row, Col } from 'reactstrap';
@@ -81,11 +81,29 @@ class KnowledgeDataDetail extends Component {
       feedBackCheck: false,
       spinnerMessage: '',
       reviews: null,
+      reloadInfo: false,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
     this.questionRef = React.createRef();
   }
+
+  componentDidUpdate() {
+    if (
+      this._isMounted &&
+      !this.state.loading &&
+      this.props.dataApprovalDetail &&
+      (this.props.approvalReportDetail ||
+        this.props.intent !== this.props.dataApprovalDetail.intent)
+    ) {
+      this.getInformation();
+      this.scrollToTop();
+    }
+  }
+
+  setReload = (status) => {
+    this._isMounted && this.setState({ reloadInfo: status });
+  };
 
   handleInputForm = (event) => handleInputFormChange(event, this);
 
@@ -127,6 +145,16 @@ class KnowledgeDataDetail extends Component {
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
     form.synonyms = synonym;
+
+    let references = [];
+    form.documentReference.forEach((reference) => {
+      references.push({
+        extra_info: reference.extra_info,
+        id: reference.id,
+        page: reference.page,
+      });
+    });
+    form.documentReference = references;
     this._isMounted && this.setState({ form: form });
   };
 
@@ -381,6 +409,7 @@ class KnowledgeDataDetail extends Component {
 
   getInformation = () => {
     this.setLoading(true, 'Getting information');
+    this.setReload(true);
     axiosClient
       .get(GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS(this.props.intent))
       .then((response) => {
@@ -397,18 +426,21 @@ class KnowledgeDataDetail extends Component {
               userList: userList,
             });
           this.setFormStatus();
+          this.setReload(false);
           this.setErrorAlert(false);
         } else {
           this.setLoading(false);
+          this.setReload(false);
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
         }
       })
       .catch((err) => {
+        this.setReload(false);
         this.setErrorAlert(true);
         this.setLoading(false, 'Getting information');
       });
-    this.setReport();
+    this.state.reloadInfo && this.setReport();
   };
 
   setFormData = (dataApproval) => {
@@ -489,190 +521,191 @@ class KnowledgeDataDetail extends Component {
           loading={this.state.loading}
           text={this.state.spinnerMessage}
         />
-        {this.state.form.intent.trim() !== '' && (
-          <div className="mt-3">
-            <div className="form-item form-item-meta pr-5 pl-5 pb-5">
-              <div className="mr-3 ml-3">
-                {this.state.successAlert && (
-                  <SuccessAlert
-                    successAlert={this.state.successAlert}
-                    text={this.state.alertMessage}
-                    onDismiss={() => this.onDismiss('successAlert')}
-                  />
-                )}
-                {this.state.errorAlert && (
-                  <ErrorAlert
-                    errorAlert={this.state.errorAlert}
-                    errorList={this.state.errorList}
-                    onDismiss={() => this.onDismiss('errorAlert')}
-                  />
-                )}
-              </div>
-              <Row xs="1">
-                <Col>
-                  <h4 className="text-center m-3" ref={this.titleRef}>
-                    Edit knowledge data: {this.props.intent}
-                    <br />
-                    ID: {this.state.form.id}
-                  </h4>
-                </Col>
-              </Row>
 
-              {this.state.form.report_processing && (
-                <div className="d-flex justify-content-end">
-                  <ReportModal
-                    buttonId="report-button"
-                    isOpen={this.state.isOpenReport}
-                    toggle={this.toggleReport}
-                    reportDetail={this.state.reportDetail}
-                    saveNote={this.saveNote}
-                    feedBackCheck={this.state.feedBackCheck}
-                    noteValue={
-                      this.state.form.report_processing.processor_note
-                        ? this.state.form.report_processing.processor_note
-                        : ''
-                    }
-                  />
-                  <Button
-                    id="report-button"
-                    color="info"
-                    onClick={this.toggleReport}
-                  >
-                    <FontAwesomeIcon icon={faNewspaper} />
-                    &nbsp;
-                    Report
-                  </Button>
-                </div>
+        <div className="mt-3">
+          <div className="form-item form-item-meta pr-5 pl-5 pb-5">
+            <div className="mr-3 ml-3">
+              {this.state.successAlert && (
+                <SuccessAlert
+                  successAlert={this.state.successAlert}
+                  text={this.state.alertMessage}
+                  onDismiss={() => this.onDismiss('successAlert')}
+                />
               )}
+              {this.state.errorAlert && (
+                <ErrorAlert
+                  errorAlert={this.state.errorAlert}
+                  errorList={this.state.errorList}
+                  onDismiss={() => this.onDismiss('errorAlert')}
+                />
+              )}
+            </div>
+            <Row xs="1">
+              <Col>
+                <h4 className="text-center m-3" ref={this.titleRef}>
+                  Edit knowledge data: {this.props.intent}
+                  <br />
+                  ID: {this.state.form.id}
+                </h4>
+              </Col>
+            </Row>
+            {this.state.form.intent.trim() !== '' && !this.state.reloadInfo && (
+              <Fragment>
+                {this.state.form.report_processing && (
+                  <div className="d-flex justify-content-end">
+                    <ReportModal
+                      buttonId="report-button"
+                      isOpen={this.state.isOpenReport}
+                      toggle={this.toggleReport}
+                      reportDetail={this.state.reportDetail}
+                      saveNote={this.saveNote}
+                      feedBackCheck={this.state.feedBackCheck}
+                      noteValue={
+                        this.state.form.report_processing.processor_note
+                          ? this.state.form.report_processing.processor_note
+                          : ''
+                      }
+                    />
+                    <Button
+                      id="report-button"
+                      color="info"
+                      onClick={this.toggleReport}
+                    >
+                      <FontAwesomeIcon icon={faNewspaper} />
+                      &nbsp; Report
+                    </Button>
+                  </div>
+                )}
 
-              <FormSectionTitle title="Meta data" />
-              <MetaData
-                disable={this.state.disable}
-                intentValue={this.state.form.intent}
-                intentFullNameValue={this.state.form.intentFullName}
-                referenceValue={this.state.form.documentReference}
-                onChange={this.handleInputForm}
-                setReference={this.setReference}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setErrorList={this.setErrorList}
-              />
-              <hr className="mr-3 ml-3 divider" />
-              <FormSectionTitle title="Data analysis" />
-              {this.state.form.rawData && (
-                <RawData
+                <FormSectionTitle title="Meta data" />
+                <MetaData
                   disable={this.state.disable}
-                  hoverWord={this.state.hoverWord}
+                  intentValue={this.state.form.intent}
+                  intentFullNameValue={this.state.form.intentFullName}
+                  referenceValue={this.state.form.documentReference}
+                  onChange={this.handleInputForm}
+                  setReference={this.setReference}
+                  setSuccessAlert={this.setSuccessAlert}
+                  setErrorAlert={this.setErrorAlert}
+                  setErrorList={this.setErrorList}
+                />
+                <hr className="mr-3 ml-3 divider" />
+                <FormSectionTitle title="Data analysis" />
+                {this.state.form.rawData && (
+                  <RawData
+                    disable={this.state.disable}
+                    hoverWord={this.state.hoverWord}
+                    detailPage={true}
+                    rawDataValue={this.state.form.rawData}
+                    scrollToTop={this.scrollToTop}
+                    setSuccessAlert={this.setSuccessAlert}
+                    setErrorAlert={this.setErrorAlert}
+                    setErrorList={this.setErrorList}
+                    setTokenizeWord={this.setTokenizeWord}
+                    getWordArray={this.getWordArray}
+                    setRawData={this.setRawData}
+                    cancelCriticalData={this.cancelCriticalData}
+                    onChange={this.handleInputForm}
+                    setLoading={this.setLoading}
+                  />
+                )}
+                {wordArray.length !== 0 && (
+                  <CriticalData
+                    disable={this.state.disable}
+                    ref={this.criticalDataRef}
+                    criticalDataValue={this.state.form.criticalData}
+                    wordArray={wordArray}
+                    ner={this.state.ner}
+                    setCritical={this.setCriticalData}
+                  />
+                )}
+
+                <Coresponse
+                  disable={this.state.disable}
+                  coresponseValue={this.state.form.coresponse}
+                  setCoresponse={this.setCoresponse}
+                  wordArray={wordArray}
+                />
+                <Question
+                  disable={this.state.disable}
+                  ref={this.questionRef}
                   detailPage={true}
-                  rawDataValue={this.state.form.rawData}
+                  questionValue={this.state.form.questions}
                   scrollToTop={this.scrollToTop}
                   setSuccessAlert={this.setSuccessAlert}
                   setErrorAlert={this.setErrorAlert}
                   setErrorList={this.setErrorList}
-                  setTokenizeWord={this.setTokenizeWord}
-                  getWordArray={this.getWordArray}
-                  setRawData={this.setRawData}
-                  cancelCriticalData={this.cancelCriticalData}
-                  onChange={this.handleInputForm}
-                  setLoading={this.setLoading}
+                  setQuestions={this.setQuestions}
+                  synonymsArray={this.state.form.synonyms}
+                  synonymIds={this.state.synonymIdList}
+                  className="mt-3"
                 />
-              )}
-              {wordArray.length !== 0 && (
-                <CriticalData
+
+                <BaseResponse
                   disable={this.state.disable}
-                  ref={this.criticalDataRef}
-                  criticalDataValue={this.state.form.criticalData}
-                  wordArray={wordArray}
-                  ner={this.state.ner}
-                  setCritical={this.setCriticalData}
+                  baseResponseValue={this.state.form.baseResponse}
+                  onChange={this.handleInputForm}
                 />
-              )}
 
-              <Coresponse
-                disable={this.state.disable}
-                coresponseValue={this.state.form.coresponse}
-                setCoresponse={this.setCoresponse}
-                wordArray={wordArray}
-              />
-              <Question
-                disable={this.state.disable}
-                ref={this.questionRef}
-                detailPage={true}
-                questionValue={this.state.form.questions}
-                scrollToTop={this.scrollToTop}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setErrorList={this.setErrorList}
-                setQuestions={this.setQuestions}
-                synonymsArray={this.state.form.synonyms}
-                synonymIds={this.state.synonymIdList}
-                className="mt-3"
-              />
-
-              <BaseResponse
-                disable={this.state.disable}
-                baseResponseValue={this.state.form.baseResponse}
-                onChange={this.handleInputForm}
-              />
-
-              <Synonyms
-                disable={this.state.disable}
-                scrollToTop={this.scrollToTop}
-                setAlertMessage={this.setAlertMessage}
-                setSuccessAlert={this.setSuccessAlert}
-                setErrorAlert={this.setErrorAlert}
-                setErrorList={this.setErrorList}
-                setSynonym={this.setSynonym}
-                wordArray={wordArray}
-                resetGeneratedQuestion={this.resetGeneratedQuestion}
-                synonymsValue={this.state.form.synonyms}
-                setHoverWord={this.setHoverWord}
-              />
-              <Row className="d-flex justify-content-around mt-3 pb-3">
-                {!this.state.disable &&
-                  (this.state.formStatus === AVAILABLE ||
-                    (this.state.formStatus === PROCESSING &&
-                      this.state.owner) ||
-                    (this.state.formStatus === DONE && this.state.owner)) && (
-                    <Button
-                      disabled={this.state.disable}
-                      type="submit"
-                      color="info"
-                      onClick={this.submitForm}
-                    >
-                      <FontAwesomeIcon icon={faSave} /> Save knowledge data
-                    </Button>
-                  )}
-              </Row>
-              <hr className="mr-3 ml-3 divider" />
-              <FormSectionTitle title="User review" />
-
-              {this.state.reviews && (
-                <Vote
-                  review={this.state.reviews}
-                  formStatus={this.state.formStatus}
-                  knowledgeDataId={this.state.form.id}
-                  owner={this.state.owner}
-                  setSuccessAlert={this.setSuccessAlert}
-                  setErrorAlert={this.setErrorAlert}
+                <Synonyms
+                  disable={this.state.disable}
+                  scrollToTop={this.scrollToTop}
                   setAlertMessage={this.setAlertMessage}
-                  scrollToTop={this.scrollToTop}
-                />
-              )}
-              {this.state.comments && (
-                <Comment
-                  formStatus={this.state.formStatus}
-                  knowledgeDataId={this.state.form.id}
-                  comments={this.state.comments}
-                  userList={this.state.userList}
-                  setErrorAlert={this.setErrorAlert}
                   setSuccessAlert={this.setSuccessAlert}
-                  scrollToTop={this.scrollToTop}
+                  setErrorAlert={this.setErrorAlert}
+                  setErrorList={this.setErrorList}
+                  setSynonym={this.setSynonym}
+                  wordArray={wordArray}
+                  resetGeneratedQuestion={this.resetGeneratedQuestion}
+                  synonymsValue={this.state.form.synonyms}
+                  setHoverWord={this.setHoverWord}
                 />
-              )}
-            </div>
+                <Row className="d-flex justify-content-around mt-3 pb-3">
+                  {!this.state.disable &&
+                    (this.state.formStatus === AVAILABLE ||
+                      (this.state.formStatus === PROCESSING &&
+                        this.state.owner) ||
+                      (this.state.formStatus === DONE && this.state.owner)) && (
+                      <Button
+                        disabled={this.state.disable}
+                        type="submit"
+                        color="info"
+                        onClick={this.submitForm}
+                      >
+                        <FontAwesomeIcon icon={faSave} /> Save knowledge data
+                      </Button>
+                    )}
+                </Row>
+                <hr className="mr-3 ml-3 divider" />
+                <FormSectionTitle title="User review" />
+
+                {this.state.reviews && (
+                  <Vote
+                    review={this.state.reviews}
+                    formStatus={this.state.formStatus}
+                    knowledgeDataId={this.state.form.id}
+                    owner={this.state.owner}
+                    setSuccessAlert={this.setSuccessAlert}
+                    setErrorAlert={this.setErrorAlert}
+                    setAlertMessage={this.setAlertMessage}
+                    scrollToTop={this.scrollToTop}
+                  />
+                )}
+                {this.state.comments && (
+                  <Comment
+                    formStatus={this.state.formStatus}
+                    knowledgeDataId={this.state.form.id}
+                    comments={this.state.comments}
+                    userList={this.state.userList}
+                    setErrorAlert={this.setErrorAlert}
+                    setSuccessAlert={this.setSuccessAlert}
+                    scrollToTop={this.scrollToTop}
+                  />
+                )}
+              </Fragment>
+            )}
           </div>
-        )}
+        </div>
       </Container>
     );
   };

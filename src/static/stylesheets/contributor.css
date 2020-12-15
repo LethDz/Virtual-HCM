@@ -119,7 +119,8 @@
 }
 
 .popover-width .popover {
-  max-width: 600px;
+  min-width: 600px !important;
+  max-width: 600px !important;
 }
 
 .w-600px {
@@ -165,4 +166,19 @@
 
 .review-minimize-button:hover {
   cursor: pointer;
+}
+
+.report-id-title {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.report-id-title:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.comment-detail {
+  white-space: pre-line;
 }
