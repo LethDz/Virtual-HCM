@@ -28,7 +28,7 @@ import {
   SelectKnowledgeData,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/report.detail.css';
-import { reportType } from 'src/modules/contributor';;
+import { reportType } from 'src/modules/contributor';
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -138,7 +138,8 @@ class ReportDetailModal extends Component {
           this.setLoading(false);
         })
         .then(() => {
-          this.props.updateReportList && this.props.updateReportList(this.props.reportList);
+          this.props.updateReportList &&
+            this.props.updateReportList(this.props.reportList);
           this.toggle();
         })
         .catch(() => {
@@ -176,140 +177,136 @@ class ReportDetailModal extends Component {
 
   render() {
     return (
-        <Modal
-          isOpen={this.props.isOpen}
-          toggle={this.toggle}
-          unmountOnClose={true}
-          size='lg'
-        >
-          <ModalHeader toggle={this.toggle}>
-            Report ID: {this.state.report.id}
-          </ModalHeader>
-          <Form>
-            <ModalBody className='report-container'>
-              <LoadingSpinner
-                loading={this.state.loading}
-                text={'Loading'}
-                type='MODAL'
+      <Modal
+        isOpen={this.props.isOpen}
+        toggle={this.toggle}
+        unmountOnClose={true}
+        size='lg'
+      >
+        <ModalHeader toggle={this.toggle}>
+          Report ID: {this.state.report.id}
+        </ModalHeader>
+        <Form>
+          <ModalBody className='report-container'>
+            <LoadingSpinner
+              loading={this.state.loading}
+              text={'Loading'}
+              type='MODAL'
+            />
+            {this.state.successAlert && (
+              <SuccessAlert
+                successAlert={this.state.successAlert}
+                text='Rejected successfully'
+                onDismiss={() => this.onDismiss('successAlert')}
               />
-              {this.state.successAlert && (
-                <SuccessAlert
-                  successAlert={this.state.successAlert}
-                  text='Rejected successfully'
-                  onDismiss={() => this.onDismiss('successAlert')}
-                />
-              )}
-              {this.state.errorAlert && (
-                <ErrorAlert
-                  errorAlert={this.state.errorAlert}
-                  errorList={this.state.errorList}
-                  onDismiss={() => this.onDismiss('errorAlert')}
-                />
-              )}
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Report type: </Col>
-                <Col className='col-9'>
+            )}
+            {this.state.errorAlert && (
+              <ErrorAlert
+                errorAlert={this.state.errorAlert}
+                errorList={this.state.errorList}
+                onDismiss={() => this.onDismiss('errorAlert')}
+              />
+            )}
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Report type: </Col>
+              <Col className='col-9'>
+                <h5>
+                  <Badge
+                    color={`${
+                      reportType[this.state.report.report_type] ===
+                      reportType[1]
+                        ? 'danger'
+                        : 'primary'
+                    }`}
+                  >
+                    {reportType[this.state.report.report_type]}
+                  </Badge>
+                </h5>
+              </Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Reporter:</Col>
+              <Col className='col-9'>{this.state.report.reporter}</Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Reporter note:</Col>
+              <Col className='col-9'>{this.state.report.reporter_note}</Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Reported Intent:</Col>
+              <Col className='col-9'>
+                {this.state.report.reported_intent && (
                   <h5>
-                    <Badge
-                      color={`${
-                        reportType[this.state.report.report_type] ===
-                        reportType[1]
-                          ? 'danger'
-                          : 'primary'
-                      }`}
-                    >
-                      {reportType[this.state.report.report_type]}
+                    <Badge color='success'>
+                      {this.state.report.reported_intent}
                     </Badge>
                   </h5>
-                </Col>
-              </Row>
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Reporter:</Col>
-                <Col className='col-9'>{this.state.report.reporter}</Col>
-              </Row>
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Reporter note:</Col>
-                <Col className='col-9'>{this.state.report.reporter_note}</Col>
-              </Row>
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Reported Intent:</Col>
-                <Col className='col-9'>
-                  {this.state.report.reported_intent && (
-                    <h5>
-                      <Badge color='success'>
-                        {this.state.report.reported_intent}
-                      </Badge>
-                    </h5>
-                  )}
-                </Col>
-              </Row>
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Report Data:</Col>
-                <Col className='col-9 text-break'>
-                  {this.state.report.report_data}
-                </Col>
-              </Row>
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Bot version date:</Col>
-                <Col className='col-9'>
-                  {this.state.report.bot_version_date}
-                </Col>
-              </Row>
-              <Row className='custom-border'>
-                <Col className='col-3 font-weight-bold'>Created date:</Col>
-                <Col className='col-9'>{this.state.report.cdate}</Col>
-              </Row>
-              {this.state.report.report_type === 1 && (
-                <div>
-                  <FormGroup className='mt-3'>
-                    <Label className='font-weight-bold'>Question: </Label>
-                    <div className='message'>{this.state.report.question}</div>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label className='font-weight-bold'>Bot answer: </Label>
-                    <div className='message'>
-                      {this.state.report.bot_answer}
-                    </div>
-                  </FormGroup>
-                </div>
-              )}
-              {this.state.reject && (
-                <FormGroup>
-                  <Label className='font-weight-bold'>Processor note: </Label>
-                  <Input
-                    name='processor_note'
-                    type='textarea'
-                    value={this.state.processor_note}
-                    onChange={this.handleInput}
-                    autoFocus
-                    placeholder='Please enter the reason why you want to reject...'
-                  />
+                )}
+              </Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Report Data:</Col>
+              <Col className='col-9 text-break'>
+                {this.state.report.report_data}
+              </Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Bot version date:</Col>
+              <Col className='col-9'>{this.state.report.bot_version_date}</Col>
+            </Row>
+            <Row className='custom-border'>
+              <Col className='col-3 font-weight-bold'>Created date:</Col>
+              <Col className='col-9'>{this.state.report.cdate}</Col>
+            </Row>
+            {this.state.report.report_type === 1 && (
+              <div>
+                <FormGroup className='mt-3'>
+                  <Label className='font-weight-bold'>Question: </Label>
+                  <div className='message'>{this.state.report.question}</div>
                 </FormGroup>
-              )}
-              <Label className='font-weight-bold mb-3'>Knowledge data: </Label>
-              <SelectKnowledgeData
-                toggleDetailModal={this.toggle}
-                report={this.state.report}
-                availableIntents={this.state.report.available_knowledge_data}
-                otherIntents={this.state.report.other_knowledge_data}
-                addToast={this.props.setToast}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color='danger'
-                disabled={
-                  this.state.loading ||
-                  (this.state.reject && this.state.processor_note.trim() === '')
-                }
-                onClick={this.rejectReport}
-              >
-                <FontAwesomeIcon icon={faBan} color='white' />
-                &nbsp;Reject
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
+                <FormGroup>
+                  <Label className='font-weight-bold'>Bot answer: </Label>
+                  <div className='message'>{this.state.report.bot_answer}</div>
+                </FormGroup>
+              </div>
+            )}
+            {this.state.reject && (
+              <FormGroup>
+                <Label className='font-weight-bold'>Processor note: </Label>
+                <Input
+                  name='processor_note'
+                  type='textarea'
+                  value={this.state.processor_note}
+                  onChange={this.handleInput}
+                  autoFocus
+                  placeholder='Please enter the reason why you want to reject...'
+                />
+              </FormGroup>
+            )}
+            <Label className='font-weight-bold mb-3'>Knowledge data: </Label>
+            <SelectKnowledgeData
+              toggleDetailModal={this.toggle}
+              report={this.state.report}
+              availableIntents={this.state.report.available_knowledge_data}
+              otherIntents={this.state.report.other_knowledge_data}
+              addToast={this.props.setToast}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color='danger'
+              disabled={
+                this.state.loading ||
+                (this.state.reject && this.state.processor_note.trim() === '')
+              }
+              onClick={this.rejectReport}
+            >
+              <FontAwesomeIcon icon={faBan} color='white' />
+              &nbsp;Reject
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     );
   }
 }
