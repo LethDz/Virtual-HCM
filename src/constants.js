@@ -42,6 +42,8 @@ export const USER_RESET_PASSWORD = '/user/reset-password';
 export const USER_CHECK_RESET_PASSWORD_SESSION =
   '/user/check-reset-password-session';
 export const KNOWLEDGE_DATA_CHANGE_STATUS = '/knowledge-data/change-status';
+export const USER_GET_NOTIFICATION = '/user/report-notifications';
+export const GET_UNSEEN_REPORT = '/dashboard/unseen-report';
 
 //report
 export const GET_ALL_PENDING_REPORT = '/report/all-pending';
@@ -143,6 +145,8 @@ export const GET_KNOWLEDGE_DATA_BY_INTENT = (intent) =>
   intent
     ? `${CONTRIBUTOR_PAGE}${KNOWLEDGE_DATA}/get/${intent}`
     : `${CONTRIBUTOR_PAGE}${KNOWLEDGE_DATA}/get/:intent`;
+
+export const NOTIFICATION_PAGE = `${CONTRIBUTOR_PAGE}/report-notifications`;
 
 // API Contributor Route Path
 export const GET_KNOWLEDGE_DATA_BY_INTENT_PARAMS = (intent) =>

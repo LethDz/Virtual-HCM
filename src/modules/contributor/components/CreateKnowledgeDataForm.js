@@ -417,7 +417,7 @@ class CreateKnowledgeDataForm extends Component {
                   onClick={this.toggleReport}
                 >
                   <FontAwesomeIcon icon={faNewspaper} />
-                    &nbsp;
+                      &nbsp; Report
                 </Button>
               </div>
             )}

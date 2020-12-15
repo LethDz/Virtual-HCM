@@ -25,6 +25,10 @@
   background-color: #dd4b39 !important;
 }
 
+.bg-light-yellow {
+  background-color: #ffc107 !important;
+}
+
 .info-box-icon {
   border-top-left-radius: 2px;
   border-top-right-radius: 0;

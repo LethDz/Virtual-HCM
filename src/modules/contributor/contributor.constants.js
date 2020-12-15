@@ -59,6 +59,12 @@ export const idOfStatusOfKD = {
   DISABLE: 3,
 };
 
+export const reportStatus = {
+  PENDING: 1,
+  PROCESSED: 2,
+  REJECTED: 3,
+};
+
 export const displayStringOfStatusOfKD = {
   1: 'Processing',
   2: 'Done',
