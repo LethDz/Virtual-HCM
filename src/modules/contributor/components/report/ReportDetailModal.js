@@ -13,28 +13,22 @@ import {
   Col,
   Badge,
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
 import axiosClient from 'src/common/axiosClient';
-import {
-  GET_PENDING_REPORT,
-  CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM,
-  REJECT_REPORT,
-  GET_KNOWLEDGE_DATA_BY_INTENT,
-} from 'src/constants';
+import { GET_PENDING_REPORT, REJECT_REPORT } from 'src/constants';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { connect } from 'react-redux';
 import {
   rejectReport,
-  approveReport,
   getAllPendingReport,
+  SelectKnowledgeData,
 } from 'src/modules/contributor';
 import 'src/static/stylesheets/report.detail.css';
-import { reportType } from 'src/modules/contributor';
+import { reportType } from 'src/modules/contributor';;
 
 class ReportDetailModal extends Component {
   _isMounted = false;
@@ -50,6 +44,7 @@ class ReportDetailModal extends Component {
       reject: false,
       knowledge_data_id: 0,
       selectedIntent: '',
+      openModal: false,
     };
   }
 
@@ -158,16 +153,6 @@ class ReportDetailModal extends Component {
     }
   };
 
-  approveReport = () => {
-    const approvalReport = this.state.report;
-    const id = this.state.knowledge_data_id;
-    const approvalDetail = {
-      report: approvalReport,
-      knowledge_data_id: id,
-    };
-    this.props.approveReport(approvalDetail);
-  };
-
   onSelectedChange = (event) => {
     const index = event.nativeEvent.target.selectedIndex;
     const id = event.nativeEvent.target[index].getAttribute('id');
@@ -182,178 +167,149 @@ class ReportDetailModal extends Component {
     !this.state.loading && this.props.toggle();
   };
 
+  setOpenModal = (status) => {
+    this._isMounted &&
+      this.setState({
+        openModal: status,
+      });
+  };
+
   render() {
     return (
-      <Modal
-        isOpen={this.props.isOpen}
-        toggle={this.toggle}
-        unmountOnClose={true}
-        size="lg"
-      >
-        <ModalHeader toggle={this.toggle}>
-          Report ID: {this.state.report.id}
-        </ModalHeader>
-        <Form>
-          <ModalBody className="report-container">
-            <LoadingSpinner
-              loading={this.state.loading}
-              text={'Loading'}
-              type="MODAL"
-            />
-            {this.state.successAlert && (
-              <SuccessAlert
-                successAlert={this.state.successAlert}
-                text="Rejecting is successfully"
-                onDismiss={() => this.onDismiss('successAlert')}
+        <Modal
+          isOpen={this.props.isOpen}
+          toggle={this.toggle}
+          unmountOnClose={true}
+          size='lg'
+        >
+          <ModalHeader toggle={this.toggle}>
+            Report ID: {this.state.report.id}
+          </ModalHeader>
+          <Form>
+            <ModalBody className='report-container'>
+              <LoadingSpinner
+                loading={this.state.loading}
+                text={'Loading'}
+                type='MODAL'
               />
-            )}
-            {this.state.errorAlert && (
-              <ErrorAlert
-                errorAlert={this.state.errorAlert}
-                errorList={this.state.errorList}
-                onDismiss={() => this.onDismiss('errorAlert')}
-              />
-            )}
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Report type: </Col>
-              <Col className="col-9">
-                <h5>
-                  <Badge
-                    color={`${
-                      reportType[this.state.report.report_type] ===
-                      reportType[1]
-                        ? 'danger'
-                        : 'primary'
-                    }`}
-                  >
-                    {reportType[this.state.report.report_type]}
-                  </Badge>
-                </h5>
-              </Col>
-            </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Reporter:</Col>
-              <Col className="col-9">{this.state.report.reporter}</Col>
-            </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Reporter note:</Col>
-              <Col className="col-9">{this.state.report.reporter_note}</Col>
-            </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Reported Intent:</Col>
-              <Col className="col-9">
-                {this.state.report.reported_intent && (
+              {this.state.successAlert && (
+                <SuccessAlert
+                  successAlert={this.state.successAlert}
+                  text='Rejected successfully'
+                  onDismiss={() => this.onDismiss('successAlert')}
+                />
+              )}
+              {this.state.errorAlert && (
+                <ErrorAlert
+                  errorAlert={this.state.errorAlert}
+                  errorList={this.state.errorList}
+                  onDismiss={() => this.onDismiss('errorAlert')}
+                />
+              )}
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Report type: </Col>
+                <Col className='col-9'>
                   <h5>
-                    <Badge color="success">
-                      {this.state.report.reported_intent}
+                    <Badge
+                      color={`${
+                        reportType[this.state.report.report_type] ===
+                        reportType[1]
+                          ? 'danger'
+                          : 'primary'
+                      }`}
+                    >
+                      {reportType[this.state.report.report_type]}
                     </Badge>
                   </h5>
-                )}
-              </Col>
-            </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Report Data:</Col>
-              <Col className="col-9 text-break">
-                {this.state.report.report_data}
-              </Col>
-            </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Bot version date:</Col>
-              <Col className="col-9">{this.state.report.bot_version_date}</Col>
-            </Row>
-            <Row className="custom-border">
-              <Col className="col-3 font-weight-bold">Created date:</Col>
-              <Col className="col-9">{this.state.report.cdate}</Col>
-            </Row>
-            {this.state.report.report_type === 1 && (
-              <div>
-                <FormGroup className="mt-3">
-                  <Label className="font-weight-bold">Question: </Label>
-                  <div className="message">{this.state.report.question}</div>
-                </FormGroup>
-                <FormGroup>
-                  <Label className="font-weight-bold">Bot answer: </Label>
-                  <div className="message">{this.state.report.bot_answer}</div>
-                </FormGroup>
-              </div>
-            )}
-            <FormGroup>
-              <Label
-                for="knowledge_data_availability"
-                className="font-weight-bold"
-              >
-                Select knowledge data:
-              </Label>
-              <Input
-                type="select"
-                name="select"
-                id="exampleSelect"
-                onChange={this.onSelectedChange.bind(this)}
-              >
-                <option value={0} id={0}>
-                  Create new knowledge data
-                </option>
-                {this.state.report.available_knowledge_data &&
-                  this.state.report.available_knowledge_data.map(
-                    (knowledge_data) => (
-                      <option
-                        id={knowledge_data.id}
-                        value={knowledge_data.intent}
-                        key={knowledge_data.id}
-                      >
-                        {knowledge_data.intent_fullname}
-                      </option>
-                    )
+                </Col>
+              </Row>
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Reporter:</Col>
+                <Col className='col-9'>{this.state.report.reporter}</Col>
+              </Row>
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Reporter note:</Col>
+                <Col className='col-9'>{this.state.report.reporter_note}</Col>
+              </Row>
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Reported Intent:</Col>
+                <Col className='col-9'>
+                  {this.state.report.reported_intent && (
+                    <h5>
+                      <Badge color='success'>
+                        {this.state.report.reported_intent}
+                      </Badge>
+                    </h5>
                   )}
-              </Input>
-            </FormGroup>
-            {this.state.reject && (
-              <FormGroup>
-                <Label className="font-weight-bold">Processor note: </Label>
-                <Input
-                  name="processor_note"
-                  type="textarea"
-                  value={this.state.processor_note}
-                  onChange={this.handleInput}
-                  autoFocus
-                  placeholder="Please input the reason why you want to reject..."
-                />
-              </FormGroup>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Link
-              to={
-                this.state.knowledge_data_id === 0
-                  ? CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM
-                  : GET_KNOWLEDGE_DATA_BY_INTENT(this.state.selectedIntent)
-              }
-              className="link-no-underline"
-            >
+                </Col>
+              </Row>
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Report Data:</Col>
+                <Col className='col-9 text-break'>
+                  {this.state.report.report_data}
+                </Col>
+              </Row>
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Bot version date:</Col>
+                <Col className='col-9'>
+                  {this.state.report.bot_version_date}
+                </Col>
+              </Row>
+              <Row className='custom-border'>
+                <Col className='col-3 font-weight-bold'>Created date:</Col>
+                <Col className='col-9'>{this.state.report.cdate}</Col>
+              </Row>
+              {this.state.report.report_type === 1 && (
+                <div>
+                  <FormGroup className='mt-3'>
+                    <Label className='font-weight-bold'>Question: </Label>
+                    <div className='message'>{this.state.report.question}</div>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label className='font-weight-bold'>Bot answer: </Label>
+                    <div className='message'>
+                      {this.state.report.bot_answer}
+                    </div>
+                  </FormGroup>
+                </div>
+              )}
+              {this.state.reject && (
+                <FormGroup>
+                  <Label className='font-weight-bold'>Processor note: </Label>
+                  <Input
+                    name='processor_note'
+                    type='textarea'
+                    value={this.state.processor_note}
+                    onChange={this.handleInput}
+                    autoFocus
+                    placeholder='Please enter the reason why you want to reject...'
+                  />
+                </FormGroup>
+              )}
+              <Label className='font-weight-bold mb-3'>Knowledge data: </Label>
+              <SelectKnowledgeData
+                toggleDetailModal={this.toggle}
+                report={this.state.report}
+                availableIntents={this.state.report.available_knowledge_data}
+                otherIntents={this.state.report.other_knowledge_data}
+                addToast={this.props.setToast}
+              />
+            </ModalBody>
+            <ModalFooter>
               <Button
-                color="primary"
-                type="submit"
-                disabled={this.state.loading}
-                onClick={this.approveReport}
+                color='danger'
+                disabled={
+                  this.state.loading ||
+                  (this.state.reject && this.state.processor_note.trim() === '')
+                }
+                onClick={this.rejectReport}
               >
-                <FontAwesomeIcon icon={faCheck} color="white" />
-                &nbsp;To Knowledge Data Process
+                <FontAwesomeIcon icon={faBan} color='white' />
+                &nbsp;Reject
               </Button>
-            </Link>
-            <Button
-              color="danger"
-              disabled={
-                this.state.loading ||
-                (this.state.reject && this.state.processor_note.trim() === '')
-              }
-              onClick={this.rejectReport}
-            >
-              <FontAwesomeIcon icon={faBan} color="white" />
-              &nbsp;Reject
-            </Button>
-          </ModalFooter>
-        </Form>
-      </Modal>
+            </ModalFooter>
+          </Form>
+        </Modal>
     );
   }
 }
@@ -364,7 +320,5 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   rejectReport: (reportDetail) => dispatch(rejectReport(reportDetail)),
-  approveReport: (approvalReportDetail) =>
-    dispatch(approveReport(approvalReportDetail)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ReportDetailModal);

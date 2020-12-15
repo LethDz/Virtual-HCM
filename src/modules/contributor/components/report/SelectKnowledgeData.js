@@ -1,32 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  Col,
-} from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import {
-  ReportList,
-  ReportAcceptedList,
-  ReportRejectedList,
+  AvailableKnowledgeDataList,
+  OtherKnowledgeDataList,
 } from 'src/modules/contributor';
-import { useToasts } from 'react-toast-notifications';
 
-const Report = () => {
+const SelectKnowledgeData = (props) => {
   const [activeTab, setActiveTab] = useState('0');
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorList, setErrorList] = useState([]);
   const conRef = useRef('');
   const mounted = useRef(false);
-  const { addToast } = useToasts();
 
   const toggle = (tab) => {
     mounted.current && activeTab !== tab && setActiveTab(tab);
+  };
+
+  const toggleDetail = () => {
+    props.toggleDetailModal();
+  };
+
+  const addToast = () => {
+    props.addToast();
   };
 
   const toggleRef = useRef(toggle);
@@ -41,11 +38,7 @@ const Report = () => {
   }, []);
 
   return (
-    <div
-      id='cl-container'
-      className='cl-container container min-vh-100'
-      ref={conRef}
-    >
+    <div className='min-vh-50' ref={conRef}>
       {errorAlert && (
         <ErrorAlert
           errorAlert={errorAlert}
@@ -53,11 +46,6 @@ const Report = () => {
           onDismiss={() => setErrorAlert(false)}
         />
       )}
-      <Row>
-        <Col className='justify-content-center d-flex'>
-          <h5 className='mt-2 mb-2'>Report List</h5>
-        </Col>
-      </Row>
       <Nav tabs>
         <NavItem>
           <NavLink
@@ -67,7 +55,7 @@ const Report = () => {
             }}
             role='button'
           >
-            Pending
+            Available knowledge data:
           </NavLink>
         </NavItem>
         <NavItem>
@@ -78,18 +66,7 @@ const Report = () => {
             }}
             role='button'
           >
-            Accepted
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '3' })}
-            onClick={() => {
-              toggle('3');
-            }}
-            role='button'
-          >
-            Rejected
+            Other knowledge data
           </NavLink>
         </NavItem>
       </Nav>
@@ -97,11 +74,12 @@ const Report = () => {
         <TabPane tabId='1'>
           <div className='mt-2'>
             {activeTab === '1' && (
-              <ReportList
-                addToast={addToast}
+              <AvailableKnowledgeDataList
                 setErrorAlert={setErrorAlert}
                 setErrorList={setErrorList}
                 conRef={conRef}
+                intents={props.availableIntents}
+                report={props.report}
               />
             )}
           </div>
@@ -109,21 +87,14 @@ const Report = () => {
         <TabPane tabId='2'>
           <div className='mt-2'>
             {activeTab === '2' && (
-              <ReportAcceptedList
+              <OtherKnowledgeDataList
                 setErrorAlert={setErrorAlert}
                 setErrorList={setErrorList}
                 conRef={conRef}
-              />
-            )}
-          </div>
-        </TabPane>
-        <TabPane tabId='3'>
-          <div className='mt-2'>
-            {activeTab === '3' && (
-              <ReportRejectedList
-                setErrorAlert={setErrorAlert}
-                setErrorList={setErrorList}
-                conRef={conRef}
+                intents={props.otherIntents}
+                report={props.report}
+                toggleDetailModal={toggleDetail}
+                addToast={addToast}
               />
             )}
           </div>
@@ -133,4 +104,4 @@ const Report = () => {
   );
 };
 
-export default Report;
+export default SelectKnowledgeData;

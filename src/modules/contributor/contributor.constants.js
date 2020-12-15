@@ -8,6 +8,7 @@ import {
   ReportType,
   ReportedIntent,
   ReferenceLink,
+  ReportUserLink,
 } from 'src/modules/contributor';
 import { UserLink } from 'src/common/UserLink';
 
@@ -388,15 +389,6 @@ export const columnPendingReportFieldDef = [
     cellRenderer: 'reportType',
   },
   {
-    field: 'reporter',
-    headerName: 'Reporter',
-    width: 25,
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
     field: 'reported_intent',
     headerName: 'Reported Intent',
     width: 75,
@@ -412,6 +404,15 @@ export const columnPendingReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 25,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'cdate',
@@ -452,24 +453,6 @@ export const columnAcceptedReportFieldDef = [
     cellRenderer: 'reportType',
   },
   {
-    field: 'reporter',
-    headerName: 'Reporter',
-    width: 25,
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
-    field: 'processor',
-    headerName: 'Processor',
-    width: 25,
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
     field: 'reported_intent',
     headerName: 'Reported Intent',
     width: 75,
@@ -494,6 +477,24 @@ export const columnAcceptedReportFieldDef = [
     filter: true,
     resizable: true,
     cellRenderer: 'reportedIntent',
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 25,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
+  },
+  {
+    field: 'processor',
+    headerName: 'Processor',
+    width: 25,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'mdate',
@@ -526,24 +527,6 @@ export const columnRejectedReportFieldDef = [
     cellRenderer: 'reportType',
   },
   {
-    field: 'reporter',
-    headerName: 'Reporter',
-    width: 25,
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
-    field: 'processor',
-    headerName: 'Processor',
-    width: 25,
-    sortable: true,
-    filter: true,
-    resizable: true,
-    cellRenderer: 'userLink',
-  },
-  {
     field: 'reported_intent',
     headerName: 'Reported Intent',
     width: 75,
@@ -567,6 +550,24 @@ export const columnRejectedReportFieldDef = [
     sortable: true,
     filter: true,
     resizable: true,
+  },
+  {
+    field: 'reporter',
+    headerName: 'Reporter',
+    width: 25,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
+  },
+  {
+    field: 'processor',
+    headerName: 'Processor',
+    width: 25,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
   },
   {
     field: 'mdate',
@@ -692,4 +693,71 @@ export const options = {
     display: true,
     position: 'bottom',
   },
+};
+
+export const availableKnowledgeDataDef = [
+  {
+    field: 'id',
+    headerName: 'ID',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'intent',
+    headerName: 'Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'intent_fullname',
+    headerName: 'Intent Fullname',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+];
+
+export const otherKnowledgeDataDef = [
+  {
+    field: 'id',
+    headerName: 'ID',
+    width: 50,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'intent',
+    headerName: 'Intent',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'intent_fullname',
+    headerName: 'Intent Fullname',
+    width: 100,
+    sortable: true,
+    filter: true,
+    resizable: true,
+  },
+  {
+    field: 'edit_username',
+    headerName: 'Edited by',
+    width: 60,
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellRenderer: 'userLink',
+  },
+];
+
+export const frameworkForOtherKnowledgeData = {
+  userLink: ReportUserLink,
 };
