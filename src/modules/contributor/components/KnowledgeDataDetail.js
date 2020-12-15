@@ -145,6 +145,16 @@ class KnowledgeDataDetail extends Component {
       synonym.push({ word: synonyms.word, synonyms: synonymIds });
     });
     form.synonyms = synonym;
+
+    let references = [];
+    form.documentReference.forEach((reference) => {
+      references.push({
+        extra_info: reference.extra_info,
+        id: reference.id,
+        page: reference.page,
+      });
+    });
+    form.documentReference = references;
     this._isMounted && this.setState({ form: form });
   };
 

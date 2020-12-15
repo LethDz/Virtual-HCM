@@ -16,6 +16,9 @@ import {
   DONE,
   DISABLE,
   ReportDetailModal,
+  ReportDetailModalAccepted,
+  ReportDetailModalRejected,
+  reportStatus,
 } from 'src/modules/contributor/index';
 import { handleInputChange } from 'src/common/handleInputChange';
 import { getUserData } from 'src/common/authorizationChecking';
@@ -64,6 +67,7 @@ export default class Comment extends Component {
       formStatus: props.formStatus,
       modalReportDetail: false,
       selectedId: '',
+      reportStatus: '',
     };
     this.commentRef = React.createRef();
     this.message = ['Commenting', 'Refreshing', 'Editing', 'Deleting'];
@@ -306,22 +310,48 @@ export default class Comment extends Component {
       this.setState({ modalReportDetail: !this.state.modalReportDetail });
   };
 
-  setIdThenToggle = (id) => {
-    this._isMounted && this.setState({ selectedId: id });
+  setIdThenToggle = (id, status) => {
+    this._isMounted && this.setState({ selectedId: id, reportStatus: status });
     this.toggleReportDetail();
   };
+
+  returnReportModal = () => {
+    switch (this.state.reportStatus) {
+      case reportStatus.PENDING:
+        return (
+          <ReportDetailModal
+            isOpen={this.state.modalReportDetail}
+            id={this.state.selectedId}
+            reportType={this.state.reportType}
+            toggle={this.toggleReportDetail}
+            updateReportList={this.setReportList}
+          />
+        );
+      case reportStatus.PROCESSED:
+        return (
+          <ReportDetailModalAccepted
+            isOpen={this.state.modalReportDetail}
+            id={this.state.selectedId}
+            toggle={this.toggleReportDetail}
+          />
+        );
+      case reportStatus.REJECTED:
+        return (
+          <ReportDetailModalRejected
+            isOpen={this.state.modalReportDetail}
+            id={this.state.selectedId}
+            toggle={this.toggleReportDetail}
+          />
+        );
+      default:
+        return (<div></div>);
+    }
+  }
 
   render() {
     return (
       <Row xs="1">
-        {this.state.modalReportDetail && (
-          <ReportDetailModal
-            isOpen={this.state.modalReportDetail}
-            id={this.state.selectedId}
-            toggle={this.toggleReportDetail}
-            updateReportList={this.setReportList}
-          />
-        )}
+        {this.returnReportModal()}
         <LoadingSpinner
           loading={this.state.loading}
           text={this.state.spinnerMessage}
@@ -389,7 +419,10 @@ export default class Comment extends Component {
                                 <span
                                   className="report-id-title"
                                   onClick={() =>
-                                    this.setIdThenToggle(comment.report.id)
+                                    this.setIdThenToggle(
+                                      comment.report.id,
+                                      comment.report.status
+                                    )
                                   }
                                 >
                                   Report id: {comment.report.id}
@@ -400,7 +433,7 @@ export default class Comment extends Component {
                           </Row>
                           <Row>
                             <Col>
-                              <span>
+                              <span className="comment-detail">
                                 {comment.reply_to && (
                                   <span>
                                     #{this.linkIdToIndex(comment.reply_to)}
