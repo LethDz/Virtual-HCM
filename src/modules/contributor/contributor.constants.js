@@ -65,10 +65,10 @@ export const reportStatus = {
 };
 
 export const displayStringOfStatusOfKD = {
-  1: PROCESSING,
-  2: DONE,
-  0: AVAILABLE,
-  3: DISABLE,
+  1: 'Processing',
+  2: 'Done',
+  0: 'Available',
+  3: 'Disable',
 };
 
 export const statusOfKDColor = {

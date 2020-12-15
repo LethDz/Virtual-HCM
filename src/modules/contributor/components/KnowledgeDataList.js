@@ -37,6 +37,7 @@ class KnowledgeDataList extends Component {
       loading: false,
       errorAlert: false,
       intent: '',
+      dataApprovalList: [],
     };
     this.titleRef = React.createRef();
   }
@@ -81,18 +82,26 @@ class KnowledgeDataList extends Component {
       });
   };
 
+  setDataApprovalList = (list) => {
+    this._isMounted &&
+      this.setState({
+        dataApprovalList: list,
+      });
+  };
+
   setData = () => {
     this.setLoading(true);
     axiosClient
       .get(KNOWLEDGE_DATA + ALL)
-      .then((response) => {
+      .then(async (response) => {
         if (response.data.status) {
-          this.props.fetchAllDataApproval(
+          await this.props.fetchAllDataApproval(
             response.data.result_data.knowledge_datas
           );
-          this.props.fetchKnowledgeDataSetting(
+          await this.props.fetchKnowledgeDataSetting(
             response.data.result_data.review_settings
           );
+          this.setDataApprovalList(this.props.dataApprovalList);
         } else {
           this.setErrorList(response.data.messages);
           this.setErrorAlert(true);
@@ -202,7 +211,7 @@ class KnowledgeDataList extends Component {
         >
           <AgGridReact
             onFirstDataRendered={this.onFirstDataRendered}
-            rowData={this.props.dataApprovalList}
+            rowData={this.state.dataApprovalList}
             rowSelection="single"
             animateRows={true}
             onGridReady={this.onGridReady}

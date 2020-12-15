@@ -18,6 +18,7 @@ import ReportPage from 'src/pages/contributor/report/ReportPage';
 import UserDetailPage from 'src/pages/user/UserDetailPage';
 import ForgotPasswordPage from 'src/pages/user/ForgotPasswordPage';
 import ResetPasswordPage from 'src/pages/user/ResetPasswordPage';
+import ReportNotificationPage from 'src/pages/report-notification/ReportNotificationPage';
 
 export {
   HomePage,
@@ -40,4 +41,5 @@ export {
   UserDetailPage,
   ForgotPasswordPage,
   ResetPasswordPage,
+  ReportNotificationPage,
 };

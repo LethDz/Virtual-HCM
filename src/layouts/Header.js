@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faKey, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { signOut } from 'src/common/authorizationChecking';
 import { ChangePassword } from 'src/modules/user';
+import { NotificationButton } from 'src/modules/report-notification';
 
 const Header = () => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -20,6 +21,7 @@ const Header = () => {
     <Fragment>
       <Navbar className="d-flex justify-content-end navbar" expand="md">
         <Nav className="ml-auto" navbar>
+          <NotificationButton />
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggle className="navbar-font" nav caret>
               <FontAwesomeIcon icon={faCog} /> Setting
