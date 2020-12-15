@@ -47,6 +47,28 @@
   padding: 0.3rem 1rem !important;
 }
 
+.button-notification {
+  background-color: #3c8dbc !important;
+  border: none !important;
+}
+
+.button-notification:hover .svg-inline--fa {
+  color: #d0e0ea;
+}
+
+.button-notification:focus {
+  box-shadow: none !important;
+}
+
+.notification .number-of-unseen {
+  position: absolute;
+  top: 7px;
+  right: 128px;
+  padding: 0px 5px;
+  border-radius: 49%;
+  font-size: 11px;
+}
+
 .navbar-font {
   color: white;
 }

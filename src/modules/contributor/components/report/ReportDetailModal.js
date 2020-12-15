@@ -134,7 +134,7 @@ class ReportDetailModal extends Component {
         .then((response) => {
           if (response.data.status) {
             this.props.rejectReport(report_id);
-            this.props.updateReportList([]);
+            this.props.updateReportList && this.props.updateReportList([]);
             this.setSuccessAlert(true);
           } else {
             this.setErrorAlert(true);
@@ -143,7 +143,7 @@ class ReportDetailModal extends Component {
           this.setLoading(false);
         })
         .then(() => {
-          this.props.updateReportList(this.props.reportList);
+          this.props.updateReportList && this.props.updateReportList(this.props.reportList);
           this.toggle();
         })
         .catch(() => {

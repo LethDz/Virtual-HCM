@@ -1,0 +1,30 @@
+.button-border-git {
+  border-color: #d9dadc !important;
+}
+
+.list-group-default {
+  background-color: white !important;
+}
+
+.list-group-default:hover {
+  background-color: aliceblue !important;
+  box-shadow: 2px 0 0 #0366d6 inset;
+}
+
+.list-group-seen {
+  background-color: #f6f8fa !important;
+}
+
+.list-group-seen:hover {
+  background-color: aliceblue !important;
+  box-shadow: 2px 0 0 #0366d6 inset;
+}
+
+.blockquote-footer-inline {
+  display: inline-block;
+  color: #6c757d;
+}
+
+.blockquote-footer-inline::before {
+  content: '\2014\00A0';
+}

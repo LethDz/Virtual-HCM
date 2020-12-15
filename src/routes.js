@@ -21,6 +21,7 @@ import {
   UserDetailPage,
   ForgotPasswordPage,
   ResetPasswordPage,
+  ReportNotificationPage,
 } from 'src/pages';
 import {
   HOME_PAGE,
@@ -43,6 +44,7 @@ import {
   USER_DETAIL_PAGE,
   FORGOT_PASSWORD_PAGE,
   RESET_PASSWORD_PAGE,
+  NOTIFICATION_PAGE,
 } from 'src/constants';
 import ErrorBoundaryRoute from 'src/common/ErrorBoundaryRoute';
 import PrivateRouteAdmin from 'src/common/PrivateRouteAdmin';
@@ -143,6 +145,11 @@ const Routes = () => (
         exact
         path={USER_DETAIL_PAGE()}
         component={UserDetailPage}
+      />
+      <PrivateRouteContributor
+        exact
+        path={NOTIFICATION_PAGE}
+        component={ReportNotificationPage}
       />
     </Switch>
   </Fragment>
