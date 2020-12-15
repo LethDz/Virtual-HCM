@@ -248,6 +248,11 @@ class ManageTrainingProcess extends Component {
       ));
   };
 
+  onABC = () => {
+    // Do whatever you want 
+    // When press the button on the Control Panel this function will do.
+  }
+
   render() {
     return (
       <Container className="cl-container">
@@ -313,6 +318,7 @@ class ManageTrainingProcess extends Component {
               remoteAction={this.remoteAction}
               selectTrainableData={this.selectTrainableData}
               setSettingToDefault={this.setSettingToDefault}
+              onABC={this.onABC}
             />
           </Col>
         </Row>

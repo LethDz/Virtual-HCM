@@ -38,7 +38,9 @@ const ControlPanel = (props) => {
     props.setSettingToDefault();
   };
 
-  const onABC = () => {};
+  const onABC = () => {
+    props.onABC();
+  };
 
   return (
     <Fragment>
@@ -210,17 +212,19 @@ const ControlPanel = (props) => {
               </Button>
             </ButtonGroup>
           </Col>
+        </FormGroup>
+        <FormGroup row>
           <Col xs="auto" className="pr-0">
-            <Button size="sm" color="primary" onClick={onABC}>
-              <FontAwesomeIcon icon={faUndoAlt} />
-              &nbsp; ABC button
-            </Button>
-          </Col>
-          <Col xs="auto" className="pr-0">
-            <Button size="sm" color="secondary" onClick={onDefault}>
-              <FontAwesomeIcon icon={faUndoAlt} />
-              &nbsp; Reset to default
-            </Button>
+            <ButtonGroup>
+              <Button size="sm" color="primary" onClick={onABC}>
+                <FontAwesomeIcon icon={faUndoAlt} />
+                &nbsp; ABC button
+              </Button>
+              <Button size="sm" color="secondary" onClick={onDefault}>
+                <FontAwesomeIcon icon={faUndoAlt} />
+                &nbsp; Reset to default
+              </Button>
+            </ButtonGroup>
           </Col>
         </FormGroup>
       </Form>
