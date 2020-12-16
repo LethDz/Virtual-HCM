@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 import 'src/static/stylesheets/training.process.css';
-import Terminal from 'terminal-in-react';
+import Terminal from 'src/common/Terminal';
 import {
   eventEnterSimulator,
   ControlPanel,
@@ -169,7 +169,7 @@ class ManageTrainingProcess extends Component {
       `Train data: ${!this.state.data ? 'None' : this.state.data.filename}`
     );
     terminal(`Classifier type: ${classifierTypes[this.state.type]}`);
-    if (this.state.type === '1' || this.state.type === '2'){
+    if (this.state.type === '1' || this.state.type === '2') {
       terminal(`Max senquence length: ${this.state.sentence_length}`);
       terminal(`Batch size: ${this.state.batch}`);
       terminal(`Number of epoches: ${this.state.epoch}`);
@@ -249,9 +249,9 @@ class ManageTrainingProcess extends Component {
   };
 
   onABC = () => {
-    // Do whatever you want 
+    // Do whatever you want
     // When press the button on the Control Panel this function will do.
-  }
+  };
 
   render() {
     return (
