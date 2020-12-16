@@ -55,7 +55,7 @@ const SelectKnowledgeData = (props) => {
             }}
             role='button'
           >
-            Available knowledge data:
+            Available knowledge data
           </NavLink>
         </NavItem>
         <NavItem>
