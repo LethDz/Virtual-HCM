@@ -101,8 +101,8 @@ class ChatHistoryDetailModal extends Component {
             <CardBody className='chat-container'>
               <ul className='chat-list'>
                 {this.state.chatLog &&
-                  this.state.chatLog.map((chat) => (
-                    <li className={chat.from === 1 ? "out" : "in"}>
+                  this.state.chatLog.map((chat, index) => (
+                    <li className={chat.from === 1 ? "out" : "in"} key={`chat-history-${index}`}>
                       <div className="chat-body">
                         <span className="time_date">{chat.time}</span>
                         <div className="chat-message">
