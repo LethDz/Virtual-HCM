@@ -5,3 +5,78 @@ it('renders login page', () => {
   const { container } = render(LoginPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders login page', () => {
+  const { container } = render(LoginPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

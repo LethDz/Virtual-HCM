@@ -5,3 +5,68 @@ it('renders contributor page', () => {
   const { container } = render(ContributorPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor page', () => {
+  const { container } = render(ContributorPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

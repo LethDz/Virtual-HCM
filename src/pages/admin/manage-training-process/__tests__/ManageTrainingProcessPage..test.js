@@ -5,3 +5,68 @@ it('renders manage training process page', () => {
   const { container } = render(ManageTrainingProcessPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders manage training process page', () => {
+  const { container } = render(ManageTrainingProcessPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

@@ -5,3 +5,68 @@ it('renders train data page', () => {
   const { container } = render(TrainDataPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders train data page', () => {
+  const { container } = render(TrainDataPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

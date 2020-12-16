@@ -5,3 +5,79 @@ it('renders reference list page', () => {
   const { container } = render(ReferenceListPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders reference list page', () => {
+  const { container } = render(ReferenceListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+

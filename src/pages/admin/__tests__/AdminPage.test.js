@@ -5,3 +5,73 @@ it('renders admin page', () => {
   const { container } = render(AdminPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+
+it('renders admin page', () => {
+  const { container } = render(AdminPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

@@ -89,7 +89,7 @@ class ChatHistoryDetailModal extends Component {
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='lg'>
         <ModalHeader toggle={this.props.toggle}>Chat Message</ModalHeader>
         <ModalBody>
-          <LoadingSpinner loading={this.state.loading} text={'Loading'} />
+          <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
           {this.state.errorAlert && (
             <ErrorAlert
               errorAlert={this.state.errorAlert}

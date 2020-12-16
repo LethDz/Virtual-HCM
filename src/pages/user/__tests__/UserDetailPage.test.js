@@ -5,3 +5,73 @@ it('renders user detail page', () => {
   const { container } = render(UserDetailPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders user detail page', () => {
+  const { container } = render(UserDetailPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

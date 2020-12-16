@@ -5,3 +5,73 @@ it('renders home page', () => {
   const { container } = render(HomePage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders home page', () => {
+  const { container } = render(HomePage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

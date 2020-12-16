@@ -5,3 +5,68 @@ it('renders knowledge data list page', () => {
   const { container } = render(KnowledgeDataListPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders knowledge data list page', () => {
+  const { container } = render(KnowledgeDataListPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});

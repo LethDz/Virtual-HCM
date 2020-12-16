@@ -5,3 +5,58 @@ it('renders contributor edit page', () => {
   const { container } = render(ContributorEditPage());
   expect(container).toMatchInlineSnapshot(`<div />`);
 });
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
+
+it('renders contributor edit page', () => {
+  const { container } = render(ContributorEditPage());
+  expect(container).toMatchInlineSnapshot(`<div />`);
+});
