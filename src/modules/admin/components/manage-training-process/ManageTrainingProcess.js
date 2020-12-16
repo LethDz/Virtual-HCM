@@ -16,6 +16,7 @@ import {
 import { connect } from 'react-redux';
 import { getStatusOfChatSocket } from 'src/modules/chat';
 import { WEB_SOCKET_TRAINING } from 'src/constants';
+import { regexETA } from 'src/constants';
 
 class ManageTrainingProcess extends Component {
   constructor() {
@@ -32,11 +33,13 @@ class ManageTrainingProcess extends Component {
     };
     this.trainSocket = null;
     this.current_state = null;
+    this.last_row = null;
     this.commands = {
       CONNECT: 'connect',
       START: 'start',
       STOP: 'stop',
       CHECK_STATUS: 'check_status',
+      SEND_TURN_OFF_BOT_SIGNAL: 'turn_off_bot'
     };
   }
 
@@ -98,11 +101,16 @@ class ManageTrainingProcess extends Component {
     //   await terminal('Training process [=>>>>] : ETA llul ');
     //   await runCommand('clearOneLine');
     // }, 1000);
-    trainSocket.onmessage = function (e) {
+    trainSocket.onmessage = (e) => {
       let received = JSON.parse(e.data);
       if (received.type) {
         switch (received.type) {
           case 'message':
+            if (this.last_row && this.last_row.match(regexETA) && received.data.match(regexETA)) {
+              runCommand('clearOneLine');
+            }
+            this.last_row = received.data;
+            console.log(received.data);
             terminal(received.data);
             break;
           case 'running_status':
@@ -140,6 +148,10 @@ class ManageTrainingProcess extends Component {
           case 'start_failed':
             let server_message = received.data;
             terminal(server_message);
+            break;
+          case 'turn_off_status':
+            let turn_of_status_message = received.data;
+            terminal(turn_of_status_message);
             break;
           default:
             terminal('[Websocket] Received data is unknown');
@@ -252,10 +264,13 @@ class ManageTrainingProcess extends Component {
       ));
   };
 
-  onABC = () => {
-    // Do whatever you want
-    // When press the button on the Control Panel this function will do.
-  };
+  sendTurnOffBotSignal = () => {
+    this.trainSocket.send(
+      JSON.stringify({
+        command: this.commands.SEND_TURN_OFF_BOT_SIGNAL,
+      })
+    );
+  }
 
   render() {
     return (
@@ -326,7 +341,7 @@ class ManageTrainingProcess extends Component {
               remoteAction={this.remoteAction}
               selectTrainableData={this.selectTrainableData}
               setSettingToDefault={this.setSettingToDefault}
-              onABC={this.onABC}
+              sendTurnOffBotSignal={this.sendTurnOffBotSignal}
             />
           </Col>
         </Row>
