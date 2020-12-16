@@ -86,7 +86,7 @@ class ManageTrainingProcess extends Component {
     return this.trainSocket && this.trainSocket.readyState === WebSocket.OPEN;
   };
 
-  create_websocket_connection = (terminal) => {
+  create_websocket_connection = (terminal, runCommand) => {
     let _self = this;
     let trainSocket = this.props.trainSocket
       ? this.props.trainSocket
@@ -94,6 +94,10 @@ class ManageTrainingProcess extends Component {
     trainSocket.onopen = function (e) {
       terminal('[open] Connected to training service');
     };
+    // setInterval(async () => {
+    //   await terminal('Training process [=>>>>] : ETA llul ');
+    //   await runCommand('clearOneLine');
+    // }, 1000);
     trainSocket.onmessage = function (e) {
       let received = JSON.parse(e.data);
       if (received.type) {
@@ -281,7 +285,10 @@ class ManageTrainingProcess extends Component {
               commands={{
                 connect: (arg, print, runCommand) => {
                   if (this.props.trainSocket && !this.trainSocket) {
-                    this.trainSocket = this.create_websocket_connection(print);
+                    this.trainSocket = this.create_websocket_connection(
+                      print,
+                      runCommand
+                    );
                     print('Reconnected to service !!!');
                   } else {
                     if (this.connected()) {
@@ -289,7 +296,8 @@ class ManageTrainingProcess extends Component {
                     } else {
                       this.current_state = this.commands.CONNECT;
                       this.trainSocket = this.create_websocket_connection(
-                        print
+                        print,
+                        runCommand
                       );
                     }
                   }

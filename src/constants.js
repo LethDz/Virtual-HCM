@@ -161,3 +161,6 @@ export const CSRF_TOKEN = 'csrftoken';
 
 // General Error Message
 export const generalError = 'An error has occured';
+
+// Regex detect ETA string
+export const regexETA = /\b(\w*ETA\w*)\b/g;
