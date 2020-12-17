@@ -115,29 +115,25 @@ class StatusBadge extends Component {
               Select status
             </option>
             {Object.keys(idOfStatusOfKD).map((status, index) => {
-              if (idOfStatusOfKD[status] === idOfStatusOfKD['DONE']) {
-                return <Fragment key={index}></Fragment>;
-              } else {
-                return (
-                  <option
-                    value={idOfStatusOfKD[status]}
-                    key={index}
-                    disabled={idOfStatusOfKD[status] === idOfStatusOfKD['DONE']}
-                    style={{
-                      backgroundColor:
-                        idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
-                          ? 'whitesmoke'
-                          : 'white',
-                      color:
-                        idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
-                          ? 'gray'
-                          : 'black',
-                    }}
-                  >
-                    {statusOfKD[status]}
-                  </option>
-                );
-              }
+              return (
+                <option
+                  value={idOfStatusOfKD[status]}
+                  key={index}
+                  disabled={idOfStatusOfKD[status] === idOfStatusOfKD['DONE']}
+                  style={{
+                    backgroundColor:
+                      idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
+                        ? 'whitesmoke'
+                        : 'white',
+                    color:
+                      idOfStatusOfKD[status] === idOfStatusOfKD['DONE']
+                        ? 'gray'
+                        : 'black',
+                  }}
+                >
+                  {statusOfKD[status]}
+                </option>
+              );
             })}
           </Input>
         )}
