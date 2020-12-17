@@ -238,6 +238,8 @@ class TrainDataList extends Component {
             frameworkComponents={frameworkComponentsData}
             pagination={true}
             paginationAutoPageSize={true}
+            immutableData={true}
+            getRowNodeId={(data) => data.id}
           ></AgGridReact>
         </div>
       </Fragment>
