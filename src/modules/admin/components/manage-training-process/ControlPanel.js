@@ -1,4 +1,5 @@
 import {
+  faExclamationTriangle,
   faFileCode,
   faPlayCircle,
   faStopCircle,
@@ -39,7 +40,7 @@ const ControlPanel = (props) => {
   };
 
   const onABC = () => {
-    props.onABC();
+    props.sendTurnOffBotSignal();
   };
 
   return (
@@ -217,8 +218,8 @@ const ControlPanel = (props) => {
           <Col xs="auto" className="pr-0">
             <ButtonGroup>
               <Button size="sm" color="primary" onClick={onABC}>
-                <FontAwesomeIcon icon={faUndoAlt} />
-                &nbsp; ABC button
+                <FontAwesomeIcon icon={faExclamationTriangle} />
+                &nbsp; Stop chatbot next startup
               </Button>
               <Button size="sm" color="secondary" onClick={onDefault}>
                 <FontAwesomeIcon icon={faUndoAlt} />

@@ -23,7 +23,6 @@ import { Base, ContainerWrapper, Note } from './styled-elements';
 import Bar from '../Bar';
 import Content from '../Content/index';
 import Tabs from '../Tabs/index';
-import { regexETA } from 'src/constants';
 
 function compLogic(comp) {
   switch (comp) {
@@ -548,14 +547,8 @@ class Terminal extends Component {
       summary[summary.length - 2] &&
       summary[summary.length - 1]
     ) {
-      const strBeforeLast = summary[summary.length - 2];
-      const strLast = summary[summary.length - 1];
-      if (strBeforeLast.match(regexETA) && strLast.match(regexETA)) {
-        const arrayBefore = summary.slice(0, summary.length - 2);
-        const arrayAfter = summary.slice(summary.length - 1, summary.length);
-        const newArray = arrayBefore.concat(arrayAfter);
-        instance.setState({ summary: newArray });
-      }
+      const newArray = summary.slice(0, summary.length - 1);
+      instance.setState({ summary: newArray });
     }
   };
 
