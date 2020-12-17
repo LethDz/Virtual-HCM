@@ -342,7 +342,7 @@ class KnowledgeDataDetail extends Component {
   };
 
   scrollToTop = () => {
-    this.titleRef.current.scrollIntoView({
+    this._isMounted && this.titleRef.current.scrollIntoView({
       behavior: 'smooth',
       block: 'end',
     });

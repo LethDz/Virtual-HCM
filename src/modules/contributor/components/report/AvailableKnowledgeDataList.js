@@ -126,7 +126,7 @@ class AvailableKnowledgeDataList extends Component {
               to={CONTRIBUTOR_PAGE_CREATE_KNOWLEDGE_DATA_FORM}
               className='link-no-underline'
             >
-              <Button color='primary'>
+              <Button color='primary' onClick={this.approveReport}>
                 <FontAwesomeIcon icon={faPlus} color='white' />
                 &nbsp; Create
               </Button>

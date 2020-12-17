@@ -89,6 +89,10 @@ class ReportModal extends Component {
               <Label className="font-weight-bold">Bot answer: </Label>
               <div className="message">{report.bot_answer}</div>
             </FormGroup>
+            <FormGroup className="custom-border">
+              <Label className="font-weight-bold">Reporter's note: </Label>
+              <div className="message">{report.reporter_note}</div>
+            </FormGroup>
             <Row>
               <Col className="col-3 font-weight-bold">Reporter Data:</Col>
               <Col className="col-9 text-break">{report.report_data}</Col>
