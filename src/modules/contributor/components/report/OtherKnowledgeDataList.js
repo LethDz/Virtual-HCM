@@ -3,12 +3,12 @@ import { Button, Col, Row } from 'reactstrap';
 import {
   otherKnowledgeDataDef,
   frameworkForOtherKnowledgeData,
+  ReportConfirmModal,
 } from 'src/modules/contributor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
 import { AgGridReact } from 'ag-grid-react';
-import ReportConfirmModal from './ReportConfirmModal';
 
 class OtherKnowledgeDataList extends Component {
   _isMounted = false;
