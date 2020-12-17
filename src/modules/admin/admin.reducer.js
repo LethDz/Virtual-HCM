@@ -128,7 +128,7 @@ export const adminReducer = (state = initialState, action) => {
     case CHANGE_TRAIN_DATA_STATUS:
       const idTrainData = action.payload.id;
       let dataDetail = state.trainDataDetail;
-      let dataList = state.trainDataList.map((data) => {
+      const dataList = state.trainDataList.map((data) => {
         if (data.id === idTrainData) {
           data.type = data.type === 1 ? 2 : 1;
         }

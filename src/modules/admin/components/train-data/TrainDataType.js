@@ -9,14 +9,6 @@ import 'src/static/stylesheets/train.data.type.css';
 
 const TrainDataType = (props) => {
   const [status, setStatus] = useState(props.value === 1 ? true : false);
-  const badgeName = dataTypes[props.value].badge;
-  const value = dataTypes[props.value].value;
-  const label = (
-    <Badge color={badgeName} pill style={{ fontSize: '0.7rem' }}>
-      {value}
-    </Badge>
-  );
-
   const context =
     props.context &&
     (props.context.componentParent
@@ -63,12 +55,26 @@ const TrainDataType = (props) => {
           type="switch"
           id={`toggleStatus-${props.data.id}`}
           name="toggleStatus"
-          label={label}
+          label={
+            <Badge
+              color={dataTypes[props.value].badge}
+              pill
+              style={{ fontSize: '0.7rem' }}
+            >
+              {dataTypes[props.value].value}
+            </Badge>
+          }
           checked={status}
           onChange={(event) => onInputChange(event, setStatus)}
         />
       ) : (
-        label
+        <Badge
+          color={dataTypes[props.value].badge}
+          pill
+          style={{ fontSize: '0.7rem' }}
+        >
+          {dataTypes[props.value].value}
+        </Badge>
       )}
     </div>
   );

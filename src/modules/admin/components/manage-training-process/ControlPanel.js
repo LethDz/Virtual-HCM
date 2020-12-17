@@ -201,7 +201,7 @@ const ControlPanel = (props) => {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Col xs="auto" className="pr-0">
+          <Col xs="auto">
             <ButtonGroup>
               <Button size="sm" color="success" type="submit">
                 <FontAwesomeIcon icon={faPlayCircle} />
@@ -215,7 +215,7 @@ const ControlPanel = (props) => {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Col xs="auto" className="pr-0">
+          <Col xs="auto">
             <ButtonGroup>
               <Button size="sm" color="primary" onClick={onABC}>
                 <FontAwesomeIcon icon={faExclamationTriangle} />

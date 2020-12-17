@@ -69,7 +69,7 @@ const BtnChangeStatus = (props) => {
           type="DISABLE"
           isOpen={isOpenDeleteConfirmation}
           toggle={toggleDeleteConfirmation}
-          value="test"
+          value="user"
           confirmDelete={executeAction}
         />
       )}
