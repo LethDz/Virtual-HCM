@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Form,
   Input,
@@ -11,40 +11,41 @@ import {
   ModalFooter,
   Col,
   Row,
-} from "reactstrap";
+} from 'reactstrap';
 import {
   handleInputChange,
   handleItemInWordsChange,
-} from "src/common/handleInputChange";
-import axiosClient from "src/common/axiosClient";
-import { connect } from "react-redux";
-import LoadingSpinner from "src/common/loadingSpinner/LoadingSpinner";
-import ErrorAlert from "src/common/alertComponent/ErrorAlert";
-import SuccessAlert from "src/common/alertComponent/SuccessAlert";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+} from 'src/common/handleInputChange';
+import axiosClient from 'src/common/axiosClient';
+import { connect } from 'react-redux';
+import LoadingSpinner from 'src/common/loadingSpinner/LoadingSpinner';
+import ErrorAlert from 'src/common/alertComponent/ErrorAlert';
+import SuccessAlert from 'src/common/alertComponent/SuccessAlert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   getAllSynonyms,
   addSynonymToList,
   POSTags,
-} from "src/modules/contributor";
-import { SYNONYM, ADD, NLP, TOKENIZE } from "src/constants";
-import "src/static/stylesheets/synonym.css";
+} from 'src/modules/contributor';
+import { SYNONYM, ADD, NLP, TOKENIZE } from 'src/constants';
+import 'src/static/stylesheets/synonym.css';
 
 class CreateSynonymModal extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      meaning: "",
+      meaning: '',
       words: [],
-      newWord: "",
+      newWord: '',
       loading: false,
       errorAlert: false,
       successAlert: false,
       errorList: [],
-      paragraph: "",
+      paragraph: '',
       tokenizedWords: [],
+      ne_synonym: false,
     };
     this.conRef = React.createRef();
   }
@@ -112,8 +113,8 @@ class CreateSynonymModal extends Component {
   removeItemWithSlice = (index, items) => {
     const firstArr = items.slice(0, index);
     const secondArr = items.slice(index + 1);
-    return [...firstArr , ...secondArr]
-  }
+    return [...firstArr, ...secondArr];
+  };
 
   checkDuplicateWord = (newWord) => {
     let duplicate = false;
@@ -121,7 +122,7 @@ class CreateSynonymModal extends Component {
       if (word === newWord) {
         duplicate = true;
         let error = this.state.errorList;
-        error.push("This word existed!");
+        error.push('This word existed!');
         this.setErrorList(error);
       }
       return duplicate;
@@ -138,6 +139,7 @@ class CreateSynonymModal extends Component {
       .post(SYNONYM + ADD, {
         meaning: this.state.meaning,
         words: this.state.words,
+        ne_synonym: this.state.ne_synonym,
       })
       .then((response) => {
         if (response.data.status) {
@@ -165,7 +167,7 @@ class CreateSynonymModal extends Component {
   tokenizeWord = async () => {
     await this.setErrorList([]);
     const paragraph = this.state.paragraph;
-    if (this.checkInputEmpty(paragraph, "Nothing to check!")) {
+    if (this.checkInputEmpty(paragraph, 'Nothing to check!')) {
       if (paragraph !== this.state.oldParagraph) {
         this.setLoading(true);
         this.setErrorAlert(false);
@@ -214,7 +216,7 @@ class CreateSynonymModal extends Component {
     let newWord = this.state.newWord.trim();
     if (
       !this.checkDuplicateWord(newWord) &&
-      this.checkInputEmpty(newWord, "Input cannot be empty")
+      this.checkInputEmpty(newWord, 'Input cannot be empty')
     ) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
@@ -222,7 +224,7 @@ class CreateSynonymModal extends Component {
       this._isMounted &&
         this.setState({
           words: listWord,
-          newWord: "",
+          newWord: '',
         });
     } else {
       this.setErrorAlert(true);
@@ -240,7 +242,7 @@ class CreateSynonymModal extends Component {
   };
 
   scrollToBottom = () => {
-    this.conRef.current.scrollIntoView({ behavior: "smooth" });
+    this.conRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   toggle = () => {
@@ -257,19 +259,19 @@ class CreateSynonymModal extends Component {
         <ModalHeader toggle={this.toggle}>Create New Synonym</ModalHeader>
         <Form onSubmit={this.addSynonym}>
           <ModalBody>
-            <LoadingSpinner loading={this.state.loading} text={"Loading"} />
+            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
                 text="Adding synonym is successfully"
-                onDismiss={() => this.onDismiss("successAlert")}
+                onDismiss={() => this.onDismiss('successAlert')}
               />
             )}
             {this.state.errorAlert && this.state.errorList && (
               <ErrorAlert
                 errorAlert={this.state.errorAlert}
                 errorList={this.state.errorList}
-                onDismiss={() => this.onDismiss("errorAlert")}
+                onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
             <FormGroup>
@@ -283,13 +285,26 @@ class CreateSynonymModal extends Component {
                 disabled={this.state.loading}
               />
             </FormGroup>
+            <Row className="mb-3 pl-3">
+              <Col className="d-flex">
+                <span className="title">Named-entity synonym</span>
+                <input
+                  className="ml-2 align-self-center"
+                  id="ne_synonym"
+                  type="checkbox"
+                  name="ne_synonym"
+                  onChange={this.handleInput}
+                  checked={this.state.ne_synonym}
+                />{' '}
+              </Col>
+            </Row>
             <Label className="font-weight-bolder">Words: </Label>
             <div className="container justify-content-center">
               <div className="border border-light p-3 list-word">
                 {this._isMounted &&
                   this.state.words &&
                   this.state.words.map((word, index) => (
-                    <Row className="mt-2" key={"word" + index}>
+                    <Row className="mt-2" key={'word' + index}>
                       <Col className="col-3 mt-2">Word {index + 1}</Col>
                       <Col className="col-7">
                         <Input

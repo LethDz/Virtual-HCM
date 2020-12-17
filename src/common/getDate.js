@@ -65,9 +65,9 @@ export const dateToMilliseconds = (dateString) => {
 };
 
 export const calculateTheDifferent = (date) => {
-  const date1 = new Date(date.split('.')[0]);
-  const date2 = new Date();
-  const timeDifference = date2.getTime() - date1.getTime();
+  const date1 = dateToMilliseconds(date);
+  const dateNow = new Date();
+  const timeDifference = dateNow.getTime() - date1;
   const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
   return daysDifference;

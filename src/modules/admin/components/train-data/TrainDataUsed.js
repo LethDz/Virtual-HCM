@@ -41,9 +41,8 @@ const TrainDataUsed = (props) => {
           </Button>
           {isOpen && (
             <Tooltip
-              placement="top"
+              placement="left"
               isOpen={isOpen}
-              autohide={true}
               target={`train-data-${props?.data.id}`}
             >
               <Row className="row postag-tool-tip">

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Form,
   Input,
@@ -11,15 +11,15 @@ import {
   ModalFooter,
   Col,
   Row,
-} from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
   faMinus,
   faPlus,
   faSave,
   faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+} from '@fortawesome/free-solid-svg-icons';
 import {
   SYNONYM,
   GET_SYNONYM,
@@ -27,7 +27,7 @@ import {
   DELETE_SYNONYM,
   NLP,
   TOKENIZE,
-} from "src/constants";
+} from 'src/constants';
 import {
   handleInputChange,
   handleItemInWordsChange,
@@ -45,24 +45,25 @@ import {
   editSynonymDetail,
   deleteSynonym,
   POSTags,
-} from "src/modules/contributor";
-import "src/static/stylesheets/synonym.css";
+} from 'src/modules/contributor';
+import 'src/static/stylesheets/synonym.css';
 
 class SynonymDetailModal extends Component {
   _isMounted = false;
   constructor() {
     super();
     this.state = {
-      synonym_id: "",
-      meaning: "",
+      synonym_id: '',
+      meaning: '',
       words: [],
-      newWord: "",
+      newWord: '',
       loading: false,
       errorAlert: false,
       successAlert: false,
       errorList: [],
-      paragraph: "",
+      paragraph: '',
       tokenizedWords: [],
+      ne_synonym: false,
       isOpenDeleteConfirmation: false,
     };
     this.conRef = React.createRef();
@@ -82,35 +83,26 @@ class SynonymDetailModal extends Component {
   }
 
   initiateData = () => {
-    if (
-      this.props.synonymDetail &&
-      this.props.synonymDetail.synonym_id === parseInt(this.props.id)
-    ) {
-      this.setState({
-        ...this.props.synonymDetail,
-      });
-    } else {
-      this.setLoading(true);
-      axiosClient
-        .get(SYNONYM + GET_SYNONYM(this.props.id))
-        .then((response) => {
-          if (response.data.status) {
-            const synonym = response.data.result_data;
-            this.props.pullSynonymDetail(synonym);
-            this.setState({
-              ...synonym,
-            });
-          } else {
-            this.setErrorAlert(true);
-          }
-          this.setLoading(false);
-        })
-        .catch(() => {
-          this.setLoading(false);
+    this.setLoading(true);
+    axiosClient
+      .get(SYNONYM + GET_SYNONYM(this.props.id))
+      .then((response) => {
+        if (response.data.status) {
+          const synonym = response.data.result_data;
+          this.props.pullSynonymDetail(synonym);
+          this.setState({
+            ...synonym,
+          });
+        } else {
           this.setErrorAlert(true);
-          this.setSuccessAlert(false);
-        });
-    }
+        }
+        this.setLoading(false);
+      })
+      .catch(() => {
+        this.setLoading(false);
+        this.setErrorAlert(true);
+        this.setSuccessAlert(false);
+      });
   };
 
   handleInput = (event) => handleInputChange(event, this);
@@ -164,8 +156,8 @@ class SynonymDetailModal extends Component {
   removeItemWithSlice = (index, items) => {
     const firstArr = items.slice(0, index);
     const secondArr = items.slice(index + 1);
-    return [...firstArr , ...secondArr]
-  }
+    return [...firstArr, ...secondArr];
+  };
 
   checkDuplicateWord = (newWord) => {
     let duplicate = false;
@@ -173,7 +165,7 @@ class SynonymDetailModal extends Component {
       if (word === newWord) {
         duplicate = true;
         let error = this.state.errorList;
-        error.push("This word existed!");
+        error.push('This word existed!');
         this.setErrorList(error);
       }
       return duplicate;
@@ -189,6 +181,7 @@ class SynonymDetailModal extends Component {
         id: this.state.synonym_id,
         meaning: this.state.meaning,
         words: this.state.words,
+        ne_synonym: this.state.ne_synonym,
       })
       .then((response) => {
         if (response.data.status) {
@@ -247,7 +240,7 @@ class SynonymDetailModal extends Component {
     let newWord = this.state.newWord.trim();
     if (
       !this.checkDuplicateWord(newWord) &&
-      this.checkInputEmpty(newWord, "Input cannot be empty")
+      this.checkInputEmpty(newWord, 'Input cannot be empty')
     ) {
       this.setErrorAlert(false);
       let listWord = this.state.words;
@@ -255,7 +248,7 @@ class SynonymDetailModal extends Component {
       this._isMounted &&
         this.setState({
           words: listWord,
-          newWord: "",
+          newWord: '',
         });
     } else {
       this.setErrorAlert(true);
@@ -265,7 +258,7 @@ class SynonymDetailModal extends Component {
   tokenizeWord = async () => {
     await this.setErrorList([]);
     const paragraph = this.state.paragraph;
-    if (this.checkInputEmpty(paragraph, "Nothing to check!")) {
+    if (this.checkInputEmpty(paragraph, 'Nothing to check!')) {
       if (paragraph !== this.state.oldParagraph) {
         this.setLoading(true);
         this.setErrorAlert(false);
@@ -320,7 +313,7 @@ class SynonymDetailModal extends Component {
   };
 
   scrollToBottom = () => {
-    this.conRef.current.scrollIntoView({ behavior: "smooth" });
+    this.conRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   toggle = () => {
@@ -350,22 +343,24 @@ class SynonymDetailModal extends Component {
             confirmDelete={this.confirmDelete}
           />
         )}
-        <ModalHeader toggle={this.toggle}>Synonym ID: {this.state.synonym_id}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>
+          Synonym ID: {this.state.synonym_id}
+        </ModalHeader>
         <Form onSubmit={this.editSynonym}>
           <ModalBody>
-            <LoadingSpinner loading={this.state.loading} text={"Loading"} />
+            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
                 text="Editing synonym is successfully"
-                onDismiss={() => this.onDismiss("successAlert")}
+                onDismiss={() => this.onDismiss('successAlert')}
               />
             )}
             {this.state.errorAlert && (
               <ErrorAlert
                 errorAlert={this.state.errorAlert}
                 errorList={this.state.errorList}
-                onDismiss={() => this.onDismiss("errorAlert")}
+                onDismiss={() => this.onDismiss('errorAlert')}
               />
             )}
             <FormGroup>
@@ -379,6 +374,19 @@ class SynonymDetailModal extends Component {
                 disabled={this.state.loading}
               />
             </FormGroup>
+            <Row className="mb-3 pl-3">
+              <Col className="d-flex">
+                <span className="title">Named-entity synonym</span>
+                <input
+                  className="ml-2 align-self-center"
+                  id="ne_synonym"
+                  type="checkbox"
+                  name="ne_synonym"
+                  onChange={this.handleInput}
+                  checked={this.state.ne_synonym}
+                />{' '}
+              </Col>
+            </Row>
             <Label className="font-weight-bold">Words: </Label>
             <div className="container justify-content-center">
               <div className="border border-light p-3 list-word">
@@ -470,7 +478,7 @@ class SynonymDetailModal extends Component {
             <Button
               color="danger"
               disabled={this.state.loading}
-              style={{ color: "white" }}
+              style={{ color: 'white' }}
               onClick={this.deleteSynonym}
             >
               <FontAwesomeIcon icon={faTrash} color="white" />

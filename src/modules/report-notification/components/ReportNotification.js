@@ -17,6 +17,7 @@ import {
 } from 'src/modules/report-notification';
 import { history } from 'src/common/history';
 import Pagination from 'react-js-pagination';
+import { dateToMilliseconds } from 'src/common/getDate';
 
 class ReportNotification extends Component {
   _isMounted = false;
@@ -82,8 +83,8 @@ class ReportNotification extends Component {
 
   splitReadAndUnread = async (data) => {
     await data.sort((noti1, noti2) => {
-      const date1 = new Date(noti1.cdate).getTime();
-      const date2 = new Date(noti2.cdate).getTime();
+      const date1 = dateToMilliseconds(noti1.cdate);
+      const date2 = dateToMilliseconds(noti2.cdate);
 
       return date2 - date1;
     });
