@@ -549,7 +549,7 @@ class KnowledgeDataDetail extends Component {
                 </h4>
               </Col>
             </Row>
-            {this.state.form.intent.trim() !== '' && !this.state.reloadInfo && (
+            {!this.state.reloadInfo && (
               <Fragment>
                 {this.state.form.report_processing && (
                   <div className="d-flex justify-content-end">
