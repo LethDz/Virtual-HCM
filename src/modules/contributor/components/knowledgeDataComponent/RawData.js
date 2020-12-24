@@ -38,67 +38,69 @@ class RawData extends Component {
   };
 
   stateTokenizeRawData = () => {
-    this.props.setLoading(true, 'Tokenizing data');
     const paragraph = {
       paragraph: this.state.rawData,
     };
-    axiosClient
-      .post(NLP + TOKENIZE, paragraph)
-      .then((response) => {
-        this.props.setLoading(false, 'Tokenizing data');
-        if (response.data.status) {
-          let fullArray = [];
-          response.data.result_data.pos.forEach((array) => {
-            fullArray.push(...array);
-          });
-          let modifiedNer = [];
-          let ner = response.data.result_data.ner;
-          for (let sentenceIndex in ner) {
-            for (let idx in ner[sentenceIndex]) {
-              let type = ner[sentenceIndex][idx].type;
-              let word = ner[sentenceIndex][idx].word;
-              let index = ner[sentenceIndex][idx].start_idx;
-              if (sentenceIndex === 0) {
-                modifiedNer.push({
-                  type: type,
-                  word: word,
-                  index: index,
-                });
-              } else {
+    if (paragraph.paragraph !== '') {
+      this.props.setLoading(true, 'Tokenizing data');
+      axiosClient
+        .post(NLP + TOKENIZE, paragraph)
+        .then((response) => {
+          this.props.setLoading(false, 'Tokenizing data');
+          if (response.data.status) {
+            let fullArray = [];
+            response.data.result_data.pos.forEach((array) => {
+              fullArray.push(...array);
+            });
+            let modifiedNer = [];
+            let ner = response.data.result_data.ner;
+            for (let sentenceIndex in ner) {
+              for (let idx in ner[sentenceIndex]) {
+                let type = ner[sentenceIndex][idx].type;
+                let word = ner[sentenceIndex][idx].word;
                 let index = ner[sentenceIndex][idx].start_idx;
-                for (let i = 0; i < sentenceIndex; i++) {
-                  index += response.data.result_data.pos[i].length;
+                if (sentenceIndex === 0) {
+                  modifiedNer.push({
+                    type: type,
+                    word: word,
+                    index: index,
+                  });
+                } else {
+                  let index = ner[sentenceIndex][idx].start_idx;
+                  for (let i = 0; i < sentenceIndex; i++) {
+                    index += response.data.result_data.pos[i].length;
+                  }
+                  modifiedNer.push({
+                    type: type,
+                    word: word,
+                    index: index,
+                  });
                 }
-                modifiedNer.push({
-                  type: type,
-                  word: word,
-                  index: index,
-                });
               }
             }
+            if (this._isMounted)
+              this.setState({
+                mode: 'TOKENIZE',
+                tokenizeData: fullArray,
+                ner: modifiedNer,
+              });
+            this.setTokenizedWordArray();
+          } else {
+            this.props.setSuccessAlert(false);
+            this.props.setErrorAlert(true);
+            this.props.setLoading(false, 'Tokenizing data');
+            this.props.setErrorList(response.data.messages);
+            this.props.scrollToTop();
           }
-          if (this._isMounted)
-            this.setState({
-              mode: 'TOKENIZE',
-              tokenizeData: fullArray,
-              ner: modifiedNer,
-            });
-          this.setTokenizedWordArray();
-        } else {
-          this.props.setSuccessAlert(false);
-          this.props.setErrorAlert(true);
+        })
+        .catch((err) => {
           this.props.setLoading(false, 'Tokenizing data');
-          this.props.setErrorList(response.data.messages);
+          if (this._isMounted) this.setState({ loading: false });
+          this.props.setErrorAlert(true);
+          this.props.setSuccessAlert(false);
           this.props.scrollToTop();
-        }
-      })
-      .catch((err) => {
-        this.props.setLoading(false, 'Tokenizing data');
-        if (this._isMounted) this.setState({ loading: false });
-        this.props.setErrorAlert(true);
-        this.props.setSuccessAlert(false);
-        this.props.scrollToTop();
-      });
+        });
+    }
   };
 
   setRawData = () => {

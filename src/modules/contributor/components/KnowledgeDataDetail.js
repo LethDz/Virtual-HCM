@@ -591,24 +591,22 @@ class KnowledgeDataDetail extends Component {
                 />
                 <hr className="mr-3 ml-3 divider" />
                 <FormSectionTitle title="Data analysis" />
-                {this.state.form.rawData && (
-                  <RawData
-                    disable={this.state.disable}
-                    hoverWord={this.state.hoverWord}
-                    detailPage={true}
-                    rawDataValue={this.state.form.rawData}
-                    scrollToTop={this.scrollToTop}
-                    setSuccessAlert={this.setSuccessAlert}
-                    setErrorAlert={this.setErrorAlert}
-                    setErrorList={this.setErrorList}
-                    setTokenizeWord={this.setTokenizeWord}
-                    getWordArray={this.getWordArray}
-                    setRawData={this.setRawData}
-                    cancelCriticalData={this.cancelCriticalData}
-                    onChange={this.handleInputForm}
-                    setLoading={this.setLoading}
-                  />
-                )}
+                <RawData
+                  disable={this.state.disable}
+                  hoverWord={this.state.hoverWord}
+                  detailPage={true}
+                  rawDataValue={this.state.form.rawData}
+                  scrollToTop={this.scrollToTop}
+                  setSuccessAlert={this.setSuccessAlert}
+                  setErrorAlert={this.setErrorAlert}
+                  setErrorList={this.setErrorList}
+                  setTokenizeWord={this.setTokenizeWord}
+                  getWordArray={this.getWordArray}
+                  setRawData={this.setRawData}
+                  cancelCriticalData={this.cancelCriticalData}
+                  onChange={this.handleInputForm}
+                  setLoading={this.setLoading}
+                />
                 {wordArray.length !== 0 && (
                   <CriticalData
                     disable={this.state.disable}
