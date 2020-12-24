@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Badge, Col, FormGroup, Label, Row } from 'reactstrap';
+import { Badge, Col, Row } from 'reactstrap';
 
 import { reportType } from 'src/modules/contributor';
 
@@ -46,14 +46,14 @@ const DetailModalViewOnly = (props) => {
       </Row>
       {props.report.report_type === 1 && (
         <div>
-          <FormGroup className='mt-3'>
-            <Label className='font-weight-bold'>Question: </Label>
-            <div className='message'>{props.report.question}</div>
-          </FormGroup>
-          <FormGroup>
-            <Label className='font-weight-bold'>Bot answer: </Label>
-            <div className='message'>{props.report.bot_answer}</div>
-          </FormGroup>
+          <Row className='custom-border'>
+            <Col className='col-3 font-weight-bold'>Question: </Col>
+            <Col className='col-9 message'>{props.report.question}</Col>
+          </Row>
+          <Row className='custom-border'>
+            <Col className='col-3 font-weight-bold'>Bot answer: </Col>
+            <Col className='col-9 message'>{props.report.bot_answer}</Col>
+          </Row>
         </div>
       )}
       <Row className='custom-border'>

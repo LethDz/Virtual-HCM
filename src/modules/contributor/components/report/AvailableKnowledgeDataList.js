@@ -143,7 +143,7 @@ class AvailableKnowledgeDataList extends Component {
                 onClick={this.approveReport}
               >
                 <FontAwesomeIcon icon={faFile} color='white' />
-                &nbsp; To knowledge process
+                &nbsp; Edit
               </Button>
             </Link>
           </Col>

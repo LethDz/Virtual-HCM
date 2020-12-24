@@ -89,7 +89,11 @@ class ChatHistoryDetailModal extends Component {
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='lg'>
         <ModalHeader toggle={this.props.toggle}>Chat Message</ModalHeader>
         <ModalBody>
-          <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
+          <LoadingSpinner
+            loading={this.state.loading}
+            text={'Loading'}
+            type='MODAL'
+          />
           {this.state.errorAlert && (
             <ErrorAlert
               errorAlert={this.state.errorAlert}
@@ -99,19 +103,22 @@ class ChatHistoryDetailModal extends Component {
           )}
           <Card>
             <CardBody className='chat-container'>
-              <ul className='chat-list'>
+              <div className='chat-list'>
                 {this.state.chatLog &&
                   this.state.chatLog.map((chat, index) => (
-                    <li className={chat.from === 1 ? "out" : "in"} key={`chat-history-${index}`}>
-                      <div className="chat-body">
-                        <span className="time_date">{chat.time}</span>
-                        <div className="chat-message">
+                    <div
+                      className={chat.from === 1 ? 'out' : 'in'}
+                      key={`chat-history-${index}`}
+                    >
+                      <div className='chat-body'>
+                        <span className= 'time_date'>{chat.time}</span>
+                        <div className='chat-message'>
                           <p>{chat.message}</p>
                         </div>
                       </div>
-                    </li>
+                    </div>
                   ))}
-              </ul>
+              </div>
             </CardBody>
           </Card>
         </ModalBody>

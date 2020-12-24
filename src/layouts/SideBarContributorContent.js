@@ -54,7 +54,7 @@ const SideBarContributorContent = () => {
         active={location.includes(SYNONYM_LIST_PAGE)}
       />
       <SideBarItem
-        name="Reports"
+        name="Report"
         icon={<FontAwesomeIcon icon={faNewspaper} />}
         link={REPORT_LIST_PAGE}
         active={location.includes(REPORT_LIST_PAGE)}
