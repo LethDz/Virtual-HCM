@@ -180,7 +180,7 @@ class ReportList extends Component {
                 onClick={this.toggleReportDetail}
               >
                 <FontAwesomeIcon icon={faEye} color='white' />
-                &nbsp; View Report
+                &nbsp; View report
               </Button>
               {this.state.modalReportDetail && (
                 <ReportDetailModal

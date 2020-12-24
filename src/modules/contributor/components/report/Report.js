@@ -55,7 +55,7 @@ const Report = () => {
       )}
       <Row>
         <Col className='justify-content-center d-flex'>
-          <h5 className='mt-2 mb-2'>Report List</h5>
+          <h5 className='mt-2 mb-2'>Report</h5>
         </Col>
       </Row>
       <Nav tabs>

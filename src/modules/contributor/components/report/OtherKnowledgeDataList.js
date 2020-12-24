@@ -139,7 +139,7 @@ class OtherKnowledgeDataList extends Component {
               onClick={() => this.setOpenModal(true)}
             >
               <FontAwesomeIcon icon={faBell} />
-              &nbsp; Notify To
+              &nbsp; Notify
             </Button>
           </Col>
         </Row>

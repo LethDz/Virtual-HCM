@@ -208,8 +208,8 @@ class ReportDetailModal extends Component {
               />
             )}
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Report type: </Col>
-              <Col className='col-9'>
+              <Col className='col-4 font-weight-bold'>Report type: </Col>
+              <Col className='col-8'>
                 <h5>
                   <Badge
                     color={`${
@@ -225,16 +225,16 @@ class ReportDetailModal extends Component {
               </Col>
             </Row>
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Reporter:</Col>
-              <Col className='col-9'>{this.state.report.reporter}</Col>
+              <Col className='col-4 font-weight-bold'>Reporter:</Col>
+              <Col className='col-8'>{this.state.report.reporter}</Col>
             </Row>
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Reporter note:</Col>
-              <Col className='col-9'>{this.state.report.reporter_note}</Col>
+              <Col className='col-4 font-weight-bold'>Reporter note:</Col>
+              <Col className='col-8'>{this.state.report.reporter_note}</Col>
             </Row>
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Reported Intent:</Col>
-              <Col className='col-9'>
+              <Col className='col-4 font-weight-bold'>Reported Intent:</Col>
+              <Col className='col-8'>
                 {this.state.report.reported_intent && (
                   <h5>
                     <Badge color='success'>
@@ -245,45 +245,55 @@ class ReportDetailModal extends Component {
               </Col>
             </Row>
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Report Data:</Col>
-              <Col className='col-9 text-break'>
+              <Col className='col-4 font-weight-bold'>Report Data:</Col>
+              <Col className='col-8 text-break'>
                 {this.state.report.report_data}
               </Col>
             </Row>
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Bot version date:</Col>
-              <Col className='col-9'>{this.state.report.bot_version_date}</Col>
+              <Col className='col-4 font-weight-bold'>Bot version date:</Col>
+              <Col className='col-8'>{this.state.report.bot_version_date}</Col>
             </Row>
             <Row className='custom-border'>
-              <Col className='col-3 font-weight-bold'>Created date:</Col>
-              <Col className='col-9'>{this.state.report.cdate}</Col>
+              <Col className='col-4 font-weight-bold'>Created date:</Col>
+              <Col className='col-8'>{this.state.report.cdate}</Col>
             </Row>
             {this.state.report.report_type === 1 && (
               <div>
-                <FormGroup className='mt-3'>
-                  <Label className='font-weight-bold'>Question: </Label>
-                  <div className='message'>{this.state.report.question}</div>
-                </FormGroup>
-                <FormGroup>
-                  <Label className='font-weight-bold'>Bot answer: </Label>
-                  <div className='message'>{this.state.report.bot_answer}</div>
-                </FormGroup>
+                <Row className='custom-border'>
+                  <Col className='col-4 font-weight-bold'>Question: </Col>
+                  <Col className='col-8 message'>
+                    {this.state.report.question}
+                  </Col>
+                </Row>
+                <Row className='custom-border'>
+                  <Col className='col-4 font-weight-bold'>Bot answer: </Col>
+                  <Col className='col-8 message'>
+                    {this.state.report.bot_answer}
+                  </Col>
+                </Row>
               </div>
             )}
             {this.state.reject && (
-              <FormGroup>
-                <Label className='font-weight-bold'>Processor note: </Label>
-                <Input
-                  name='processor_note'
-                  type='textarea'
-                  value={this.state.processor_note}
-                  onChange={this.handleInput}
-                  autoFocus
-                  placeholder='Please enter the reason why you want to reject...'
-                />
-              </FormGroup>
+              <Row className='custom-border'>
+                <Col>
+                  <FormGroup>
+                    <Label className='font-weight-bold'>Processor note: </Label>
+                    <Input
+                      name='processor_note'
+                      type='textarea'
+                      value={this.state.processor_note}
+                      onChange={this.handleInput}
+                      autoFocus
+                      placeholder='Please enter the reason why you want to reject...'
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
             )}
-            <Label className='font-weight-bold mb-3'>Knowledge data: </Label>
+            <Label className='font-weight-bold mb-3'>
+              Available knowledge data:{' '}
+            </Label>
             <SelectKnowledgeData
               toggleDetailModal={this.toggle}
               report={this.state.report}

@@ -191,7 +191,7 @@ class SynonymList extends Component {
       >
         <Row>
           <Col className="justify-content-center d-flex">
-            <h5 className="mt-2 mb-2">Synonyms</h5>
+            <h5 className="mt-2 mb-2">Synonym</h5>
           </Col>
         </Row>
         {this.state.successAlert && (

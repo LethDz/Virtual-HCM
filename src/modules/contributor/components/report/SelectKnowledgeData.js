@@ -55,7 +55,7 @@ const SelectKnowledgeData = (props) => {
             }}
             role='button'
           >
-            Available knowledge data
+            My knowledge data
           </NavLink>
         </NavItem>
         <NavItem>
@@ -66,7 +66,7 @@ const SelectKnowledgeData = (props) => {
             }}
             role='button'
           >
-            Other knowledge data
+            Other people's knowledge data
           </NavLink>
         </NavItem>
       </Nav>
