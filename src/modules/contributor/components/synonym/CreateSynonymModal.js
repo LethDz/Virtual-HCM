@@ -179,6 +179,7 @@ class CreateSynonymModal extends Component {
         axiosClient
           .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
           .then((response) => {
+            this.setLoading(false);
             if (response.data.status) {
               let words = [];
               response.data.result_data.pos.map((sentence) => {
@@ -194,7 +195,6 @@ class CreateSynonymModal extends Component {
               this.setState({
                 tokenizedWords: words,
               });
-              this.setLoading(false);
             } else {
               this.setErrorAlert(true);
               this.setErrorList(response.data.messages);
