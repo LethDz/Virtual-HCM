@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Badge } from 'reactstrap';
 
 import { ACCEPT, DECLINE, DRAFT } from 'src/modules/contributor/index';
+import { getUserData } from 'src/common/authorizationChecking';
 
 class SelfReviewStatus extends Component {
   _isMounted = false;
@@ -9,6 +10,7 @@ class SelfReviewStatus extends Component {
     super();
     this.state = {
       user_review: null,
+      user: null,
     };
   }
 
@@ -24,41 +26,50 @@ class SelfReviewStatus extends Component {
     this._isMounted = false;
   };
 
+  isOwner = () => {
+    const user = getUserData();
+    return user.username === this.props.data.edit_user;
+  };
+
   render() {
-    const className = 'mt-2 badge-width';
-    switch (this.state.user_review) {
-      case ACCEPT:
-        return (
-          <h6>
-            <Badge className={className} color="success">
-              Accept
-            </Badge>
-          </h6>
-        );
-      case DECLINE:
-        return (
-          <h6>
-            <Badge className={className} color="danger">
-              Decline
-            </Badge>
-          </h6>
-        );
-      case DRAFT:
-        return (
-          <h6>
-            <Badge className={className} color="warning">
-              Draft
-            </Badge>
-          </h6>
-        );
-      default:
-        return (
-          <h6>
-            <Badge className={className} color="secondary">
-              N/A
-            </Badge>
-          </h6>
-        );
+    if (this.isOwner()) {
+      return ''
+    } else {
+      const className = 'mt-2 badge-width';
+      switch (this.state.user_review) {
+        case ACCEPT:
+          return (
+            <h6>
+              <Badge className={className} color="success">
+                Accept
+              </Badge>
+            </h6>
+          );
+        case DECLINE:
+          return (
+            <h6>
+              <Badge className={className} color="danger">
+                Decline
+              </Badge>
+            </h6>
+          );
+        case DRAFT:
+          return (
+            <h6>
+              <Badge className={className} color="warning">
+                Draft
+              </Badge>
+            </h6>
+          );
+        default:
+          return (
+            <h6>
+              <Badge className={className} color="secondary">
+                N/A
+              </Badge>
+            </h6>
+          );
+      }
     }
   }
 }

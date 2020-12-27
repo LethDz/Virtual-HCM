@@ -6,7 +6,7 @@ const SideBarItem = (props) => {
   return (
     <div className="sidebar-item">
       <Link to={props.link} className="link-no-underline">
-        <ListGroupItem active={props.active} className="sidebar-link">
+        <ListGroupItem active={props.active} className="sidebar-link select">
           {props.icon} {props.name}
         </ListGroupItem>
       </Link>

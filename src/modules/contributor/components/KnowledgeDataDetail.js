@@ -342,10 +342,11 @@ class KnowledgeDataDetail extends Component {
   };
 
   scrollToTop = () => {
-    this._isMounted && this.titleRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-    });
+    this._isMounted &&
+      this.titleRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      });
   };
 
   setHoverWord = (word, from) => {
@@ -607,17 +608,14 @@ class KnowledgeDataDetail extends Component {
                   onChange={this.handleInputForm}
                   setLoading={this.setLoading}
                 />
-                {wordArray.length !== 0 && (
-                  <CriticalData
-                    disable={this.state.disable}
-                    ref={this.criticalDataRef}
-                    criticalDataValue={this.state.form.criticalData}
-                    wordArray={wordArray}
-                    ner={this.state.ner}
-                    setCritical={this.setCriticalData}
-                  />
-                )}
-
+                <CriticalData
+                  disable={this.state.disable}
+                  ref={this.criticalDataRef}
+                  criticalDataValue={this.state.form.criticalData}
+                  wordArray={wordArray}
+                  ner={this.state.ner}
+                  setCritical={this.setCriticalData}
+                />
                 <Coresponse
                   disable={this.state.disable}
                   coresponseValue={this.state.form.coresponse}

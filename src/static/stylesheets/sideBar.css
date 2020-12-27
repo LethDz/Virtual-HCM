@@ -42,6 +42,10 @@
   text-decoration: none;
 }
 
+.select.list-group-item.active {
+  color: #fff !important;
+}
+
 .navbar {
   background-color: #3c8dbc;
   padding: 0.3rem 1rem !important;

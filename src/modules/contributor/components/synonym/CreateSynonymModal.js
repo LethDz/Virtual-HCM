@@ -168,46 +168,38 @@ class CreateSynonymModal extends Component {
     await this.setErrorList([]);
     const paragraph = this.state.paragraph;
     if (this.checkInputEmpty(paragraph, 'Nothing to check!')) {
-      if (paragraph !== this.state.oldParagraph) {
-        this.setLoading(true);
-        this.setErrorAlert(false);
-        this.setSuccessAlert(false);
-        this.setState({
-          oldParagraph: paragraph,
-          tokenizedWords: [],
-        });
-        axiosClient
-          .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
-          .then((response) => {
-            this.setLoading(false);
-            if (response.data.status) {
-              let words = [];
-              response.data.result_data.pos.map((sentence) => {
-                sentence.map((word) => {
-                  if (word.type !== POSTags[POSTags.length - 1]) {
-                    words.push(word.value);
-                  }
-                  return word;
-                });
-                return sentence;
+      this.setLoading(true);
+      this.setErrorAlert(false);
+      this.setSuccessAlert(false);
+      axiosClient
+        .post(NLP + TOKENIZE, { paragraph: this.state.paragraph })
+        .then((response) => {
+          this.setLoading(false);
+          if (response.data.status) {
+            let words = [];
+            response.data.result_data.pos.map((sentence) => {
+              sentence.map((word) => {
+                if (word.type !== POSTags[POSTags.length - 1]) {
+                  words.push(word.value);
+                }
+                return word;
               });
+              return sentence;
+            });
 
-              this.setState({
-                tokenizedWords: words,
-              });
-            } else {
-              this.setErrorAlert(true);
-              this.setErrorList(response.data.messages);
-            }
-          })
-          .catch(() => {
-            this.setLoading(false);
+            this.setState({
+              tokenizedWords: words,
+            });
+          } else {
             this.setErrorAlert(true);
-            this.setSuccessAlert(false);
-          });
-      }
-    } else {
-      this.setErrorAlert(true);
+            this.setErrorList(response.data.messages);
+          }
+        })
+        .catch(() => {
+          this.setLoading(false);
+          this.setErrorAlert(true);
+          this.setSuccessAlert(false);
+        });
     }
   };
 
@@ -259,7 +251,11 @@ class CreateSynonymModal extends Component {
         <ModalHeader toggle={this.toggle}>Create New Synonym</ModalHeader>
         <Form onSubmit={this.addSynonym}>
           <ModalBody>
-            <LoadingSpinner loading={this.state.loading} text={'Loading'} type="MODAL"/>
+            <LoadingSpinner
+              loading={this.state.loading}
+              text={'Loading'}
+              type="MODAL"
+            />
             {this.state.successAlert && (
               <SuccessAlert
                 successAlert={this.state.successAlert}
@@ -373,8 +369,10 @@ class CreateSynonymModal extends Component {
                 <Col>
                   <div className="tokenized-word-list">
                     <div className="list-content">
-                      {this.state.tokenizedWords.map((word) => (
-                        <span className="tokenized-word">{word}</span>
+                      {this.state.tokenizedWords.map((word, index) => (
+                        <span key={index} className="tokenized-word">
+                          {word}
+                        </span>
                       ))}
                     </div>
                   </div>
