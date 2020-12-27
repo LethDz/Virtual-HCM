@@ -32,43 +32,56 @@ class SelfReviewStatus extends Component {
   };
 
   render() {
+    const DONE = 2;
+    const className = 'mt-2 badge-width';
     if (this.isOwner()) {
-      return ''
+      return '';
     } else {
-      const className = 'mt-2 badge-width';
-      switch (this.state.user_review) {
-        case ACCEPT:
-          return (
-            <h6>
-              <Badge className={className} color="success">
-                Accept
-              </Badge>
-            </h6>
-          );
-        case DECLINE:
-          return (
-            <h6>
-              <Badge className={className} color="danger">
-                Decline
-              </Badge>
-            </h6>
-          );
-        case DRAFT:
-          return (
-            <h6>
-              <Badge className={className} color="warning">
-                Draft
-              </Badge>
-            </h6>
-          );
-        default:
-          return (
-            <h6>
-              <Badge className={className} color="secondary">
-                N/A
-              </Badge>
-            </h6>
-          );
+      if (this.props.data.status !== DONE) {
+        switch (this.state.user_review) {
+          case ACCEPT:
+            return (
+              <h6>
+                <Badge className={className} color="success">
+                  Accept
+                </Badge>
+              </h6>
+            );
+          case DECLINE:
+            return (
+              <h6>
+                <Badge className={className} color="danger">
+                  Decline
+                </Badge>
+              </h6>
+            );
+          case DRAFT:
+            return (
+              <h6>
+                <Badge className={className} color="warning">
+                  Draft
+                </Badge>
+              </h6>
+            );
+          default:
+            return (
+              <h6>
+                <Badge className={className} color="secondary">
+                  N/A
+                </Badge>
+              </h6>
+            );
+        }
+      } else if (this.state.user_review === ACCEPT) {
+        return (
+          <h6>
+            <Badge className={className} color="success">
+              Accept
+            </Badge>
+          </h6>
+        );
+      } else {
+        return '';
       }
     }
   }
