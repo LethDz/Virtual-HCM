@@ -620,7 +620,11 @@ class KnowledgeDataDetail extends Component {
                     setCritical={this.setCriticalData}
                   />
                 )}
-
+                <BaseResponse
+                  disable={this.state.disable}
+                  baseResponseValue={this.state.form.baseResponse}
+                  onChange={this.handleInputForm}
+                />
                 <Coresponse
                   disable={this.state.disable}
                   coresponseValue={this.state.form.coresponse}
@@ -641,13 +645,6 @@ class KnowledgeDataDetail extends Component {
                   synonymIds={this.state.synonymIdList}
                   className="mt-3"
                 />
-
-                <BaseResponse
-                  disable={this.state.disable}
-                  baseResponseValue={this.state.form.baseResponse}
-                  onChange={this.handleInputForm}
-                />
-
                 <Synonyms
                   disable={this.state.disable}
                   scrollToTop={this.scrollToTop}

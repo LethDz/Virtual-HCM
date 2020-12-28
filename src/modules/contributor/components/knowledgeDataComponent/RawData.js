@@ -168,9 +168,9 @@ class RawData extends Component {
       );
     } else {
       return (
-        <Row>
-          {!this.props.disable && (
-            <Fragment>
+        <Fragment>
+          <Row>
+            {!this.props.disable && (
               <Col>
                 <Input
                   disabled={this.props.disable}
@@ -183,22 +183,26 @@ class RawData extends Component {
                   onChange={this.handleInput}
                 />
               </Col>
-              <Col xs="auto">
-                <Button
-                  disabled={this.props.disable}
-                  type="button"
-                  color="primary"
-                  onClick={this.stateTokenizeRawData}
-                >
-                  <FontAwesomeIcon icon={faHammer} /> Tokenize
-                </Button>
-              </Col>
-            </Fragment>
-          )}
-        </Row>
+            )}
+          </Row>
+          <Row className="mt-2">
+            <Col>
+              <Button
+                disabled={this.props.disable}
+                type="button"
+                color="primary"
+                onClick={this.stateTokenizeRawData}
+                block
+              >
+                <FontAwesomeIcon icon={faHammer} /> Tokenize
+              </Button>
+            </Col>
+          </Row>
+        </Fragment>
       );
     }
   };
+
   render() {
     return (
       <Row xs="1">

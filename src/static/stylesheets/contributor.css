@@ -182,3 +182,7 @@
 .comment-detail {
   white-space: pre-line;
 }
+
+.named-entity-synonym-badge {
+  display: table !important;
+}

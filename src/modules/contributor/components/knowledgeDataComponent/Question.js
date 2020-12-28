@@ -123,7 +123,8 @@ export default class Question extends Component {
       return;
     }
 
-    if (this._isMounted) this.setState({ loading: true, loadingMessage: 'Adding questions' });
+    if (this._isMounted)
+      this.setState({ loading: true, loadingMessage: 'Adding questions' });
     const paragraph = {
       paragraph: question,
     };
@@ -211,9 +212,9 @@ export default class Question extends Component {
           this.setState({
             loading: false,
           });
-          this.props.setErrorAlert(true);
-          this.props.setSuccessAlert(false);
-          this.props.scrollToTop();
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
       });
   };
 
@@ -302,7 +303,7 @@ export default class Question extends Component {
     this._isMounted &&
       this.setState({
         loading: true,
-        loadingMessage: "Generating questions",
+        loadingMessage: 'Generating questions',
       });
     axiosClient
       .post(NLP + GENERATE_SIMILARIES, data)
@@ -337,9 +338,9 @@ export default class Question extends Component {
           this.setState({
             loading: false,
           });
-          this.props.setErrorAlert(true);
-          this.props.setSuccessAlert(false);
-          this.props.scrollToTop();
+        this.props.setErrorAlert(true);
+        this.props.setSuccessAlert(false);
+        this.props.scrollToTop();
       });
   };
 
@@ -390,6 +391,7 @@ export default class Question extends Component {
               block
               disabled={this.props.disable}
               onClick={this.generatedSentences}
+              color="primary"
             >
               <FontAwesomeIcon icon={faListAlt} /> Generate
             </Button>
@@ -422,7 +424,10 @@ export default class Question extends Component {
           />
         )}
 
-        <LoadingSpinner loading={this.state.loading} text={this.state.loadingMessage}>
+        <LoadingSpinner
+          loading={this.state.loading}
+          text={this.state.loadingMessage}
+        >
           <Row xs="1">
             <Col>
               <Label className="label">Question:</Label>

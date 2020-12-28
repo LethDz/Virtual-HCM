@@ -9,6 +9,7 @@ import {
   Label,
   InputGroup,
   InputGroupAddon,
+  Badge,
 } from 'reactstrap';
 import { handleInputChange } from 'src/common/handleInputChange';
 
@@ -188,12 +189,20 @@ class Synonyms extends Component {
                               <ListGroupItem key={indexs}>
                                 <Row>
                                   <Col>
+                                    {synonym.ne_synonym && (
+                                      <Badge
+                                        color="info"
+                                        pill
+                                        className="named-entity-synonym-badge mb-1"
+                                      >
+                                        Named Entity Synonym
+                                      </Badge>
+                                    )}
                                     {synonym.meaning}:&nbsp;
                                     {synonym.words.map((key, index) => {
                                       if (index + 1 === synonym.words.length) {
                                         return <span key={index}>{key}. </span>;
-                                      } 
-                                      else {
+                                      } else {
                                         return <span key={index}>{key}, </span>;
                                       }
                                     })}

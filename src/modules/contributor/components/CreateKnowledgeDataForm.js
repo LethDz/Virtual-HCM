@@ -71,7 +71,7 @@ class CreateKnowledgeDataForm extends Component {
     this._isMounted = true;
     this.setReport();
   };
-  
+
   setLoading = (status, message) => {
     this._isMounted &&
       this.setState({
@@ -204,13 +204,13 @@ class CreateKnowledgeDataForm extends Component {
   };
 
   submitForm = (event) => {
-    this.setLoading(true, 'Sending form')
+    this.setLoading(true, 'Sending form');
     event.preventDefault();
     if (!this.checkFormSubmit()) {
       axiosClient
         .post(KNOWLEDGE_DATA + ADD, this.reformatForm())
         .then((response) => {
-          this.setLoading(false, 'Sending form')
+          this.setLoading(false, 'Sending form');
           if (response.data.status) {
             history.push(CONTRIBUTOR_PAGE_LIST_KNOWLEDGE_DATA);
           } else {
@@ -221,7 +221,7 @@ class CreateKnowledgeDataForm extends Component {
           }
         })
         .catch((err) => {
-          this.setLoading(false, 'Sending form')
+          this.setLoading(false, 'Sending form');
           this.setErrorAlert(true);
           this.setSuccessAlert(false);
           this.scrollToTop();
@@ -369,7 +369,10 @@ class CreateKnowledgeDataForm extends Component {
     const wordArray = this.getWordArray();
     return (
       <Container fluid={true}>
-        <LoadingSpinner loading={this.state.loading} text={this.state.spinnerMessage} />
+        <LoadingSpinner
+          loading={this.state.loading}
+          text={this.state.spinnerMessage}
+        />
         <div className="mt-3">
           <div className="form-item form-item-meta pr-5 pl-5">
             <div className="mr-3 ml-3">
@@ -417,7 +420,7 @@ class CreateKnowledgeDataForm extends Component {
                   onClick={this.toggleReport}
                 >
                   <FontAwesomeIcon icon={faNewspaper} />
-                      &nbsp; Report
+                  &nbsp; Report
                 </Button>
               </div>
             )}
@@ -451,7 +454,7 @@ class CreateKnowledgeDataForm extends Component {
               ner={this.state.ner}
               setCritical={this.setCriticalData}
             />
-
+            <BaseResponse onChange={this.handleInputForm} />
             <Coresponse
               setCoresponse={this.setCoresponse}
               wordArray={wordArray}
@@ -468,9 +471,6 @@ class CreateKnowledgeDataForm extends Component {
               synonymsArray={this.state.form.synonyms}
               synonymIds={this.state.synonymIdList}
             />
-
-            <BaseResponse onChange={this.handleInputForm} />
-
             <Synonyms
               scrollToTop={this.scrollToTop}
               setAlertMessage={this.setAlertMessage}
