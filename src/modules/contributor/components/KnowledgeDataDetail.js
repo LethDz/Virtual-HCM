@@ -82,6 +82,7 @@ class KnowledgeDataDetail extends Component {
       spinnerMessage: '',
       reviews: null,
       reloadInfo: false,
+      loadTokenize: false,
     };
     this.titleRef = React.createRef();
     this.criticalDataRef = React.createRef();
@@ -131,6 +132,7 @@ class KnowledgeDataDetail extends Component {
       this.setState({
         tokenizedWord: tokenizedWord,
         ner: nerArray,
+        loadTokenize: true,
       });
   };
 
@@ -608,14 +610,17 @@ class KnowledgeDataDetail extends Component {
                   onChange={this.handleInputForm}
                   setLoading={this.setLoading}
                 />
-                <CriticalData
-                  disable={this.state.disable}
-                  ref={this.criticalDataRef}
-                  criticalDataValue={this.state.form.criticalData}
-                  wordArray={wordArray}
-                  ner={this.state.ner}
-                  setCritical={this.setCriticalData}
-                />
+                {this.state.loadTokenize && (
+                  <CriticalData
+                    disable={this.state.disable}
+                    ref={this.criticalDataRef}
+                    criticalDataValue={this.state.form.criticalData}
+                    wordArray={wordArray}
+                    ner={this.state.ner}
+                    setCritical={this.setCriticalData}
+                  />
+                )}
+
                 <Coresponse
                   disable={this.state.disable}
                   coresponseValue={this.state.form.coresponse}

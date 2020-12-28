@@ -81,7 +81,13 @@ class SelfReviewStatus extends Component {
           </h6>
         );
       } else {
-        return '';
+        return (
+          <h6>
+            <Badge className={className} color="secondary">
+              N/A
+            </Badge>
+          </h6>
+        );
       }
     }
   }
