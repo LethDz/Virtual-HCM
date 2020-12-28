@@ -21,14 +21,14 @@ class ChatWidget extends Component {
       loading: false,
       isBotAvailable: true,
       isConfirmState: false,
-      confirmType: null
+      confirmType: null,
     };
     this.chatSocket = null;
     this.current_command = null;
     this.commands = {
       START_NEW_SESSION: 'newsession',
       REQUEST_LAST_SESSION_DATA: 'getlastsession',
-      CHAT: 'chat'
+      CHAT: 'chat',
     };
     this.response_types = {
       LAST_SESSION_MESSAGES: 'last_session_messages',
@@ -36,7 +36,7 @@ class ChatWidget extends Component {
       CHAT_RESPONSE: 'chat_response',
       START_NEW_SESSION_FAILED: 'new_session_failed',
       END_SESSION_STATUS: 'end_session_status',
-      ERROR: 'error'
+      ERROR: 'error',
     };
   }
 
@@ -45,16 +45,10 @@ class ChatWidget extends Component {
       let text = message.data.text;
       if (text) {
         // Chat handle
-        this.send_websocket_command(this.commands.CHAT, text);
+        this.send_websocket_command(this.commands.CHAT, text.trim());
         this.setState({
           messageList: [...this.state.messageList, message],
         });
-      } else if (this.state.isConfirmState) {
-        if (this.state.confirmType === 'confirm_true_false') {
-          this.send_websocket_command(this.commands.CHAT, 'đúng');
-        } else {
-          this.send_websocket_command(this.commands.CHAT, 'có');
-        }
       }
     }
   };
@@ -124,6 +118,7 @@ class ChatWidget extends Component {
       _self.setState({
         loading: false,
       });
+      _self.confirmMessage();
     };
     chatSocket.onmessage = function (e) {
       let received = JSON.parse(e.data);
@@ -138,7 +133,7 @@ class ChatWidget extends Component {
               _self.commands.START_NEW_SESSION,
               null
             );
-            
+
             break;
           case _self.response_types.LAST_SESSION_MESSAGES:
             if (received.data && received.data.length > 0) {
@@ -146,7 +141,7 @@ class ChatWidget extends Component {
               if (received.confirm_state) {
                 _self.setState({
                   isConfirmState: true,
-                  confirmType: received.confirm_type
+                  confirmType: received.confirm_type,
                 });
               }
             } else {
@@ -180,7 +175,7 @@ class ChatWidget extends Component {
               _self._sendMessages(received.data);
             }
             _self.setState({
-              isBotAvailable: false
+              isBotAvailable: false,
             });
             break;
           default:
@@ -191,7 +186,7 @@ class ChatWidget extends Component {
         if (received.confirm_state) {
           _self.setState({
             isConfirmState: true,
-            confirmType: received.confirm_type
+            confirmType: received.confirm_type,
           });
         }
       }
@@ -248,6 +243,24 @@ class ChatWidget extends Component {
         messageList: [...this.state.messageList, ...messages],
       });
     }
+  };
+
+  confirmMessage = () => {
+    let chatInput = document.getElementsByClassName('sc-user-input--text');
+    chatInput[0].onkeydown = (event) => {
+      if (
+        event.code === 'Enter' &&
+        chatInput[0].innerHTML === '' &&
+        this.state.isConfirmState
+      ) {
+        // TO DO confirm message
+        if (this.state.confirmType === 'confirm_true_false') {
+          this.send_websocket_command(this.commands.CHAT, 'đúng');
+        } else {
+          this.send_websocket_command(this.commands.CHAT, 'có');
+        }
+      }
+    };
   };
 
   componentDidMount() {

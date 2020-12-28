@@ -97,10 +97,7 @@ class ManageTrainingProcess extends Component {
     trainSocket.onopen = function (e) {
       terminal('[open] Connected to training service');
     };
-    // setInterval(async () => {
-    //   await terminal('Training process [=>>>>] : ETA llul ');
-    //   await runCommand('clearOneLine');
-    // }, 1000);
+
     trainSocket.onmessage = (e) => {
       let received = JSON.parse(e.data);
       if (received.type) {
