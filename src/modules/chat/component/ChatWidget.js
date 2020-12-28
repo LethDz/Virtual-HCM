@@ -19,7 +19,9 @@ class ChatWidget extends Component {
       newMessagesCount: 0,
       isOpen: false,
       loading: false,
-      isBotAvailable: true
+      isBotAvailable: true,
+      isConfirmState: false,
+      confirmType: null
     };
     this.chatSocket = null;
     this.current_command = null;
@@ -47,6 +49,12 @@ class ChatWidget extends Component {
         this.setState({
           messageList: [...this.state.messageList, message],
         });
+      } else if (this.state.isConfirmState) {
+        if (this.state.confirmType === 'confirm_true_false') {
+          this.send_websocket_command(this.commands.CHAT, 'đúng');
+        } else {
+          this.send_websocket_command(this.commands.CHAT, 'có');
+        }
       }
     }
   };
@@ -111,7 +119,7 @@ class ChatWidget extends Component {
       return null;
     }
     chatSocket.onopen = function (e) {
-      console.log('[chat_open] Connected to training service');
+      console.log('[chat_open] Connected to chatbot');
       _self.props.updateStatusOfChatSocket(true);
       _self.setState({
         loading: false,
@@ -135,6 +143,12 @@ class ChatWidget extends Component {
           case _self.response_types.LAST_SESSION_MESSAGES:
             if (received.data && received.data.length > 0) {
               _self.setChatboxMessages(received.data);
+              if (received.confirm_state) {
+                _self.setState({
+                  isConfirmState: true,
+                  confirmType: received.confirm_type
+                });
+              }
             } else {
               _self.send_websocket_command(
                 _self.commands.START_NEW_SESSION,
@@ -173,6 +187,12 @@ class ChatWidget extends Component {
             console.log(
               'What is meaning of default block missing warning when it doesnt do anything'
             );
+        }
+        if (received.confirm_state) {
+          _self.setState({
+            isConfirmState: true,
+            confirmType: received.confirm_type
+          });
         }
       }
     };
