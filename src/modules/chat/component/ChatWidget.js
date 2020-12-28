@@ -186,7 +186,12 @@ class ChatWidget extends Component {
         if (received.confirm_state) {
           _self.setState({
             isConfirmState: true,
-            confirmType: received.confirm_type,
+            confirmType: received.confirm_type
+          });
+        } else {
+          _self.setState({
+            isConfirmState: false,
+            confirmType: null
           });
         }
       }
