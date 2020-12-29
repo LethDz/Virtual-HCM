@@ -36,9 +36,15 @@ export const getTheCurrentUserRole = () => {
 };
 
 export const getUserData = () => {
-  return !localStorage.getItem('user')
-    ? null
-    : JSON.parse(localStorage.getItem('user'));
+  try {
+    const user = !localStorage.getItem('user')
+      ? null
+      : JSON.parse(localStorage.getItem('user'));
+
+    return user;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const signOut = () => {
