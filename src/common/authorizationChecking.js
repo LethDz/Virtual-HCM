@@ -43,6 +43,7 @@ export const getUserData = () => {
 
     return user;
   } catch (error) {
+    localStorage.removeItem('user');
     return null;
   }
 };
