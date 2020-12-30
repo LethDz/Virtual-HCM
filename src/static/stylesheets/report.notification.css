@@ -28,3 +28,7 @@
 .blockquote-footer-inline::before {
   content: '\2014\00A0';
 }
+
+.page-item.active .page-link {
+  z-index: 0 !important;
+}
