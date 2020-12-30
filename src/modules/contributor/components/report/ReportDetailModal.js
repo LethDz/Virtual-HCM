@@ -140,6 +140,9 @@ class ReportDetailModal extends Component {
         .then(() => {
           this.props.updateReportList &&
             this.props.updateReportList(this.props.reportList);
+          if (this.props.changeReportStatus) {
+            this.props.changeReportStatus('rejected');
+          }
           this.toggle();
         })
         .catch(() => {
