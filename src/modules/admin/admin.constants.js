@@ -181,15 +181,6 @@ export const trainDataCol = [
     resizable: true,
     comparator: dateComparator,
   },
-  {
-    headerName: 'Modified Date',
-    field: 'mdate',
-    sortable: true,
-    filter: true,
-    width: 120,
-    resizable: true,
-    comparator: dateComparator,
-  },
 ];
 
 // set Component to Ag-grid
