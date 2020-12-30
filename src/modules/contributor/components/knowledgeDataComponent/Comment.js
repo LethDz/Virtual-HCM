@@ -315,6 +315,12 @@ export default class Comment extends Component {
     this.toggleReportDetail();
   };
 
+  changeReportStatus = (status) => {
+    if (status === 'rejected') {
+      this.refreshComment();
+    }
+  };
+
   returnReportModal = () => {
     switch (this.state.reportStatus) {
       case reportStatus.PENDING:
@@ -325,6 +331,7 @@ export default class Comment extends Component {
             reportType={this.state.reportType}
             toggle={this.toggleReportDetail}
             updateReportList={this.setReportList}
+            changeReportStatus={this.changeReportStatus}
           />
         );
       case reportStatus.PROCESSED:
@@ -344,20 +351,20 @@ export default class Comment extends Component {
           />
         );
       default:
-        return (<div></div>);
+        return <div></div>;
     }
-  }
+  };
 
   render() {
     return (
-      <Row xs="1">
+      <Row xs='1'>
         {this.returnReportModal()}
         <LoadingSpinner
           loading={this.state.loading}
           text={this.state.spinnerMessage}
         />
         <Col>
-          <Label className="label">Comment:</Label>
+          <Label className='label'>Comment:</Label>
           {this.state.formStatus !== DONE && this.formStatus !== DISABLE && (
             <Row>
               <Col>
@@ -365,18 +372,18 @@ export default class Comment extends Component {
                   <Input
                     ref={this.commentRef}
                     onChange={this.handleInput}
-                    name="comment"
+                    name='comment'
                     value={this.state.comment}
-                    placeholder="Enter comment here"
+                    placeholder='Enter comment here'
                   />
-                  <InputGroupAddon addonType="append">
-                    <Button color="primary" onClick={this.addComment}>
+                  <InputGroupAddon addonType='append'>
+                    <Button color='primary' onClick={this.addComment}>
                       <FontAwesomeIcon icon={faPaperPlane} />
                       &nbsp;
                     </Button>
                   </InputGroupAddon>
-                  <InputGroupAddon addonType="append">
-                    <Button color="success" onClick={this.refreshComment}>
+                  <InputGroupAddon addonType='append'>
+                    <Button color='success' onClick={this.refreshComment}>
                       <FontAwesomeIcon icon={faSync} />
                     </Button>
                   </InputGroupAddon>
@@ -385,21 +392,21 @@ export default class Comment extends Component {
             </Row>
           )}
 
-          <ListGroup className="mt-2">
+          <ListGroup className='mt-2'>
             {this.state.showComment.map((comment, index) => {
               if (comment) {
                 let user = this.getUserById(comment.user);
                 return (
-                  <ListGroupItem key={index} className="comment">
+                  <ListGroupItem key={index} className='comment'>
                     <Row>
-                      <Col xs="auto">#{comment.index}</Col>
-                      <Col xs="auto">
+                      <Col xs='auto'>#{comment.index}</Col>
+                      <Col xs='auto'>
                         <img
-                          type="image"
-                          name="avatarImage"
-                          id="avatarImage"
-                          alt="avatar"
-                          className="img-circle"
+                          type='image'
+                          name='avatarImage'
+                          id='avatarImage'
+                          alt='avatar'
+                          className='img-circle'
                           src={user.avatar ? imgBase64(user.avatar) : avatar}
                         ></img>
                       </Col>
@@ -417,23 +424,25 @@ export default class Comment extends Component {
                             {comment.report.id && (
                               <Col>
                                 <span
-                                  className="report-id-title"
-                                  onClick={() =>
+                                  className='report-id-title'
+                                  onClick={() =>{
                                     this.setIdThenToggle(
                                       comment.report.id,
                                       comment.report.status
                                     )
+                                  }
+                                    
                                   }
                                 >
                                   Report id: {comment.report.id}
                                 </span>
                               </Col>
                             )}
-                            <Col xs="auto">{comment.mdate}</Col>
+                            <Col xs='auto'>{comment.mdate}</Col>
                           </Row>
                           <Row>
                             <Col>
-                              <span className="comment-detail">
+                              <span className='comment-detail'>
                                 {comment.reply_to && (
                                   <span>
                                     #{this.linkIdToIndex(comment.reply_to)}
@@ -458,7 +467,7 @@ export default class Comment extends Component {
 
                             {this.state.formStatus !== DONE &&
                               this.formStatus !== DISABLE && (
-                                <Col xs="auto">
+                                <Col xs='auto'>
                                   <Row>
                                     {this.state.user &&
                                       this.state.user.username ===
@@ -467,9 +476,9 @@ export default class Comment extends Component {
                                       comment.status !== 2 && (
                                         <Fragment>
                                           <Button
-                                            type="button"
-                                            color="warning"
-                                            size="sm"
+                                            type='button'
+                                            color='warning'
+                                            size='sm'
                                             onClick={() => {
                                               this.setEditCommentIndex(
                                                 comment.index
@@ -479,10 +488,10 @@ export default class Comment extends Component {
                                             <FontAwesomeIcon icon={faEdit} />
                                           </Button>
                                           <Button
-                                            type="button"
-                                            color="danger"
-                                            size="sm"
-                                            className="ml-2"
+                                            type='button'
+                                            color='danger'
+                                            size='sm'
+                                            className='ml-2'
                                             onClick={() => {
                                               this.removeComment(comment.index);
                                             }}
@@ -493,10 +502,10 @@ export default class Comment extends Component {
                                       )}
                                     {comment.status !== 2 ? (
                                       <Button
-                                        type="button"
-                                        color="info"
-                                        size="sm"
-                                        className="ml-2"
+                                        type='button'
+                                        color='info'
+                                        size='sm'
+                                        className='ml-2'
                                         onClick={() => {
                                           this.setReplyComment(comment.index);
                                         }}
@@ -515,7 +524,7 @@ export default class Comment extends Component {
                             <Col>
                               <h6>{user.username}</h6>
                             </Col>
-                            <Col xs="auto">{comment.mdate}</Col>
+                            <Col xs='auto'>{comment.mdate}</Col>
                           </Row>
                           <Row>
                             <Col>
@@ -526,13 +535,13 @@ export default class Comment extends Component {
                                 }}
                               />
                             </Col>
-                            <Col xs="auto">
+                            <Col xs='auto'>
                               <Row>
                                 <Fragment>
                                   <Button
-                                    type="button"
-                                    color="warning"
-                                    size="sm"
+                                    type='button'
+                                    color='warning'
+                                    size='sm'
                                     onClick={() => {
                                       this.saveComment(comment.index);
                                     }}
@@ -540,10 +549,10 @@ export default class Comment extends Component {
                                     <FontAwesomeIcon icon={faSave} />
                                   </Button>
                                   <Button
-                                    type="button"
-                                    color="danger"
-                                    size="sm"
-                                    className="ml-2"
+                                    type='button'
+                                    color='danger'
+                                    size='sm'
+                                    className='ml-2'
                                     onClick={() =>
                                       this.cancelEditMode(comment.index)
                                     }
@@ -563,14 +572,14 @@ export default class Comment extends Component {
             })}
           </ListGroup>
           {this.state.comments.length !== 0 && (
-            <div className="mt-1 d-flex justify-content-center">
+            <div className='mt-1 d-flex justify-content-center'>
               <Pagination
                 activePage={this.state.activePage}
                 totalItemsCount={this.state.comments.length}
                 itemsCountPerPage={MAXIMUM_COMMENT_PER_PAGE}
                 onChange={this.handlePageChange}
-                itemClass="page-item"
-                linkClass="page-link"
+                itemClass='page-item'
+                linkClass='page-link'
               />
             </div>
           )}
